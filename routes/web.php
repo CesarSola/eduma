@@ -13,10 +13,10 @@ Route::get('/', function () {
 
 //
 Route::get('/google-auth/redirect', [GoogleController::class, 'redirect'])
-->name('auth.redirect');
+    ->name('auth.redirect');
 
 Route::get('/google-auth/callback', [GoogleController::class, 'callback'])
-->name('auth.callback');
+    ->name('auth.callback');
 
 
 //
@@ -30,4 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+Route::get('expedientes', function () {
+    return view('expedientes.index');
+});
