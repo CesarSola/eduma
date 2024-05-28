@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'SICE',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -318,6 +318,11 @@ return [
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
+        [
+            'text' => 'Expedientes',
+            'url' => 'expediente',
+            'icon' => 'fas fa-fw fa-folder',
+        ],
         [
             'text' => 'profile',
             'url' => 'profile',
