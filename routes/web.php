@@ -35,3 +35,6 @@ require __DIR__ . '/auth.php';
 Route::get('expedientes', function () {
     return view('expedientes.index');
 });
+Route::get('expedientes.expediente', function () {
+    return view('expedientes.expediente');
+});

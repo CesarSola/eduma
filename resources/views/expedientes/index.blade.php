@@ -33,9 +33,12 @@
                 <td>6</td>
                 <td>7</td>
                 <td>8</td>
-                <td> <button>{{}}</button></td>
+                <td>
+                    <form action="{{ route('expedientes.expediente') }}" method="GET">
+                        <button type="submit" class="btn btn-primary">Ir a otra vista</button>
+                    </form>
+                </td>
             </tr>
-            <!-- Agrega más filas de datos según sea necesario -->
         </tbody>
     </table>
 @stop
