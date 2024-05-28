@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <p>Gestion de cursos y EC .</p>
+    <p>Gestion de cursos y EC Laravel 11 .</p>
 @stop
 
 @section('css')
