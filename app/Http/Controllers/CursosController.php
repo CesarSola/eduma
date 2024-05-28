@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ExpedientesUsuariosController extends Controller
+class CursosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('expedientes.usuarios.index');
+        return view('expedientes.cursos.index');
     }
-
 
     /**
      * Show the form for creating a new resource.

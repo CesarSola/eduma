@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\CursosController;
+use App\Http\Controllers\DocumentosController;
+use App\Http\Controllers\ExpedientesController;
+use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -35,6 +40,8 @@ require __DIR__ . '/auth.php';
 Route::get('expedientes', function () {
     return view('expedientes.index');
 });
-Route::get('usuarios', function () {
-    return view('usuarios.expediente');
-});
+Route::get('expedientes', [ExpedientesController::class, 'index'])->name('expedientes.index');
+Route::get('/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
+Route::get('/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
+Route::get('/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
+Route::get('/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
