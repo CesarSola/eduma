@@ -11,7 +11,7 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expediente');
+        return view('usuarios.expediente');
     }
 
     /**

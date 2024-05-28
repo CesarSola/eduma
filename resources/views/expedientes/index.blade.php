@@ -34,7 +34,7 @@
                 <td>7</td>
                 <td>8</td>
                 <td>
-                    <form action="{{ route('expedientes.expediente') }}" method="GET">
+                    <form action="{{ route('usuarios.expediente') }}" method="GET">
                         <button type="submit" class="btn btn-primary">Ir a otra vista</button>
                     </form>
                 </td>
