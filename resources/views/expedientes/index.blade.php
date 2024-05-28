@@ -9,32 +9,31 @@
 @section('content')
     <p>EXPEDIENTES</p>
 
-    <table class="table table-striped table-hover">
+    <table class="table">
         <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">id</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Nombre</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Apellido</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Matrícula</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">INE</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Comprobante Domiciliario
-                </th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Foto</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Estado</th>
-                <th style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Expediente</th>
+            <tr style="text-align: center">
+                <th scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Matrícula</th>
+                <th scope="col">INE</th>
+                <th scope="col">Comprobante Domiciliario</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Expediente</th>
             </tr>
         </thead>
         <tbody>
-            <tr style="background-color: #f9f9f9;">
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 1</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 2</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 1</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 2</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 1</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 2</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 1</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 2</td>
-                <td style="padding: 8px; text-align: center; border-right: 2px solid color: black;">Dato 2</td>
+            <tr style="text-align: center">
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td> <button>{{}}</button></td>
             </tr>
             <!-- Agrega más filas de datos según sea necesario -->
         </tbody>
