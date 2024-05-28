@@ -43,5 +43,10 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+        <div class="mt4">
+            <a href="{{ url('/google-auth/redirect') }}">Iniciar sesión con Google</a>
+
+
+        </div>
     </form>
 </x-guest-layout>

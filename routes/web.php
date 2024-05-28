@@ -1,12 +1,25 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+
+use function PHPUnit\Framework\callback;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+//
+Route::get('/google-auth/redirect', [GoogleController::class, 'redirect'])
+->name('auth.redirect');
+
+Route::get('/google-auth/callback', [GoogleController::class, 'callback'])
+->name('auth.callback');
+
+
+//
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
