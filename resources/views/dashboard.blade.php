@@ -8,6 +8,8 @@
 
 @section('content')
     <p>Gestion de cursos y EC Laravel 11 .</p>
+
+    <p>Prueba dos ded Git</p>
 @stop
 
 @section('css')
