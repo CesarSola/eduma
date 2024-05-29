@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class GoogleController extends Controller
 {
-    public function redirect(){
+    public function redirect()
+    {
         return Socialite::driver('google')->redirect();
     }
     public function callback(){
@@ -34,7 +35,7 @@ class GoogleController extends Controller
 
 
         }
-        return redirect()->intended('/');
+        return redirect()->intended('dashboard');
     }
 
 
