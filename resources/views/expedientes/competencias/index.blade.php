@@ -6,9 +6,7 @@
     <div class="header-flex">
         <h1>Competencias</h1>
         <div>
-            <form action="{{ route('usuarios.index') }}" method="GET">
-                <button type="submit" class="btn btn-primary">Regresar a Expediente</button>
-            </form>
+            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
