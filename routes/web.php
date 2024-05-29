@@ -43,9 +43,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('expedientes', function () {
-    return view('expedientes.index');
-});
+
 Route::get('/expedientesAdmin', [ExpedientesController::class, 'index'])->name('expedientesAdmin.index');
 Route::get('/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
 Route::get('/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');

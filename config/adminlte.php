@@ -320,7 +320,7 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'Expedientes',
-            'url' => 'expedientes',
+            'url' => 'expedientesAdmin',
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
