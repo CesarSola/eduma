@@ -7,7 +7,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Expediente</h1>
-        <a href="{{ route('expedientes.index') }}" class="btn btn-secondary">Regresar</a>
+        <a href="{{ route('expedientesAdmin.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                        @extends('expedientes.usuarios.edit')
+                        @extends('expedientes.expedientesAdmin.usuarios.edit')
                     </div>
                 </div>
             </div>

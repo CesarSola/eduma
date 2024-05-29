@@ -11,7 +11,7 @@ class CompetenciasController extends Controller
      */
     public function index()
     {
-        return view('expedientes.competencias.index');
+        return view('expedientes.expedientesAdmin.competencias.index');
     }
 
     /**

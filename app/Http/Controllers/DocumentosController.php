@@ -11,7 +11,7 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.registroGeneral.index');
+        return view('expedientes.expedientesAdmin.registroGeneral.index');
     }
 
     /**
