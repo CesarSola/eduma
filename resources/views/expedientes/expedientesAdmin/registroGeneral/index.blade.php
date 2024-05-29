@@ -30,10 +30,6 @@
                                             <h6 class="text-left mt-2">Apellido</h6>
                                             <h6 class="text-left mt-2">Edad: 30 años</h6>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                                data-target="#edit">
-                                                Editar
-                                            </button>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
