@@ -34,9 +34,7 @@
                 <td>7</td>
                 <td>8</td>
                 <td>
-                    <form action="{{ route('usuarios.index') }}" method="GET">
-                        <button type="submit" class="btn btn-primary"> Ver Expediente</button>
-                    </form>
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Regresar</a>
                 </td>
             </tr>
         </tbody>

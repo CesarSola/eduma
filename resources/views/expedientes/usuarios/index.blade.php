@@ -1,6 +1,8 @@
 @extends('adminlte::page')
 
 @section('title', 'Expediente')
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -21,7 +23,10 @@
                         <h6 class="text-left mt-2">Nombre</h6>
                         <h6 class="text-left mt-2">Apellido</h6>
                         <h6 class="text-left mt-2">Edad: 30 años</h6>
-                        <a href="#" class="btn btn-success btn-block btn-sm">Editar</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">
+                            Editar
+                        </button>
                     </div>
                     <div class="right-content">
                         <span class="badge badge-info">Estatus: Activo</span>
@@ -96,12 +101,14 @@
                                 </div>
                             </div>
                         </div>
+                        @extends('expedientes.usuarios.edit')
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @stop
+
 
 @section('css')
     <style>
@@ -160,6 +167,7 @@
 @stop
 
 @section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         console.log("Hi, I'm using the Laravel-AdminLTE package!");
     </script>
