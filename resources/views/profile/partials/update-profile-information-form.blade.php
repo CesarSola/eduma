@@ -69,19 +69,25 @@
         </div>
 
        <div class="grid grid-cols-2 gap-6">
-         <div >
-            <x-input-label for="colonia" :value="__('Colonia')" />
-            <x-text-input id="colonia" name="colonia" type="text" class="mt-1 block w-full" :value="old('colonia', $user->colonia)" />
-            <x-input-error class="mt-2" :messages="$errors->get('colonia')" />
-             </div>
-                <div>
-            <x-input-label for="estado" :value="__('Estado')" />
-            <x-text-input id="estado" name="estado" type="text" class="mt-1 block w-full" :value="old('estado', $user->estado)" />
-            <x-input-error class="mt-2" :messages="$errors->get('estado')" />
-         </div>
+            <div>
+                <x-input-label for="colonia" :value="__('Colonia')" />
+                @if(!empty($data['response']['colonia']))
+       <select>
+            @foreach($data['response']['colonia'] as $colonia)
+                <option>{{ $colonia }}</option>
+            @endforeach
+        </select>
+    @else
+        <p>No se encontraron colonias para este código postal.</p>
+    @endif
+                <x-input-error class="mt-2" :messages="$errors->get('colonia')" />
+            </div>
+            <div>
+                <x-input-label for="estado" :value="__('Estado')" />
+                <x-text-input id="estado" name="estado" type="text" class="mt-1 block w-full" :value="old('estado', $user->estado)" />
+                <x-input-error class="mt-2" :messages="$errors->get('estado')" />
+            </div>
        </div>
-
-
 
         <div class="grid grid-cols-2 gap-6">
             <div>
@@ -113,3 +119,6 @@
         </div>
     </form>
 </section>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
