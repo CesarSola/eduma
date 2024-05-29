@@ -34,7 +34,7 @@
                 <td>7</td>
                 <td>8</td>
                 <td>
-                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Regresar</a>
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
                 </td>
             </tr>
         </tbody>
