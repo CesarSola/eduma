@@ -45,9 +45,9 @@ require __DIR__ . '/auth.php';
 
 
 Route::get('/expedientesAdmin', [ExpedientesController::class, 'index'])->name('expedientesAdmin.index');
-Route::get('/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
-Route::get('/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
-Route::get('/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
-Route::get('/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
+Route::get('/expedientesAdmin/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
+Route::get('/expedientesAdmin/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
+Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
+Route::get('/expedientesAdmin/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
