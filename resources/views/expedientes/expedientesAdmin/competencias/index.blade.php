@@ -29,7 +29,6 @@
                                             <h6 class="text-left mt-2">Nombre</h6>
                                             <h6 class="text-left mt-2">Apellido</h6>
                                             <h6 class="text-left mt-2">Edad: 30 años</h6>
-                                            <!-- Button trigger modal -->
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
@@ -38,43 +37,72 @@
                                 </div>
                             </div>
                         </div>
-                    @stop
+                        <div class="form-group row">
+                            <table class="table">
+                                <thead>
+                                    <tr style="text-align: center">
+                                        <th scope="col">id</th>
+                                        <th scope="col">competencia</th>
+                                        <th scope="col">Documentos <br>(Evidencias)</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="text-align: center">
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td><a href="" class="btn btn-primary">Ver</a></td>
+                                        <td>4</td>
+                                        <td><a href="" class="btn btn-warning">Archivar</a></td>
+                                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@stop
 
-                    @section('css')
-                        <style>
-                            .header-flex {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            }
+@section('css')
+    <style>
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-                            .content-flex {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: flex-start;
-                            }
+        .content-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
 
-                            .left-content {
-                                width: 50%;
-                                float: left;
-                            }
+        .left-content {
+            width: 50%;
+            float: left;
+        }
 
-                            .right-content {
-                                width: 50%;
-                                float: right;
-                                text-align: right;
-                            }
+        .right-content {
+            width: 50%;
+            float: right;
+            text-align: right;
+        }
 
-                            .button-right {
-                                float: right;
-                            }
-                        </style>
-                        {{-- Add here extra stylesheets --}}
-                        {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-                    @stop
+        .button-right {
+            float: right;
+        }
+    </style>
+    {{-- Add here extra stylesheets --}}
+    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+@stop
 
-                    @section('js')
-                        <script>
-                            console.log("Hi, I'm using the Laravel-AdminLTE package!");
-                        </script>
-                    @stop
+@section('js')
+    <script>
+        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+    </script>
+@stop
