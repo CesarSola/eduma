@@ -12,9 +12,9 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-        $registroGeneral = User::all();
+        $registroGeneral = User::first();
 
-        // Renderizar la vista con la lista de usuarios
+        // Render the view with the user data
         return view('expedientes.expedientesAdmin.registroGeneral.index', compact('registroGeneral'));
     }
 

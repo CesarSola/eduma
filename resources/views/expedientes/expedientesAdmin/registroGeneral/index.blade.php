@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Documentos Generales</h1>
         <div>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('usuariosAdmin.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
