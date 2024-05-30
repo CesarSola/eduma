@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Evidencias Competencias</h1>
         <div>
-            <a href="{{ route('cursosExpediente.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('competencia.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
@@ -25,12 +25,12 @@
                                             <div class="text-center">
                                                 <img src="" alt="" class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $competenciaEvidencias->name }}
-                                                {{ $competenciaEvidencias->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $evidenciasCO->name }}
+                                                {{ $evidenciasCO->secondName }}</h6>
                                             <h6 class="text-left mt-2">Apellidos:
-                                                {{ $competenciaEvidencias->paternalSurname }}
-                                                {{ $competenciaEvidencias->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $competenciaEvidencias->age }} años</h6>
+                                                {{ $evidenciasCO->paternalSurname }}
+                                                {{ $evidenciasCO->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $evidenciasCO->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>

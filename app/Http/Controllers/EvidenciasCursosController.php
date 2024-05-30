@@ -11,10 +11,10 @@ class EvidenciasCursosController extends Controller
      */
     public function index()
     {
-        $cursoEvidencia = auth()->user();
+        $evidenciasCU = auth()->user();
 
         // Renderizar la vista de las evidencias de competencias con los datos del usuario
-        return view('expedientes.expedientesAdmin.cursos.evidencias', compact('cursoEvidencia'));
+        return view('expedientes.expedientesAdmin.cursos.evidencias', compact('evidenciasCU'));
     }
 
     /**

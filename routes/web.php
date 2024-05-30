@@ -57,10 +57,11 @@ Route::resource('registroGeneral', DocumentosController::class);
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
-Route::resource('evidenciasCU', EvidenciasCursosController::class);
+Route::get('evidenciasCU', [EvidenciasCursosController::class, 'index'])->name('evidenciasCU.index');
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
-Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
+Route::get('evidenciasCO', [EvidenciasCompetenciasController::class, 'index'])->name('evidenciasCO.index');
+
 
 
 // routes/web.php

@@ -26,9 +26,12 @@
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
                                                     class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombre</h6>
-                                            <h6 class="text-left mt-2">Apellido</h6>
-                                            <h6 class="text-left mt-2">Edad: 30 años</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $evidenciasCU->name }}
+                                                {{ $evidenciasCU->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Apellidos:
+                                                {{ $evidenciasCU->paternalSurname }}
+                                                {{ $evidenciasCU->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $evidenciasCU->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
