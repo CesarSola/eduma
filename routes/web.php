@@ -59,3 +59,6 @@ Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias'
 Route::resource('user', ExpedientesController::class);
 Route::resource('registroGeneral', DocumentosController::class);
 Route::resource('usuarios', ExpedientesUsuariosController::class);
+// routes/web.php
+
+Route::resource('cursos', CursosController::class);
