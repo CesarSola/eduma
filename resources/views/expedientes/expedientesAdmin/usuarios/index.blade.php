@@ -20,11 +20,13 @@
                         <div class="text-center">
                             <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                         </div>
-                        <h6 class="text-left mt-2">Primer Nombre: {{ $users->name }}</h6>
-                        <h6 class="text-left mt-2">Segundo Nombre: {{ $users->secondName }}</h6>
-                        <h6 class="text-left mt-2">Apellido Paterno: {{ $users->paternalSurname }}</h6>
-                        <h6 class="text-left mt-2">Apellido materno: {{ $users->maternalSurname }}</h6>
-                        <h6 class="text-left mt-2">Edad: {{ $users->age }} años</h6>
+                        @if ($usuario)
+                            <p>Nombres: {{ $usuario->name }} {{ $usuario->secondName }}</p>
+                            <p>Apellidos: {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
+                            <p>Edad {{ $usuario->age }} años</p>
+                        @else
+                            <p>No se encontraron usuarios</p>
+                        @endif
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">
                             Editar

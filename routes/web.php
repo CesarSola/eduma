@@ -46,9 +46,6 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-Route::get('/expedientesAdmin', [ExpedientesController::class, 'index'])->name('expedientesAdmin.index');
-Route::get('/expedientesAdmin/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
-Route::get('/expedientesAdmin/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
 Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
 Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
 Route::get('/expedientesAdmin/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
@@ -56,6 +53,7 @@ Route::get('/expedientesAdmin/competencias/', [EvidenciasCompetenciasController:
 Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
-Route::resource('user', ExpedientesController::class);
+
+Route::resource('expedientesAdmin', ExpedientesController::class);
 Route::resource('registroGeneral', DocumentosController::class);
 Route::resource('usuarios', ExpedientesUsuariosController::class);

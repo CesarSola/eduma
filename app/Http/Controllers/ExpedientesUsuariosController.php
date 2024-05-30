@@ -12,10 +12,10 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $usuario = User::all();
 
         // Renderizar la vista con la lista de usuarios
-        return view('expedientes.expedientesAdmin.usuarios.index', compact('users'));
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuario'));
     }
 
     /**
@@ -23,10 +23,10 @@ class ExpedientesUsuariosController extends Controller
      */
     public function show($id)
     {
-        $users = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.usuarios.index', compact('users'));
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuario'));
     }
 
     /**
@@ -35,7 +35,7 @@ class ExpedientesUsuariosController extends Controller
     public function create()
     {
         // Mostrar el formulario de creación de un nuevo recurso
-        return view('expedientes.expedientesAdmin.usuarios.create');
+
     }
 
     /**
@@ -69,7 +69,7 @@ class ExpedientesUsuariosController extends Controller
      */
     public function edit($id)
     {
-        $users = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
         return view('expedientes.expedientesAdmin.usuarios.edit', compact('usuario'));
     }
@@ -93,13 +93,13 @@ class ExpedientesUsuariosController extends Controller
         $validatedData = $request->validate($rules);
 
         // Encontrar el usuario por ID
-        $users = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
         // Actualizar el usuario con los datos validados
-        $users->update($validatedData);
+        $usuario->update($validatedData);
 
         // Redirigir a la vista de índice con un mensaje de éxito
-        return redirect()->route('usuarios.index')
+        return redirect()->route('expedientesAdmin.index')
             ->with('success', 'Usuario actualizado correctamente');
     }
 
