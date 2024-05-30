@@ -54,9 +54,13 @@ Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'ind
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 
+//ruta index de expedientes
 Route::resource('expedientesAdmin', ExpedientesController::class);
+//ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
+//ruta de la carpeta usuarios
 Route::resource('usuarios', ExpedientesUsuariosController::class);
+
 // routes/web.php
 
 Route::resource('cursos', CursosController::class);

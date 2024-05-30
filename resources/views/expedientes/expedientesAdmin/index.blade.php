@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($users as $user)
+            @foreach ($expedientesAdmin as $user)
                 <tr style="text-align: center">
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>

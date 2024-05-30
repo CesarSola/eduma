@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DocumentosController extends Controller
@@ -11,7 +12,10 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesAdmin.registroGeneral.index');
+        $registroGeneral = User::all();
+
+        // Renderizar la vista con la lista de usuarios
+        return view('expedientes.expedientesAdmin.registroGeneral.index', compact('registroGeneral'));
     }
 
     /**
