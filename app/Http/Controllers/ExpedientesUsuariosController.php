@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ExpedientesUsuariosController extends Controller
@@ -11,19 +12,30 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        $usuario = auth()->user();
+        $usuarios = User::all();
+
+        // Renderizar la vista con la lista de usuarios
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuarios'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $usuario = User::findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuario'));
     }
-
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        // Mostrar el formulario de creación de un nuevo recurso
+        return view('expedientes.expedientesAdmin.usuarios.create');
     }
 
     /**
@@ -31,38 +43,78 @@ class ExpedientesUsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        // Definir las reglas de validación
+        $rules = [
+            'name' => 'required|string|max:255',
+            'secondName' => 'nullable|string|max:255',
+            'paternalSurname' => 'required|string|max:255',
+            'maternalSurname' => 'nullable|string|max:255',
+            'age' => 'required|integer|min:0',
+            // Otras reglas de validación si es necesario
+        ];
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        // Validar la solicitud
+        $validatedData = $request->validate($rules);
+
+        // Crear un nuevo usuario con los datos validados
+        User::create($validatedData);
+
+        // Redirigir a la vista de índice con un mensaje de éxito
+        return redirect()->route('expedientesAdmin.index')
+            ->with('success', 'Usuario creado correctamente');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $usuario = User::findOrFail($id);
+
+        return view('expedientes.expedientesAdmin.usuarios.edit', compact('usuario'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Definir las reglas de validación
+        $rules = [
+            'name' => 'required|string|max:255',
+            'secondName' => 'nullable|string|max:255',
+            'paternalSurname' => 'required|string|max:255',
+            'maternalSurname' => 'nullable|string|max:255',
+            'age' => 'required|integer|min:0',
+            // Otras reglas de validación si es necesario
+        ];
+
+        // Validar la solicitud
+        $validatedData = $request->validate($rules);
+
+        // Encontrar el usuario por ID
+        $usuario = User::findOrFail($id);
+
+        // Actualizar el usuario con los datos validados
+        $usuario->update($validatedData);
+
+        // Redirigir a la vista de índice con un mensaje de éxito
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $usuario = User::findOrFail($id);
+
+        // Eliminar el usuario
+        $usuario->delete();
+
+        // Redirigir a la vista de índice con un mensaje de éxito
+        return redirect()->route('expedientesAdmin.index')
+            ->with('success', 'Usuario eliminado correctamente');
     }
 }

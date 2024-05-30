@@ -8,25 +8,25 @@
 
 @section('content')
     <p>EXPEDIENTES</p>
-    @foreach ($users as $user)
-        <table class="table">
-            <thead>
-                <tr style="text-align: center">
-                    <th scope="col">id</th>
-                    <th scope="col">Primer Nombre</th>
-                    <th scope="col">Segundo Nombre</th>
-                    <th scope="col">Apellido Paterno</th>
-                    <th scope="col">Apellido Materno</th>
-                    <th scope="col">Edad</th>
-                    <th scope="col">Matrícula</th>
-                    <th scope="col">INE</th>
-                    <th scope="col">Comprobante Domiciliario</th>
-                    <th scope="col">Foto</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Expediente</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="table">
+        <thead>
+            <tr style="text-align: center">
+                <th scope="col">id</th>
+                <th scope="col">Primer Nombre</th>
+                <th scope="col">Segundo Nombre</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Edad</th>
+                <th scope="col">Matrícula</th>
+                <th scope="col">INE</th>
+                <th scope="col">Comprobante Domiciliario</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Expediente</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($users as $user)
                 <tr style="text-align: center">
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
@@ -40,12 +40,12 @@
                     <td></td>
                     <td></td>
                     <td>
-                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
+                        <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-primary">Ver</a>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-    @endforeach
+            @endforeach
+        </tbody>
+    </table>
 @stop
 
 @section('css')

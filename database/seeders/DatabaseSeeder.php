@@ -32,5 +32,22 @@ class DatabaseSeeder extends Seeder
             'password' => '12345678',
 
         ]);
+        User::factory()->create([
+            'name' => 'Jose',
+            'secondName' => 'Luis',
+            'paternalSurname' => 'Perez',
+            'maternalSurname' => 'May',
+            'age' => '45',
+            'calle_avenida' => 'C15 entre 16 y 12',
+            'numext' => 'S/N',
+            'codpos' => '97800',
+            'colonia' => 'Maxcanú',
+            'estado' => 'Yucatán',
+            'ciudad' => 'Maxcanú',
+            'municipio' => 'Maxcanú',
+            'email' => 'test2@example.com',
+            'password' => '12345678',
+
+        ]);
     }
 }

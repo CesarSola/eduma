@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('registroGeneral.update', $usuario->id) }}">
+                <form method="POST" action="{{ route('usuarios.update', $usuario->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
