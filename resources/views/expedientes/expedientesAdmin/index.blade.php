@@ -8,37 +8,42 @@
 
 @section('content')
     <p>EXPEDIENTES</p>
-
-    <table class="table">
-        <thead>
-            <tr style="text-align: center">
-                <th scope="col">id</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Matrícula</th>
-                <th scope="col">INE</th>
-                <th scope="col">Comprobante Domiciliario</th>
-                <th scope="col">Foto</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Expediente</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="text-align: center">
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
-                <td>
-                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    @foreach ($users as $user)
+        <table class="table">
+            <thead>
+                <tr style="text-align: center">
+                    <th scope="col">id</th>
+                    <th scope="col">Primer Nombre</th>
+                    <th scope="col">Segundo Nombre</th>
+                    <th scope="col">Apellido Paterno</th>
+                    <th scope="col">Apellido Materno</th>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">INE</th>
+                    <th scope="col">Comprobante Domiciliario</th>
+                    <th scope="col">Foto</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Expediente</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="text-align: center">
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->secondName }}</td>
+                    <td>{{ $user->paternalSurname }}</td>
+                    <td>{{ $user->maternalSurname }}</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    @endforeach
 @stop
 
 @section('css')
