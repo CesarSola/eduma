@@ -320,8 +320,22 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'Expedientes',
-            'url' => 'expedientesAdmin',
             'icon' => 'fas fa-fw fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Lista de expedientes',
+                    'url' => 'expedientesAdmin',
+                ],
+                [
+                    'text' => 'Lista de cursos',
+                    'url' => 'expedientesAdmin/cursos/expediente',
+
+                ],
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                ],
+            ],
         ],
         [
             'text' => 'profile',

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name'); //campo nombre
-            $table->string('secondName'); //campo segundo nombre
-            $table->string('paternalSurname'); //campo apellido paterno
-            $table->string('maternalSurname'); //campo apellido materno
-            $table->string('age'); //campo edad
-            $table->string('email')->unique(); // campo email/correo 
+            $table->string('secondName')->nullable();  //campo segundo nombre
+            $table->string('paternalSurname')->nullable();  //campo apellido paterno
+            $table->string('maternalSurname')->nullable();  //campo apellido materno
+            $table->string('age')->nullable();  //campo edad
+            $table->string('email')->unique(); // campo email/correo
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password'); // campo contraseña
             $table->string('calle_avenida')->nullable(); // Campo calle/avenida
