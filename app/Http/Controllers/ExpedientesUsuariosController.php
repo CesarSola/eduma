@@ -26,7 +26,7 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin = User::findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin'));
     }
 
     /**

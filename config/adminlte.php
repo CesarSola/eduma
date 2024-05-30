@@ -324,7 +324,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Lista de expedientes',
-                    'url' => 'expedientesAdmin',
+                    'url' => 'usuariosAdmin',
                 ],
                 [
                     'text' => 'Lista de cursos',
