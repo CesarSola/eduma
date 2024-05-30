@@ -20,6 +20,13 @@ class DatabaseSeeder extends Seeder
             'secondName' => 'Antonio',
             'paternalSurname' => 'Canul',
             'maternalSurname' => 'Chin',
+            'calle_avenida' => 'C18 entre 15 y 17',
+            'numext' => 'S/N',
+            'codpos' => '97818',
+            'colonia' => 'Kopomá',
+            'estado' => 'Yucatán',
+            'ciudad' => 'Kopomá',
+            'municipio' => 'Kopomá',
             'email' => 'test@example.com',
             'password' => '12345678',
 
