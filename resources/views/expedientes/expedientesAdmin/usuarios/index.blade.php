@@ -20,9 +20,10 @@
                         <div class="text-center">
                             <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                         </div>
-                        <h6 class="text-left mt-2">Nombre</h6>
-                        <h6 class="text-left mt-2">Apellido</h6>
-                        <h6 class="text-left mt-2">Edad: 30 años</h6>
+                        <h6 class="text-left mt-2">Nombres: {{ $usuario->name }} {{ $usuario->secondName }}</h6>
+                        <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
+                            {{ $usuario->maternalSurname }}</h6>
+                        <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">
                             Editar

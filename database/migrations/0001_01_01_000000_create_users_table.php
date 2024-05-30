@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('secondName'); //campo segundo nombre
             $table->string('paternalSurname'); //campo apellido paterno
             $table->string('maternalSurname'); //campo apellido materno
+            $table->string('age'); //campo edad
             $table->string('email')->unique(); // campo email/correo 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password'); // campo contraseña

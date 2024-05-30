@@ -57,3 +57,4 @@ Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'ind
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 Route::resource('user', ExpedientesController::class);
+Route::resource('registroGeneral', DocumentosController::class);

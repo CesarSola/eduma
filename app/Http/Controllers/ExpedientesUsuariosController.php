@@ -11,7 +11,10 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesAdmin.usuarios.index');
+        $usuario = auth()->user();
+
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuario'));
     }
 
 

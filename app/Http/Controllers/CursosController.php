@@ -11,7 +11,10 @@ class CursosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesAdmin.cursos.index');
+        $usuario = auth()->user();
+
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.cursos.index', compact('usuario'));
     }
 
     /**

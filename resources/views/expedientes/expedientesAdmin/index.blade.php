@@ -17,6 +17,7 @@
                     <th scope="col">Segundo Nombre</th>
                     <th scope="col">Apellido Paterno</th>
                     <th scope="col">Apellido Materno</th>
+                    <th scope="col">Edad</th>
                     <th scope="col">Matrícula</th>
                     <th scope="col">INE</th>
                     <th scope="col">Comprobante Domiciliario</th>
@@ -32,6 +33,7 @@
                     <td>{{ $user->secondName }}</td>
                     <td>{{ $user->paternalSurname }}</td>
                     <td>{{ $user->maternalSurname }}</td>
+                    <td>{{ $user->age }}</td>
                     <td>6</td>
                     <td>7</td>
                     <td>8</td>

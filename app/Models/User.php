@@ -11,16 +11,24 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Reglas de validación
+    static $rules = [
+        'name' => 'required',
+        'secondName' => 'required',
+        'paternalSurname' => 'required',
+        'maternalSurname' => 'required',
+        'age' => 'required|integer',
+        'email' => 'required|string|email|max:255|unique:users,email',
+        // Agrega más reglas según sea necesario
+    ];
+
+    // Campos que se pueden asignar masivamente
     protected $fillable = [
         'name',
         'secondName',
         'paternalSurname',
         'maternalSurname',
+        'age',
         'email',
         'password',
         'google_id',
@@ -33,26 +41,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'municipio',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Campos que deben estar ocultos para la serialización
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    // Atributos que deben ser casteados
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }

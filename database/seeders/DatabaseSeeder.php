@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'secondName' => 'Antonio',
             'paternalSurname' => 'Canul',
             'maternalSurname' => 'Chin',
+            'age' => '20',
             'calle_avenida' => 'C18 entre 15 y 17',
             'numext' => 'S/N',
             'codpos' => '97818',
