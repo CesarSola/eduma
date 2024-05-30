@@ -12,10 +12,10 @@ class CursosController extends Controller
      */
     public function index()
     {
-        $usuario = auth()->user();
+        $cursosExpediente = auth()->user();
         $cursos = Curso::all();
-
-        return view('lista_cursos.index', compact('usuario', 'cursos'));
+        return view('expedientes.expedientesAdmin.cursos.index', compact('cursosExpediente'));
+        return view('lista_cursos.index', compact('cursos'));
     }
 
     /**
@@ -117,9 +117,8 @@ class CursosController extends Controller
         // Redirigir al usuario a la lista de cursos con un mensaje de éxito
         // Tu lógica para guardar el curso en el controlador
 
-// Después de guardar el curso, redirige al usuario a la página de índice de cursos
-return redirect()->route('cursos.index')->with('success', 'Curso creado exitosamente');
-
+        // Después de guardar el curso, redirige al usuario a la página de índice de cursos
+        return redirect()->route('cursos.index')->with('success', 'Curso creado exitosamente');
     }
 
     // Otros métodos del controlador...

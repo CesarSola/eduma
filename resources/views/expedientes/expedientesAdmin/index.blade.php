@@ -40,7 +40,7 @@
                     <td></td>
                     <td></td>
                     <td>
-                        <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-primary">Ver</a>
+                        <a href="{{ route('usuariosAdmin.show', $user->id) }}" class="btn btn-primary">Ver</a>
                     </td>
                 </tr>
             @endforeach

@@ -20,13 +20,9 @@
                         <div class="text-center">
                             <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                         </div>
-                        @if ($usuario)
-                            <p>Nombres: {{ $usuario->name }} {{ $usuario->secondName }}</p>
-                            <p>Apellidos: {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
-                            <p>Edad {{ $usuario->age }} años</p>
-                        @else
-                            <p>No se encontraron usuarios</p>
-                        @endif
+                        <p>Nombres: {{ $usuariosAdmin->name }} {{ $usuariosAdmin->secondName }}</p>
+                        <p>Apellidos: {{ $usuariosAdmin->paternalSurname }} {{ $usuariosAdmin->maternalSurname }}</p>
+                        <p>Edad {{ $usuariosAdmin->age }} años</p>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">
                             Editar

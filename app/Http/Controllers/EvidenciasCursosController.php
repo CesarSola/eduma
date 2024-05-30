@@ -11,7 +11,10 @@ class EvidenciasCursosController extends Controller
      */
     public function index()
     {
-        return view('cursos.index', compact('cursosExpediente'));
+        $cursoEvidencia = auth()->user();
+
+        // Renderizar la vista de las evidencias de competencias con los datos del usuario
+        return view('expedientes.expedientesAdmin.cursos.evidencias', compact('cursoEvidencia'));
     }
 
     /**

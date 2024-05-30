@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Competencias</h1>
         <div>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('usuariosAdmin.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
@@ -58,7 +58,6 @@
                                         </td>
                                         <td>4</td>
                                         <td><a href="" class="btn btn-warning">Archivar</a></td>
-                                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -48,9 +48,7 @@ require __DIR__ . '/auth.php';
 
 Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
 Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
-Route::get('/expedientesAdmin/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
-Route::get('/expedientesAdmin/competencias/', [EvidenciasCompetenciasController::class, 'index'])->name('competencias.evidencias');
-Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
+
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 
@@ -59,9 +57,10 @@ Route::resource('expedientesAdmin', ExpedientesController::class);
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
-Route::resource('usuarios', ExpedientesUsuariosController::class);
+Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
+Route::resource('cursoEvidencia', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencias', CompetenciasController::class);
 Route::resource('competenciaEvidencias', EvidenciasCompetenciasController::class);

@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Cursos</h1>
         <div>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('usuariosAdmin.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
@@ -26,11 +26,11 @@
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
                                                     class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
-                                                {{ $usuario->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
-                                                {{ $usuario->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $cursosExpediente->name }}
+                                                {{ $cursosExpediente->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Apellidos: {{ $cursosExpediente->paternalSurname }}
+                                                {{ $cursosExpediente->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $cursosExpediente->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
@@ -54,11 +54,12 @@
                                     <tr style="text-align: center">
                                         <td>1</td>
                                         <td>2</td>
-                                        <td><a href="{{ route('cursos.evidencias') }}" class="btn btn-primary">Ver</a>
+                                        <td><a href="{{ route('cursoEvidencia.evidencias') }}"
+                                                class="btn btn-primary">Ver</a>
                                         </td>
                                         <td>4</td>
                                         <td><a href="" class="btn btn-warning">Archivar</a></td>
-                                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
+                                        <a href="{{ route('usuariosAdmin.index') }}" class="btn btn-primary">Ver</a>
                                         </td>
                                     </tr>
                                 </tbody>
