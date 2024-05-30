@@ -8,6 +8,8 @@ use App\Http\Controllers\ExpedientesController;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
+use App\Http\Controllers\EvidenciasCompetenciasController;
+use App\Http\Controllers\EvidenciasCursosController;
 use Illuminate\Support\Facades\Route;
 
 use Laravel\Socialite\Facades\Socialite;
@@ -48,6 +50,9 @@ Route::get('/expedientesAdmin', [ExpedientesController::class, 'index'])->name('
 Route::get('/expedientesAdmin/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
 Route::get('/expedientesAdmin/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
 Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
+Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
 Route::get('/expedientesAdmin/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
+Route::get('/expedientesAdmin/competencias/', [EvidenciasCompetenciasController::class, 'index'])->name('competencias.evidencias');
+Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
