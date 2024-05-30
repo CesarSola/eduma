@@ -37,10 +37,15 @@ class DocumentosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Obtener los datos del usuario con el ID dado
+        $user = User::findOrFail($id);
+
+        // Pasar los datos del usuario a la vista
+        return view('expedientes.expedientesAdmin.registroGeneral.index', compact('user'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

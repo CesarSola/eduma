@@ -60,7 +60,7 @@ class ExpedientesUsuariosController extends Controller
         User::create($validatedData);
 
         // Redirigir a la vista de índice con un mensaje de éxito
-        return redirect()->route('expedientesAdmin.index')
+        return redirect()->route('usuariosAdmin.index')
             ->with('success', 'Usuario creado correctamente');
     }
 
@@ -99,7 +99,7 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin->update($validatedData);
 
         // Redirigir a la vista de índice con un mensaje de éxito
-        return redirect()->route('expedientesAdmin.index')
+        return redirect()->route('usuariosAdmin.index')
             ->with('success', 'Usuario actualizado correctamente');
     }
 
@@ -114,7 +114,7 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin->delete();
 
         // Redirigir a la vista de índice con un mensaje de éxito
-        return redirect()->route('expedientesAdmin.index')
+        return redirect()->route('usuariosAdmin.index')
             ->with('success', 'Usuario eliminado correctamente');
     }
 }
