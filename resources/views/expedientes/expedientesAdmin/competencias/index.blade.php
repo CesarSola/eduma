@@ -26,11 +26,11 @@
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
                                                     class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
-                                                {{ $usuario->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
-                                                {{ $usuario->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $competencia->name }}
+                                                {{ $competencia->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Apellidos: {{ $competencia->paternalSurname }}
+                                                {{ $competencia->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $competencia->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>

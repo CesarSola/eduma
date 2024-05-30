@@ -100,7 +100,7 @@
                                         <li class="list-group-item">Curso 6</li>
                                         <li class="list-group-item">Curso 7</li>
                                     </ul>
-                                    <a href="{{ route('cursos.index') }}"
+                                    <a href="{{ route('cursosExpediente.index') }}"
                                         class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                                 </div>
                             </div>

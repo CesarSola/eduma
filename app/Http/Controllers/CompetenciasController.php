@@ -11,10 +11,10 @@ class CompetenciasController extends Controller
      */
     public function index()
     {
-        $usuario = auth()->user();
+        $competencia = auth()->user();
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario'));
+        return view('expedientes.expedientesAdmin.competencias.index', compact('competencia'));
     }
 
     /**

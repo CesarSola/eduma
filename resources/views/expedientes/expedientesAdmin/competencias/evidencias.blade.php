@@ -23,12 +23,14 @@
                                     <div class="card-body header-flex">
                                         <div class="left-content">
                                             <div class="text-center">
-                                                <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="img-circle">
+                                                <img src="" alt="" class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombre</h6>
-                                            <h6 class="text-left mt-2">Apellido</h6>
-                                            <h6 class="text-left mt-2">Edad: 30 años</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $competenciaEvidencias->name }}
+                                                {{ $competenciaEvidencias->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Apellidos:
+                                                {{ $competenciaEvidencias->paternalSurname }}
+                                                {{ $competenciaEvidencias->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $competenciaEvidencias->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
@@ -55,7 +57,6 @@
                                         <td><a href="" class="btn btn-primary">Ver</a></td>
                                         <td>4</td>
                                         <td><a href="" class="btn btn-warning">Archivar</a></td>
-                                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -60,6 +60,12 @@ Route::resource('expedientesAdmin', ExpedientesController::class);
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
 Route::resource('usuarios', ExpedientesUsuariosController::class);
+//ruta de la carpeta cursos
+Route::resource('cursosExpediente', CursosController::class);
+//ruta de la carpeta competencias
+Route::resource('competencias', CompetenciasController::class);
+Route::resource('competenciaEvidencias', EvidenciasCompetenciasController::class);
+
 
 // routes/web.php
 

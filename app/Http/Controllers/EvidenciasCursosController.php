@@ -11,7 +11,7 @@ class EvidenciasCursosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesAdmin.cursos.evidencias');
+        return view('cursos.index', compact('cursosExpediente'));
     }
 
     /**
