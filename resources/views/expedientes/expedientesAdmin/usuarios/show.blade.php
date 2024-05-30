@@ -7,7 +7,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Expediente</h1>
-        <a href="{{ route('expedientesAdmin.index') }}" class="btn btn-secondary">Regresar</a>
+        <a href="{{ route('usuariosAdmin.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -76,7 +76,7 @@
                                         <li class="list-group-item">Competencia 6</li>
                                         <li class="list-group-item">Competencia 7</li>
                                     </ul>
-                                    <a href="{{ route('competencias.index') }}"
+                                    <a href="{{ route('competencia.index') }}"
                                         class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                                 </div>
                             </div>

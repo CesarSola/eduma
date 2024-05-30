@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\DocumentosController;
-use App\Http\Controllers\ExpedientesController;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
@@ -46,8 +45,6 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
-Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
 
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
@@ -60,10 +57,10 @@ Route::resource('registroGeneral', DocumentosController::class);
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
-Route::resource('cursoEvidencia', EvidenciasCursosController::class);
+Route::resource('evidenciasCU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
-Route::resource('competencias', CompetenciasController::class);
-Route::resource('competenciaEvidencias', EvidenciasCompetenciasController::class);
+Route::resource('competencia', CompetenciasController::class);
+Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 
 
 // routes/web.php

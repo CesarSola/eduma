@@ -11,10 +11,11 @@ class EvidenciasCompetenciasController extends Controller
      */
     public function index()
     {
-        $competenciaEvidencias = auth()->user();
+
+        $evidenciasCO = auth()->user();
 
         // Renderizar la vista de las evidencias de competencias con los datos del usuario
-        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('competenciaEvidencias'));
+        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('evidenciasCO'));
     }
 
     /**
