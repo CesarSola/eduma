@@ -12,10 +12,10 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        $usuarios = User::all();
+        $users = User::all();
 
         // Renderizar la vista con la lista de usuarios
-        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuarios'));
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('users'));
     }
 
     /**
@@ -23,10 +23,10 @@ class ExpedientesUsuariosController extends Controller
      */
     public function show($id)
     {
-        $usuario = User::findOrFail($id);
+        $users = User::findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.usuarios.index', compact('usuario'));
+        return view('expedientes.expedientesAdmin.usuarios.index', compact('users'));
     }
 
     /**
@@ -46,9 +46,9 @@ class ExpedientesUsuariosController extends Controller
         // Definir las reglas de validación
         $rules = [
             'name' => 'required|string|max:255',
-            'secondName' => 'nullable|string|max:255',
+            'secondName' => 'required|string|max:255',
             'paternalSurname' => 'required|string|max:255',
-            'maternalSurname' => 'nullable|string|max:255',
+            'maternalSurname' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
             // Otras reglas de validación si es necesario
         ];
@@ -69,7 +69,7 @@ class ExpedientesUsuariosController extends Controller
      */
     public function edit($id)
     {
-        $usuario = User::findOrFail($id);
+        $users = User::findOrFail($id);
 
         return view('expedientes.expedientesAdmin.usuarios.edit', compact('usuario'));
     }
@@ -82,9 +82,9 @@ class ExpedientesUsuariosController extends Controller
         // Definir las reglas de validación
         $rules = [
             'name' => 'required|string|max:255',
-            'secondName' => 'nullable|string|max:255',
+            'secondName' => 'required|string|max:255',
             'paternalSurname' => 'required|string|max:255',
-            'maternalSurname' => 'nullable|string|max:255',
+            'maternalSurname' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
             // Otras reglas de validación si es necesario
         ];
@@ -93,10 +93,10 @@ class ExpedientesUsuariosController extends Controller
         $validatedData = $request->validate($rules);
 
         // Encontrar el usuario por ID
-        $usuario = User::findOrFail($id);
+        $users = User::findOrFail($id);
 
         // Actualizar el usuario con los datos validados
-        $usuario->update($validatedData);
+        $users->update($validatedData);
 
         // Redirigir a la vista de índice con un mensaje de éxito
         return redirect()->route('usuarios.index')
