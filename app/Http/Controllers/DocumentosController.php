@@ -12,12 +12,12 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-        $registroGeneral = User::first();
+
+        $registroGeneral = User::all();
 
         // Render the view with the user data
         return view('expedientes.expedientesAdmin.registroGeneral.index', compact('registroGeneral'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -39,13 +39,11 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
-        // Obtener los datos del usuario con el ID dado
-        $user = User::findOrFail($id);
+        $registroGeneral = User::findOrFail($id);
 
-        // Pasar los datos del usuario a la vista
-        return view('expedientes.expedientesAdmin.registroGeneral.index', compact('user'));
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral'));
     }
-
 
     /**
      * Show the form for editing the specified resource.

@@ -54,8 +54,8 @@
                                 <li class="list-group-item">Documento 8</li>
                                 <li class="list-group-item">Documento 9</li>
                             </ul>
-                            <a href="{{ route('registroGeneral.index') }}"
-                                class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
+                            <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                class="btn btn-primary">Ver</a>
                         </div>
                     </div>
                 </div>
