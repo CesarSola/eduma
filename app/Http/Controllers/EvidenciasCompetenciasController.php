@@ -14,7 +14,7 @@ class EvidenciasCompetenciasController extends Controller
         $evidenciasCO = auth()->user();
 
         // Renderizar la vista de las evidencias de competencias con los datos del usuario
-        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('evidenciasCO'));
+        return view('expedientes.expedientesAdmin.competencias.evidencias.evidencias', compact('evidenciasCO'));
     }
 
     /**
