@@ -337,7 +337,7 @@ return [
         ],
         [
             'text' => 'Mi Expediente',
-            'url' => 'expedientes/expedientesUser/dashboardUser/index',
+            'url' => 'usuarios',
             'icon' => 'fas fa-fw fa-folder',
         ],
         ['header' => 'AJUSTES'],

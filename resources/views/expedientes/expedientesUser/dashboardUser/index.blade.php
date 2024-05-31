@@ -64,7 +64,7 @@
                     <h6 class="text-center">Estándar</h6>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-2" href="#">Regístrate</a>
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
                     <a class="btn btn-danger" href="#">Descargar</a>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                     <h6 class="text-center">Estándar</h6>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-2" href="#">Regístrate</a>
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
                     <a class="btn btn-danger" href="#">Descargar</a>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                     <h6 class="text-center">Estándar</h6>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-2" href="#">Regístrate</a>
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
                     <a class="btn btn-danger" href="#">Descargar</a>
                 </div>
             </div>

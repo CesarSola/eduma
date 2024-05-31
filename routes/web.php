@@ -16,7 +16,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 use function PHPUnit\Framework\callback;
 use App\Http\Controllers\PostalCodeController;
-
+use App\Http\Controllers\RegistroECController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,8 +68,8 @@ Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 //rutas del expediente Usuario
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
-Route::get('/expedientes/expedientesUser/dashboardUser/index', [DashboardUserController::class, 'index']);
-
+//ruta del registro a un E
+Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController::class, 'index'])->name('registroEC.index');
 
 
 // routes/web.php
