@@ -4,10 +4,10 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\DocumentosController;
-use App\Http\Controllers\ExpedientesController;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
+use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\EvidenciasCompetenciasController;
 use App\Http\Controllers\EvidenciasCursosController;
 
@@ -47,19 +47,32 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-Route::get('/expedientesAdmin', [ExpedientesController::class, 'index'])->name('expedientesAdmin.index');
-Route::get('/expedientesAdmin/usuarios/expediente', [ExpedientesUsuariosController::class, 'index'])->name('usuarios.index');
-Route::get('/expedientesAdmin/registroGeneral/expediente', [DocumentosController::class, 'index'])->name('registroGeneral.index');
-Route::get('/expedientesAdmin/cursos/expediente', [CursosController::class, 'index'])->name('cursos.index');
-Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
-Route::get('/expedientesAdmin/competencias/expediente', [CompetenciasController::class, 'index'])->name('competencias.index');
-Route::get('/expedientesAdmin/competencias/', [EvidenciasCompetenciasController::class, 'index'])->name('competencias.evidencias');
-Route::get('/expedientesAdmin/cursos/', [EvidenciasCursosController::class, 'index'])->name('cursos.evidencias');
+
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
-Route::resource('user', ExpedientesController::class);
+
+//ruta index de expedientes ya no existe
+//Route::resource('expedientesAdmin', ExpedientesController::class);
+//ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
-Route::resource('usuarios', ExpedientesUsuariosController::class);
+//ruta de la carpeta usuarios
+Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
+//ruta de la carpeta cursos
+Route::resource('cursosExpediente', CursosController::class);
+//ruta del show de evidencias cursos
+Route::resource('evidenciasCU', EvidenciasCursosController::class);
+//ruta de la carpeta competencias
+Route::resource('competencia', CompetenciasController::class);
+//ruta del show de evidencias competencias
+Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
+
+//rutas del expediente Usuario
+//ruta dashboard usuario
+Route::resource('usuarios', DashboardUserController::class);
+Route::get('/expedientes/expedientesUser/dashboardUser/index', [DashboardUserController::class, 'index']);
+
+
+
 // routes/web.php
 
 Route::resource('cursos', CursosController::class);

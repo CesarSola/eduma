@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EvidenciasCompetenciasController extends Controller
@@ -9,9 +10,22 @@ class EvidenciasCompetenciasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('expedientes.expedientesAdmin.competencias.evidencias');
+        // Obtener el ID del usuario desde la solicitud
+        $userId = $request->query('user_id');
+
+        // Verificar si se proporcionó un ID de usuario
+        if ($userId) {
+            // Buscar el usuario por ID
+            $competencia = User::findOrFail($userId);
+        } else {
+            // Si no se proporciona un ID, obtener el usuario autenticado
+            $competencia = auth()->user();
+        }
+
+        // Renderizar la vista de las evidencias de competencias con los datos del usuario
+        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('competencia'));
     }
 
     /**

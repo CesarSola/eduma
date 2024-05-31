@@ -4,19 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Curso;
+use App\Models\User;
 
 class CursosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $usuario = auth()->user();
-        $cursos = Curso::all(); // Asegúrate de que estás obteniendo todos los cursos en plural
+        $cursos = Curso::all();
 
-        return view('lista_cursos.index', compact('usuario', 'cursos')); // Pasa la variable como 'cursos'
+        return view('lista_cursos.index', compact('usuario', 'cursos'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -93,9 +95,27 @@ class CursosController extends Controller
         ]);
 
         $curso = Curso::findOrFail($id);
-        $curso->update($request->all());
 
-        return redirect()->route('cursos.index')->with('success', 'Curso actualizado exitosamente');
+        // Actualizar los datos del curso con los datos del formulario
+        $curso->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'instructor' => $request->input('instructor'),
+            'duration' => $request->input('duration'),
+            'modalidad' => $request->input('modalidad'),
+            'fecha_inicio' => $request->input('fecha_inicio'),
+            'fecha_final' => $request->input('fecha_final'),
+            'plataforma' => $request->input('plataforma'),
+            'costo' => $request->input('costo'),
+            'certification' => $request->input('certification'),
+        ]);
+
+        // Redirigir al usuario a la lista de cursos con un mensaje de éxito
+        // Tu lógica para guardar el curso en el controlador
+
+// Después de guardar el curso, redirige al usuario a la página de índice de cursos
+return redirect()->route('cursos.index')->with('success', 'Curso creado exitosamente');
+
     }
 
     // Otros métodos del controlador...

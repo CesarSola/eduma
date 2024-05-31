@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DocumentosController extends Controller
@@ -11,9 +12,12 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesAdmin.registroGeneral.index');
-    }
 
+        $registroGeneral = User::all();
+
+        // Render the view with the user data
+        return view('expedientes.expedientesAdmin.registroGeneral.index', compact('registroGeneral'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -33,9 +37,12 @@ class DocumentosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $registroGeneral = User::findOrFail($id);
+
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral'));
     }
 
     /**

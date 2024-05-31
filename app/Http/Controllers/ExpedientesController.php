@@ -12,10 +12,9 @@ class ExpedientesController extends Controller
      */
     public function index()
     {
-        $users = User::paginate();
+        $expedientesAdmin = User::paginate();
 
-        return view('expedientes.expedientesAdmin.index', compact('users'))
-            ->with('i', (request()->input('page', 1) - 1) * $users->perPage());
+        return view('expedientes.expedientesAdmin.index', compact('expedientesAdmin'));
     }
 
     /**

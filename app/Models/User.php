@@ -25,7 +25,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'paternalSurname' => 'required',
         'maternalSurname' => 'required',
         'age' => 'required|integer',
-        'email' => 'required|string|email|max:255|unique:users,email',
         // Agrega más reglas según sea necesario
     ];
 

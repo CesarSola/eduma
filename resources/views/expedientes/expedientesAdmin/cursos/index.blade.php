@@ -6,7 +6,8 @@
     <div class="header-flex">
         <h1>Cursos</h1>
         <div>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}"
+                class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
@@ -54,12 +55,12 @@
                                     <tr style="text-align: center">
                                         <td>1</td>
                                         <td>2</td>
-                                        <td><a href="{{ route('cursos.evidencias') }}" class="btn btn-primary">Ver</a>
+                                        <td>
+                                            <a href="{{ route('evidenciasCU.index', ['user_id' => $usuario->id]) }}"
+                                                class="btn btn-primary">Ver</a>
                                         </td>
                                         <td>4</td>
                                         <td><a href="" class="btn btn-warning">Archivar</a></td>
-                                        <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Ver</a>
-                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

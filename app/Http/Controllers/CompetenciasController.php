@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Estandares;
 
@@ -10,13 +11,14 @@ class CompetenciasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $usuario = auth()->user();
-        $competencia = Estandares::all();
 
-        return view('lista_estandares.index', compact('usuario', 'competencia'));
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,25 +33,15 @@ class CompetenciasController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación de datos
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'tipo' => 'required|string',
+        //
+    }
 
-        ]);
-
-        // Crear un nuevo objeto Curso con los datos del formulario
-        $competencia = new Estandares([
-            'name' => $request->input('name'),
-            'tipo' => $request->input('tipo'),
-
-        ]);
-
-        // Guardar el curso en la base de datos
-        $competencia->save();
-
-        // Redirigir al usuario a la lista de cursos con un mensaje de éxito
-        return redirect()->route('competencias.index')->with('success', 'competencias creado exitosamente');
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
