@@ -10,13 +10,24 @@ class CompetenciasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $competencia = auth()->user();
+        // Obtener el ID del usuario desde la solicitud
+        $userId = $request->query('user_id');
+
+        // Verificar si se proporcionó un ID de usuario
+        if ($userId) {
+            // Buscar el usuario por ID
+            $competencia = User::findOrFail($userId);
+        } else {
+            // Si no se proporciona un ID, obtener el usuario autenticado
+            $competencia = auth()->user();
+        }
 
         // Renderizar la vista del expediente del usuario
         return view('expedientes.expedientesAdmin.competencias.index', compact('competencia'));
     }
+
 
     /**
      * Show the form for creating a new resource.

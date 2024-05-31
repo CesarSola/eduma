@@ -4,19 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Curso;
+use App\Models\User;
 
 class CursosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cursosExpediente = auth()->user();
+        // Obtener el ID del usuario desde la solicitud
+        $userId = $request->query('user_id');
+
+        // Verificar si se proporcionó un ID de usuario
+        if ($userId) {
+            // Buscar el usuario por ID
+            $usuario = User::findOrFail($userId);
+        } else {
+            // Si no se proporciona un ID, obtener el usuario autenticado
+            $usuario = auth()->user();
+        }
+
+        // Obtener todos los cursos
         $cursos = Curso::all();
-        return view('expedientes.expedientesAdmin.cursos.index', compact('cursosExpediente'));
-        return view('lista_cursos.index', compact('cursos'));
+
+        // Renderizar la vista de cursos del usuario con los cursos y el usuario
+        return view('expedientes.expedientesAdmin.cursos.index', compact('usuario', 'cursos'));
     }
+
 
     /**
      * Show the form for creating a new resource.

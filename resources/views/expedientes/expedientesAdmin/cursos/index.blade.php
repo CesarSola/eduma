@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Cursos</h1>
         <div>
-            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $cursosExpediente->id]) }}"
+            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}"
                 class="btn btn-secondary">Regresar</a>
         </div>
     </div>
@@ -27,11 +27,11 @@
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
                                                     class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $cursosExpediente->name }}
-                                                {{ $cursosExpediente->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $cursosExpediente->paternalSurname }}
-                                                {{ $cursosExpediente->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $cursosExpediente->age }} años</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
+                                                {{ $usuario->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
+                                                {{ $usuario->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>

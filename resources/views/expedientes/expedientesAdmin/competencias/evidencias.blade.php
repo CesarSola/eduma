@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Evidencias Competencias</h1>
         <div>
-            <a href="{{ route('competencia.index') }}" class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('competencia.index', ['user_id' => $competencia->id]) }}" class="btn btn-secondary">Regresar</a>
         </div>
     </div>
 @stop
@@ -25,12 +25,12 @@
                                             <div class="text-center">
                                                 <img src="" alt="" class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $evidenciasCO->name }}
-                                                {{ $evidenciasCO->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $competencia->name }}
+                                                {{ $competencia->secondName }}</h6>
                                             <h6 class="text-left mt-2">Apellidos:
-                                                {{ $evidenciasCO->paternalSurname }}
-                                                {{ $evidenciasCO->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $evidenciasCO->age }} años</h6>
+                                                {{ $competencia->paternalSurname }}
+                                                {{ $competencia->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $competencia->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
@@ -54,10 +54,10 @@
                                     <tr style="text-align: center">
                                         <td>1</td>
                                         <td>2</td>
-                                        <td><a href="#" class="btn btn-primary">Ver</a></td>
+                                        <td><a href="{{ route('evidenciasCU.index', ['user_id' => $competencia->id]) }}"
+                                                class="btn btn-primary">Ver</a></td>
                                         <td>4</td>
                                         <td><a href="#" class="btn btn-warning">Archivar</a></td>
-                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

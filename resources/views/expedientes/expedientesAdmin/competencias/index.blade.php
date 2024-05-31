@@ -25,7 +25,7 @@
                                         <div class="left-content">
                                             <div class="text-center">
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="img-circle">
+                                                    class="rounded-circle">
                                             </div>
                                             <h6 class="text-left mt-2">Nombres: {{ $competencia->name }}
                                                 {{ $competencia->secondName }}</h6>
@@ -34,7 +34,7 @@
                                             <h6 class="text-left mt-2">Edad: {{ $competencia->age }} años</h6>
                                         </div>
                                         <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
+                                            <span class="badge bg-info">Estatus: Activo</span>
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +55,9 @@
                                     <tr style="text-align: center">
                                         <td>1</td>
                                         <td>2</td>
-                                        <td><a href="{{ route('evidenciasCO.index') }}" class="btn btn-primary">Ver</a>
+                                        <td>
+                                            <a href="{{ route('evidenciasCO.index', ['user_id' => $competencia->id]) }}"
+                                                class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                                         </td>
                                         <td>4</td>
                                         <td></td>
@@ -99,8 +101,6 @@
             float: right;
         }
     </style>
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')

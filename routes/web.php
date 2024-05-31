@@ -62,7 +62,7 @@ Route::get('evidenciasCU', [EvidenciasCursosController::class, 'index'])->name('
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
-Route::get('evidenciasCO', [EvidenciasCompetenciasController::class, 'index'])->name('evidenciasCO.index');
+Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 
 
 

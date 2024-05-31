@@ -76,7 +76,7 @@
                                         <li class="list-group-item">Competencia 6</li>
                                         <li class="list-group-item">Competencia 7</li>
                                     </ul>
-                                    <a href="{{ route('competencia.index') }}"
+                                    <a href="{{ route('competencia.index', ['user_id' => $usuariosAdmin->id]) }}"
                                         class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                         <li class="list-group-item">Curso 6</li>
                                         <li class="list-group-item">Curso 7</li>
                                     </ul>
-                                    <a href="{{ route('cursosExpediente.index') }}"
+                                    <a href="{{ route('cursos.index', ['user_id' => $usuariosAdmin->id]) }}"
                                         class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                                 </div>
                             </div>
