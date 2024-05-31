@@ -58,7 +58,7 @@ Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos
-Route::get('evidenciasCU', [EvidenciasCursosController::class, 'index'])->name('evidenciasCU.index');
+Route::resource('evidenciasCU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias

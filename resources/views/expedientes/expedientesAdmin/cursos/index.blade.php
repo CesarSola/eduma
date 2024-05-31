@@ -55,7 +55,9 @@
                                     <tr style="text-align: center">
                                         <td>1</td>
                                         <td>2</td>
-                                        <td><a href="{{ route('evidenciasCU.index') }}" class="btn btn-primary">Ver</a>
+                                        <td>
+                                            <a href="{{ route('evidenciasCU.index', ['user_id' => $usuario->id]) }}"
+                                                class="btn btn-primary">Ver</a>
                                         </td>
                                         <td>4</td>
                                         <td><a href="" class="btn btn-warning">Archivar</a></td>
