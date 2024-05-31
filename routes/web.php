@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
+use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\EvidenciasCompetenciasController;
 use App\Http\Controllers\EvidenciasCursosController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,10 @@ Route::resource('evidenciasCU', EvidenciasCursosController::class);
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
+
+//rutas del expediente Usuario
+//ruta dashboard usuario
+Route::get('/expedientes/expedientesUser/dashboardUser/index', [DashboardUserController::class, 'index']);
 
 
 
