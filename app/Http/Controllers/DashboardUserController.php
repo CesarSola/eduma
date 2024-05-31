@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardUserController extends Controller
 {
@@ -11,7 +13,11 @@ class DashboardUserController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesUser.dashboardUser.index');
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
+
+        // Renderizar la vista con el usuario autenticado
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario'));
     }
 
     /**

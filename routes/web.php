@@ -67,6 +67,7 @@ Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 
 //rutas del expediente Usuario
 //ruta dashboard usuario
+Route::resource('usuarios', DashboardUserController::class);
 Route::get('/expedientes/expedientesUser/dashboardUser/index', [DashboardUserController::class, 'index']);
 
 
