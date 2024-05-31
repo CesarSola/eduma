@@ -319,6 +319,11 @@ return [
         ],
         ['header' => 'account_settings'],
         [
+            'text' => 'profile',
+            'url' => 'profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'Expedientes',
             'icon' => 'fas fa-fw fa-folder',
             'submenu' => [
@@ -338,7 +343,7 @@ return [
             ],
         ],
         [
-            'text' => 'profile',
+            'text' => 'Mi Expediente',
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],
