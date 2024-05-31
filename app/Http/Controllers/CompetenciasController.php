@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CompetenciasController extends Controller
@@ -36,9 +37,12 @@ class CompetenciasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $competencia = User::findOrFail($id);
+
+        // Renderizar la vista del expediente del usuario
+        return view('expedientes.expedientesAdmin.competencia.show', compact('competencia'));
     }
 
     /**
