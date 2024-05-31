@@ -8,18 +8,17 @@
 
 @section('content')
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">
     Nuevo
-  </button>
+</button>
 
-
-    <table class="table table-borderless">
-        <thead>
-           @foreach ($cursos as $curso)
-           <tr>
+<table id="cursos-table" class="table table-bordered table-hover">
+    <thead>
+        <tr>
             <th>Numero</th>
             <th>Nombre</th>
             <th>Descripcion</th>
+            <th>Estandar de competencia</th>
             <th>Instructor</th>
             <th>Duración</th>
             <th>Modalidad</th>
@@ -29,12 +28,15 @@
             <th>Costo</th>
             <th>Certificacion</th>
             <th>Acción</th>
-
         </tr>
+    </thead>
+    <tbody>
+        @foreach ($cursos as $curso)
         <tr>
             <td>{{$curso->id}}</td>
             <td>{{$curso->name}}</td>
             <td>{{$curso->description}}</td>
+            <td>{{$curso->competencia}}</td>
             <td>{{$curso->instructor}}</td>
             <td>{{$curso->duration}}</td>
             <td>{{$curso->modalidad}}</td>
@@ -44,32 +46,28 @@
             <td>{{$curso->costo}}</td>
             <td>{{$curso->certification}}</td>
             <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Nuevo
-                  </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit">
+                   edit
+                </button>
             </td>
         </tr>
-           @endforeach
-        </thead>
-        <tbody>
-            <!-- Aquí puedes iterar sobre los cursos y mostrarlos en la tabla -->
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
 
-
-    <!-- Modal de creación de curso -->
-
-        <!-- Aquí deberías incluir el formulario de creación de curso -->
-        @extends('lista_cursos.create')
-    </div>
-    @extends('lista_cursos.edit')
+@include('lista_cursos.create')
 @stop
 
 @section('css')
     {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 @stop
 
 @section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#cursos-table').DataTable();
+        });
+    </script>
 @stop

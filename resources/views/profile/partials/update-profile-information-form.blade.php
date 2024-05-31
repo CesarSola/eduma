@@ -13,9 +13,30 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div>
+            <x-input-label for="photo" :value="__('Foto')" />
+            <input type="file" class="form-input-file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)">
+
+            @if($user->image)
+            <div class="flex items-center mt-2">
+                <div>
+                    <x-input-label for="photo" :value="__('Foto actual')" class="text-center"/>
+                    <div>
+                        <img id="photo-preview" src="{{ asset('storage/' . $user->image->path) }}" class="w-24 h-24 rounded-full object-cover">
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm text-gray-500">{{ basename($user->image->path) }}</p>
+                </div>
+            </div>
+            @endif
+
+            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -45,6 +66,7 @@
                     @endif
                 </div>
             @endif
+        </div>
 
         <!-- Additional Fields -->
         <div>
@@ -71,14 +93,14 @@
             <div>
                 <x-input-label for="colonia" :value="__('Colonia')" />
                 @if(!empty($data['response']['colonia']))
-       <select>
-            @foreach($data['response']['colonia'] as $colonia)
-                <option>{{ $colonia }}</option>
-            @endforeach
-        </select>
-    @else
-        <p>No se encontraron colonias para este código postal.</p>
-    @endif
+                <select>
+                    @foreach($data['response']['colonia'] as $colonia)
+                        <option>{{ $colonia }}</option>
+                    @endforeach
+                </select>
+                @else
+                    <p>No se encontraron colonias para este código postal.</p>
+                @endif
                 <x-input-error class="mt-2" :messages="$errors->get('colonia')" />
             </div>
             <div>
@@ -102,37 +124,21 @@
             </div>
         </div>
         <!-- End of Additional Fields -->
-        </div>
 
         <!-- Botón para abrir el modal de cambio de contraseña -->
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Actualizar') }}</x-primary-button>
-            <button type="button" class="btn btn-primary flex items-center gap-4" data-toggle="modal" data-target="#exampleModal">
-                Cambiar Contraseña
-            </button>
-
-
         </div>
-
     </form>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('photo-preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

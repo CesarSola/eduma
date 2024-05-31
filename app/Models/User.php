@@ -6,10 +6,17 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne; // Importar la clase HasOne
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
+
+    // Relación de uno a uno con el modelo Image
+    public function image(): HasOne
+    {
+        return $this->hasOne(Image::class);
+    }
 
     // Reglas de validación
     static $rules = [
@@ -39,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'estado',
         'ciudad',
         'municipio',
+        'photo'
     ];
 
     // Campos que deben estar ocultos para la serialización

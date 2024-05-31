@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -49,35 +51,35 @@ class ProfileController extends Controller
         // Validar los datos del formulario principal
         $validatedData = $request->validated();
 
-        // Agregar reglas de validación para la información adicional
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'calle_avenida' => 'nullable|string|max:255',
-            'numext' => 'nullable|string|max:255',
-            'codpos' => 'nullable|string|max:10',
-            'colonia' => 'nullable|string|max:255',
-            'estado' => 'nullable|string|max:255',
-            'ciudad' => 'nullable|string|max:255',
-            'municipio' => 'nullable|string|max:255',
-        ]);
-
         // Obtener el usuario actual
         $user = $request->user();
 
-        // Actualizar los campos del usuario
-        $user->fill($validated);
+        // Procesar la foto del perfil si se proporciona una nueva
+        if ($request->hasFile('photo')) {
+            // Eliminar la foto anterior si existe
+            if ($user->image != null) {
+                Storage::disk('images')->delete($user->image->path);
+                $user->image->delete();
+            }
+            // Almacenar la nueva foto en el sistema de archivos con el nombre personalizado
+            $user->image()->create([
+                'path' => $request->file('photo')->store('users', 'images'),
+            ]);
+        }
 
-        // Si el email ha sido modificado, establece email_verified_at a null
+        // Actualizar los campos del usuario
+        $user->fill($validatedData);
+
+        // Si el email ha sido modificado, establecer email_verified_at a null
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
-        // Guardar los cambios
+        // Guardar los cambios en el usuario
         $user->save();
 
-        // Redireccionar a la página de edición de perfil
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Redireccionar a la página de edición de perfil con un mensaje de estado
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**

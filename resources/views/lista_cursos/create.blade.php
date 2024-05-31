@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="create" tabindex="-1" aria-labelledby="create" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Crear Nuevo Curso</h5>
+                <h5 class="modal-title" id="create">Crear Nuevo Curso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,6 +20,10 @@
                     <div class="form-group">
                         <label for="description">Descripción</label>
                         <textarea class="form-control" id="description" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="competencia">Estandar de competencia</label>
+                        <textarea class="form-control" id="competencia" name="competencia" required></textarea>
                     </div>
 
                     <div class="form-group">

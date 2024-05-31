@@ -1,20 +1,19 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Crear Nuevo Curso</h5>
+                <h5 class="modal-title" id="edit">Editar estandar de competencia</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Vista para editar un curso -->
-<form action="{{ route('cursos.update', $curso->id) }}" method="POST">
+               <form action="{{ route('cursos.update', $curso->id) }}" method="POST">
     @csrf
     @method('PUT')
 
-    <!-- Campos de entrada para editar los detalles del curso -->
     <div class="form-group">
         <label for="name">Nombre del Curso</label>
         <input type="text" class="form-control" id="name" name="name" value="{{ $curso->name }}" required>
@@ -23,6 +22,11 @@
     <div class="form-group">
         <label for="description">Descripción</label>
         <textarea class="form-control" id="description" name="description" required>{{ $curso->description }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="competencia">Estandares</label>
+        <textarea class="form-control" id="competencia" name="competencia" required>{{ $curso->competencia }}</textarea>
     </div>
 
     <div class="form-group">
@@ -67,11 +71,9 @@
         <input type="text" class="form-control" id="certification" name="certification" value="{{ $curso->certification }}">
     </div>
 
-    <!-- Botones para enviar el formulario y cerrar el modal -->
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 </form>
-
             </div>
             <div class="modal-footer">
             </div>

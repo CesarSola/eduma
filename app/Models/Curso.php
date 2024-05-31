@@ -12,6 +12,7 @@ class Curso extends Model
     protected $fillable = [
         'name',
         'description',
+        'competencia',
         'instructor',
         'duration',
         'modalidad',
@@ -22,3 +23,4 @@ class Curso extends Model
         'certification',
     ];
 }
+

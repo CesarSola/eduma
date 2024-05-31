@@ -10,13 +10,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
 use App\Http\Controllers\EvidenciasCompetenciasController;
 use App\Http\Controllers\EvidenciasCursosController;
+
 use Illuminate\Support\Facades\Route;
 
 use Laravel\Socialite\Facades\Socialite;
 
 use function PHPUnit\Framework\callback;
 use App\Http\Controllers\PostalCodeController;
-
+use App\Models\Estandares;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,3 +63,4 @@ Route::resource('usuarios', ExpedientesUsuariosController::class);
 // routes/web.php
 
 Route::resource('cursos', CursosController::class);
+Route::resource('competencias', CompetenciasController::class);
