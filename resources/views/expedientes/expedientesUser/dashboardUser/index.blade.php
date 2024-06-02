@@ -55,16 +55,18 @@
     <div class="card">
         <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
         <br>
-        <div class="card-body d-flex align-items-center justify-content-between">
-            <div class="d-flex flex-column align-items-start">
-                <h6 class="text-left">EC01</h6>
-            </div>
-            <div class="d-flex flex-column align-items-center flex-grow-1">
-                <h6 class="text-center">Estándar</h6>
-            </div>
-            <div class="d-flex">
-                <a class="btn btn-primary me-2" href="#">Regístrate</a>
-                <a class="btn btn-danger" href="#">Descargar</a>
+        <div class="card">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-column align-items-start">
+                    <h6 class="text-left">EC01</h6>
+                </div>
+                <div class="d-flex flex-column align-items-center flex-grow-1">
+                    <h6 class="text-center">Estándar</h6>
+                </div>
+                <div class="d-flex">
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
+                    <a class="btn btn-danger" href="#">Descargar</a>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -76,7 +78,7 @@
                     <h6 class="text-center">Estándar</h6>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-2" href="#">Regístrate</a>
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
                     <a class="btn btn-danger" href="#">Descargar</a>
                 </div>
             </div>
@@ -90,69 +92,71 @@
                     <h6 class="text-center">Estándar</h6>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-2" href="#">Regístrate</a>
+                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
                     <a class="btn btn-danger" href="#">Descargar</a>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
+    <br>
+    <div class="card">
+        <h6 style="text-align: center" class="card-title">Cursos</h6>
         <br>
         <div class="card">
-            <h6 style="text-align: center" class="card-title">Cursos</h6>
-            <br>
-            <div class="card">
-                <div class="card-body">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
+            <div class="card-body">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
             </div>
         </div>
-    @stop
+    </div>
+@stop
 
-    @section('css')
-        <style>
-            .card-title {
-                background-color: #5cb85c;
-                /* Color verde */
-                padding: 10px;
-                color: white;
-                border-radius: 5px;
-            }
+@section('css')
+    <style>
+        .card-title {
+            background-color: #5cb85c;
+            /* Color verde */
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
+        }
 
-            .card-header h3 {
-                margin: 0;
-            }
+        .card-header h3 {
+            margin: 0;
+        }
 
-            .card-body {
-                background-color: #dff0d8;
-                /* Fondo verde claro */
-                padding: 20px;
-                border: 1px solid #5cb85c;
-                border-radius: 5px;
-            }
+        .card-body {
+            background-color: #dff0d8;
+            /* Fondo verde claro */
+            padding: 20px;
+            border: 1px solid #5cb85c;
+            border-radius: 5px;
+        }
 
-            .text-center {
-                color: #000;
-            }
+        .text-center {
+            color: #000;
+        }
 
-            .text-left {
-                color: #000;
-            }
+        .text-left {
+            color: #000;
+        }
 
-            .d-flex.align-items-center h6 {
-                margin-bottom: 0;
-            }
-        </style>
-    @stop
+        .d-flex.align-items-center h6 {
+            margin-bottom: 0;
+        }
+    </style>
+@stop
 
-    @section('js')
-        <script>
-            console.log("Hi, I'm using the Laravel-AdminLTE package!");
-        </script>
-    @stop
+@section('js')
+    <script>
+        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+    </script>
+@stop

@@ -344,6 +344,12 @@ return [
             ],
         ],
         [
+            'text' => 'Mi Expediente',
+            'url' => 'expedientes/expedientesUser/dashboardUser/index',
+            'icon' => 'fas fa-fw fa-folder',
+        ],
+        ['header' => 'AJUSTES'],
+        [
             'text' => 'profile',
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
