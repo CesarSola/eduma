@@ -106,13 +106,9 @@
         <div class="card">
             <div class="card-body">
                 <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    @foreach ($cursos as $curso)
+                        <li>{{ $curso->name }}</li>
+                    @endforeach
                 </ul>
             </div>
         </div>

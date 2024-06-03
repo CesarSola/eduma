@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curso;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +14,12 @@ class DashboardUserController extends Controller
      */
     public function index()
     {
+        $cursos = Curso::all();
         // Obtener el usuario autenticado
         $usuario = Auth::user();
 
         // Renderizar la vista con el usuario autenticado
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario'));
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos'));
     }
 
     /**
