@@ -24,6 +24,11 @@
                         <label for="tipo">Tipo</label>
                         <input type="text" class="form-control" id="tipo" name="tipo" value="{{ old('tipo') }}" required>
                     </div>
+                    <div class="form-group">
+                        <label for="Dnecesarios">Documentos necesarios</label>
+                        <input type="text" class="form-control" id="Dnecesarios" name="Dnecesarios" value="{{ old('Dnecesarios') }}" required>
+
+                    </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
             </div>

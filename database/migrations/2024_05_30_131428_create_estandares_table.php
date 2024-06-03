@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('numero');
             $table->string('name');
+            $table->string('Dnecesarios');
             $table->string('tipo');
             $table->timestamps();
         });

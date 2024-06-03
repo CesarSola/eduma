@@ -34,12 +34,14 @@ class CompetenciasAddController extends Controller
         $request->validate([
             'numero' => 'nullable|string|max:200',
             'name' => 'required|string|max:255',
+            'Dnecesarios' => 'required|string|max:255',
             'tipo' => 'required|string',
         ]);
 
         // Crear una nueva competencia
         Estandares::create([
             'numero' => $request->input('numero'),
+            'Dnecesarios' => $request->input('Dnecesarios'),
             'name' => $request->input('name'),
             'tipo' => $request->input('tipo'),
         ]);
@@ -80,6 +82,7 @@ public function show(string $id)
         // Validación de datos
         $request->validate([
             'numero' => 'nullable|string|max:200',
+            'Dnecesarios' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'tipo' => 'required|string',
         ]);
@@ -89,6 +92,7 @@ public function show(string $id)
 
         $competencia->update([
             'numero' => $request->input('numero'),
+            'Dnecesarios' => $request->input('Dnecesarios'),
             'name' => $request->input('name'),
             'tipo' => $request->input('tipo'),
         ]);

@@ -12,6 +12,7 @@ class Estandares extends Model
         'numero',
         'name',
         'tipo',
+        'Dnecesarios',
 
     ];
 }
