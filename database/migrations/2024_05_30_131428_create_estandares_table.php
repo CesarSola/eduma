@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('estandares', function (Blueprint $table) {
             $table->id();
+            $table->string('numero');
             $table->string('name');
             $table->string('tipo');
             $table->timestamps();

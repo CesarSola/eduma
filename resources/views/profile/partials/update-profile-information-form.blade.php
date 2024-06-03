@@ -26,7 +26,7 @@
                 <div>
                     <x-input-label for="photo" :value="__('Foto actual')" class="text-center"/>
                     <div>
-                        <img id="photo-preview" src="{{ asset('storage/' . $user->image->path) }}" class="w-24 h-24 rounded-full object-cover">
+                        <img id="photo-preview" src="{{ asset('storage/profile' . $user->image->path) }}" class="w-24 h-24 rounded-full object-cover">
                     </div>
                 </div>
                 <div class="ml-4">

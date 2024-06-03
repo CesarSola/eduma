@@ -348,9 +348,34 @@ return [
             'url' => 'expedientes/expedientesUser/dashboardUser/index',
             'icon' => 'fas fa-fw fa-folder',
         ],
+        [
+            'text' => 'Registro de cursos',
+            'url' => 'cursos',
+            'icon' => 'fas fa-table',
+        ],
+        [
+            'text' => 'Registro de estandares',
+            'url' => 'competenciasAD',
+            'icon' => 'fas fa-table',
+        ],
+        [
+            'text' => 'Inscripciones',
+            'url' => 'competenciasinscripcion',
+            'icon' => 'fas fa-table',
+        ],
+        [
+            'text' => 'Mis cursos',
+            'url' => 'competenciasAD',
+            'icon' => 'fas fa-table',
+        ],
+        [
+            'text' => 'Mi Expediente',
+            'url' => 'expedientes/expedientesUser/dashboardUser/index',
+            'icon' => 'fas fa-fw fa-folder',
+        ],
         ['header' => 'AJUSTES'],
         [
-            'text' => 'profile',
+            'text' => 'Perfil',
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],

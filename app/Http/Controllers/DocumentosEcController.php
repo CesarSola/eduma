@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Documentos;
 use Illuminate\Http\Request;
 
-class DocumentosController extends Controller
+class DocumentosEcController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-        $registroGeneral = User::all();
-
-        // Render the view with the user data
-        return view('lista_competencias.show', compact('registroGeneral'));
+        $documentos = Documentos::all();
+        return view('lista_competencias.show', compact('documentos'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -37,12 +35,9 @@ class DocumentosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
-        $registroGeneral = User::findOrFail($id);
-
-        // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral'));
+        //
     }
 
     /**

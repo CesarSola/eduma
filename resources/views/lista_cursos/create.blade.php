@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="create">Crear Nuevo Curso</h5>
+                <h5 class="modal-title" id="create">Crear nuevo curso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -38,8 +38,15 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="modalidad">Modalidad</label>
-                            <input type="text" class="form-control" id="modalidad" name="modalidad">
+                            <select class="form-control" id="modalidad" name="modalidad">
+                                <option value="">Selecciona una modalidad</option>
+                                <option value="Online">Online</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <!-- Agrega más opciones según sea necesario -->
+                            </select>
                         </div>
+
                     </div>
 
                     <div class="form-row">
@@ -53,10 +60,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="plataforma">Plataforma</label>
-                        <input type="text" class="form-control" id="plataforma" name="plataforma">
-                    </div>
+
 
                     <div class="form-group">
                         <label for="costo">Costo</label>

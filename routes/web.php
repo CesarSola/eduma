@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\CompetenciasAddController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\DocumentosController;
+use App\Http\Controllers\DocumentosEcController;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
 use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\ECviewsController;
 use App\Http\Controllers\EvidenciasCompetenciasController;
 use App\Http\Controllers\EvidenciasCursosController;
+use App\Http\Controllers\RegistroECController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -76,4 +80,7 @@ Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController
 // routes/web.php
 
 Route::resource('cursos', CursosController::class);
-Route::resource('competencias', CompetenciasController::class);
+Route::resource('competenciasAD', CompetenciasAddController::class);
+Route::resource('competenciasinscripcion', CompetenciasAddController::class);
+Route::resource('ECinfo',ECviewsController::class);
+Route::resource('documentos',DocumentosEcController::class);
