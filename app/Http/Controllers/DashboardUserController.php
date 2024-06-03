@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curso;
+use App\Models\DocumentosUser;
 use App\Models\Estandares;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,8 +21,7 @@ class DashboardUserController extends Controller
             // El usuario está autenticado, obtener el usuario autenticado
             $usuario = Auth::user();
         } else {
-            // El usuario no está autenticado, puedes manejar este caso según tus necesidades
-            // Por ejemplo, redirigirlo a la página de inicio de sesión
+            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
             return redirect()->route('login');
         }
 
@@ -29,8 +29,11 @@ class DashboardUserController extends Controller
         $competencias = Estandares::all();
         $cursos = Curso::all();
 
+        // Verificar si los documentos del usuario existen
+        $documentos = DocumentosUser::where('user_id', $usuario->id)->exists();
+
         // Renderizar la vista con el usuario autenticado y otros datos
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias'));
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos'));
     }
 
 

@@ -47,36 +47,24 @@
         <br>
         <div class="card d-none" id="documentos">
             <div class="card-body">
-                <ul>
-                    <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente
-                            A color con fondo blanco,
-                            Sin sombras y sin lentes,
-                            Con peso máximo de 300 Kb y formato JPG, BMP o PNG.
-                            Debido a que esta fotografía servirá para el certificado oficial se recomienda acudir a un
-                            estudio fotográfico.
-                        </span>
-                    </li>
-                    <br>
-                    <li><span>
-                            Idenitificación oficinal escaneada INEo IFE
-                            Que sea legible
-                        </span>
-                    </li>
-                    <br>
-                    <li><Span>
-                            Comprobante Domiciliario
-                            Actual y escaneado de forma legible
-                            en PDF
-                        </Span>
-                    </li>
-                    <br>
-                    <li>
-                        <span>CURP en formato PDF
-                            Escaneado y legible
-                        </span>
-                    </li>
-                </ul>
-                <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
+                @if (!$documentos)
+                    <ul>
+                        <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
+                                color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato JPG,
+                                BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se recomienda
+                                acudir a un estudio fotográfico.</span></li>
+                        <br>
+                        <li><span>Identificación oficial escaneada INE o IFE Que sea legible</span></li>
+                        <br>
+                        <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
+                        <br>
+                        <li><span>CURP en formato PDF Escaneado y legible</span></li>
+                    </ul>
+                    <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
+                    </h6>
+                @else
+                    <h6 class="text-center">Los documentos ya han sido subidos.</h6>
+                @endif
             </div>
         </div>
     </div>

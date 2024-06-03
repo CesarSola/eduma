@@ -29,32 +29,44 @@ class SDocumentosController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,bmp|max:300',
-            'ine_ife' => 'required|mimes:pdf|max:1024',
-            'comprobante_domiciliario' => 'required|mimes:pdf|max:1024',
-            'curp' => 'required|mimes:pdf|max:1024',
-        ]);
-
         $user = Auth::user();
-        $folderPath = 'documentos/' . $user->id;
+        $userName = str_replace(' ', '_', $user->name); // Reemplaza espacios en blanco con guiones bajos
 
-        // Almacenar los archivos y obtener sus rutas
-        $fotoPath = $request->file('foto')->storeAs($folderPath, 'Foto.' . $request->file('foto')->extension(), 'public');
-        $ineIfePath = $request->file('ine_ife')->storeAs($folderPath, 'INE_o_IFE.' . $request->file('ine_ife')->extension(), 'public');
-        $comprobanteDomiciliarioPath = $request->file('comprobante_domiciliario')->storeAs($folderPath, 'Comprobante_Domicilio.' . $request->file('comprobante_domiciliario')->extension(), 'public');
-        $curpPath = $request->file('curp')->storeAs($folderPath, 'CURP.' . $request->file('curp')->extension(), 'public');
+        // Validar y almacenar la fotografía digital
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoPath = $foto->storeAs('public/images/documentos/' . $userName, 'Foto.' . $foto->extension());
+        }
 
-        // Guardar las rutas de los archivos en la base de datos
-        DocumentosUser::create([
-            'user_id' => $user->id,
-            'foto' => $fotoPath,
-            'ine_ife' => $ineIfePath,
-            'comprobante_domiciliario' => $comprobanteDomiciliarioPath,
-            'curp' => $curpPath,
-        ]);
+        // Validar y almacenar la identificación oficial (INE o IFE)
+        if ($request->hasFile('ine_ife')) {
+            $ineIfe = $request->file('ine_ife');
+            $ineIfePath = $ineIfe->storeAs('public/images/documentos/' . $userName, 'INE_o_IFE.' . $ineIfe->extension());
+        }
 
-        return redirect()->route('documentosUser.index')->with('success', 'Documentos subidos correctamente.');
+        // Validar y almacenar el comprobante domiciliario
+        if ($request->hasFile('comprobante_domiciliario')) {
+            $comprobante = $request->file('comprobante_domiciliario');
+            $comprobantePath = $comprobante->storeAs('public/images/documentos/' . $userName, 'Comprobante_Domicilio.' . $comprobante->extension());
+        }
+
+        // Validar y almacenar la CURP
+        if ($request->hasFile('curp')) {
+            $curp = $request->file('curp');
+            $curpPath = $curp->storeAs('public/images/documentos/' . $userName, 'CURP.' . $curp->extension());
+        }
+
+        // Puedes guardar las rutas de los archivos en la base de datos
+        $documentosUser = new DocumentosUser();
+        $documentosUser->user_id = $user->id;
+        $documentosUser->foto = $fotoPath ?? null;
+        $documentosUser->ine_ife = $ineIfePath ?? null;
+        $documentosUser->comprobante_domiciliario = $comprobantePath ?? null;
+        $documentosUser->curp = $curpPath ?? null;
+        $documentosUser->save();
+
+        // Redireccionar o devolver una respuesta según sea necesario
+        return redirect()->route('usuarios.index')->with('success', 'Documentos subidos correctamente');
     }
 
     /**
