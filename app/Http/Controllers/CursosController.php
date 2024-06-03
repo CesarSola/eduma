@@ -28,11 +28,14 @@ class CursosController extends Controller
         // Obtener todos los cursos
         $cursos = Curso::all();
 
-        // Renderizar la vista de cursos del usuario con los cursos y el usuario
-        return view('expedientes.expedientesAdmin.cursos.index', compact('usuario', 'cursos'));
-        $cursos = Curso::all();
-
-        return view('lista_cursos.index', compact('usuario', 'cursos'));
+        // Verificar la URL y decidir qué vista mostrar
+        if ($request->is('cursosExpediente*')) {
+            // Renderizar la vista de expedientes con los cursos y el usuario
+            return view('expedientes.expedientesAdmin.cursos.index', compact('usuario', 'cursos'));
+        } else {
+            // Renderizar la vista de lista de cursos con los cursos y el usuario
+            return view('lista_cursos.index', compact('usuario', 'cursos'));
+        }
     }
 
 

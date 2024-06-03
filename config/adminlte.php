@@ -313,7 +313,9 @@ return [
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
-        ['header' => 'ADMINISTRADOR'],
+        [
+            'header' => 'ADMINISTRADOR'
+        ],
         [
             'text' => 'PANEL ADMINISTRATIVO',
             'icon' => 'fas fa-fw fa-folder-open',
@@ -326,22 +328,22 @@ return [
                 [
                     'text' => 'Registro de cursos',
                     'url' => 'cursos',
-                    'icon' => 'fas fa-table',
+                    'icon' => 'fas fa-plus-circle',
+                ],
+                [
+                    'text' => 'Mis cursos',
+                    'url' => 'cursos',
+                    'icon' => 'fas fa-book',
                 ],
                 [
                     'text' => 'Registro de estandares',
                     'url' => 'competenciasAD',
-                    'icon' => 'fas fa-table',
+                    'icon' => 'fas fa-tasks',
                 ],
                 [
                     'text' => 'Inscripciones',
                     'url' => 'competenciasinscripcion',
-                    'icon' => 'fas fa-table',
-                ],
-                [
-                    'text' => 'Mis cursos',
-                    'url' => 'competenciasAD',
-                    'icon' => 'fas fa-table',
+                    'icon' => 'fas fa-check',
                 ],
             ],
         ],
