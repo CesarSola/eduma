@@ -74,7 +74,7 @@ Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
-Route::resource('documentos', SDocumentosController::class);
+Route::resource('documentosUser', SDocumentosController::class);
 //ruta del registro a un EC
 Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController::class, 'index'])->name('registroEC.index');
 

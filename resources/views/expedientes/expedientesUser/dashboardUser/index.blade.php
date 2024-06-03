@@ -76,7 +76,7 @@
                         </span>
                     </li>
                 </ul>
-                <h6 class="text-center"><a href="{{ route('documentos.show') }}" class="btn btn-primary">Subir</a>
+                <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
             </div>
         </div>
     </div>
