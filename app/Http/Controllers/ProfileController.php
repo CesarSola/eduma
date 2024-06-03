@@ -6,81 +6,72 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\Models\CodigoPostal;
 
 class ProfileController extends Controller
 {
-    public function index()
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Request $request)
     {
-        // Realizar la solicitud a la API
-        $response = Http::get('https://api.copomex.com/query/get_colonia_por_cp/97830?token=1a1e01a4-11bd-4a5d-a9b5-fe563db704ea');
-
-        // Obtener los datos JSON de la respuesta
-        $data = $response->json();
-
-        // Pasar los datos a la vista 'profile.partials.update-information-form-blade'
-        return view('profile.partials.update-information-form-blade', compact('data'));
-    }
-
-    public function edit(Request $request): View
-    {
-        $user = auth()->user();
-
-        // Obtener el código postal del usuario
-        $codigoPostal = $user->codpos;
-
-        // Realizar la solicitud a la API para obtener las colonias
-        $response = Http::get("https://api.copomex.com/query/get_colonia_por_cp/{$codigoPostal}?token=1a1e01a4-11bd-4a5d-a9b5-fe563db704ea");
-
-        // Obtener los datos JSON de la respuesta
-        $data = $response->json();
-
-        // Pasar los datos a la vista 'profile.edit'
-        return view('profile.edit', compact('data', 'user'));
+        $codigosPostales = CodigoPostal::all(); // Obtener todos los códigos postales
+        return view('profile.edit', [
+            'user' => $request->user(),
+            'codigosPostales' => $codigosPostales, // Pasar los códigos postales a la vista
+        ]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        // Validar los datos del formulario principal
-        $validatedData = $request->validated();
+   /**
+ * Update the user's profile information.
+ */
+/**
+ * Update the user's profile information.
+ */
+public function update(ProfileUpdateRequest $request): RedirectResponse
+{
+    $user = $request->user();
 
-        // Obtener el usuario actual
-        $user = $request->user();
+    // Actualizar los campos de perfil del usuario
+    $user->fill($request->validated());
 
-        // Procesar la foto del perfil si se proporciona una nueva
-        if ($request->hasFile('photo')) {
-            // Eliminar la foto anterior si existe
-            if ($user->image != null) {
-                Storage::disk('images')->delete($user->image->path);
-                $user->image->delete();
-            }
-            // Almacenar la nueva foto en el sistema de archivos con el nombre personalizado
-            $user->image()->create([
-                'path' => $request->file('photo')->store('users', 'images'),
-            ]);
-        }
+    // Obtener el género del formulario y asignarlo al usuario
+    $user->genero = $request->input('genero');
 
-        // Actualizar los campos del usuario
-        $user->fill($validatedData);
+    // Obtener el apellido del formulario y asignarlo al usuario
+    $user->last_name = $request->input('last_name');
 
-        // Si el email ha sido modificado, establecer email_verified_at a null
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
-        // Guardar los cambios en el usuario
-        $user->save();
-
-        // Redireccionar a la página de edición de perfil con un mensaje de estado
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+    // Si se actualizó el email, restablecer la verificación
+    if ($user->isDirty('email')) {
+        $user->email_verified_at = null;
     }
+
+    // Obtener los datos de dirección del formulario
+    $codigoPostal = CodigoPostal::where('d_codigo', $request->input('codigo_postal'))->first();
+
+    // Asignar los datos de dirección del código postal al usuario si se encuentra
+    if ($codigoPostal) {
+        $user->d_codigo = $codigoPostal->d_codigo; // Asegúrate de asignar el código postal
+        $user->d_asenta = $codigoPostal->d_asenta;
+        $user->D_mnpio = $codigoPostal->D_mnpio;
+        $user->d_estado = $codigoPostal->d_estado;
+        $user->d_ciudad = $codigoPostal->d_ciudad;
+    }
+
+    // Guardar los cambios en la base de datos
+    $user->save();
+
+    // Redirigir de vuelta al formulario de edición de perfil con un mensaje de éxito
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
+
+
+
 
     /**
      * Delete the user's account.

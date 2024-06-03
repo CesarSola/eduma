@@ -51,7 +51,19 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
+use App\Http\Controllers\CodigoPostalController;
 
+// Rutas para el CRUD de códigos postales
+Route::resource('codigos-postales', CodigoPostalController::class);
+
+Route::post('/obtener-detalles-codigo-postal', [CodigoPostalController::class, 'obtenerDetallesCodigoPostal'])->name('obtener-detalles-codigo-postal');
+
+
+
+Route::post('/importar-excel', [CodigoPostalController::class, 'importarExcel'])->name('importar.excel');
+
+
+Route::post('/profile/update-address', [ProfileController::class, 'updateAddress'])->name('update-address');
 
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 
