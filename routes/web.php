@@ -60,7 +60,7 @@ Route::post('/obtener-detalles-codigo-postal', [CodigoPostalController::class, '
 
 
 
-Route::post('/importar-excel', [CodigoPostalCoñntroller::class, 'importarExcel'])->name('importar.excel');
+Route::post('/importar-excel', [CodigoPostalController::class, 'importarExcel'])->name('importar.excel');
 
 
 Route::post('/profile/update-address', [ProfileController::class, 'updateAddress'])->name('update-address');
