@@ -13,10 +13,14 @@ class CompetenciasController extends Controller
      */
     public function index(Request $request)
     {
-        $usuario = auth()->user();
+        // Obtener el ID del usuario desde la solicitud
+        $userId = $request->query('user_id');
+
+        // Buscar el usuario por ID, si no se proporciona ID, se obtiene el usuario autenticado
+        $competencia = User::find($userId) ?? auth()->user();
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario'));
+        return view('expedientes.expedientesAdmin.competencias.index', compact('competencia'));
     }
 
 
@@ -80,9 +84,6 @@ class CompetenciasController extends Controller
 
 
 
-return redirect()->route('competencias.index')->with('success', 'competencia creado exitosamente');
-
+        return redirect()->route('competencias.index')->with('success', 'competencia creado exitosamente');
     }
-
-    // Otros métodos del controlador...
 }

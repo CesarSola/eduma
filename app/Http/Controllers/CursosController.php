@@ -13,7 +13,23 @@ class CursosController extends Controller
      */
     public function index(Request $request)
     {
-        $usuario = auth()->user();
+        // Obtener el ID del usuario desde la solicitud
+        $userId = $request->query('user_id');
+
+        // Verificar si se proporcionó un ID de usuario
+        if ($userId) {
+            // Buscar el usuario por ID
+            $usuario = User::findOrFail($userId);
+        } else {
+            // Si no se proporciona un ID, obtener el usuario autenticado
+            $usuario = auth()->user();
+        }
+
+        // Obtener todos los cursos
+        $cursos = Curso::all();
+
+        // Renderizar la vista de cursos del usuario con los cursos y el usuario
+        return view('expedientes.expedientesAdmin.cursos.index', compact('usuario', 'cursos'));
         $cursos = Curso::all();
 
         return view('lista_cursos.index', compact('usuario', 'cursos'));
@@ -70,50 +86,50 @@ class CursosController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-{
-    $cursos = Curso::findOrFail($id);
-    return view('lista_cursos.edit', compact('curso'));
-}
+    {
+        $cursos = Curso::findOrFail($id);
+        return view('lista_cursos.edit', compact('curso'));
+    }
 
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'competencia' => 'nullable|string|max:255',
-        'instructor' => 'nullable|string|max:255',
-        'duration' => 'nullable|integer',
-        'modalidad' => 'nullable|string|max:255',
-        'fecha_inicio' => 'nullable|date',
-        'fecha_final' => 'nullable|date',
-        'plataforma' => 'nullable|string|max:255',
-        'costo' => 'nullable|string|max:255',
-        'certification' => 'nullable|string|max:255',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'competencia' => 'nullable|string|max:255',
+            'instructor' => 'nullable|string|max:255',
+            'duration' => 'nullable|integer',
+            'modalidad' => 'nullable|string|max:255',
+            'fecha_inicio' => 'nullable|date',
+            'fecha_final' => 'nullable|date',
+            'plataforma' => 'nullable|string|max:255',
+            'costo' => 'nullable|string|max:255',
+            'certification' => 'nullable|string|max:255',
+        ]);
 
-    $cursos = Curso::findOrFail($id);
+        $cursos = Curso::findOrFail($id);
 
-    // Actualizar los datos del curso con los datos del formulario
-    $cursos->update([
-        'name' => $request->input('name'),
-        'description' => $request->input('description'),
-        'instructor' => $request->input('instructor'),
-        'duration' => $request->input('duration'),
-        'modalidad' => $request->input('modalidad'),
-        'fecha_inicio' => $request->input('fecha_inicio'),
-        'fecha_final' => $request->input('fecha_final'),
-        'plataforma' => $request->input('plataforma'),
-        'costo' => $request->input('costo'),
-        'certification' => $request->input('certification'),
-    ]);
+        // Actualizar los datos del curso con los datos del formulario
+        $cursos->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'instructor' => $request->input('instructor'),
+            'duration' => $request->input('duration'),
+            'modalidad' => $request->input('modalidad'),
+            'fecha_inicio' => $request->input('fecha_inicio'),
+            'fecha_final' => $request->input('fecha_final'),
+            'plataforma' => $request->input('plataforma'),
+            'costo' => $request->input('costo'),
+            'certification' => $request->input('certification'),
+        ]);
 
-    // Redirigir al usuario a la lista de cursos con un mensaje de éxito
-    return redirect()->route('cursos.index')->with('success', 'Curso actualizado exitosamente');
-}
+        // Redirigir al usuario a la lista de cursos con un mensaje de éxito
+        return redirect()->route('cursos.index')->with('success', 'Curso actualizado exitosamente');
+    }
 
     // Otros métodos del controlador...
 }
