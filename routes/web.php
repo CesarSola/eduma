@@ -73,7 +73,7 @@ Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 //rutas del expediente Usuario
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
-//ruta del registro a un E
+//ruta del registro a un EC
 Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController::class, 'index'])->name('registroEC.index');
 
 
@@ -82,5 +82,5 @@ Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController
 Route::resource('cursos', CursosController::class);
 Route::resource('competenciasAD', CompetenciasAddController::class);
 Route::resource('competenciasinscripcion', CompetenciasAddController::class);
-Route::resource('ECinfo',ECviewsController::class);
-Route::resource('documentos',DocumentosEcController::class);
+Route::resource('ECinfo', ECviewsController::class);
+Route::resource('documentos', DocumentosEcController::class);
