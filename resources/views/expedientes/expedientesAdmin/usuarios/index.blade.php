@@ -25,21 +25,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($usuariosAdmin as $user)
+            @foreach ($usuariosAdmin as $usuario)
                 <tr style="text-align: center">
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->secondName }}</td>
-                    <td>{{ $user->paternalSurname }}</td>
-                    <td>{{ $user->maternalSurname }}</td>
-                    <td>{{ $user->age }}</td>
-                    <td>{{ $user->matricula ?? 'N/A' }}</td>
+                    <td>{{ $usuario->id }}</td>
+                    <td>{{ $usuario->name }}</td>
+                    <td>{{ $usuario->secondName }}</td>
+                    <td>{{ $usuario->paternalSurname }}</td>
+                    <td>{{ $usuario->maternalSurname }}</td>
+                    <td>{{ $usuario->age }}</td>
+                    <td>{{ $usuario->matricula ?? 'N/A' }}</td>
                     <td>
-                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->ine_ife)
+                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->ine_ife)
                             <object
-                                data="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
+                                data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
                                 type="application/pdf" width="100" height="100">
-                                <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
+                                <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
                                     target="_blank">Ver INE</a>
                             </object>
                         @else
@@ -47,11 +47,11 @@
                         @endif
                     </td>
                     <td>
-                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->comprobante_domiciliario)
+                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->comprobante_domiciliario)
                             <object
-                                data="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
+                                data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
                                 type="application/pdf" width="100" height="100">
-                                <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
+                                <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
                                     target="_blank">Ver Comprobante</a>
                             </object>
                         @else
@@ -59,15 +59,15 @@
                         @endif
                     </td>
                     <td>
-                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->foto)
-                            <img src="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->foto)) }}"
+                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->foto)
+                            <img src="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->foto)) }}"
                                 width="100" height="100" />
                         @else
                             No disponible
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('usuariosAdmin.show', $user->id) }}" class="btn btn-primary">Ver</a>
+                        <a href="{{ route('usuariosAdmin.show', $usuario->id) }}" class="btn btn-primary">Ver</a>
                     </td>
                 </tr>
             @endforeach
