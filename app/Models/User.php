@@ -6,16 +6,15 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasOne; // Importar la clase HasOne
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    // Relación de uno a uno con el modelo Image
-    public function image(): HasOne
+    // Relación de uno a muchos con el modelo DocumentosUser
+    public function documentos()
     {
-        return $this->hasOne(Image::class);
+        return $this->hasMany(DocumentosUser::class);
     }
 
     // Reglas de validación

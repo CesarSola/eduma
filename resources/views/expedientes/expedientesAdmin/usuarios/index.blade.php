@@ -21,7 +21,6 @@
                 <th scope="col">INE</th>
                 <th scope="col">Comprobante Domiciliario</th>
                 <th scope="col">Foto</th>
-                <th scope="col">Estado</th>
                 <th scope="col">Expediente</th>
             </tr>
         </thead>
@@ -34,11 +33,31 @@
                     <td>{{ $user->paternalSurname }}</td>
                     <td>{{ $user->maternalSurname }}</td>
                     <td>{{ $user->age }}</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $user->matricula ?? 'N/A' }}</td>
+                    <td>
+                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->ine_ife)
+                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
+                                target="_blank">Ver INE</a>
+                        @else
+                            No disponible
+                        @endif
+                    </td>
+                    <td>
+                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->comprobante_domiciliario)
+                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
+                                target="_blank">Ver Comprobante</a>
+                        @else
+                            No disponible
+                        @endif
+                    </td>
+                    <td>
+                        @if ($user->documentos->isNotEmpty() && $user->documentos->first()->foto)
+                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->foto)) }}"
+                                target="_blank">Ver Foto</a>
+                        @else
+                            No disponible
+                        @endif
+                    </td>
                     <td>
                         <a href="{{ route('usuariosAdmin.show', $user->id) }}" class="btn btn-primary">Ver</a>
                     </td>

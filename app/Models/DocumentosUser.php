@@ -13,6 +13,8 @@ class DocumentosUser extends Model
 
     protected $fillable = [
         'user_id',
+        'tipo',
+        'ruta',
         'foto',
         'ine_ife',
         'comprobante_domiciliario',

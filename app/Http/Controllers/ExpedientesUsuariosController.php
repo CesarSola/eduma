@@ -12,21 +12,18 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        $usuariosAdmin = User::all();
+        $usuariosAdmin = User::with('documentos')->get();
 
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $usuariosAdmin = User::findOrFail($id);
+        $usuario = User::with('documentos')->findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin'));
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuario'));
     }
 
     /**
