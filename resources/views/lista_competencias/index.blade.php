@@ -18,6 +18,7 @@
             <th>Numero</th>
             <th>Nombre</th>
             <th>Tipo</th>
+            <th>D.necesarios</th>
             <th>Acción</th>
         </tr>
     </thead>
@@ -27,6 +28,8 @@
             <td>{{$competencias->numero}}</td>
             <td>{{$competencias->name}}</td>
             <td>{{$competencias->tipo}}</td>
+            <td>
+                {{$competencias->Dnecesarios}}</td>
 
             <td>
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ $competencias->id }}">

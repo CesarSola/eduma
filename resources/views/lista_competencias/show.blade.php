@@ -22,22 +22,27 @@
     <h4 class="pl-4">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </h4>
-    <table id="cursos-table" class="table table-bordered table-hover text-center">
-        <thead>
+
+    <table id="cursos-table" class="table table-bordered table-hover text-center small-table">
+        <thead class="table-primary">
             <tr>
                 <td>Nombre</td>
+                <td>Archivos</td>
                 <td>Acción</td>
             </tr>
         </thead>
         <tbody>
             @foreach ($documentos as $documento)
-                <tr>
-                    <td>{{ $documento->nombre }}</td>
-                    <td>
-                        <button class="btn btn-primary">Ver</button>
-                        <button class="btn btn-danger">Eliminar</button>
-                    </td>
-                </tr>
+                @if ($competencias->numero == "EC076" && $competencias->Dnecesarios == $documento->nombre)
+                    <tr>
+                        <td>{{ $documento->nombre }}</td>
+                        <td>{{ $documento->Archivos }}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Subir</button>
+                            <button class="btn btn-success btn-sm">Descargar</button>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -47,48 +52,34 @@
     {{-- Add here extra stylesheets --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <style>
-        /* Estilos para los botones */
+        /* Estilos para los botones y tabla */
         .btn {
-            padding: 8px 12px; /* Ajustamos el padding para que los botones sean más compactos */
+            padding: 8px 12px;
             border: none;
             cursor: pointer;
-            font-size: 14px; /* Reducimos el tamaño de la fuente */
+            font-size: 14px;
             border-radius: 5px;
             margin-right: 10px;
         }
 
-        /* Ajustamos el espacio entre los elementos */
-        .toolbar {
-            display: flex;
-            align-items: center;
-            margin-top: 20px; /* Añadimos un margen superior para separar el contenido anterior */
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
         }
 
-        .toolbar input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
+        .small-table {
+            width: auto;
+            font-size: 12px;
         }
 
-        /* Estilos para el cuadrado */
-        .square {
-            width: 40px; /* Reducimos el tamaño del cuadrado */
-            height: 40px; /* Reducimos el tamaño del cuadrado */
-            border: 1px dashed black;
-            position: relative;
-            line-height: 40px;
+        .small-table th,
+        .small-table td {
+            padding: 4px 8px;
         }
 
-        .cross {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 18px; /* Ajustamos el tamaño del símbolo "+" */
+        .small-table .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
         }
     </style>
-@stop
-
-@section('js')
 @stop

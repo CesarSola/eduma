@@ -11,5 +11,6 @@ class Documentos extends Model
     protected $fillable = [
         'nombre',
         'archivo',
+        'Dnecesarios',
     ];
 }
