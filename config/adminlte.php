@@ -347,7 +347,7 @@ return [
         ],
         ['header' => 'USUARIO'],
         [
-            'text' => 'Mi Expediente',
+            'text' => 'Mi expediente',
             'url' => 'usuarios',
             'icon' => 'fas fa-fw fa-folder',
         ],
