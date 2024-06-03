@@ -308,69 +308,47 @@ return [
 
 
 
-
-
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
+        ['header' => 'ADMINISTRADOR'],
         [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'Expedientes',
+            'text' => 'PANEL ADMINISTRATIVO',
             'icon' => 'fas fa-fw fa-folder-open',
             'submenu' => [
                 [
                     'text' => 'Lista de expedientes',
-                    'url' => 'expedientesAdmin',
+                    'url' => 'usuariosAdmin',
+                    'icon' => 'fas fa-user',
                 ],
                 [
-                    'text' => 'Cursos',
-                    'url' => 'expedientesAdmin/cursos/expediente',
+                    'text' => 'Registro de cursos',
+                    'url' => 'cursos',
                     'icon' => 'fas fa-table',
                 ],
                 [
-                    'text' => 'Estandares de competencia',
-                    'url' => 'competencias',
+                    'text' => 'Registro de estandares',
+                    'url' => 'competenciasAD',
+                    'icon' => 'fas fa-table',
+                ],
+                [
+                    'text' => 'Inscripciones',
+                    'url' => 'competenciasinscripcion',
+                    'icon' => 'fas fa-table',
+                ],
+                [
+                    'text' => 'Mis cursos',
+                    'url' => 'competenciasAD',
                     'icon' => 'fas fa-table',
                 ],
             ],
         ],
+        ['header' => 'USUARIO'],
         [
-            'text' => 'Mi Expediente',
-            'url' => 'expedientes/expedientesUser/dashboardUser/index',
-            'icon' => 'fas fa-fw fa-folder',
-        ],
-        [
-            'text' => 'Registro de cursos',
-            'url' => 'cursos',
-            'icon' => 'fas fa-table',
-        ],
-        [
-            'text' => 'Registro de estandares',
-            'url' => 'competenciasAD',
-            'icon' => 'fas fa-table',
-        ],
-        [
-            'text' => 'Inscripciones',
-            'url' => 'competenciasinscripcion',
-            'icon' => 'fas fa-table',
-        ],
-        [
-            'text' => 'Mis cursos',
-            'url' => 'competenciasAD',
-            'icon' => 'fas fa-table',
-        ],
-        [
-            'text' => 'Mi Expediente',
-            'url' => 'expedientes/expedientesUser/dashboardUser/index',
+            'text' => 'Mi expediente',
+            'url' => 'usuarios',
             'icon' => 'fas fa-fw fa-folder',
         ],
         ['header' => 'AJUSTES'],
@@ -383,60 +361,6 @@ return [
             'text' => 'change_password',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
         ],
     ],
 
