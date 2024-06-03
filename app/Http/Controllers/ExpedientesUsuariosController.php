@@ -20,10 +20,10 @@ class ExpedientesUsuariosController extends Controller
 
     public function show($id)
     {
-        $usuario = User::with('documentos')->findOrFail($id);
+        $usuariosAdmin = User::with('documentos')->findOrFail($id);
 
         // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuario'));
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin'));
     }
 
     /**
