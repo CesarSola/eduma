@@ -33,24 +33,34 @@
 
     <br>
     <div class="card">
-        <h6 style="text-align: center" class="card-title">Completa los siguientes pasos</h6>
+        <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos">Lista de requerimientos
+            y documentación</h6>
         <br>
-        <div class="card">
+        <div class="card d-none" id="requerimientos">
             <div class="card-body">
-                <h6 class="text-center">Lista de requerimentos y documentación</h6>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h6 class="text-center">Sube tus documentos</h6>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h6 class="text-center">Descargar los formatos</h6>
+                <h6 class="text-center">Contenido de requerimientos y documentación...</h6>
             </div>
         </div>
     </div>
+    <div class="card">
+        <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Sube tus documentos</h6>
+        <br>
+        <div class="card d-none" id="documentos">
+            <div class="card-body">
+                <h6 class="text-center">Contenido de sube tus documentos...</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <h6 style="text-align: center" class="card-title toggle-card" data-target="#formatos">Descargar los formatos</h6>
+        <br>
+        <div class="card d-none" id="formatos">
+            <div class="card-body">
+                <h6 class="text-center">Contenido de descargar los formatos...</h6>
+            </div>
+        </div>
+    </div>
+
     <br>
     <div class="card">
         <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
@@ -72,6 +82,7 @@
             </div>
         @endforeach
     </div>
+
     <br>
     <div class="card">
         <h6 style="text-align: center" class="card-title">Cursos</h6>
@@ -121,11 +132,25 @@
         .d-flex.align-items-center h6 {
             margin-bottom: 0;
         }
+
+        .toggle-card {
+            cursor: pointer;
+        }
     </style>
 @stop
 
 @section('js')
     <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleCards = document.querySelectorAll('.toggle-card');
+
+            toggleCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const target = document.querySelector(targetId);
+                    target.classList.toggle('d-none');
+                });
+            });
+        });
     </script>
 @stop
