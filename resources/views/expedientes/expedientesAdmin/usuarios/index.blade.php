@@ -36,24 +36,32 @@
                     <td>{{ $user->matricula ?? 'N/A' }}</td>
                     <td>
                         @if ($user->documentos->isNotEmpty() && $user->documentos->first()->ine_ife)
-                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
-                                target="_blank">Ver INE</a>
+                            <object
+                                data="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
+                                type="application/pdf" width="100" height="100">
+                                <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->ine_ife)) }}"
+                                    target="_blank">Ver INE</a>
+                            </object>
                         @else
                             No disponible
                         @endif
                     </td>
                     <td>
                         @if ($user->documentos->isNotEmpty() && $user->documentos->first()->comprobante_domiciliario)
-                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
-                                target="_blank">Ver Comprobante</a>
+                            <object
+                                data="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
+                                type="application/pdf" width="100" height="100">
+                                <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->comprobante_domiciliario)) }}"
+                                    target="_blank">Ver Comprobante</a>
+                            </object>
                         @else
                             No disponible
                         @endif
                     </td>
                     <td>
                         @if ($user->documentos->isNotEmpty() && $user->documentos->first()->foto)
-                            <a href="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->foto)) }}"
-                                target="_blank">Ver Foto</a>
+                            <img src="{{ asset(str_replace('public/', 'storage/', $user->documentos->first()->foto)) }}"
+                                width="100" height="100" />
                         @else
                             No disponible
                         @endif
