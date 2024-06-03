@@ -15,14 +15,24 @@ class DashboardUserController extends Controller
      */
     public function index()
     {
+        // Verificar si el usuario está autenticado
+        if (Auth::check()) {
+            // El usuario está autenticado, obtener el usuario autenticado
+            $usuario = Auth::user();
+        } else {
+            // El usuario no está autenticado, puedes manejar este caso según tus necesidades
+            // Por ejemplo, redirigirlo a la página de inicio de sesión
+            return redirect()->route('login');
+        }
+
+        // Obtener competencias y cursos
         $competencias = Estandares::all();
         $cursos = Curso::all();
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
 
-        // Renderizar la vista con el usuario autenticado
+        // Renderizar la vista con el usuario autenticado y otros datos
         return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias'));
     }
+
 
     /**
      * Show the form for creating a new resource.
