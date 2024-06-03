@@ -107,7 +107,7 @@
             <div class="card-body">
                 <ul>
                     @foreach ($cursos as $curso)
-                        <li>{{ $curso->name }}</li>
+                        <li> {{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
                     @endforeach
                 </ul>
             </div>
