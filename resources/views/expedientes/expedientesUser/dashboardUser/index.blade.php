@@ -55,49 +55,22 @@
     <div class="card">
         <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
         <br>
-        <div class="card">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div class="d-flex flex-column align-items-start">
-                    <h6 class="text-left">EC01</h6>
-                </div>
-                <div class="d-flex flex-column align-items-center flex-grow-1">
-                    <h6 class="text-center">Estándar</h6>
-                </div>
-                <div class="d-flex">
-                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
-                    <a class="btn btn-danger" href="#">Descargar</a>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div class="d-flex flex-column align-items-start">
-                    <h6 class="text-left">EC12</h6>
-                </div>
-                <div class="d-flex flex-column align-items-center flex-grow-1">
-                    <h6 class="text-center">Estándar</h6>
-                </div>
-                <div class="d-flex">
-                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
-                    <a class="btn btn-danger" href="#">Descargar</a>
+        @foreach ($competencias as $competencia)
+            <div class="card">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="d-flex flex-column align-items-start">
+                        <h6 class="text-left">{{ $competencia->numero }}</h6>
+                    </div>
+                    <div class="d-flex flex-column align-items-center flex-grow-1">
+                        <h6 class="text-center">{{ $competencia->name }}</h6>
+                    </div>
+                    <div class="d-flex">
+                        <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
+                        <a class="btn btn-danger" href="#">Descargar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div class="d-flex flex-column align-items-start">
-                    <h6 class="text-left">EC05</h6>
-                </div>
-                <div class="d-flex flex-column align-items-center flex-grow-1">
-                    <h6 class="text-center">Estándar</h6>
-                </div>
-                <div class="d-flex">
-                    <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
-                    <a class="btn btn-danger" href="#">Descargar</a>
-                </div>
-            </div>
-        </div>
-    </div>
+        @endforeach
     </div>
     <br>
     <div class="card">
@@ -107,7 +80,7 @@
             <div class="card-body">
                 <ul>
                     @foreach ($cursos as $curso)
-                        <li> {{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
+                        <li>{{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
                     @endforeach
                 </ul>
             </div>
