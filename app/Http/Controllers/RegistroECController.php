@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocumentosUser;
+use App\Models\Estandares;
 use Illuminate\Http\Request;
 
 class RegistroECController extends Controller
@@ -11,7 +13,51 @@ class RegistroECController extends Controller
      */
     public function index()
     {
-        return view('expedientes.expedientesUser.registroEC.index');
+        // Obtener los estándares de competencia
+        $EC = Estandares::all();
+
+        // Pasar los datos a la vista
+        return view('expedientes.expedientesUser.registroEC.index', compact('EC'));
+    }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeDocumentosIns(Request $request)
+    {
+        $request->validate([
+            'ficha_inscripcion' => 'required|mimes:doc,docx|max:2048',
+        ]);
+
+        $path = $request->file('ficha_inscripcion')->store('public/documentos');
+
+        $documentosUser = DocumentosUser::where('user_id', auth()->id())->first();
+        if (!$documentosUser) {
+            $documentosUser = new DocumentosUser();
+            $documentosUser->user_id = auth()->id();
+        }
+        $documentosUser->ficha_inscripcion = $path;
+        $documentosUser->save();
+
+        return redirect()->route('documentosIns.create')->with('success', 'Ficha de inscripción subida correctamente');
+    }
+
+    public function storeDocumentosComp(Request $request)
+    {
+        $request->validate([
+            'comprobante_pago' => 'required|image|max:2048',
+        ]);
+
+        $path = $request->file('comprobante_pago')->store('public/documentos');
+
+        $documentosUser = DocumentosUser::where('user_id', auth()->id())->first();
+        if (!$documentosUser) {
+            $documentosUser = new DocumentosUser();
+            $documentosUser->user_id = auth()->id();
+        }
+        $documentosUser->comprobante_pago = $path;
+        $documentosUser->save();
+
+        return redirect()->route('documentosComp.create')->with('success', 'Comprobante de pago subido correctamente');
     }
     /**
      * Show the form for creating a new resource.

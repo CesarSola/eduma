@@ -92,7 +92,7 @@
                         <h6 class="text-center">{{ $competencia->name }}</h6>
                     </div>
                     <div class="d-flex">
-                        <a class="btn btn-primary" href="{{ route('registroEC.index') }}">Regístrate</a>
+                        <a class="btn btn-primary" href="{{ route('EC.index') }}">Regístrate</a>
                         <a class="btn btn-danger" href="#">Descargar</a>
                     </div>
                 </div>

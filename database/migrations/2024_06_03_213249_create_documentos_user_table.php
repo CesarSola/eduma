@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('ine_ife'); // Ruta de la identificación
             $table->string('comprobante_domiciliario'); // Ruta del comprobante domiciliario
             $table->string('curp'); // Ruta del CURP
+            $table->string('comprobante_pago'); // Ruta del comprobante de pago
+            $table->string('ficha_inscripcion'); // Ruta de la ficha de inscripción
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
