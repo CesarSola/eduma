@@ -161,8 +161,11 @@ return [
         /*
          * Package Service Providers...
          */
+<<<<<<< HEAD
         //Maatwebsite\Excel\ExcelServiceProvider::class,
 
+=======
+>>>>>>> 3cdfbefe6f94697c4cca22279f42c0fc59f31113
 
         /*
          * Application Service Providers...
@@ -186,9 +189,13 @@ return [
     |
     */
 
+<<<<<<< HEAD
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
       //  'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
+=======
+    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
+>>>>>>> 3cdfbefe6f94697c4cca22279f42c0fc59f31113
 
 ];
