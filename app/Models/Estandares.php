@@ -8,11 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Estandares extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'numero',
-        'name',
-        'tipo',
-        'Dnecesarios',
-
-    ];
+    protected $table = 'estandares';
+    public function cursos()
+    {
+        return $this->belongsTo(Curso::class, 'id');
+    }
 }

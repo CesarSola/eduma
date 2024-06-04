@@ -19,7 +19,6 @@
 
                 <th class="centered-text">Numero</th>
                 <th class="centered-text">Nombre</th>
-
                 <th class="centered-text">Descripción</th>
                 <th class="centered-text">Estandar de competencia</th>
                 <th class="centered-text">Instructor</th>
@@ -35,10 +34,10 @@
         <tbody>
             @foreach ($cursos as $curso)
             <tr>
-                <td>{{$curso->numero}}</td>
+                <td>{{$curso->id}}</td>
                 <td>{{$curso->name}}</td>
                 <td>{{$curso->description}}</td>
-                <td>{{$curso->competencia}}</td>
+                <td>{{$curso->estandares->numero}}</td>
                 <td>{{$curso->instructor}}</td>
                 <td>{{$curso->duration}}</td>
                 <td>{{$curso->modalidad}}</td>
