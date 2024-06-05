@@ -2,7 +2,6 @@
 
 @section('title', 'Expediente')
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -44,21 +43,23 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <ul class="list-group flex-grow-1 overflow-auto">
-                                <li class="list-group-item">Documento 1</li>
-                                <li class="list-group-item">Documento 2</li>
-                                <li class="list-group-item">Documento 3</li>
-                                <li class="list-group-item">Documento 4</li>
-                                <li class="list-group-item">Documento 5</li>
-                                <li class="list-group-item">Documento 6</li>
-                                <li class="list-group-item">Documento 7</li>
-                                <li class="list-group-item">Documento 8</li>
-                                <li class="list-group-item">Documento 9</li>
+                                @foreach ($usuariosAdmin->documentos as $documento)
+                                    <li class="list-group-item">
+                                        INE/IFE: {{ pathinfo($documento->ine_ife, PATHINFO_FILENAME) }}
+                                        <br>
+                                        Comprobante Domiciliario:
+                                        {{ pathinfo($documento->comprobante_domiciliario, PATHINFO_FILENAME) }}
+                                        <br>
+                                        Foto: {{ pathinfo($documento->foto, PATHINFO_FILENAME) }}
+                                    </li>
+                                @endforeach
                             </ul>
                             <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
                                 class="btn btn-primary">Ver</a>
                         </div>
                     </div>
                 </div>
+                <!-- Aquí puedes añadir más secciones como Competencias y Cursos -->
                 <div class="col-md-6">
                     <div class="row h-100">
                         <div class="col-md-6">
