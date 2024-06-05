@@ -20,4 +20,8 @@ class Estandares extends Model
     {
         return $this->belongsTo(Curso::class, 'id');
     }
+    public function comprobantePago()
+    {
+        return $this->hasOne(ComprobantePago::class);
+    }
 }

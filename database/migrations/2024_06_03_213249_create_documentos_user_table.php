@@ -14,12 +14,10 @@ class CreateDocumentosUserTable extends Migration
         Schema::create('documentos_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id'); // Para relacionar con el usuario
-            $table->string('foto')->nullable(); // Ruta de la foto, ahora nullable
-            $table->string('ine_ife')->nullable(); // Ruta de la identificación
-            $table->string('comprobante_domiciliario')->nullable(); // Ruta del comprobante domiciliario
-            $table->string('curp')->nullable(); // Ruta del CURP
-            $table->string('comprobante_pago')->nullable(); // Ruta del comprobante de pago
-            $table->string('ficha_inscripcion')->nullable(); // Ruta de la ficha de inscripción
+            $table->string('foto'); // Ruta de la foto, ahora nullable
+            $table->string('ine_ife'); // Ruta de la identificación
+            $table->string('comprobante_domiciliario'); // Ruta del comprobante domiciliario
+            $table->string('curp'); // Ruta del CURP 
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

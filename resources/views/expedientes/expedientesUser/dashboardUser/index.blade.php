@@ -83,6 +83,9 @@
         <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
         <br>
         @foreach ($competencias as $competencia)
+            @php
+                $comprobante = $comprobantes->firstWhere('estandar_id', $competencia->id);
+            @endphp
             <div class="card">
                 <div class="card-body d-flex align-items-center justify-content-between">
                     <div class="d-flex flex-column align-items-start">
@@ -92,14 +95,18 @@
                         <h6 class="text-center">{{ $competencia->name }}</h6>
                     </div>
                     <div class="d-flex">
-                        <a class="btn btn-primary"
-                            href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
+                        @if ($comprobante)
+                            <a class="btn btn-primary"
+                                href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Ver</a>
+                        @else
+                            <a class="btn btn-primary"
+                                href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
+                        @endif
                         <a class="btn btn-danger" href="#">Descargar</a>
                     </div>
                 </div>
             </div>
         @endforeach
-
     </div>
 
     <br>
@@ -122,7 +129,6 @@
     <style>
         .card-title {
             background-color: #5cb85c;
-            /* Color verde */
             padding: 10px;
             color: white;
             border-radius: 5px;
@@ -134,7 +140,6 @@
 
         .card-body {
             background-color: #dff0d8;
-            /* Fondo verde claro */
             padding: 20px;
             border: 1px solid #5cb85c;
             border-radius: 5px;
