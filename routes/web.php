@@ -88,8 +88,9 @@ Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
 Route::resource('documentosUser', SDocumentosController::class);
 //ruta del registro a un EC
-
-Route::resource('EC', RegistroECController::class);
+Route::get('/competenciaEC/documentosIns', [RegistroECController::class, 'documentosIns'])->name('competenciaEC.documentosIns');
+Route::get('/competenciaEC/documentosComp', [RegistroECController::class, 'documentosComp'])->name('competenciaEC.documentosComp');
+Route::resource('competenciaEC', RegistroECController::class);
 
 
 

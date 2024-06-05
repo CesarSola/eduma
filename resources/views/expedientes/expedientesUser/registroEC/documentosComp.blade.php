@@ -7,11 +7,11 @@
 @stop
 
 @section('content')
-    <form action="{{ route('documentosComp.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('competenciaEC.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <label for="comprobante_pago">Comprobante de Pago (Imagen):</label>
-            <input type="file" name="comprobante_pago" class="form-control" required>
+            <label for="comprobante_pago">Comprobante de Pago (PDF):</label>
+            <input type="file" name="comprobante_pago" class="form-control" accept=".pdf" required>
         </div>
         <button type="submit" class="btn btn-success">Subir</button>
     </form>
