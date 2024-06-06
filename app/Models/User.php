@@ -76,4 +76,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Curso::class, 'user_curso');
     }
+<<<<<<< HEAD
+    public function deactivateAccount(User $user)
+    {
+        $user->active = 0;
+        $user->save();
+    
+        // Redirigir o mostrar un mensaje de éxito
+    }
+    public function reactivateAccount(User $user)
+{
+    $user->active = 1;
+    $user->save();
+
+    // Redirigir o mostrar un mensaje de éxito
+}
+
+=======
+>>>>>>> 04a319847ab69e868af32812c6059bc85ec9c8ec
 }

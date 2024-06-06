@@ -102,3 +102,15 @@ Route::resource('competenciasAD', CompetenciasAddController::class);
 Route::resource('competenciasinscripcion', CompetenciasAddController::class);
 Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
+});
+
+Route::get('/profile/reactivate', function () {
+    return view('auth.reactivate');
+})->name('profile.reactivate');
+
+Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivate');
