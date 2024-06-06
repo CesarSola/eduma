@@ -22,8 +22,11 @@
                         <textarea class="form-control" id="description" name="description" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="competencia">Estandar de competencia</label>
-                        <textarea class="form-control" id="competencia" name="competencia" required></textarea>
+                        <label for="estandar_id">Estandar de Competencia</label>
+                        <select class="form-control" id="estandar_id" name="estandar_id" required>
+                            <option value="">Selecciona un estandar</option>
+
+                        </select>
                     </div>
 
                     <div class="form-group">

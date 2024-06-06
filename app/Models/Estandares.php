@@ -8,11 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Estandares extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'numero',
-        'name',
-        'tipo',
-        'Dnecesarios',
 
+    protected $table = 'estandares';
+
+    protected $fillable = [
+        'numero', // existing fields
+        'name', // existing fields
+        'tipo',
+        'Dnecesarios' // new field added
     ];
+
+    public function cursos()
+    {
+        return $this->belongsTo(Curso::class, 'id');
+    }
+
+    public function comprobantePago()
+    {
+        return $this->hasOne(ComprobantePago::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_competencia');
+    }
 }

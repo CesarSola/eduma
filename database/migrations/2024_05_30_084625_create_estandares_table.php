@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('estandares', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('numero');
             $table->string('name');
-            $table->string('Dnecesarios');
+            $table->string('Dnecesarios', 999);
             $table->string('tipo');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+
             $table->timestamps();
         });
     }

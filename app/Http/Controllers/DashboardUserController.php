@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ComprobantePago;
 use App\Models\Curso;
 use App\Models\DocumentosUser;
 use App\Models\Estandares;
@@ -16,24 +17,21 @@ class DashboardUserController extends Controller
      */
     public function index()
     {
-        // Verificar si el usuario está autenticado
         if (Auth::check()) {
-            // El usuario está autenticado, obtener el usuario autenticado
             $usuario = Auth::user();
         } else {
-            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
             return redirect()->route('login');
         }
 
-        // Obtener competencias y cursos
         $competencias = Estandares::all();
         $cursos = Curso::all();
 
-        // Verificar si los documentos del usuario existen
         $documentos = DocumentosUser::where('user_id', $usuario->id)->exists();
 
-        // Renderizar la vista con el usuario autenticado y otros datos
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos'));
+        // Obtener los comprobantes de pago del usuario
+        $comprobantes = ComprobantePago::where('user_id', $usuario->id)->get();
+
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'comprobantes'));
     }
 
 

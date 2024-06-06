@@ -12,12 +12,10 @@
 
 @section('content')
     <div class="card mb-3" style="max-width: 600px; margin: auto;">
-        <div class="card-body-1 d-flex justify-content-between">
-            <div class="d-flex flex-column">
-                <h6 class="text-left">EC001</h6>
-            </div>
-            <div class="d-flex flex-column flex-grow-1 text-center">
-                <h6 class="text-center">NOMBRE DEL ESTÁNDAR DE C</h6>
+        <div class="card-body-1 d-flex justify-content-center align-items-center">
+            <div class="d-flex flex-column text-center">
+                <h6>{{ $estandar_id->numero }} {{ $estandar_id->name }} {{ $estandar_id->tipo }}
+                </h6>
             </div>
         </div>
     </div>
@@ -27,26 +25,37 @@
             <div class="card-body">
                 <h6>REQUISITOS PARA LA EVALUACIÓN Y CERTIFICACIÓN</h6>
                 <h6>INFORMACIÓN DEL CURSO</h6>
-                <h6>LISTA DE EVIDENCIAS</h6>
+                <h6>{{ $estandar_id->Dnecesarios }}</h6>
             </div>
         </div>
 
         <div class="d-flex justify-content-between" style="width: 100%;">
-            <div class="card mb-3" style="width: 48%;">
+            <div class="card mb-3" style="width: 48%; margin: auto;">
                 <div class="card-body text-center">
-                    <button class="btn btn-success">SUBIR DOCUMENTOS DE INSCRIPCIÓN</button>
-                </div>
-            </div>
-            <div class="card mb-3" style="width: 48%;">
-                <div class="card-body text-center">
-                    <button class="btn btn-success">SUBIR COMPROBANTE DE PAGO</button>
+                    @if ($comprobanteExistente)
+                        <p>Comprobante de pago subido correctamente.</p>
+                        <a href="{{ Storage::url($comprobanteExistente->comprobante_pago) }}" class="btn btn-primary">Ver
+                            Comprobante</a>
+                    @else
+                        <!-- Formulario para subir el comprobante de pago -->
+                        <form action="{{ route('competenciaEC.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="competencia_id" value="{{ $selectedECId }}">
+                            <div class="form-group">
+                                <label for="comprobante_pago">Comprobante de Pago (PDF):</label>
+                                <input type="file" name="comprobante_pago" class="form-control" accept=".pdf" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Subir</button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="text-center mt-3">
-        <button class="btn btn-success">EVIDENCIAS</button>
+        <div class="d-flex justify-content-between mt-3">
+            <a href="" class="btn btn-success">Evidencias</a>
+            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Volver</a>
+        </div>
     </div>
 @stop
 
@@ -105,6 +114,17 @@
         .btn-success:hover {
             background-color: #4cae4c;
             border-color: #4cae4c;
+        }
+
+        .btn-primary {
+            background-color: #0275d8;
+            border-color: #0275d8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #025aa5;
+            border-color: #025aa5;
         }
     </style>
 @stop

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Curso;
+use App\Models\Estandares;
+
 use App\Models\User;
 
 class CursosController extends Controller
@@ -44,7 +46,10 @@ class CursosController extends Controller
      */
     public function create()
     {
-        return view('lista_cursos.create');
+       $estandares = Estandares::all();
+
+        // Pasar los estandares a la vista de creación
+        return view('lista_cursos.create', compact('estandares'));
     }
 
     /**
@@ -55,7 +60,7 @@ class CursosController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'competencia' => 'nullable|string|max:255',
+            'id_estandares' => 'required|exists:estandares,id',
             'instructor' => 'nullable|string|max:255',
             'duration' => 'nullable|integer',
             'modalidad' => 'nullable|string|max:255',
@@ -69,7 +74,7 @@ class CursosController extends Controller
         $cursos = new Curso([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'competencia' => $request->input('competencia'),
+            'id_estandares' => $request->input('id_estandares'),
             'instructor' => $request->input('instructor'),
             'duration' => $request->input('duration'),
             'modalidad' => $request->input('modalidad'),
@@ -99,36 +104,36 @@ class CursosController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'competencia' => 'nullable|string|max:255',
-            'instructor' => 'nullable|string|max:255',
-            'duration' => 'nullable|integer',
-            'modalidad' => 'nullable|string|max:255',
-            'fecha_inicio' => 'nullable|date',
-            'fecha_final' => 'nullable|date',
-            'plataforma' => 'nullable|string|max:255',
-            'costo' => 'nullable|string|max:255',
-            'certification' => 'nullable|string|max:255',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'competencia' => 'nullable|string|max:255',
+        'instructor' => 'nullable|string|max:255',
+        'duration' => 'nullable|integer',
+        'modalidad' => 'nullable|string|max:255',
+        'fecha_inicio' => 'nullable|date',
+        'fecha_final' => 'nullable|date',
+        'plataforma' => 'nullable|string|max:255',
+        'costo' => 'nullable|string|max:255',
+        'certification' => 'nullable|string|max:255',
+    ]);
 
         $cursos = Curso::findOrFail($id);
 
-        // Actualizar los datos del curso con los datos del formulario
-        $cursos->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'instructor' => $request->input('instructor'),
-            'duration' => $request->input('duration'),
-            'modalidad' => $request->input('modalidad'),
-            'fecha_inicio' => $request->input('fecha_inicio'),
-            'fecha_final' => $request->input('fecha_final'),
-            'plataforma' => $request->input('plataforma'),
-            'costo' => $request->input('costo'),
-            'certification' => $request->input('certification'),
-        ]);
+    // Actualizar los datos del curso con los datos del formulario
+    $cursos->update([
+        'name' => $request->input('name'),
+        'description' => $request->input('description'),
+        'instructor' => $request->input('instructor'),
+        'duration' => $request->input('duration'),
+        'modalidad' => $request->input('modalidad'),
+        'fecha_inicio' => $request->input('fecha_inicio'),
+        'fecha_final' => $request->input('fecha_final'),
+        'plataforma' => $request->input('plataforma'),
+        'costo' => $request->input('costo'),
+        'certification' => $request->input('certification'),
+    ]);
 
         // Redirigir al usuario a la lista de cursos con un mensaje de éxito
         return redirect()->route('cursos.index')->with('success', 'Curso actualizado exitosamente');
