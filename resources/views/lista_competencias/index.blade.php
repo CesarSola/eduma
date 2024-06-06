@@ -3,14 +3,17 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Estandraes</h1>
+    <h1>Estandares</h1>
 @stop
 
 @section('content')
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">
-   Nuevo
-</button>
+<div class="mb-4">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">
+        Nuevo
+     </button>
+</div>
+
 
 <table id="cursos-table" class="table table-bordered table-hover ">
     <thead  class="table table-bordered table-hover text-center">

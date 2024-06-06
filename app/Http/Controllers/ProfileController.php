@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\CodigoPostal;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
+
+
     public function edit(Request $request)
     {
         $codigosPostales = CodigoPostal::all(); // Obtener todos los códigos postales
@@ -44,12 +47,33 @@ public function update(ProfileUpdateRequest $request): RedirectResponse
     $user->genero = $request->input('genero');
 
     // Obtener el apellido del formulario y asignarlo al usuario
-    $user->last_name = $request->input('last_name');
+    $user->secondName = $request->input('secondName');
+    $user->maternalSurname = $request->input('maternalSurname');
+    $user->paternalSurname = $request->input('paternalSurname');
+    $user->calle_avenida = $request->input('calle_avenida');
+    $user->numext = $request->input('numext');
+    $user->age= $request->input('age');
+    $user->phone= $request->input('phone');
 
     // Si se actualizó el email, restablecer la verificación
     if ($user->isDirty('email')) {
         $user->email_verified_at = null;
     }
+    $userName = str_replace(' ', '_', $user->name . '_' . $user->paternalSurname);
+
+    // Validar y almacenar la fotografía digital si se ha enviado una
+    if ($request->hasFile('foto')) {
+        // Obtener el archivo de la solicitud
+        $foto = $request->file('foto');
+
+        // Almacenar la fotografía en la carpeta correspondiente con el nombre de usuario
+        $fotoPath = $foto->storeAs('public/images/users/' . $userName, 'Foto.' . $foto->extension());
+
+        // Asignar la ruta de la foto al usuario
+        $user->foto = $fotoPath;
+    }
+
+    // Guardar los cambios en el usuario en la base de datos
 
     // Obtener los datos de dirección del formulario
     $codigoPostal = CodigoPostal::where('d_codigo', $request->input('codigo_postal'))->first();

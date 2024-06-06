@@ -24,12 +24,13 @@ return new class extends Migration
             $table->string('password'); // campo contraseña
             $table->string('calle_avenida')->nullable(); // Campo calle/avenida
             $table->string('numext')->nullable(); // Campo numext
-            $table->string('codpos')->nullable(); // Campo codpos
-            $table->string('colonia')->nullable(); // Campo colonia
-            $table->string('estado')->nullable(); // Campo estado
-            $table->string('ciudad')->nullable(); // Campo ciudad
-            $table->string('municipio')->nullable(); // Campo municipio
+            $table->string('d_codigo')->nullable(); // Campo codpos
+            $table->string('d_asenta')->nullable(); // Campo colonia
+            $table->string('d_estado')->nullable(); // Campo estado
+            $table->string('d_ciudad')->nullable(); // Campo ciudad
+            $table->string('D_mnpio')->nullable(); // Campo municipio
             $table->string('phone')->nullable(); // Campo municipio
+            $table->string('foto')->nullable(); // Campo municipio
             $table->rememberToken();
             $table->timestamps();
         });

@@ -15,6 +15,35 @@
     padding: 50px;
     border-radius: 10px;
 }
+.container-1 {
+    background-color: white;
+    width: 60%; /* Ancho reducido al 60% para dejar 20% de margen en cada lado */
+    padding: 10px;
+    border-radius: 10px;
+    margin: 0 auto; /* Centrado horizontal */
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+}
+
+.container1.1 {
+    display: flex;
+    flex-direction: column; /* Organizar en columna */
+    align-items: center; /* Centrar horizontalmente los elementos */
+    width: 100%;
+}
+
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    margin-top: 20px;
+}
+
+
 
 .flex-container {
     display: flex;
@@ -38,10 +67,71 @@ margin-left: 55px;
 
     </style>
     <div class="py-12">
+
+
+        </div>
+
+        <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+            @csrf
+            @method('patch')
+            <div class="container-1">
+                <div class="container1.1">
+                    <!-- Contenedor para la vista previa de la imagen y la etiqueta -->
+                    <div class="preview-container mb-4">
+                        <x-input-label class="mb-2" for="name" :value="__('Foto de perfil')" />
+                        <!-- Vista previa de la imagen -->
+                        <img src="{{ asset(str_replace('public/', 'storage/', $user->foto)) }}" id="previewImage" width="200" height="200" class="rounded-full shadow-lg mb-4">
+                        <!-- Input para seleccionar una nueva imagen -->
+                        <label for="foto" class="cursor-pointer hover:opacity-80 inline-flex items-center shadow-md px-4 py-2 bg-blue-500 text-blue border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                            Seleccionar imagen
+                            <input id="foto" name="foto" type="file" class="text-sm cursor-pointer hidden" onchange="previewFile()" accept="image/*">
+                        </label>
+                        <x-input-error class="mt-2" :messages="$errors->get('foto')" />
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function previewFile() {
+                    const preview = document.getElementById('previewImage');
+                    const file = document.getElementById('foto').files[0];
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        // Convert file to base64 string
+                        preview.src = reader.result;
+                    }, false);
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                }
+            </script>
+
+
+
+            <script>
+                function previewFile() {
+                    const preview = document.getElementById('previewImage');
+                    const file = document.querySelector('input[type=file]').files[0];
+                    const reader = new FileReader();
+
+                    reader.onloadend = function() {
+                        preview.src = reader.result;
+                    }
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    } else {
+                        preview.src = "";
+                    }
+                }
+            </script>
+
+
+
         <div class="container">
-            <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
-                @csrf
-                @method('patch')
+<br>
             <div class="flex-container">
 
                 <div class="Div-1">
@@ -196,7 +286,7 @@ margin-left: 55px;
                                 class="text-sm text-gray-600"
                             >{{ __('Guardado.') }}</p>
                         @endif
-
+                    </form>
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
                             Cambiar contraseña
                         </button>
@@ -229,7 +319,7 @@ margin-left: 55px;
                       </div>
 
             </div>
-        </form>
+
         </div>
     </div>
     <br>

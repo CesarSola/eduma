@@ -35,12 +35,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_id',
         'calle_avenida',
         'numext',
-        'codpos',
-        'colonia',
-        'estado',
-        'ciudad',
-        'municipio',
-        'photo',
+        'd_codigo',
+        'd_asenta',
+        'd_estado',
+        'd_ciudad',
+        'D_mnpio',
+       'foto',
         'phone'
     ];
 
@@ -74,4 +74,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Curso::class, 'user_curso');
     }
+
 }
