@@ -73,6 +73,8 @@ Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias'
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
+//ruta comentarios-validar
+Route::put('/registro-general/{id}/update-documentos', [DocumentosController::class, 'updateDocumentos'])->name('registroGeneral.updateDocumentos');
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos

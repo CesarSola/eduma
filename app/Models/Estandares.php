@@ -18,18 +18,21 @@ class Estandares extends Model
         'Dnecesarios' // new field added
     ];
 
+    // Relación muchos a uno con el modelo Curso
     public function cursos()
     {
         return $this->belongsTo(Curso::class, 'id');
     }
 
+    // Relación uno a uno con el modelo ComprobantePago
     public function comprobantePago()
     {
         return $this->hasOne(ComprobantePago::class);
     }
 
+    // Relación muchos a muchos con el modelo User
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_competencia');
+        return $this->belongsToMany(User::class, 'user_estandares', 'estandar_id', 'user_id');
     }
 }

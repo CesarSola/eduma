@@ -11,8 +11,6 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-
-
     // Reglas de validación
     static $rules = [
         'name' => 'required',
@@ -40,7 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'd_estado',
         'd_ciudad',
         'D_mnpio',
-       'foto',
+        'foto',
         'phone'
     ];
 
@@ -55,24 +53,27 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
     // Relación de uno a muchos con el modelo DocumentosUser
-    // User.php
     public function documentos()
     {
-        return $this->hasMany(DocumentosUser::class, 'user_id');
+        return $this->hasMany(DocumentosUser::class);
     }
 
-    public function comprobantesPago()
+    // Relación de uno a muchos con el modelo ComprobantePago
+    public function comprobantes()
     {
         return $this->hasMany(ComprobantePago::class);
     }
+
+    // Relación muchos a muchos con el modelo Estandares
     public function estandares()
     {
-        return $this->belongsToMany(Estandares::class, 'user_competencia');
+        return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id');
     }
+    // Relación muchos a muchos con el modelo Curso
     public function cursos()
     {
         return $this->belongsToMany(Curso::class, 'user_curso');
     }
-
 }

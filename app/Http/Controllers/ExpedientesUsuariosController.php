@@ -17,12 +17,22 @@ class ExpedientesUsuariosController extends Controller
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
-
     public function show($id)
     {
-        $usuariosAdmin = User::with('documentos')->find($id);
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin'));
+        // Dentro del método show del controlador
+
+
+        $usuariosAdmin = User::with('documentos', 'comprobantes', 'estandares', 'cursos')->findOrFail($id);
+
+        $documentos = $usuariosAdmin->documentos;
+        $comprobantesPago = $usuariosAdmin->comprobantes->whereNotNull('comprobante_pago');
+        $competencias = $usuariosAdmin->estandares;
+        $cursos = $usuariosAdmin->cursos;
+
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesPago', 'competencias', 'cursos'));
     }
+
+
     /**
      * Show the form for creating a new resource.
      */

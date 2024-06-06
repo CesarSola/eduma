@@ -40,27 +40,76 @@
                                 </div>
                             </div>
                         </div>
-                        @for ($i = 1; $i <= 4; $i++)
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Documento {{ $i }}</label>
-                                <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary">Ver</button>
+
+                        <form action="{{ route('registroGeneral.updateDocumentos', ['id' => $registroGeneral->id]) }}"
+                            method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <!-- Mostrar documentos específicos -->
+                            @foreach ($documentos as $documento)
+                                @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
+                                    @if ($documento->$documentoNombre)
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}</label>
+                                            <div class="col-sm-4">
+                                                <a href="{{ Storage::url($documento->$documentoNombre) }}" target="_blank"
+                                                    class="btn btn-primary">Ver</a>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="documento_{{ $documentoNombre }}"
+                                                        id="validar_{{ $documentoNombre }}" value="validar">
+                                                    <label class="form-check-label"
+                                                        for="validar_{{ $documentoNombre }}">Validar</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="documento_{{ $documentoNombre }}"
+                                                        id="rechazar_{{ $documentoNombre }}" value="rechazar">
+                                                    <label class="form-check-label"
+                                                        for="rechazar_{{ $documentoNombre }}">Rechazar</label>
+                                                </div>
+                                                <textarea class="form-control mt-2" name="comentario_{{ $documentoNombre }}" placeholder="Agregar comentarios"></textarea>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endforeach
+
+                            <!-- Mostrar comprobante de pago -->
+                            @if ($comprobantePago)
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
+                                    <div class="col-sm-4">
+                                        <a href="{{ Storage::url($comprobantePago->comprobante_pago) }}" target="_blank"
+                                            class="btn btn-primary">Ver</a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="comprobante_pago"
+                                                id="validar_comprobante_pago" value="validar">
+                                            <label class="form-check-label" for="validar_comprobante_pago">Validar</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="comprobante_pago"
+                                                id="rechazar_comprobante_pago" value="rechazar">
+                                            <label class="form-check-label" for="rechazar_comprobante_pago">Rechazar</label>
+                                        </div>
+                                        <textarea class="form-control mt-2" name="comentario_comprobante_pago" placeholder="Agregar comentarios"></textarea>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="documento{{ $i }}"
-                                            id="validar{{ $i }}" value="validar">
-                                        <label class="form-check-label" for="validar{{ $i }}">Validar</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="documento{{ $i }}"
-                                            id="rechazar{{ $i }}" value="rechazar">
-                                        <label class="form-check-label" for="rechazar{{ $i }}">Rechazar</label>
-                                    </div>
-                                    <textarea class="form-control mt-2" placeholder="Agregar comentarios"></textarea>
+                            @endif
+
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-success">Guardar</button>
                                 </div>
                             </div>
-                        @endfor
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -97,8 +146,6 @@
             float: right;
         }
     </style>
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')

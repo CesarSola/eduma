@@ -36,73 +36,92 @@
 
         <div class="col-md-12 mt-3">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
                             <h3 class="card-title">Documentos de Registro General</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <ul class="list-group flex-grow-1 overflow-auto">
-                                @foreach ($usuariosAdmin->documentos as $documento)
-                                    <li class="list-group-item">
-                                        INE/IFE: {{ pathinfo($documento->ine_ife, PATHINFO_FILENAME) }}
+                            @if ($documentos->isNotEmpty())
+                                <ul class="list-group flex-grow-1 overflow-auto">
+                                    @foreach ($documentos as $documento)
+                                        <li class="list-group-item">
+                                            {{ basename($documento->ine_ife) }}
+                                        </li>
                                         <br>
-                                        Comprobante Domiciliario:
-                                        {{ pathinfo($documento->comprobante_domiciliario, PATHINFO_FILENAME) }}
+                                        <li class="list-group-item">
+                                            {{ basename($documento->comprobante_domiciliario) }}
+                                        </li>
                                         <br>
-                                        Foto: {{ pathinfo($documento->foto, PATHINFO_FILENAME) }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                            <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                class="btn btn-primary">Ver</a>
+                                        <li class="list-group-item">
+                                            {{ basename($documento->foto) }}
+                                        </li>
+                                        <br>
+                                    @endforeach
+                                @else
+                                    <div style="text-align: center">
+                                        <p>No hay documentos disponibles para este usuario.</p>
+                                    </div>
+                            @endif
+                            <!-- Mostrar los comprobantes de pago si existen -->
+                            @if ($comprobantesPago->isNotEmpty())
+                                <ul class="list-group flex-grow-1 overflow-auto">
+                                    @foreach ($comprobantesPago as $comprobante)
+                                        <li class="list-group-item">
+                                            {{ basename($comprobante->comprobante_pago) }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            @if ($documentos->isNotEmpty())
+                                <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                    class="btn btn-primary">Ver</a>
+                            @endif
                         </div>
                     </div>
                 </div>
-                <!-- Aquí puedes añadir más secciones como Competencias y Cursos -->
-                <div class="col-md-6">
-                    <div class="row h-100">
-                        <div class="col-md-6">
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <h3 class="card-title">Competencias</h3>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <ul class="list-group flex-grow-1 overflow-auto">
-                                        <li class="list-group-item">Competencia 1</li>
-                                        <li class="list-group-item">Competencia 2</li>
-                                        <li class="list-group-item">Competencia 3</li>
-                                        <li class="list-group-item">Competencia 4</li>
-                                        <li class="list-group-item">Competencia 5</li>
-                                        <li class="list-group-item">Competencia 6</li>
-                                        <li class="list-group-item">Competencia 7</li>
-                                    </ul>
-                                    <a href="{{ route('competencia.index', ['user_id' => $usuariosAdmin->id]) }}"
-                                        class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
-                                </div>
-                            </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Competencias</h3>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <h3 class="card-title">Cursos</h3>
+                        <div class="card-body d-flex flex-column">
+                            @if ($competencias->isNotEmpty())
+                                <ul class="list-group flex-grow-1 overflow-auto">
+                                    @foreach ($competencias as $competencia)
+                                        <li class="list-group-item">{{ $competencia->nombre }}</li>
+                                    @endforeach
+                                </ul>
+                                <a href="{{ route('competencia.index', ['user_id' => $usuariosAdmin->id]) }}"
+                                    class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
+                            @else
+                                <div style="text-align: center">
+                                    <p>No hay competencias disponibles para este usuario.</p>
                                 </div>
-                                <div class="card-body d-flex flex-column">
-                                    <ul class="list-group flex-grow-1 overflow-auto">
-                                        <li class="list-group-item">Curso 1</li>
-                                        <li class="list-group-item">Curso 2</li>
-                                        <li class="list-group-item">Curso 3</li>
-                                        <li class="list-group-item">Curso 4</li>
-                                        <li class="list-group-item">Curso 5</li>
-                                        <li class="list-group-item">Curso 6</li>
-                                        <li class="list-group-item">Curso 7</li>
-                                    </ul>
-                                    <a href="{{ route('cursosExpediente.index', ['user_id' => $usuariosAdmin->id]) }}"
-                                        class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
-                                </div>
-                            </div>
+                            @endif
                         </div>
-                        @extends('expedientes.expedientesAdmin.usuarios.edit')
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Cursos</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            @if ($cursos->isNotEmpty())
+                                <ul class="list-group flex-grow-1 overflow-auto">
+                                    @foreach ($cursos as $curso)
+                                        <li class="list-group-item">{{ $curso->nombre }}</li>
+                                    @endforeach
+                                </ul>
+                                <a href="{{ route('cursosExpediente.index', ['user_id' => $usuariosAdmin->id]) }}"
+                                    class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
+                            @else
+                                <div style="text-align: center">
+                                    <p>No hay cursos disponibles para este usuario.</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
