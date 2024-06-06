@@ -41,6 +41,24 @@
             </a>
         </div>
 
+        <!-- Registration Link -->
+        <p class="my-0">
+            <a href="{{ route('register') }}">{{ __('Register a new membership') }}</a>
+        </p>
+
+        <!-- Reactivate Account Link (if inactive) -->
+        @if($inactive ?? false)
+            <div class="flex items-center justify-end mt-4">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('profile.reactivate') }}">
+                    {{ __('Reactivate your account') }}
+                </a>
+            </div>
+            <div class="mb-3">
+                <p class="text-danger">This account is deactivated. Please reactivate it.</p>
+                <p class="text-muted">{{ __('Email') }}: {{ $email }}</p>
+            </div>
+        @endif
+
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">

@@ -58,4 +58,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function deactivateAccount(User $user)
+    {
+        $user->active = 0;
+        $user->save();
+    
+        // Redirigir o mostrar un mensaje de éxito
+    }
+    public function reactivateAccount(User $user)
+{
+    $user->active = 1;
+    $user->save();
+
+    // Redirigir o mostrar un mensaje de éxito
+}
 }
