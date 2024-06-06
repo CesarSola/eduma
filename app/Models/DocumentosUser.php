@@ -13,7 +13,6 @@ class DocumentosUser extends Model
 
     protected $fillable = [
         'user_id',
-        'tipo',
         'ruta',
         'foto',
         'ine_ife',
@@ -23,6 +22,6 @@ class DocumentosUser extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -12,11 +12,6 @@ class DocumentosController extends Controller
      */
     public function index()
     {
-
-        $registroGeneral = User::all();
-
-        // Render the view with the user data
-        return view('lista_competencias.show', compact('registroGeneral'));
     }
     /**
      * Show the form for creating a new resource.

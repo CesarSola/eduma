@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
-
     protected $table = 'cursos';
-    public function estandares()
+
+    public function users()
     {
-        return $this->belongsTo(Estandares::class, 'id_estandares','id');
+        return $this->belongsToMany(User::class, 'user_curso');
     }
 }

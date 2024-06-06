@@ -88,7 +88,9 @@ Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
 Route::resource('documentosUser', SDocumentosController::class);
 //ruta del registro a un EC
-Route::get('expedientes/expedientesUser/registroEC/index', [RegistroECController::class, 'index'])->name('registroEC.index');
+// Ruta específica para el método store del controlador RegistroECController
+Route::resource('competenciaEC', RegistroECController::class);
+
 
 
 // routes/web.php
