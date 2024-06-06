@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('paternalSurname')->nullable();  //campo apellido paterno
             $table->string('maternalSurname')->nullable();  //campo apellido materno
             $table->string('age')->nullable();  //campo edad
+            $table->string('genero')->nullable();  //campo edad
             $table->string('email')->unique(); // campo email/correo
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password'); // campo contraseña
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('estado')->nullable(); // Campo estado
             $table->string('ciudad')->nullable(); // Campo ciudad
             $table->string('municipio')->nullable(); // Campo municipio
+            $table->string('phone')->nullable(); // Campo municipio
             $table->rememberToken();
             $table->timestamps();
         });

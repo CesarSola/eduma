@@ -24,7 +24,7 @@ use App\Http\Controllers\PostalCodeController;
 use App\Http\Controllers\SDocumentosController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 Route::get('/colonias', [PostalCodeController::class, 'index']);
 //

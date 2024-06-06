@@ -44,7 +44,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'estado',
         'ciudad',
         'municipio',
-        'photo'
+        'photo',
+        'phone'
     ];
 
     // Campos que deben estar ocultos para la serialización
