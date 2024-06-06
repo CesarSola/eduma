@@ -11,11 +11,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    // Relación de uno a muchos con el modelo DocumentosUser
-    public function documentos()
-    {
-        return $this->hasMany(DocumentosUser::class);
-    }
+
 
     // Reglas de validación
     static $rules = [
@@ -39,12 +35,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_id',
         'calle_avenida',
         'numext',
-        'codpos',
-        'colonia',
-        'estado',
-        'ciudad',
-        'municipio',
-        'photo'
+        'd_codigo',
+        'd_asenta',
+        'd_estado',
+        'd_ciudad',
+        'D_mnpio',
+       'foto',
+        'phone'
     ];
 
     // Campos que deben estar ocultos para la serialización
@@ -58,6 +55,25 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    // Relación de uno a muchos con el modelo DocumentosUser
+    // User.php
+    public function documentos()
+    {
+        return $this->hasMany(DocumentosUser::class, 'user_id');
+    }
+
+    public function comprobantesPago()
+    {
+        return $this->hasMany(ComprobantePago::class);
+    }
+    public function estandares()
+    {
+        return $this->belongsToMany(Estandares::class, 'user_competencia');
+    }
+    public function cursos()
+    {
+        return $this->belongsToMany(Curso::class, 'user_curso');
+    }
 
     public function deactivateAccount(User $user)
     {
@@ -73,4 +89,5 @@ class User extends Authenticatable implements MustVerifyEmail
 
     // Redirigir o mostrar un mensaje de éxito
 }
+
 }
