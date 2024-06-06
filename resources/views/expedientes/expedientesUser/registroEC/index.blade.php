@@ -15,7 +15,7 @@
         <div class="card-body-1 d-flex justify-content-center align-items-center">
             <div class="d-flex flex-column text-center">
                 <h6>{{ $estandar_id->numero }} {{ $estandar_id->name }} {{ $estandar_id->tipo }}
-                    {{ $estandar_id->Dnecesarios }}</h6>
+                </h6>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <div class="card-body">
                 <h6>REQUISITOS PARA LA EVALUACIÓN Y CERTIFICACIÓN</h6>
                 <h6>INFORMACIÓN DEL CURSO</h6>
-                <h6>LISTA DE EVIDENCIAS</h6>
+                <h6>{{ $estandar_id->Dnecesarios }}</h6>
             </div>
         </div>
 
