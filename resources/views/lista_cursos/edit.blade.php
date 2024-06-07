@@ -14,7 +14,12 @@
                     </div>
                     <div class="form-group">
                         <label for="competencia">Estandares</label>
-                        <textarea class="form-control" id="competencia" name="competencia" required>{{ $curso->competencia }}</textarea>
+                          <select class="form-control" id="estandar_id" name="id_estandar" required>
+
+                            @foreach ($estandares as $estandar)
+                                <option value="{{ $estandar->id }}">{{ $estandar->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="instructor">Instructor</label>

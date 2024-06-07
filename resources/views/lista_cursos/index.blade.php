@@ -37,7 +37,7 @@
                 <td>{{$curso->id}}</td>
                 <td>{{$curso->name}}</td>
                 <td>{{$curso->description}}</td>
-                <td>{{$curso->estandares->numero}}</td>
+                <td>{{ $curso->estandares ? $curso->estandares->numero : 'N/A' }}</td>
                 <td>{{$curso->instructor}}</td>
                 <td>{{$curso->duration}}</td>
                 <td>{{$curso->modalidad}}</td>
@@ -79,6 +79,7 @@
                     </div>
                 </div>
             </div>
+
             @endforeach
         </tbody>
     </table>

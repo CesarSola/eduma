@@ -341,6 +341,11 @@ return [
                     'icon' => 'fas fa-tasks',
                 ],
                 [
+                    'text' => 'Documentos necesarios',
+                    'url' => 'documentosnec',
+                    'icon' => 'fas fa-tasks',
+                ],
+                [
                     'text' => 'Inscripciones',
                     'url' => 'competenciasinscripcion',
                     'icon' => 'fas fa-check',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Documentos;
+use App\Models\DocumentosNec;
 use App\Models\Estandares;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class CompetenciasAddController extends Controller
     public function index()
     {
         $competencias =  Estandares::all();
-        return view('lista_competencias.index',compact('competencias'));
+        $documentosnec =DocumentosNec::all();
+        return view('lista_competencias.index',compact('competencias','documentosnec'));
     }
 
     /**

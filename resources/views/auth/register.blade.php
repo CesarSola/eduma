@@ -57,8 +57,6 @@
 
         <!-- Imagen centrada y progreso del registro -->
         <div class="row justify-content-center">
-
-
           <div class="col-md-6 progress-container">
             <img src="{{ asset('assets/img/logo.jpeg') }}" alt="Imagen de registro" style="width: 300px">
           </div>
@@ -71,10 +69,9 @@
             <div id="step-1">
                 <div class="d-flex justify-content-center align-items-center">
                     <h1 class="text-center text-lg font-bold text-neutral-600 leading-6 lg-text-4xl">Registrate con nosotros</h1>
-                  </div>
-                  <br>
+                </div>
+                <br>
                 <div class="row">
-
                     <!-- Name -->
                     <div class="col-md-6">
                         <div class="input-group mb-3">
@@ -155,24 +152,17 @@
                     </div>
                 </div>
 
-
-
                 <div class="d-flex justify-content-center align-items-center">
                     <a href="{{ url('/google-auth/redirect') }}">
                         <img src="{{ asset('assets/img/image.png') }}" alt="Google Auth" style="width: 30px">
                     </a>
-
                 </div>
                 <br>
                 <div class="mb-4">
                     <div class="d-flex justify-content-center align-items-center">
-                        <button type="button" class="" style="background-color: blue; color: white; border-radius: 5px; width: 300px; height: 40px; border-color: transparent;">{{ __('Siguiente Paso') }}</button>
-
+                        <button type="button" id="next-btn" class="btn btn-primary" style="width: 300px;">{{ __('Siguiente Paso') }}</button>
                     </div>
                 </div>
-
-
-            </div>
             </div>
 
             <!-- Segunda sección -->
@@ -264,7 +254,6 @@
                     </div>
                     <div class="col-4">
                         <button type="submit" class="btn btn-primary btn-block">{{ __('Register') }}</button>
-
                     </div>
                 </div>
             </div>
@@ -273,11 +262,12 @@
     </div>
   </div>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#next-btn').click(function() {
-            // Validación de los campos del primer paso (puedes agregar más validaciones si es necesario)
+            // Validación de los campos del primer paso
             var name = $('input[name="name"]').val();
             var email = $('input[name="email"]').val();
             var password = $('input[name="password"]').val();
@@ -356,7 +346,6 @@
             });
         });
     });
-
 </script>
 
 </body>

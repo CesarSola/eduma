@@ -79,13 +79,13 @@ public function update(ProfileUpdateRequest $request): RedirectResponse
     $codigoPostal = CodigoPostal::where('d_codigo', $request->input('codigo_postal'))->first();
 
     // Asignar los datos de dirección del código postal al usuario si se encuentra
-    if ($codigoPostal) {
+
         $user->d_codigo = $codigoPostal->d_codigo; // Asegúrate de asignar el código postal
         $user->d_asenta = $codigoPostal->d_asenta;
         $user->D_mnpio = $codigoPostal->D_mnpio;
         $user->d_estado = $codigoPostal->d_estado;
         $user->d_ciudad = $codigoPostal->d_ciudad;
-    }
+
 
     // Guardar los cambios en la base de datos
     $user->save();
@@ -117,4 +117,6 @@ public function update(ProfileUpdateRequest $request): RedirectResponse
 
         return Redirect::to('/');
     }
+
+
 }

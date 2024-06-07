@@ -15,12 +15,19 @@ class Estandares extends Model
         'numero', // existing fields
         'name', // existing fields
         'tipo',
-        'Dnecesarios' // new field added
+        'documentosnec_id' // new field added
     ];
 
-    public function cursos()
+
+
+        public function cursos()
     {
-        return $this->belongsTo(Curso::class, 'id');
+        return $this->hasMany(Curso::class, 'id');
+    }
+
+    public function documentosnec()
+    {
+        return $this->belongsTo(DocumentosNec::class,  'documentosnec_id');
     }
 
     public function comprobantePago()

@@ -9,20 +9,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('competenciasAD.store') }}" method="POST">
+                <form action="{{ route('documentosnec.store') }}" method="POST">
                     @csrf
-                    <div class="form-group">
-                        <label for="numero">Número</label>
-                        <input type="text" class="form-control" id="numero" name="numero" value="{{ old('numero') }}" required>
 
-                    </div>
                     <div class="form-group">
                         <label for="name">Nombre</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="tipo">Tipo</label>
-                        <input type="text" class="form-control" id="tipo" name="tipo" value="{{ old('tipo') }}" required>
+                        <label for="description">description</label>
+                        <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Guardar</button>

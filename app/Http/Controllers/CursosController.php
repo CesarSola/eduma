@@ -15,6 +15,8 @@ class CursosController extends Controller
      */
     public function index(Request $request)
     {
+
+        $estandares = Estandares::all();
         // Obtener el ID del usuario desde la solicitud
         $userId = $request->query('user_id');
 
@@ -36,7 +38,7 @@ class CursosController extends Controller
             return view('expedientes.expedientesAdmin.cursos.index', compact('usuario', 'cursos'));
         } else {
             // Renderizar la vista de lista de cursos con los cursos y el usuario
-            return view('lista_cursos.index', compact('usuario', 'cursos'));
+            return view('lista_cursos.index', compact('usuario', 'cursos','estandares'));
         }
     }
 
@@ -46,7 +48,7 @@ class CursosController extends Controller
      */
     public function create()
     {
-       $estandares = Estandares::all();
+       $estandares = Estandares::find(1)->cursos()->get();
 
         // Pasar los estandares a la vista de creación
         return view('lista_cursos.create', compact('estandares'));
@@ -57,10 +59,11 @@ class CursosController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'id_estandares' => 'required|exists:estandares,id',
+            'id_estandar' => 'required|exists:estandares,id',
             'instructor' => 'nullable|string|max:255',
             'duration' => 'nullable|integer',
             'modalidad' => 'nullable|string|max:255',
@@ -74,7 +77,7 @@ class CursosController extends Controller
         $cursos = new Curso([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'id_estandares' => $request->input('id_estandares'),
+            'id_estandar' => $request->input('id_estandar'),
             'instructor' => $request->input('instructor'),
             'duration' => $request->input('duration'),
             'modalidad' => $request->input('modalidad'),
@@ -86,6 +89,7 @@ class CursosController extends Controller
         ]);
 
         $cursos->save();
+
 
         return redirect()->route('cursos.index')->with('success', 'Curso creado exitosamente');
     }
@@ -107,6 +111,7 @@ class CursosController extends Controller
 {
     $request->validate([
         'name' => 'required|string|max:255',
+        'id_estandar' => 'required|exists:estandares,id',
         'description' => 'required|string',
         'competencia' => 'nullable|string|max:255',
         'instructor' => 'nullable|string|max:255',
@@ -125,6 +130,7 @@ class CursosController extends Controller
     $cursos->update([
         'name' => $request->input('name'),
         'description' => $request->input('description'),
+        'id_estandar' => $request->input('id_estandar'),
         'instructor' => $request->input('instructor'),
         'duration' => $request->input('duration'),
         'modalidad' => $request->input('modalidad'),

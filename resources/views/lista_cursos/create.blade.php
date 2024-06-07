@@ -21,11 +21,14 @@
                         <label for="description">Descripción</label>
                         <textarea class="form-control" id="description" name="description" required></textarea>
                     </div>
+
                     <div class="form-group">
                         <label for="estandar_id">Estandar de Competencia</label>
-                        <select class="form-control" id="estandar_id" name="estandar_id" required>
+                        <select class="form-control" id="estandar_id" name="id_estandar" required>
                             <option value="">Selecciona un estandar</option>
-
+                            @foreach ($estandares as $estandar)
+                                <option value="{{ $estandar->id }}">{{ $estandar->name }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -46,10 +49,8 @@
                                 <option value="Online">Online</option>
                                 <option value="Presencial">Presencial</option>
                                 <option value="Híbrido">Híbrido</option>
-                                <!-- Agrega más opciones según sea necesario -->
                             </select>
                         </div>
-
                     </div>
 
                     <div class="form-row">
@@ -62,8 +63,6 @@
                             <input type="date" class="form-control" id="fecha_final" name="fecha_final">
                         </div>
                     </div>
-
-
 
                     <div class="form-group">
                         <label for="costo">Costo</label>
@@ -78,9 +77,42 @@
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </form>
+
             </div>
             <div class="modal-footer">
+
             </div>
         </div>
     </div>
 </div>
+<script>
+    // Función para validar las fechas
+    function validarFechas() {
+        // Obtener los valores de las fechas
+        var fechaInicio = document.getElementById('fecha_inicio').value;
+        var fechaFinal = document.getElementById('fecha_final').value;
+
+        // Convertir las fechas a objetos Date
+        var inicio = new Date(fechaInicio);
+        var final = new Date(fechaFinal);
+
+        // Verificar si la fecha de inicio es mayor que la fecha de finalización
+        if (inicio > final) {
+            // Mostrar un alerta de error
+            alert('La fecha de inicio no puede ser mayor que la fecha de finalización');
+            // Detener el envío del formulario
+            return false;
+        }
+        // Si las fechas son válidas, permitir el envío del formulario
+        return true;
+    }
+
+    // Agregar un evento al formulario para llamar a la función validarFechas() antes de enviarlo
+    document.getElementById('formulario').addEventListener('submit', function(event) {
+        // Llamar a la función validarFechas()
+        if (!validarFechas()) {
+            // Si la función devuelve false, detener el envío del formulario
+            event.preventDefault();
+        }
+    });
+</script>
