@@ -4,7 +4,7 @@
 
 @section('content_header')
     <div class="header-flex">
-        <h1>Documentos Generales</h1>
+        <h1>Revisión de Documentos Generales</h1>
         <div>
             <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id]) }}"
                 class="btn btn-secondary">Regresar</a>
