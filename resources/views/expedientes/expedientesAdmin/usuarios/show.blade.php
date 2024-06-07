@@ -42,7 +42,7 @@
                             <h3 class="card-title">Documentos de Registro General</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            @if ($documentos->isNotEmpty())
+                            @if ($documentos->isNotEmpty() || $comprobantesPago->isNotEmpty())
                                 <ul class="list-group flex-grow-1 overflow-auto">
                                     @foreach ($documentos as $documento)
                                         <li class="list-group-item">
@@ -58,24 +58,21 @@
                                         </li>
                                         <br>
                                     @endforeach
-                                @else
-                                    <div style="text-align: center">
-                                        <p>No hay documentos disponibles para este usuario.</p>
-                                    </div>
-                            @endif
-                            <!-- Mostrar los comprobantes de pago si existen -->
-                            @if ($comprobantesPago->isNotEmpty())
-                                <ul class="list-group flex-grow-1 overflow-auto">
+
+                                    <!-- Mostrar los comprobantes de pago si existen -->
                                     @foreach ($comprobantesPago as $comprobante)
                                         <li class="list-group-item">
                                             {{ basename($comprobante->comprobante_pago) }}
                                         </li>
                                     @endforeach
                                 </ul>
-                            @endif
-                            @if ($documentos->isNotEmpty())
+
                                 <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
                                     class="btn btn-primary">Ver</a>
+                            @else
+                                <div style="text-align: center">
+                                    <p>No hay documentos disponibles para este usuario.</p>
+                                </div>
                             @endif
                         </div>
                     </div>
