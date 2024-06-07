@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocumentosUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -34,10 +35,47 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
-        $registroGeneral = User::findOrFail($id);
+        $registroGeneral = User::with('documentos', 'comprobantes')->findOrFail($id);
 
-        // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral'));
+        // Filtrar documentos específicos
+        $documentos = $registroGeneral->documentos;
+
+        // Filtrar comprobante de pago
+        $comprobantePago = $registroGeneral->comprobantes->firstWhere('comprobante_pago', '!=', null);
+
+        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'comprobantePago'));
+    }
+    public function updateDocumentos(Request $request, $id)
+    {
+        $registroGeneral = User::findOrFail($id);
+        $documentos = $registroGeneral->documentos;
+        $comprobantePago = $registroGeneral->comprobantes->firstWhere('comprobante_pago', '!=', null);
+
+        foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
+            if ($request->has("documento_$documentoNombre")) {
+                $documentos->$documentoNombre = $request->input("documento_$documentoNombre");
+                // Guardar los comentarios si los hay
+                $documentos->{"comentario_$documentoNombre"} = $request->input("comentario_$documentoNombre");
+            }
+        }
+
+        if ($comprobantePago && $request->has('comprobante_pago')) {
+            $comprobantePago->estado = $request->input('comprobante_pago');
+            $comprobantePago->comentario = $request->input('comentario_comprobante_pago');
+        }
+
+        $documentos->save();
+        if ($comprobantePago) {
+            $comprobantePago->save();
+        }
+
+        return redirect()->back()->with('success', 'Documentos actualizados correctamente');
+    }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
     }
 
     /**
@@ -51,10 +89,6 @@ class DocumentosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

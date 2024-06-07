@@ -74,6 +74,8 @@ Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias'
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
+//ruta comentarios-validar
+Route::put('/registro-general/{id}/update-documentos', [DocumentosController::class, 'updateDocumentos'])->name('registroGeneral.updateDocumentos');
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos
@@ -102,3 +104,15 @@ Route::resource('competenciasinscripcion', CompetenciasAddController::class);
 Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
 Route::resource('documentosnec', DocumentosNecController::class);
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
+});
+
+Route::get('/profile/reactivate', function () {
+    return view('auth.reactivate');
+})->name('profile.reactivate');
+
+Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivate');

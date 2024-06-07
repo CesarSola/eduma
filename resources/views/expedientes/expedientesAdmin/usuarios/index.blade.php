@@ -35,7 +35,7 @@
                     <td>{{ $usuario->age }}</td>
                     <td>{{ $usuario->matricula ?? 'N/A' }}</td>
                     <td>
-                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->ine_ife)
+                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->ine_ife)
                             <object
                                 data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
                                 type="application/pdf" width="100" height="100">
@@ -47,7 +47,7 @@
                         @endif
                     </td>
                     <td>
-                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->comprobante_domiciliario)
+                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->comprobante_domiciliario)
                             <object
                                 data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
                                 type="application/pdf" width="100" height="100">
@@ -59,7 +59,7 @@
                         @endif
                     </td>
                     <td>
-                        @if ($usuario->documentos->isNotEmpty() && $usuario->documentos->first()->foto)
+                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->foto)
                             <img src="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->foto)) }}"
                                 width="100" height="100" />
                         @else

@@ -20,7 +20,7 @@ class Estandares extends Model
 
 
 
-        public function cursos()
+    public function cursos()
     {
         return $this->hasMany(Curso::class, 'id');
     }
@@ -30,13 +30,15 @@ class Estandares extends Model
         return $this->belongsTo(DocumentosNec::class,  'documentosnec_id');
     }
 
+    // Relación uno a uno con el modelo ComprobantePago
     public function comprobantePago()
     {
         return $this->hasOne(ComprobantePago::class);
     }
 
+    // Relación muchos a muchos con el modelo User
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_competencia');
+        return $this->belongsToMany(User::class, 'user_estandares', 'estandar_id', 'user_id');
     }
 }
