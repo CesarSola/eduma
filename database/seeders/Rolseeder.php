@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -15,30 +13,39 @@ class Rolseeder extends Seeder
      */
     public function run(): void
     {
-        $role1 = Role::create(['name'=>'Admin']);
-        $role2 = Role::create(['name'=>'User']);
+        // Crear roles
+        $role1 = Role::firstOrCreate(['name' => 'Admin']);
+        $role2 = Role::firstOrCreate(['name' => 'User']);
 
-        Permission::create(['name'=>'dashboard',
-                            'description'=>'Ver el Dasboard'])->syncRoles([$role1,$role2]);
+        // Crear o verificar si el permiso ya existe antes de crearlo
+        $dashboardPermission = Permission::firstOrCreate(
+            ['name' => 'dashboard', 'guard_name' => 'web'],
+            ['description' => 'Ver el Dashboard']
+        );
 
-        
-        Permission::create(['name'=>'users.index',
-                            'description'=>'Ver listado  de Usuarios'])->assignRole([$role1]);
-        Permission::create(['name'=>'users.edit',
-                            'description'=>'Asignar Un Rol'])->assignRole([$role1]);
-        Permission::create(['name'=>'users.update',
-                            'description'=>'Actualizar Un Rol'])->assignRole([$role1]);
+        // Asignar el permiso a los roles
+        $dashboardPermission->syncRoles([$role1, $role2]);
 
-                            
-        Permission::create(['name'=>'roles.index',
-                            'description'=>'Ver listado de invernaderos'])->syncRoles([$role1]);
-        Permission::create(['name'=>'roles.show',
-                            'description'=>'Ver Vista de Invernaderos'])->syncRoles([$role1]);
-        Permission::create(['name'=>'roles.create',
-                            'description'=>'Crear un invenadero'])->syncRoles([$role1]);
-        Permission::create(['name'=>'roles.edit',
-                            'description'=>'Editar un invernadero'])->syncRoles([$role1]);
-        Permission::create(['name'=>'roles.destroy',
-                            'description'=>'Eliminar un invernadero'])->syncRoles([$role1]);
+        // Crear o verificar si los permisos ya existen antes de crearlos
+        $permissions = [
+            ['name' => 'users.index', 'description' => 'Ver listado de Usuarios'],
+            ['name' => 'users.edit', 'description' => 'Asignar Un Rol'],
+            ['name' => 'users.update', 'description' => 'Actualizar Un Rol'],
+            ['name' => 'roles.index', 'description' => 'Ver listado de invernaderos'],
+            ['name' => 'roles.show', 'description' => 'Ver Vista de Invernaderos'],
+            ['name' => 'roles.create', 'description' => 'Crear un invenadero'],
+            ['name' => 'roles.edit', 'description' => 'Editar un invernadero'],
+            ['name' => 'roles.destroy', 'description' => 'Eliminar un invernadero'],
+        ];
+
+        foreach ($permissions as $permissionData) {
+            $permission = Permission::firstOrCreate(
+                ['name' => $permissionData['name'], 'guard_name' => 'web'],
+                ['description' => $permissionData['description']]
+            );
+
+            // Asignar el permiso al rol Admin
+            $permission->syncRoles([$role1]);
+        }
     }
 }
