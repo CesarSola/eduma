@@ -21,9 +21,6 @@ class CreateUserEstandaresTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('estandar_id')->references('id')->on('estandares')->onDelete('cascade');
 
-            // Puedes agregar más columnas si es necesario
-            // ...
-
             // Definir la clave primaria compuesta
             $table->primary(['user_id', 'estandar_id']);
         });

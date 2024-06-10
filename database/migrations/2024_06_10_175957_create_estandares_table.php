@@ -15,14 +15,13 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('numero');
             $table->string('name');
-            $table->string('Dnecesarios', 999);
             $table->string('tipo');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('documentosnec_id')
-            ->nullable()
-            ->constrained('documentosnec')
-            ->cascadeOnUpdate()
-            ->nullOnDelete();
+                ->nullable()
+                ->constrained('documentosnec')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
 
             $table->timestamps();
         });

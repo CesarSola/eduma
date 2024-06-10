@@ -39,7 +39,7 @@
         <div class="card d-none" id="requerimientos">
             <div class="card-body">
                 <ul>
-                    @if (!$documentos)
+                    @if ($documentos->isEmpty())
                         <h6 class="text-center"><span>Para continuar con el proceso sube estos documentos: </span></h6>
                         <br>
                         <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
@@ -54,44 +54,59 @@
                         <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
                         <br>
                         <li><span>CURP en formato PDF Escaneado y legible</span></li>
+                    @else
+                        <h6 class="text-center">Los documentos aún no han sido subidos.</h6>
+                    @endif
                 </ul>
-            @else
-                <h6 class="text-center">Los documentos ya han sido subidos.</h6>
-                @endif
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Documentación</h6>
-        <br>
-        <div class="card d-none" id="documentos">
-            <div class="card-body">
-                @if (!$documentos)
+    @if ($documentos->isEmpty())
+        <!-- Mostrar formulario para subir documentos si no se han subido -->
+        <div class="card">
+            <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Documentación</h6>
+            <br>
+            <div class="card d-none" id="documentos">
+                <div class="card-body">
                     <h6 class="text-center">Sube aquí tus documentos</h6>
-                    <br>
                     <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
                     </h6>
-                @else
-                    <h6 class="text-center">Tus documentos estan en revisión</h6>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    @if ($documentos)
-        <div class="card">
-            <h6 style="text-align: center" class="card-title toggle-card" data-target="#formatos">Descargar los formatos
-            </h6>
-            <br>
-            <div class="card d-none" id="formatos">
-                <div class="card-body">
-                    <h6 class="text-center">Contenido de descargar los formatos...</h6>
                 </div>
             </div>
         </div>
+    @else
+        <!-- Mostrar comentarios y validaciones de documentos si se han subido -->
+        <div class="card">
+            <h6 style="text-align: center" class="card-title toggle-card" data-target="#comentarios">Comentarios y
+                Validaciones</h6>
+            <div class="card d-none" id="comentarios">
+                <div class="card-body">
+                    <!-- Mostrar comentarios y validaciones de documentos -->
+                    @foreach ($documentos as $documento)
+                        @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
+                            <p><strong>{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}:</strong>
+                                {{ $documento->{"comentario_$documentoNombre"} }}</p>
+                            <p><strong>Validado:</strong> {{ $documento->{"validado_$documentoNombre"} ? 'Sí' : 'No' }}</p>
+                        @endforeach
+                    @endforeach
 
-        <br>
+                    <!-- Mostrar comentarios y validaciones del comprobante de pago -->
+                    @if ($comprobantes->isNotEmpty())
+                        <p><strong>Comprobante de Pago:</strong> {{ $comprobantes->first()->comentario }}</p>
+                        <p><strong>Validado:</strong> {{ $comprobantes->first()->validado ? 'Sí' : 'No' }}</p>
+                    @endif
+
+                    <!-- Habilitar el botón para subir documentos si no han sido validados -->
+                    @if (!$documentos->contains('validado', false))
+                        <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($documentos->isNotEmpty())
         <div class="card">
             <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
             <br>
@@ -137,6 +152,7 @@
             </div>
         </div>
     @endif
+
 @stop
 
 @section('css')

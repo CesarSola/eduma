@@ -45,32 +45,40 @@ class DocumentosController extends Controller
 
         return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'comprobantePago'));
     }
+
     public function updateDocumentos(Request $request, $id)
     {
+        // Obtener el usuario con sus documentos
         $registroGeneral = User::findOrFail($id);
         $documentos = $registroGeneral->documentos;
-        $comprobantePago = $registroGeneral->comprobantes->firstWhere('comprobante_pago', '!=', null);
 
-        foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
-            if ($request->has("documento_$documentoNombre")) {
-                $documentos->$documentoNombre = $request->input("documento_$documentoNombre");
-                // Guardar los comentarios si los hay
-                $documentos->{"comentario_$documentoNombre"} = $request->input("comentario_$documentoNombre");
+        // Iterar sobre cada documento individualmente
+        foreach ($documentos as $documento) {
+            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
+                // Verificar si hay una acción (validar o rechazar) para el documento actual
+                if ($request->has("documento_$documentoNombre")) {
+                    // Obtener la acción (validar o rechazar)
+                    $accion = $request->input("documento_$documentoNombre");
+
+                    // Obtener el comentario asociado al documento si existe
+                    $comentarioCampo = "comentario_$documentoNombre";
+                    $comentario = $request->input($comentarioCampo, '');
+
+                    // Actualizar solo las columnas relevantes del documento
+                    $documento->update([
+                        'estado' => $accion,
+                        'comentario' => $comentario,
+                    ]);
+                }
             }
         }
 
-        if ($comprobantePago && $request->has('comprobante_pago')) {
-            $comprobantePago->estado = $request->input('comprobante_pago');
-            $comprobantePago->comentario = $request->input('comentario_comprobante_pago');
-        }
-
-        $documentos->save();
-        if ($comprobantePago) {
-            $comprobantePago->save();
-        }
-
-        return redirect()->back()->with('success', 'Documentos actualizados correctamente');
+        // Redirigir de vuelta a la vista de detalle del usuario
+        return redirect()->route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id])
+            ->with('success', 'Documentos actualizados correctamente');
     }
+
+
     /**
      * Update the specified resource in storage.
      */
