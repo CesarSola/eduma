@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Documentos;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
 use Illuminate\Http\Request;
@@ -50,8 +49,8 @@ class CompetenciasAddController extends Controller
     public function show(string $id)
     {
         $competencias = Estandares::findOrFail($id);
-        $documentos = Documentos::all();
-        return view('lista_competencias.show', compact('competencias', 'documentos'));
+
+        return view('lista_competencias.show', compact('competencias'));
     }
 
     public function edit(string $id)
@@ -93,5 +92,21 @@ class CompetenciasAddController extends Controller
         $competencia->delete();
 
         return back()->with('success', 'Competencia eliminada exitosamente');
+    }
+
+    public function storeDocumento(Request $request)
+    {
+        // Validación de datos
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Crear un nuevo documento
+        DocumentosNec::create([
+            'name' => $request->input('name'),
+        ]);
+
+        // Redirigir a la página de edición con un mensaje de éxito
+        return back()->with('success', 'Documento creado exitosamente');
     }
 }

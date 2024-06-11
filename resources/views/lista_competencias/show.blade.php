@@ -16,36 +16,20 @@
         </button>
     </h3>
     <br>
+
 @stop
 
 @section('content')
     <h4 class="pl-4">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </h4>
+    <hr>
+        @foreach ($competencias->documentosnec as $documento)
+    {{ $documento->name }}<br>
+@endforeach
 
-    <table id="cursos-table" class="table table-bordered table-hover text-center small-table">
-        <thead class="table-primary">
-            <tr>
-                <td>Nombre</td>
-                <td>Archivos</td>
-                <td>Acción</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($documentos as $documento)
-                @if ($competencias->numero == "EC076" && $competencias->Dnecesarios == $documento->nombre)
-                    <tr>
-                        <td>{{ $documento->nombre }}</td>
-                        <td>{{ $documento->Archivos }}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm">Subir</button>
-                            <button class="btn btn-success btn-sm">Descargar</button>
-                        </td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
+
+
 @endsection
 
 @section('css')

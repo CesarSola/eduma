@@ -1,5 +1,4 @@
 import forms from '@tailwindcss/forms';
-import flowbite from 'flowbite/plugin';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
@@ -42,6 +41,6 @@ export default {
 
     plugins: [
         forms,
-        flowbite,
+        require('flowbite/plugin')
     ],
 };

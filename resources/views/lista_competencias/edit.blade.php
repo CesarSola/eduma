@@ -14,6 +14,9 @@
             <label for="tipo">Tipo</label>
             <input type="text" class="form-control" id="tipo" name="tipo" value="{{ old('tipo', $competencias->tipo) }}" required>
         </div>
+
+        <hr>
+
         <div class="form-group">
             <label for="documentosnec_id">Estandar de Competencia</label>
             @foreach ($documentosnec as $estandar)
@@ -28,5 +31,8 @@
         </div>
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
+
+    <hr>
+
 
 </section>
