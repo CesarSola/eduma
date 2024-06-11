@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('modalidad')->nullable();
             $table->string('fecha_inicio')->nullable();
             $table->string('fecha_final')->nullable();
-            $table->string('plataforma')->nullable();
             $table->string('costo')->nullable();
             $table->string('certification')->nullable();
             $table->timestamps();

@@ -314,6 +314,11 @@ return [
             'icon' => 'fas fa-fw fa-home',
         ],
         [
+            'text' => 'codigos postales',
+            'url' => 'codigos-postales',
+            'icon' => 'fas fa-fw fa-road',
+        ],
+        [
             'header' => 'ADMINISTRADOR'
         ],
         [

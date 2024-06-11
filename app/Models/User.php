@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles; // Importa el trait
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles; // Usa el trait
 
     // Reglas de validación
     static $rules = [
@@ -71,11 +72,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id');
     }
+
     // Relación muchos a muchos con el modelo Curso
     public function cursos()
     {
         return $this->belongsToMany(Curso::class, 'user_curso');
     }
+
+    // Métodos para desactivar y reactivar cuentas de usuario
     public function deactivateAccount(User $user)
     {
         $user->active = 0;
@@ -83,6 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // Redirigir o mostrar un mensaje de éxito
     }
+
     public function reactivateAccount(User $user)
     {
         $user->active = 1;

@@ -28,10 +28,10 @@ class ProfileController extends Controller
         $user->fill($request->validated());
 
         // Obtener los valores del formulario y asignarlos al usuario
-        $user->genero = $request->input('genero');
         $user->secondName = $request->input('secondName');
-        $user->maternalSurname = $request->input('maternalSurname');
         $user->paternalSurname = $request->input('paternalSurname');
+        $user->maternalSurname = $request->input('maternalSurname');
+        $user->age = $request->input('age');
         $user->calle_avenida = $request->input('calle_avenida');
         $user->numext = $request->input('numext');
         $user->d_codigo = $request->input('d_codigo');
@@ -40,6 +40,11 @@ class ProfileController extends Controller
         $user->d_ciudad = $request->input('d_ciudad');
         $user->D_mnpio = $request->input('D_mnpio');
         $user->age = $request->input('age');
+        $user->d_codigo = $request->input('codpos');
+        $user->d_asenta = $request->input('colonia');
+        $user->d_estado = $request->input('estado');
+        $user->d_ciudad = $request->input('ciudad');
+        $user->D_mnpio = $request->input('municipio');
         $user->phone = $request->input('phone');
 
         // Si se actualizó el email, restablecer la verificación

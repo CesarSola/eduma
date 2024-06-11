@@ -38,20 +38,15 @@
         <br>
         <div class="card d-none" id="requerimientos">
             <div class="card-body">
-                <h6 class="text-center">Contenido de requerimientos y documentación...</h6>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Documentación</h6>
-        <br>
-        <div class="card d-none" id="documentos">
-            <div class="card-body">
-                @if (!$documentos)
-                    <ul>
+                <ul>
+                    @if ($documentos->isEmpty())
+                        <h6 class="text-center"><span>Para continuar con el proceso sube estos documentos: </span></h6>
+                        <br>
                         <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
-                                color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato JPG,
-                                BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se recomienda
+                                color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato
+                                JPG,
+                                BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se
+                                recomienda
                                 acudir a un estudio fotográfico.</span></li>
                         <br>
                         <li><span>Identificación oficial escaneada INE o IFE Que sea legible</span></li>
@@ -59,70 +54,105 @@
                         <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
                         <br>
                         <li><span>CURP en formato PDF Escaneado y legible</span></li>
-                    </ul>
-                    <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
-                    </h6>
-                @else
-                    <h6 class="text-center">Los documentos ya han sido subidos.</h6>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <h6 style="text-align: center" class="card-title toggle-card" data-target="#formatos">Descargar los formatos</h6>
-        <br>
-        <div class="card d-none" id="formatos">
-            <div class="card-body">
-                <h6 class="text-center">Contenido de descargar los formatos...</h6>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <div class="card">
-        <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
-        <br>
-        @foreach ($competencias as $competencia)
-            @php
-                $comprobante = $comprobantes->firstWhere('estandar_id', $competencia->id);
-            @endphp
-            <div class="card">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div class="d-flex flex-column align-items-start">
-                        <h6 class="text-left">{{ $competencia->numero }}</h6>
-                    </div>
-                    <div class="d-flex flex-column align-items-center flex-grow-1">
-                        <h6 class="text-center">{{ $competencia->name }}</h6>
-                    </div>
-                    <div class="d-flex">
-                        @if ($comprobante)
-                            <a class="btn btn-primary"
-                                href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Ver</a>
-                        @else
-                            <a class="btn btn-primary"
-                                href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
-                        @endif
-                        <a class="btn btn-danger" href="#">Descargar</a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-
-    <br>
-    <div class="card">
-        <h6 style="text-align: center" class="card-title">Cursos</h6>
-        <br>
-        <div class="card">
-            <div class="card-body">
-                <ul>
-                    @foreach ($cursos as $curso)
-                        <li>{{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
-                    @endforeach
+                    @else
+                        <h6 class="text-center">Los documentos aún no han sido subidos.</h6>
+                    @endif
                 </ul>
             </div>
         </div>
     </div>
+
+    @if ($documentos->isEmpty())
+        <!-- Mostrar formulario para subir documentos si no se han subido -->
+        <div class="card">
+            <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Documentación</h6>
+            <br>
+            <div class="card d-none" id="documentos">
+                <div class="card-body">
+                    <h6 class="text-center">Sube aquí tus documentos</h6>
+                    <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
+                    </h6>
+                </div>
+            </div>
+        </div>
+    @else
+        <!-- Mostrar comentarios y validaciones de documentos si se han subido -->
+        <div class="card">
+            <h6 style="text-align: center" class="card-title toggle-card" data-target="#comentarios">Comentarios y
+                Validaciones</h6>
+            <div class="card d-none" id="comentarios">
+                <div class="card-body">
+                    <!-- Mostrar comentarios y validaciones de documentos -->
+                    @foreach ($documentos as $documento)
+                        @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
+                            <p><strong>{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}:</strong>
+                                {{ $documento->{"comentario_$documentoNombre"} }}</p>
+                            <p><strong>Validado:</strong> {{ $documento->{"validado_$documentoNombre"} ? 'Sí' : 'No' }}</p>
+                        @endforeach
+                    @endforeach
+
+                    <!-- Mostrar comentarios y validaciones del comprobante de pago -->
+                    @if ($comprobantes->isNotEmpty())
+                        <p><strong>Comprobante de Pago:</strong> {{ $comprobantes->first()->comentario }}</p>
+                        <p><strong>Validado:</strong> {{ $comprobantes->first()->validado ? 'Sí' : 'No' }}</p>
+                    @endif
+
+                    <!-- Habilitar el botón para subir documentos si no han sido validados -->
+                    @if (!$documentos->contains('validado', false))
+                        <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($documentos->isNotEmpty())
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
+            <br>
+            @foreach ($competencias as $competencia)
+                @php
+                    $comprobante = $comprobantes->firstWhere('estandar_id', $competencia->id);
+                @endphp
+                <div class="card">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div class="d-flex flex-column align-items-start">
+                            <h6 class="text-left">{{ $competencia->numero }}</h6>
+                        </div>
+                        <div class="d-flex flex-column align-items-center flex-grow-1">
+                            <h6 class="text-center">{{ $competencia->name }}</h6>
+                        </div>
+                        <div class="d-flex">
+                            @if ($comprobante)
+                                <a class="btn btn-primary"
+                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Ver</a>
+                            @else
+                                <a class="btn btn-primary"
+                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
+                            @endif
+                            <a class="btn btn-danger" href="#">Descargar</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <br>
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Cursos</h6>
+            <br>
+            <div class="card">
+                <div class="card-body">
+                    <ul>
+                        @foreach ($cursos as $curso)
+                            <li>{{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
+
 @stop
 
 @section('css')
@@ -169,10 +199,25 @@
             const toggleCards = document.querySelectorAll('.toggle-card');
 
             toggleCards.forEach(function(card) {
+                const targetId = card.getAttribute('data-target');
+                const target = document.querySelector(targetId);
+
+                // Load the state from localStorage
+                const state = localStorage.getItem(targetId);
+                if (state === 'open') {
+                    target.classList.remove('d-none');
+                } else {
+                    target.classList.add('d-none');
+                }
+
                 card.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-target');
-                    const target = document.querySelector(targetId);
                     target.classList.toggle('d-none');
+                    // Save the state to localStorage
+                    if (target.classList.contains('d-none')) {
+                        localStorage.setItem(targetId, 'closed');
+                    } else {
+                        localStorage.setItem(targetId, 'open');
+                    }
                 });
             });
         });

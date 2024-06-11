@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class ExpedientesUsuariosController extends Controller
 {
@@ -12,11 +13,17 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
-        $usuariosAdmin = User::with('documentos')->get();
+        $adminRole = Role::where('name', 'admin')->first();
+
+        // Obtener solo los usuarios que no tienen el rol de administrador
+        $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole) {
+            $query->where('role_id', $adminRole->id);
+        })->with('documentos')->get();
 
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
+
     public function show($id)
     {
         // Dentro del método show del controlador
