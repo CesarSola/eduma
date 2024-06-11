@@ -6,7 +6,6 @@ use App\Models\ComprobantePago;
 use App\Models\Curso;
 use App\Models\DocumentosUser;
 use App\Models\Estandares;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,23 +27,16 @@ class DashboardUserController extends Controller
         $cursos = Curso::all();
 
         // Obtener los documentos del usuario
-        $documentos = DocumentosUser::where('user_id', $usuario->id)->get();
+        $documentos = DocumentosUser::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
+            $query->latest();
+        }])->get();
 
         // Obtener los comprobantes de pago del usuario
-        $comprobantes = ComprobantePago::where('user_id', $usuario->id)->get();
-
-        // Convertir a una Collection si es necesario
-        if (!($documentos instanceof Collection)) {
-            $documentos = collect([$documentos]);
-        }
-        if (!($comprobantes instanceof Collection)) {
-            $comprobantes = collect([$comprobantes]);
-        }
-
+        $comprobantes = ComprobantePago::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
+            $query->latest();
+        }])->get();
         return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'comprobantes'));
     }
-
-
 
     /**
      * Show the form for creating a new resource.

@@ -46,10 +46,17 @@
                             @csrf
                             @method('PUT')
 
+                            @php
+                                $documentosParaRevisar = false;
+                            @endphp
+
                             <!-- Mostrar documentos específicos -->
                             @foreach ($documentos as $documento)
                                 @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
                                     @if ($documento->$documentoNombre)
+                                        @php
+                                            $documentosParaRevisar = true;
+                                        @endphp
                                         <div class="form-group row">
                                             <label
                                                 class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}</label>
@@ -81,6 +88,9 @@
 
                             <!-- Mostrar comprobante de pago -->
                             @if ($comprobantePago)
+                                @php
+                                    $documentosParaRevisar = true;
+                                @endphp
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
                                     <div class="col-sm-4">
@@ -103,11 +113,19 @@
                                 </div>
                             @endif
 
-                            <div class="form-group row">
-                                <div class="col-sm-12 text-center">
-                                    <button type="submit" class="btn btn-success">Guardar</button>
+                            @if ($documentosParaRevisar)
+                                <div class="form-group row">
+                                    <div class="col-sm-12 text-center">
+                                        <button type="submit" class="btn btn-success">Guardar</button>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="form-group row">
+                                    <div class="col-sm-12 text-center">
+                                        <p>Todos los documentos disponibles han sido validados.</p>
+                                    </div>
+                                </div>
+                            @endif
                         </form>
 
                     </div>

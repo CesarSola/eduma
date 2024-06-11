@@ -64,17 +64,7 @@
 
     @if ($documentos->isEmpty())
         <!-- Mostrar formulario para subir documentos si no se han subido -->
-        <div class="card">
-            <h6 style="text-align: center" class="card-title toggle-card" data-target="#documentos">Documentación</h6>
-            <br>
-            <div class="card d-none" id="documentos">
-                <div class="card-body">
-                    <h6 class="text-center">Sube aquí tus documentos</h6>
-                    <h6 class="text-center"><a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir</a>
-                    </h6>
-                </div>
-            </div>
-        </div>
+        <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
     @else
         <!-- Mostrar comentarios y validaciones de documentos si se han subido -->
         <div class="card">
@@ -83,28 +73,45 @@
             <div class="card d-none" id="comentarios">
                 <div class="card-body">
                     <!-- Mostrar comentarios y validaciones de documentos -->
+                    @php
+                        $someDocumentNotValidated = false;
+                        foreach ($documentos as $documento) {
+                            foreach ($documento->validacionesComentarios as $validacion) {
+                                if (!$validacion->tipo_validacion) {
+                                    $someDocumentNotValidated = true;
+                                    break 2; // Salir del bucle foreach
+                                }
+                            }
+                        }
+                    @endphp
+
+                    @if ($someDocumentNotValidated)
+                        <!-- Mostrar el botón para subir documentos -->
+                        <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+                    @endif
+
+                    <!-- Mostrar los comentarios y validaciones -->
                     @foreach ($documentos as $documento)
-                        @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
-                            <p><strong>{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}:</strong>
-                                {{ $documento->{"comentario_$documentoNombre"} }}</p>
-                            <p><strong>Validado:</strong> {{ $documento->{"validado_$documentoNombre"} ? 'Sí' : 'No' }}</p>
+                        @foreach ($documento->validacionesComentarios as $validacion)
+                            <p><strong>{{ ucfirst(str_replace('_', ' ', $validacion->tipo_documento)) }}:</strong>
+                                {{ $validacion->comentario }}</p>
+                            <p><strong>Validado:</strong> {{ $validacion->tipo_validacion ? 'Sí' : 'No' }}</p>
                         @endforeach
                     @endforeach
 
                     <!-- Mostrar comentarios y validaciones del comprobante de pago -->
-                    @if ($comprobantes->isNotEmpty())
-                        <p><strong>Comprobante de Pago:</strong> {{ $comprobantes->first()->comentario }}</p>
-                        <p><strong>Validado:</strong> {{ $comprobantes->first()->validado ? 'Sí' : 'No' }}</p>
-                    @endif
-
-                    <!-- Habilitar el botón para subir documentos si no han sido validados -->
-                    @if (!$documentos->contains('validado', false))
-                        <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
-                    @endif
+                    @foreach ($comprobantes as $comprobante)
+                        @foreach ($comprobante->validacionesComentarios as $validacion)
+                            <p><strong>{{ ucfirst(str_replace('_', ' ', $validacion->tipo_documento)) }}:</strong>
+                                {{ $validacion->comentario }}</p>
+                            <p><strong>Validado:</strong> {{ $validacion->tipo_validacion ? 'Sí' : 'No' }}</p>
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
         </div>
     @endif
+
 
     @if ($documentos->isNotEmpty())
         <div class="card">

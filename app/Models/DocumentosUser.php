@@ -17,9 +17,13 @@ class DocumentosUser extends Model
         'foto',
         'ine_ife',
         'comprobante_domiciliario',
-        'curp'
+        'curp',
+        'estado'
     ];
-
+    public function validacionesComentarios()
+    {
+        return $this->hasMany(ValidacionesComentarios::class, 'documento_user_id');
+    }
     // Modelo DocumentosUser
     public function user()
     {
