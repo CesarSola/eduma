@@ -55,7 +55,7 @@
                         <br>
                         <li><span>CURP en formato PDF Escaneado y legible</span></li>
                     @else
-                        <h6 class="text-center">Los documentos aún no han sido subidos.</h6>
+                        <h6 class="text-center">Los documentos ya han sido subidos.</h6>
                     @endif
                 </ul>
             </div>
