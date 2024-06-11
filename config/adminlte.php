@@ -312,8 +312,7 @@ return [
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
-        [
-            'text' => 'Roles',
+        [       'text' => 'Roles',
             'url'  => 'roles',
             'icon' => 'fas fa-fw fa-user',
             'can'  => 'roles.index',
@@ -345,7 +344,7 @@ return [
                 [
                     'text' => 'Lista de expedientes',
                     'url' => 'usuariosAdmin',
-                    'icon' => 'fas fa-user',
+                    'icon' => 'fas fa-archive',
                 ],
                 [
                     'text' => 'Registro de cursos',
@@ -365,12 +364,17 @@ return [
                 [
                     'text' => 'Documentos necesarios',
                     'url' => 'documentosnec',
-                    'icon' => 'fas fa-tasks',
+                    'icon' => 'fas fa-fw fa-file-invoice',
                 ],
                 [
                     'text' => 'Inscripciones',
                     'url' => 'competenciasinscripcion',
-                    'icon' => 'fas fa-check',
+                    'icon' => 'fas fa-fw fa-user-check',
+                ],
+                [
+                    'text' => 'codigos postales',
+                    'url' => 'codigos-postales',
+                    'icon' => 'fas fa-fw fa-paper-plane',
                 ],
             ],
         ],

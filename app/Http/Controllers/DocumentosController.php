@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DocumentosUser;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Models\ValidacionesComentarios;
 use Illuminate\Http\Request;
 
 class DocumentosController extends Controller
@@ -35,8 +36,21 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
-        $registroGeneral = User::with('documentos', 'comprobantes')->findOrFail($id);
 
+        // Log para verificar que se está obteniendo el usuario correctamente
+        Log::info('ID de usuario: ' . $id);
+
+        $registroGeneral = User::with(['documentos' => function ($query) {
+            $query->where('estado', 'pendiente'); // Solo obtener documentos pendientes
+        }, 'comprobantes' => function ($query) {
+            $query->where('estado', 'pendiente'); // Solo obtener comprobantes pendientes
+        }])->findOrFail($id);
+
+        // Log para verificar que se están obteniendo los documentos correctamente
+        Log::info('Documentos del usuario: ' . json_encode($registroGeneral->documentos));
+
+        // Log para verificar que se está obteniendo el comprobante de pago correctamente
+        Log::info('Comprobante de pago del usuario: ' . json_encode($registroGeneral->comprobantes));
         // Filtrar documentos específicos
         $documentos = $registroGeneral->documentos;
 
@@ -51,6 +65,7 @@ class DocumentosController extends Controller
         // Obtener el usuario con sus documentos
         $registroGeneral = User::findOrFail($id);
         $documentos = $registroGeneral->documentos;
+        $comprobantePago = $registroGeneral->comprobantes->firstWhere('comprobante_pago', '!=', null);
 
         // Iterar sobre cada documento individualmente
         foreach ($documentos as $documento) {
@@ -67,17 +82,44 @@ class DocumentosController extends Controller
                     // Actualizar solo las columnas relevantes del documento
                     $documento->update([
                         'estado' => $accion,
+                    ]);
+
+                    // Crear una entrada en la tabla validaciones_comentarios
+                    ValidacionesComentarios::create([
+                        'user_id' => $registroGeneral->id,
+                        'documento_user_id' => $documento->id,
+                        'tipo_documento' => $documentoNombre,
+                        'tipo_validacion' => $accion,
                         'comentario' => $comentario,
                     ]);
                 }
             }
         }
 
+        // Verificar el comprobante de pago
+        if ($comprobantePago && $request->has('comprobante_pago')) {
+            $accion = $request->input('comprobante_pago');
+            $comentario = $request->input('comentario_comprobante_pago', '');
+
+            // Actualizar el estado del comprobante de pago
+            $comprobantePago->update([
+                'estado' => $accion,
+            ]);
+
+            // Crear una entrada en la tabla validaciones_comentarios
+            ValidacionesComentarios::create([
+                'user_id' => $registroGeneral->id,
+                'comprobante_pago_id' => $comprobantePago->id,
+                'tipo_documento' => 'comprobante_pago',
+                'tipo_validacion' => $accion,
+                'comentario' => $comentario,
+            ]);
+        }
+
         // Redirigir de vuelta a la vista de detalle del usuario
         return redirect()->route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id])
             ->with('success', 'Documentos actualizados correctamente');
     }
-
 
     /**
      * Update the specified resource in storage.

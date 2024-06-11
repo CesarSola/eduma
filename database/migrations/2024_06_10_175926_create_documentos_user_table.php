@@ -18,6 +18,7 @@ class CreateDocumentosUserTable extends Migration
             $table->string('ine_ife'); // Ruta de la identificación
             $table->string('comprobante_domiciliario'); // Ruta del comprobante domiciliario
             $table->string('curp'); // Ruta del CURP 
+            $table->string('estado')->default('pendiente'); // Estado como string
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
