@@ -22,7 +22,6 @@ return new class extends Migration
                 ->constrained('documentosnec')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-
             $table->timestamps();
         });
     }

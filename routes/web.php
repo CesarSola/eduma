@@ -116,3 +116,15 @@ Route::get('/profile/reactivate', function () {
 })->name('profile.reactivate');
 
 Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivate');
+
+
+
+Route::resource('roles',App\Http\Controllers\RoleController::class);
+
+Route::resource('permissions',App\Http\Controllers\PermissionController::class);
+
+Route::middleware(['can:users.edit'])->group(function () {
+    Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+	Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+});

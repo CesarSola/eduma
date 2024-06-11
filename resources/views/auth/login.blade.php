@@ -67,18 +67,23 @@
                 </div>
             </form>
 
-            <!-- Enlaces de contraseña olvidada y registro -->
-            <div class="flex justify-between items-center mt-4">
-                @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
-                    ¿Olvidaste tu contraseña?
-                </a>
-                @endif
-                <a href="{{ route('register') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
-                    Registrarme
-                </a>
+          <!-- Forgot Password and Registration Links -->
+          <div class="flex justify-between items-center mt-4">
+            @if (Route::has('password.request'))
+              <a href="{{ route('password.request') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
+                ¿Olvidaste tu contraseña?
+              </a>
+            @endif
+
+            <a href="{{ route('register') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
+              Registrarme
+            </a>
+          </div>
             </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
 </body>
