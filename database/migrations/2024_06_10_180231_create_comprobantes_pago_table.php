@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estandar_id');
             $table->string('comprobante_pago');
-            $table->string('estado')->default('pendiente'); // Estado como string
             $table->timestamps();
 
             // Claves foráneas

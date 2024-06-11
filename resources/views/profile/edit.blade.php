@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Perfil')
 
 @section('content_header')
 @stop
@@ -8,64 +8,7 @@
 @section('content')
 
 <x-app-layout>
-    <style>
-.container {
-    background-color: white;
-    width: 100%;
-    padding: 50px;
-    border-radius: 10px;
-}
-.container-1 {
-    background-color: white;
-    width: 60%; /* Ancho reducido al 60% para dejar 20% de margen en cada lado */
-    padding: 10px;
-    border-radius: 10px;
-    margin: 0 auto; /* Centrado horizontal */
-    display: flex;
-    justify-content: center; /* Centra el contenido horizontalmente */
-    align-items: center; /* Centra el contenido verticalmente */
-}
-
-.container1.1 {
-    display: flex;
-    flex-direction: column; /* Organizar en columna */
-    align-items: center; /* Centrar horizontalmente los elementos */
-    width: 100%;
-}
-
-.preview-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-button {
-    margin-top: 20px;
-}
-
-
-
-.flex-container {
-    display: flex;
-    padding: 20px;
-    margin-left: 55px;
-}
-
-.Div-1 {
- margin-left: 10px;
-}
-
-.Div-2 {
-margin-left: 55px;
-}
-.Div-3 {
-    margin-left: 55px;
-}
-.Div-4 {
-    margin-left: 55px;
-}
-
-    </style>
+  
     <div class="py-12">
 
 
@@ -80,7 +23,7 @@ margin-left: 55px;
                     <div class="preview-container mb-4">
                         <x-input-label class="mb-2" for="name" :value="__('Foto de perfil')" />
                         <!-- Vista previa de la imagen -->
-                        <img src="{{ asset(str_replace('public/', 'storage/', $user->foto)) }}" id="previewImage" width="200" height="200" class="rounded-full shadow-lg mb-4">
+                        <img src="{{ $user->foto ? asset($user->foto) : asset('default-avatar.png') }}" id="previewImage" width="200" height="200" class="rounded-full shadow-lg mb-4">
                         <!-- Input para seleccionar una nueva imagen -->
                         <label for="foto" class="cursor-pointer hover:opacity-80 inline-flex items-center shadow-md px-4 py-2 bg-blue-500 text-blue border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
                             Seleccionar imagen
@@ -90,46 +33,25 @@ margin-left: 55px;
                     </div>
                 </div>
             </div>
-
+            
+            
             <script>
                 function previewFile() {
                     const preview = document.getElementById('previewImage');
                     const file = document.getElementById('foto').files[0];
                     const reader = new FileReader();
-
+            
                     reader.addEventListener("load", function () {
                         // Convert file to base64 string
                         preview.src = reader.result;
                     }, false);
-
+            
                     if (file) {
                         reader.readAsDataURL(file);
                     }
                 }
             </script>
-
-
-
-            <script>
-                function previewFile() {
-                    const preview = document.getElementById('previewImage');
-                    const file = document.querySelector('input[type=file]').files[0];
-                    const reader = new FileReader();
-
-                    reader.onloadend = function() {
-                        preview.src = reader.result;
-                    }
-
-                    if (file) {
-                        reader.readAsDataURL(file);
-                    } else {
-                        preview.src = "";
-                    }
-                }
-            </script>
-
-
-
+            
         <div class="container">
 <br>
             <div class="flex-container">
@@ -275,8 +197,10 @@ margin-left: 55px;
                     </div>
                     <br>
                     <div class="flex items-center justify-between gap-4">
+                        <!-- Botón "Guardar" -->
                         <x-primary-button>{{ __('Guardar') }}</x-primary-button>
-
+                    
+                        <!-- Mensaje de guardado -->
                         @if (session('status') === 'profile-updated')
                             <p
                                 x-data="{ show: true }"
@@ -286,10 +210,14 @@ margin-left: 55px;
                                 class="text-sm text-gray-600"
                             >{{ __('Guardado.') }}</p>
                         @endif
-                    </form>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+                    
+                        <!-- Botón "Cambiar contraseña" -->
+                        <button type="button" class="btn btn-success md:w-auto" data-toggle="modal" data-target="#exampleModalCenter">
                             Cambiar contraseña
                         </button>
+                    </div>
+                    
+                    </form>
                     </div>
 
                       <!-- Modal -->
@@ -329,118 +257,174 @@ margin-left: 55px;
         </div>
 
     </div>
-            </x-app-layout>
+</x-app-layout>
+@stop
+ @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .container {
+            background-color: white;
+            width: 100%;
+            padding: 50px;
+            border-radius: 10px;
+        }
+        .container-1 {
+            background-color: white;
+            width: 60%; /* Ancho reducido al 60% para dejar 20% de margen en cada lado */
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0 auto; /* Centrado horizontal */
+            display: flex;
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Centra el contenido verticalmente */
+        }
+        
+        .container1.1 {
+            display: flex;
+            flex-direction: column; /* Organizar en columna */
+            align-items: center; /* Centrar horizontalmente los elementos */
+            width: 100%;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        button {
+            margin-top: 20px;
+        }
+        
+        
+        
+        .flex-container {
+            display: flex;
+            padding: 20px;
+            margin-left: 55px;
+        }
+        
+        .Div-1 {
+         margin-left: 10px;
+        }
+        
+        .Div-2 {
+        margin-left: 55px;
+        }
+        .Div-3 {
+            margin-left: 55px;
+        }
+        .Div-4 {
+            margin-left: 55px;
+        }
+        
+    </style>
+@stop
 
-            @stop
+@section('js')
 
-            @section('css')
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-            @stop
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function nextStep() {
+        // Oculta la sección de personal y muestra la de información adicional
+        document.getElementById("personal-section").style.display = "none";
+        document.getElementById("additional-info-section").style.display = "block";
 
-            @section('js')
+        // Actualiza el progreso
+        document.querySelector('.progress-bar').style.width = '100%';
+        document.querySelector('.progress-bar').innerHTML = 'Ubicación';
+      }
 
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script>
-                function nextStep() {
-                // Oculta la sección de personal y muestra la de información adicional
-                document.getElementById("personal-section").style.display = "none";
-                document.getElementById("additional-info-section").style.display = "block";
+      function goBack() {
+        // Oculta la sección de información adicional y muestra la de personal
+        document.getElementById("additional-info-section").style.display = "none";
+        document.getElementById("personal-section").style.display = "block";
 
-                // Actualiza el progreso
-                document.querySelector('.progress-bar').style.width = '100%';
-                document.querySelector('.progress-bar').innerHTML = 'Ubicación';
-              }
+        // Actualiza el progreso
+        document.querySelector('.progress-bar').style.width = '50%';
+        document.querySelector('.progress-bar').innerHTML = 'Cuenta';
+      }
 
-              function goBack() {
-                // Oculta la sección de información adicional y muestra la de personal
-                document.getElementById("additional-info-section").style.display = "none";
-                document.getElementById("personal-section").style.display = "block";
+      $(document).ready(function() {
+        $('#next-btn').click(function() {
+          // Validación de los campos del primer paso (puedes agregar más validaciones si es necesario)
+          var name = $('input[name="name"]').val();
+          var email = $('input[name="email"]').val();
+          var password = $('input[name="password"]').val();
+          var password_confirmation = $('input[name="password_confirmation"]').val();
 
-                // Actualiza el progreso
-                document.querySelector('.progress-bar').style.width = '50%';
-                document.querySelector('.progress-bar').innerHTML = 'Cuenta';
-              }
+          if(name && email && password && password === password_confirmation) {
+            $('#personal-section').hide();
+            $('#additional-info-section').show();
+          } else {
+            alert('Por favor, completa todos los campos correctamente.');
+          }
+        });
 
-              $(document).ready(function() {
-                $('#next-btn').click(function() {
-                  // Validación de los campos del primer paso (puedes agregar más validaciones si es necesario)
-                  var name = $('input[name="name"]').val();
-                  var email = $('input[name="email"]').val();
-                  var password = $('input[name="password"]').val();
-                  var password_confirmation = $('input[name="password_confirmation"]').val();
+        $('#buscar-btn').click(function() {
+          var codigoPostal = $('#codigo_postal').val();
 
-                  if(name && email && password && password === password_confirmation) {
-                    $('#personal-section').hide();
-                    $('#additional-info-section').show();
-                  } else {
-                    alert('Por favor, completa todos los campos correctamente.');
+          $.ajax({
+            type: 'POST',
+            url: "{{ route('obtener-detalles-codigo-postal') }}",
+            data: {
+              _token: "{{ csrf_token() }}",
+              codigo_postal: codigoPostal
+            },
+            success: function(response) {
+              if (response.codigosPostales) {
+                var coloniaSelect = $('#d_asenta');
+                var municipioSelect = $('#D_mnpio');
+                var estadoSelect = $('#d_estado');
+                var ciudadSelect = $('#d_ciudad');
+
+                coloniaSelect.empty().append('<option value="">Selecciona una colonia</option>');
+                municipioSelect.empty().append('<option value="">Selecciona un municipio</option>');
+                estadoSelect.empty().append('<option value="">Selecciona un estado</option>');
+                ciudadSelect.empty().append('<option value="">Selecciona una ciudad</option>');
+
+                var municipiosUnicos = new Set();
+                var estadosUnicos = new Set();
+                var ciudadesUnicas = new Set();
+
+                var primerLugar = response.codigosPostales[0];
+
+                coloniaSelect.append('<option value="' + primerLugar.d_asenta + '" selected>' + primerLugar.d_asenta + '</option>');
+                municipioSelect.append('<option value="' + primerLugar.D_mnpio + '" selected>' + primerLugar.D_mnpio + '</option>');
+                estadoSelect.append('<option value="' + primerLugar.d_estado + '" selected>' + primerLugar.d_estado + '</option>');
+                ciudadSelect.append('<option value="' + primerLugar.d_ciudad + '" selected>' + primerLugar.d_ciudad + '</option>');
+
+                municipiosUnicos.add(primerLugar.D_mnpio);
+                estadosUnicos.add(primerLugar.d_estado);
+                ciudadesUnicas.add(primerLugar.d_ciudad);
+
+                $.each(response.codigosPostales, function(index, lugar) {
+                  if (index !== 0) {
+                    coloniaSelect.append('<option value="' + lugar.d_asenta + '">' + lugar.d_asenta + '</option>');
+
+                    if (!municipiosUnicos.has(lugar.D_mnpio)) {
+                      municipioSelect.append('<option value="' + lugar.D_mnpio + '">' + lugar.D_mnpio + '</option>');
+                      municipiosUnicos.add(lugar.D_mnpio);
+                    }
+                    if (!estadosUnicos.has(lugar.d_estado)) {
+                      estadoSelect.append('<option value="' + lugar.d_estado + '">' + lugar.d_estado + '</option>');
+                      estadosUnicos.add(lugar.d_estado);
+                    }
+                    if (!ciudadesUnicas.has(lugar.d_ciudad)) {
+                      ciudadSelect.append('<option value="' + lugar.d_ciudad + '">' + lugar.d_ciudad + '</option>');
+                      ciudadesUnicas.add(lugar.d_ciudad);
+                    }
                   }
                 });
-
-                $('#buscar-btn').click(function() {
-                  var codigoPostal = $('#codigo_postal').val();
-
-                  $.ajax({
-                    type: 'POST',
-                    url: "{{ route('obtener-detalles-codigo-postal') }}",
-                    data: {
-                      _token: "{{ csrf_token() }}",
-                      codigo_postal: codigoPostal
-                    },
-                    success: function(response) {
-                      if (response.codigosPostales) {
-                        var coloniaSelect = $('#d_asenta');
-                        var municipioSelect = $('#D_mnpio');
-                        var estadoSelect = $('#d_estado');
-                        var ciudadSelect = $('#d_ciudad');
-
-                        coloniaSelect.empty().append('<option value="">Selecciona una colonia</option>');
-                        municipioSelect.empty().append('<option value="">Selecciona un municipio</option>');
-                        estadoSelect.empty().append('<option value="">Selecciona un estado</option>');
-                        ciudadSelect.empty().append('<option value="">Selecciona una ciudad</option>');
-
-                        var municipiosUnicos = new Set();
-                        var estadosUnicos = new Set();
-                        var ciudadesUnicas = new Set();
-
-                        var primerLugar = response.codigosPostales[0];
-
-                        coloniaSelect.append('<option value="' + primerLugar.d_asenta + '" selected>' + primerLugar.d_asenta + '</option>');
-                        municipioSelect.append('<option value="' + primerLugar.D_mnpio + '" selected>' + primerLugar.D_mnpio + '</option>');
-                        estadoSelect.append('<option value="' + primerLugar.d_estado + '" selected>' + primerLugar.d_estado + '</option>');
-                        ciudadSelect.append('<option value="' + primerLugar.d_ciudad + '" selected>' + primerLugar.d_ciudad + '</option>');
-
-                        municipiosUnicos.add(primerLugar.D_mnpio);
-                        estadosUnicos.add(primerLugar.d_estado);
-                        ciudadesUnicas.add(primerLugar.d_ciudad);
-
-                        $.each(response.codigosPostales, function(index, lugar) {
-                          if (index !== 0) {
-                            coloniaSelect.append('<option value="' + lugar.d_asenta + '">' + lugar.d_asenta + '</option>');
-
-                            if (!municipiosUnicos.has(lugar.D_mnpio)) {
-                              municipioSelect.append('<option value="' + lugar.D_mnpio + '">' + lugar.D_mnpio + '</option>');
-                              municipiosUnicos.add(lugar.D_mnpio);
-                            }
-                            if (!estadosUnicos.has(lugar.d_estado)) {
-                              estadoSelect.append('<option value="' + lugar.d_estado + '">' + lugar.d_estado + '</option>');
-                              estadosUnicos.add(lugar.d_estado);
-                            }
-                            if (!ciudadesUnicas.has(lugar.d_ciudad)) {
-                              ciudadSelect.append('<option value="' + lugar.d_ciudad + '">' + lugar.d_ciudad + '</option>');
-                              ciudadesUnicas.add(lugar.d_ciudad);
-                            }
-                          }
-                        });
-                      } else {
-                        console.log(response.error);
-                      }
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                      console.log('Error al obtener los detalles: ' + textStatus);
-                    }
-                  });
-                });
-              });
-            </script>
-            @stop
+              } else {
+                console.log(response.error);
+              }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log('Error al obtener los detalles: ' + textStatus);
+            }
+          });
+        });
+      });
+    </script>
+@stop

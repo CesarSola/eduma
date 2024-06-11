@@ -17,7 +17,7 @@ class Curso extends Model
         'modalidad',
         'fecha_inicio',
         'fecha_final',
-        'plataforma',
+
          'costo',
            'certification'
 

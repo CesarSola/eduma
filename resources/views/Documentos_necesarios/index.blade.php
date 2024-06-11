@@ -10,9 +10,10 @@
 @section('content')
 <!-- Button trigger modal -->
 <div class="mb-4">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">
-        Nuevo
-     </button>
+
+     <button data-modal-target="create-modal" data-toggle="modal" data-target="#create" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+        Crear nuevo documento
+      </button>
 </div>
 
 
@@ -46,7 +47,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel{{ $documentosnec->id }}">Editar documentosnec</h5>
+                        <h5 class="modal-title" id="editModalLabel{{ $documentosnec->id }}">Editar documentos nececesarios</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -75,7 +76,7 @@
 @stop
 
 @section('css')
-
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 @stop
 

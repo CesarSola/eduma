@@ -12,13 +12,10 @@ class Estandares extends Model
     protected $table = 'estandares';
 
     protected $fillable = [
-        'numero', // existing fields
-        'name', // existing fields
-        'tipo',
-        'documentosnec_id' // new field added
+        'numero',
+        'name',
+        'tipo'
     ];
-
-
 
     public function cursos()
     {
@@ -27,16 +24,14 @@ class Estandares extends Model
 
     public function documentosnec()
     {
-        return $this->belongsTo(DocumentosNec::class,  'documentosnec_id');
+        return $this->belongsToMany(DocumentosNec::class, 'competencia_documentosnec', 'competencia_id', 'documentosnec_id');
     }
 
-    // Relación uno a uno con el modelo ComprobantePago
     public function comprobantePago()
     {
         return $this->hasOne(ComprobantePago::class);
     }
 
-    // Relación muchos a muchos con el modelo User
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_estandares', 'estandar_id', 'user_id');
