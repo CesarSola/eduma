@@ -305,13 +305,30 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-
-
-
+        
+        ['header' => 'Profile'],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
+        ],
+        [
+            'text' => 'Roles',
+            'url'  => 'roles',
+            'icon' => 'fas fa-fw fa-user',
+            'can'  => 'roles.index',
+        ],
+        [
+            'text' => 'Permisos',
+            'url'  => 'permissions',
+            'icon' => 'fas fa-fw fa-user-cog',
+            'can'  => 'permissions.index',
+        ],
+        [
+            'text'        => 'users',
+            'url'         => 'users',
+            'icon'        => 'fas fa-fw fa-users',
+            'can'         => 'users.index',
         ],
         [
             'text' => 'codigos postales',

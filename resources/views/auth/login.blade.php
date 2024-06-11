@@ -95,6 +95,16 @@
               Registrarme
             </a>
           </div>
+          <!-- If the account is inactive, show a message with the email and a reactivation link -->
+              @if($inactive ?? false)
+              <div class="mb-3">
+                  <p class="text-danger">This account is deactivated. Please reactivate it.</p>
+                  <p class="text-muted">{{ __('Email') }}: {{ $email }}</p>
+              </div>
+              <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('profile.reactivate') }}">
+                {{ __('Reactivate your account') }}
+            </a>
+              @endif
             </div>
             </form>
           </div>
