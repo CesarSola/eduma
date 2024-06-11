@@ -32,8 +32,10 @@
             <td>{{$competencias->name}}</td>
             <td>{{$competencias->tipo}}</td>
             <td>
-                {{--$competencias->documentosnec->id--}}</td>
-
+                @foreach ($competencias->documentosnec as $documento)
+                    {{ $documento->name }}<br>
+                @endforeach
+            </td>
             <td>
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ $competencias->id }}">
                     <i class="fas fa-edit fa-sm"></i>

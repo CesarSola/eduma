@@ -34,11 +34,11 @@ class ProfileController extends Controller
         $user->paternalSurname = $request->input('paternalSurname');
         $user->calle_avenida = $request->input('calle_avenida');
         $user->numext = $request->input('numext');
-        $user->codpos = $request->input('codpos');
-        $user->colonia = $request->input('colonia');
-        $user->estado = $request->input('estado');
-        $user->ciudad = $request->input('ciudad');
-        $user->municipio = $request->input('municipio');
+        $user->d_codigo = $request->input('d_codigo');
+        $user->d_asenta = $request->input('>d_asenta');
+        $user->d_estado = $request->input('d_estado');
+        $user->d_ciudad = $request->input('d_ciudad');
+        $user->D_mnpio = $request->input('D_mnpio');
         $user->age = $request->input('age');
         $user->phone = $request->input('phone');
 

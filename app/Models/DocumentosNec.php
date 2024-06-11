@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentosNec extends Model
 {
     use HasFactory;
+
     protected $table = 'documentosnec';
     protected $fillable = [
         'name',
         'description',
-
-
     ];
+
     public function estandares()
     {
-        return $this->hasMany(Estandares::class, 'id');
+        return $this->belongsToMany(Estandares::class, 'competencia_documentosnec', 'documentosnec_id', 'competencia_id');
     }
 }
