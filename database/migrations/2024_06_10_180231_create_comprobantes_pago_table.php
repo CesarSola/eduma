@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estandar_id');
             $table->string('comprobante_pago');
+            $table->json('estado')->nullable(); // Estado como JSON
             $table->timestamps();
 
             // Claves foráneas

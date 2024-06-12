@@ -72,33 +72,23 @@ class DocumentosController extends Controller
                     $accion = $request->input("documento_$documentoNombre");
                     $comentario = $request->input("comentario_$documentoNombre", '');
 
-                    // Actualizar solo las columnas relevantes del documento
-                    $documento->update([
-                        'estado' => $accion,
-                    ]);
-
-                    // Revisar si ya existe una validación para este documento
-                    $validacionExistente = ValidacionesComentarios::where('user_id', $registroGeneral->id)
-                        ->where('documento_user_id', $documento->id)
-                        ->where('tipo_documento', $documentoNombre)
-                        ->first();
-
-                    if ($validacionExistente) {
-                        // Actualizar la validación existente
-                        $validacionExistente->update([
-                            'tipo_validacion' => $accion,
-                            'comentario' => $comentario,
-                        ]);
-                    } else {
-                        // Crear una nueva entrada en la tabla validaciones_comentarios
-                        ValidacionesComentarios::create([
+                    // Update or create validation
+                    ValidacionesComentarios::updateOrCreate(
+                        [
                             'user_id' => $registroGeneral->id,
                             'documento_user_id' => $documento->id,
-                            'tipo_documento' => $documentoNombre,
+                            'tipo_documento' => $documentoNombre
+                        ],
+                        [
                             'tipo_validacion' => $accion,
-                            'comentario' => $comentario,
-                        ]);
-                    }
+                            'comentario' => $comentario
+                        ]
+                    );
+
+                    // Store the validation status in an array
+                    $estado = $documento->estado ?? [];
+                    $estado[$documentoNombre] = $accion;
+                    $documento->update(['estado' => json_encode($estado)]);
                 }
             }
         }
@@ -108,51 +98,24 @@ class DocumentosController extends Controller
                 $accion = $request->input('comprobante_pago');
                 $comentario = $request->input('comentario_comprobante_pago', '');
 
-                $comprobante->update([
-                    'estado' => $accion,
-                ]);
-
-                // Revisar si ya existe una validación para el comprobante de pago
-                $validacionExistente = ValidacionesComentarios::where('user_id', $registroGeneral->id)
-                    ->where('comprobante_pago_id', $comprobante->id)
-                    ->where('tipo_documento', 'comprobante_pago')
-                    ->first();
-
-                if ($validacionExistente) {
-                    // Actualizar la validación existente
-                    $validacionExistente->update([
-                        'tipo_validacion' => $accion,
-                        'comentario' => $comentario,
-                    ]);
-                } else {
-                    // Crear una nueva entrada en la tabla validaciones_comentarios
-                    ValidacionesComentarios::create([
+                // Update or create validation
+                ValidacionesComentarios::updateOrCreate(
+                    [
                         'user_id' => $registroGeneral->id,
                         'comprobante_pago_id' => $comprobante->id,
-                        'tipo_documento' => 'comprobante_pago',
+                        'tipo_documento' => 'comprobante_pago'
+                    ],
+                    [
                         'tipo_validacion' => $accion,
-                        'comentario' => $comentario,
-                    ]);
-                }
+                        'comentario' => $comentario
+                    ]
+                );
+
+                // Store the validation status in an array
+                $estado = $comprobante->estado ?? [];
+                $estado['comprobante_pago'] = $accion;
+                $comprobante->update(['estado' => json_encode($estado)]);
             }
-        }
-
-        // Actualizar el estado de los documentos basado en la última validación
-        foreach ($documentos as $documento) {
-            $lastValidation = $documento->validacionesComentarios->last();
-            $nuevoEstado = $lastValidation ? $lastValidation->tipo_validacion : $documento->estado; // Mantener el estado actual si no hay validaciones
-            $documento->update([
-                'estado' => $nuevoEstado,
-            ]);
-        }
-
-        // Actualizar el estado de los comprobantes basado en la última validación
-        foreach ($comprobantes as $comprobante) {
-            $lastValidation = $comprobante->validacionesComentarios->last();
-            $nuevoEstado = $lastValidation ? $lastValidation->tipo_validacion : $comprobante->estado; // Mantener el estado actual si no hay validaciones
-            $comprobante->update([
-                'estado' => $nuevoEstado,
-            ]);
         }
 
         return redirect()->route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id])
