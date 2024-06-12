@@ -14,6 +14,9 @@
 
 @section('content')
     <div class="container">
+        <div id="success-message" class="alert alert-success" style="display: none;">
+            Documento actualizado correctamente.
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -41,22 +44,25 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('registroGeneral.updateDocumentos', ['id' => $registroGeneral->id]) }}"
-                            method="POST">
-                            @csrf
-                            @method('PUT')
+                        @php
+                            $documentosParaRevisar = false;
+                        @endphp
 
-                            @php
-                                $documentosParaRevisar = false;
-                            @endphp
-
-                            <!-- Mostrar documentos específicos -->
-                            @foreach ($documentos as $documento)
-                                @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
-                                    @if ($documento->$documentoNombre)
-                                        @php
-                                            $documentosParaRevisar = true;
-                                        @endphp
+                        <!-- Mostrar documentos específicos -->
+                        @foreach ($documentos as $documento)
+                            @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
+                                @php
+                                    $estado = json_decode($documento->estado, true) ?? [];
+                                @endphp
+                                @if ($documento->$documentoNombre && (!isset($estado[$documentoNombre]) || $estado[$documentoNombre] == 'rechazar'))
+                                    @php
+                                        $documentosParaRevisar = true;
+                                    @endphp
+                                    <form class="update-form"
+                                        data-url="{{ route('registroGeneral.updateDocumento', ['id' => $registroGeneral->id, 'documento' => $documentoNombre]) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="form-group row">
                                             <label
                                                 class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}</label>
@@ -64,70 +70,81 @@
                                                 <a href="{{ Storage::url($documento->$documentoNombre) }}" target="_blank"
                                                     class="btn btn-primary">Ver</a>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="documento_{{ $documentoNombre }}"
+                                                    <input class="form-check-input" type="radio" name="documento_estado"
                                                         id="validar_{{ $documentoNombre }}" value="validar">
                                                     <label class="form-check-label"
                                                         for="validar_{{ $documentoNombre }}">Validar</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="documento_{{ $documentoNombre }}"
+                                                    <input class="form-check-input" type="radio" name="documento_estado"
                                                         id="rechazar_{{ $documentoNombre }}" value="rechazar">
                                                     <label class="form-check-label"
                                                         for="rechazar_{{ $documentoNombre }}">Rechazar</label>
                                                 </div>
-                                                <textarea class="form-control mt-2" name="comentario_{{ $documentoNombre }}" placeholder="Agregar comentarios"></textarea>
+                                                <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button type="submit" class="btn btn-success">Listo</button>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
+                                    </form>
+                                @endif
                             @endforeach
+                        @endforeach
 
-                            <!-- Mostrar comprobante de pago -->
-                            @if ($comprobantePago)
+                        <!-- Mostrar comprobante de pago -->
+                        @if ($comprobantePago)
+                            @php
+                                $estado = json_decode($comprobantePago->estado, true) ?? [];
+                            @endphp
+                            @if (!isset($estado['comprobante_pago']) || $estado['comprobante_pago'] == 'rechazar')
                                 @php
                                     $documentosParaRevisar = true;
                                 @endphp
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
-                                    <div class="col-sm-4">
-                                        <a href="{{ Storage::url($comprobantePago->comprobante_pago) }}" target="_blank"
-                                            class="btn btn-primary">Ver</a>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="comprobante_pago"
-                                                id="validar_comprobante_pago" value="validar">
-                                            <label class="form-check-label" for="validar_comprobante_pago">Validar</label>
+                                <form class="update-form"
+                                    data-url="{{ route('registroGeneral.updateDocumento', ['id' => $registroGeneral->id, 'documento' => 'comprobante_pago']) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
+                                        <div class="col-sm-4">
+                                            <a href="{{ Storage::url($comprobantePago->comprobante_pago) }}"
+                                                target="_blank" class="btn btn-primary">Ver</a>
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="comprobante_pago"
-                                                id="rechazar_comprobante_pago" value="rechazar">
-                                            <label class="form-check-label" for="rechazar_comprobante_pago">Rechazar</label>
+                                        <div class="col-sm-4">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="documento_estado"
+                                                    id="validar_comprobante_pago" value="validar">
+                                                <label class="form-check-label"
+                                                    for="validar_comprobante_pago">Validar</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="documento_estado"
+                                                    id="rechazar_comprobante_pago" value="rechazar">
+                                                <label class="form-check-label"
+                                                    for="rechazar_comprobante_pago">Rechazar</label>
+                                            </div>
+                                            <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
                                         </div>
-                                        <textarea class="form-control mt-2" name="comentario_comprobante_pago" placeholder="Agregar comentarios"></textarea>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-success">Listo</button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             @endif
+                        @endif
 
-                            @if ($documentosParaRevisar)
-                                <div class="form-group row">
-                                    <div class="col-sm-12 text-center">
-                                        <button type="submit" class="btn btn-success">Guardar</button>
-                                    </div>
+                        <!-- Mensaje para documentos validados -->
+                        @if (!$documentosParaRevisar)
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-center">
+                                    <p>Todos los documentos disponibles han sido validados.</p>
                                 </div>
-                            @else
-                                <div class="form-group row">
-                                    <div class="col-sm-12 text-center">
-                                        <p>Todos los documentos disponibles han sido validados.</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </form>
-
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -168,6 +185,69 @@
 
 @section('js')
     <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.update-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+                    const url = form.getAttribute('data-url');
+
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content'),
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('success-message').style.display =
+                                    'block';
+
+                                // Actualizar el mensaje según la acción (validar/rechazar)
+                                const action = formData.get('documento_estado');
+                                if (action === 'validar') {
+                                    form.closest('.update-form').style.display =
+                                    'none'; // Ocultar el formulario del documento validado
+                                    if (!document.querySelector('.update-form')) {
+                                        document.querySelector('.card-header').innerHTML += `
+                                            <div class="form-group row">
+                                                <div class="col-sm-12 text-center">
+                                                    <p>Todos los documentos disponibles han sido validados.</p>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
+                                } else if (action === 'rechazar') {
+                                    // Resetear campos de validar y comentario
+                                    form.querySelector('input[type="radio"]:checked').checked =
+                                        false; // Deseleccionar el radio button seleccionado
+                                    form.querySelector('textarea[name="comentario_documento"]')
+                                        .value = ''; // Reiniciar el campo de comentarios
+
+                                    // Mostrar mensaje de documento rechazado
+                                    const messageElement = form.querySelector(
+                                        '.alert.alert-info');
+                                    if (messageElement) {
+                                        messageElement.style.display = 'block';
+                                    }
+
+                                    // Cambiar texto del botón
+                                    form.querySelector('.btn.btn-success').innerText =
+                                        'Volver a validar';
+                                }
+                            } else if (data.error) {
+                                alert(data.error); // Manejar errores si es necesario
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        });
     </script>
 @stop

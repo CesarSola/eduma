@@ -23,20 +23,33 @@ class DashboardUserController extends Controller
             return redirect()->route('login');
         }
 
+        // Obtener todos los documentos del usuario con sus validaciones
+        $documentos = DocumentosUser::where('user_id', $usuario->id)
+            ->with('validacionesComentarios')
+            ->get();
+
+        // Obtener todos los comprobantes de pago del usuario con sus validaciones
+        $comprobantes = ComprobantePago::where('user_id', $usuario->id)
+            ->with('validacionesComentarios')
+            ->get();
+
+        // Filtrar los documentos que no están validados
+        $documentosPendientes = $documentos->filter(function ($documento) {
+            return $documento->validacionesComentarios->isEmpty() || !$documento->validacionesComentarios->last()->tipo_validacion;
+        });
+
+        // Filtrar los comprobantes que no están validados
+        $comprobantesPendientes = $comprobantes->filter(function ($comprobante) {
+            return $comprobante->validacionesComentarios->isEmpty() || !$comprobante->validacionesComentarios->last()->tipo_validacion;
+        });
+
         $competencias = Estandares::all();
         $cursos = Curso::all();
 
-        // Obtener los documentos del usuario
-        $documentos = DocumentosUser::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
-            $query->latest();
-        }])->get();
-
-        // Obtener los comprobantes de pago del usuario
-        $comprobantes = ComprobantePago::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
-            $query->latest();
-        }])->get();
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'comprobantes'));
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosPendientes', 'comprobantesPendientes'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.

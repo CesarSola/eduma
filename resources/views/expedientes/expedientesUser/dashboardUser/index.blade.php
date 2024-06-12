@@ -1,139 +1,155 @@
+<!-- resources/views/expedientes/expedientesUser/dashboardUser/index.blade.php -->
+
 @extends('adminlte::page')
 
-@section('title', 'Expediente')
+@section('title', 'SICE')
 
 @section('content_header')
-    <div class="header-flex">
-        <h1>Revisión de Documentos Generales</h1>
-        <div>
-            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id]) }}"
-                class="btn btn-secondary">Regresar</a>
+    <div class="card">
+        <div class="card-body">
+            <div class="left-content">
+                <div class="text-center">
+                    <p>SICE</p>
+                </div>
+            </div>
         </div>
     </div>
 @stop
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body header-flex">
-                                        <div class="left-content">
-                                            <div class="text-center">
-                                                <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="img-circle">
-                                            </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $registroGeneral->name }}
-                                                {{ $registroGeneral->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $registroGeneral->paternalSurname }}
-                                                {{ $registroGeneral->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
-                                        </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <form action="{{ route('registroGeneral.updateDocumentos', ['id' => $registroGeneral->id]) }}"
-                            method="POST">
-                            @csrf
-                            @method('PUT')
-
-                            @php
-                                $documentosParaRevisar = false;
-                            @endphp
-
-                            @foreach ($documentos as $documento)
-                                @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
-                                    @if ($documento->$documentoNombre)
-                                        @php
-                                            $documentosParaRevisar = true;
-                                            $estadoArray = json_decode($documento->estado, true);
-                                            $estado = $estadoArray[$documentoNombre] ?? null;
-                                        @endphp
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}</label>
-                                            <div class="col-sm-4">
-                                                <a href="{{ Storage::url($documento->$documentoNombre) }}" target="_blank"
-                                                    class="btn btn-primary">Ver</a>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="documento_{{ $documentoNombre }}"
-                                                        id="validar_{{ $documentoNombre }}" value="validar"
-                                                        {{ $estado === 'validar' ? 'checked' : '' }}>
-                                                    <label class="form-check-label"
-                                                        for="validar_{{ $documentoNombre }}">Validar</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="documento_{{ $documentoNombre }}"
-                                                        id="rechazar_{{ $documentoNombre }}" value="rechazar"
-                                                        {{ $estado === 'rechazar' ? 'checked' : '' }}>
-                                                    <label class="form-check-label"
-                                                        for="rechazar_{{ $documentoNombre }}">Rechazar</label>
-                                                </div>
-                                                <textarea class="form-control mt-2" name="comentario_{{ $documentoNombre }}" placeholder="Agregar comentarios"></textarea>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            @endforeach
-
-                            @if ($comprobantePago)
-                                @php
-                                    $documentosParaRevisar = true;
-                                    $estadoArray = json_decode($comprobantePago->estado, true);
-                                    $estado = $estadoArray['comprobante_pago'] ?? null;
-                                @endphp
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
-                                    <div class="col-sm-4">
-                                        <a href="{{ Storage::url($comprobantePago->comprobante_pago) }}" target="_blank"
-                                            class="btn btn-primary">Ver</a>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="comprobante_pago"
-                                                id="validar_comprobante_pago" value="validar"
-                                                {{ $estado === 'validar' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="validar_comprobante_pago">Validar</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="comprobante_pago"
-                                                id="rechazar_comprobante_pago" value="rechazar"
-                                                {{ $estado === 'rechazar' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="rechazar_comprobante_pago">Rechazar</label>
-                                        </div>
-                                        <textarea class="form-control mt-2" name="comentario_comprobante_pago" placeholder="Agregar comentarios"></textarea>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if ($documentosParaRevisar)
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary">Actualizar Documentos</button>
-                                    </div>
-                                </div>
-                            @else
-                                <p class="text-center">No hay documentos para revisar.</p>
-                            @endif
-                        </form>
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header">
+                <h4>Bienvenido</h4>
+                <div class="card-title">
+                    <h6 class="text">
+                        {{ $usuario->name }}
+                        {{ $usuario->secondName }}
+                        {{ $usuario->paternalSurname }}
+                        {{ $usuario->maternalSurname }}
+                    </h6>
                 </div>
             </div>
         </div>
     </div>
+
+    <br>
+    <div class="card">
+        <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos">Lista de requerimientos
+            y documentación</h6>
+        <br>
+        <div class="card d-none" id="requerimientos">
+            <div class="card-body">
+                <ul>
+                    @if ($documentos->isEmpty())
+                        <h6 class="text-center"><span>Para continuar con el proceso sube estos documentos: </span></h6>
+                        <br>
+                        <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
+                                color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato JPG,
+                                BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se recomienda
+                                acudir a un estudio fotográfico.</span></li>
+                        <br>
+                        <li><span>Identificación oficial escaneada INE o IFE Que sea legible</span></li>
+                        <br>
+                        <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
+                        <br>
+                        <li><span>CURP en formato PDF Escaneado y legible</span></li>
+                    @else
+                        <h6 class="text-center">Los documentos ya han sido subidos.</h6>
+                    @endif
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="card">
+        @if ($documentos->isNotEmpty())
+            <h6 style="text-align: center" class="card-title">Documentos siendo validados</h6>
+            <br>
+            <div class="card-body">
+                <!-- Aquí va la tabla para mostrar los documentos en proceso de validación -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Estado</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($documentos as $documento)
+                            @foreach ($documento->validacionesComentarios as $validacion)
+                                <tr>
+                                    <td>{{ ucfirst(str_replace('_', ' ', $validacion->tipo_documento)) }}</td>
+                                    <td>
+                                        @if ($validacion->tipo_validacion == 'validar')
+                                            Validado
+                                        @elseif ($validacion->tipo_validacion == 'rechazar')
+                                            Rechazado
+                                        @elseif ($validacion->tipo_validacion == 'Pendiente')
+                                            en proceso
+                                        @else
+                                            No validado
+                                        @endif
+                                    </td>
+                                    <td>{{ $validacion->comentario }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+    <!-- Sección de cursos y competencias -->
+    @if ($documentos->isNotEmpty())
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
+            <br>
+            @foreach ($competencias as $competencia)
+                @php
+                    $comprobante = $comprobantes->firstWhere('estandar_id', $competencia->id);
+                @endphp
+                <div class="card">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div class="d-flex flex-column align-items-start">
+                            <h6 class="text-left">{{ $competencia->numero }}</h6>
+                        </div>
+                        <div class="d-flex flex-column align-items-center flex-grow-1">
+                            <h6 class="text-center">{{ $competencia->name }}</h6>
+                        </div>
+                        <div class="d-flex">
+                            @if ($comprobante)
+                                <a class="btn btn-primary"
+                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Ver</a>
+                            @else
+                                <a class="btn btn-primary"
+                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
+                            @endif
+                            <a class="btn btn-danger" href="#">Descargar</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <br>
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Cursos</h6>
+            <br>
+            <div class="card">
+                <div class="card-body">
+                    <ul>
+                        @foreach ($cursos as $curso)
+                            <li>{{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
+    <!-- Fin de la sección de cursos y competencias -->
 @stop
 
 @section('css')

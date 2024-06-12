@@ -75,7 +75,7 @@ Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta comentarios-validar
-Route::put('/registro-general/{id}/update-documentos', [DocumentosController::class, 'updateDocumentos'])->name('registroGeneral.updateDocumentos');
+Route::put('/registro-general/{id}/update-documento/{documento}', [DocumentosController::class, 'updateDocumento'])->name('registroGeneral.updateDocumento');
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos
@@ -119,12 +119,12 @@ Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->na
 
 
 
-Route::resource('roles',App\Http\Controllers\RoleController::class);
+Route::resource('roles', App\Http\Controllers\RoleController::class);
 
-Route::resource('permissions',App\Http\Controllers\PermissionController::class);
+Route::resource('permissions', App\Http\Controllers\PermissionController::class);
 
 Route::middleware(['can:users.edit'])->group(function () {
     Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
-	Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
