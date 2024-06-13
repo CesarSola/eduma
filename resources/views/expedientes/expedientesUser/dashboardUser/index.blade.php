@@ -68,7 +68,6 @@
             <h6 style="text-align: center" class="card-title">Documentos siendo validados</h6>
             <br>
             <div class="card-body">
-                <!-- Aquí va la tabla para mostrar los documentos en proceso de validación -->
                 <table class="table">
                     <thead>
                         <tr>
@@ -79,22 +78,34 @@
                     </thead>
                     <tbody>
                         @foreach ($documentos as $documento)
-                            @foreach ($documento->validacionesComentarios as $validacion)
-                                <tr>
-                                    <td>{{ ucfirst(str_replace('_', ' ', $validacion->tipo_documento)) }}</td>
-                                    <td>
-                                        @if ($validacion->tipo_validacion == 'validar')
-                                            Validado
-                                        @elseif ($validacion->tipo_validacion == 'rechazar')
-                                            Rechazado
-                                        @elseif ($validacion->tipo_validacion == 'Pendiente')
-                                            en proceso
-                                        @else
-                                            No validado
-                                        @endif
-                                    </td>
-                                    <td>{{ $validacion->comentario }}</td>
-                                </tr>
+                            @php
+                                $estado = json_decode($documento->estado, true) ?? [];
+                            @endphp
+                            @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $tipo_documento)
+                                @if ($documento->$tipo_documento)
+                                    <tr>
+                                        <td>{{ ucfirst(str_replace('_', ' ', $tipo_documento)) }}</td>
+                                        <td>
+                                            @if (isset($estado[$tipo_documento]))
+                                                @if ($estado[$tipo_documento] == 'validar')
+                                                    Validado
+                                                @elseif ($estado[$tipo_documento] == 'rechazar')
+                                                    Rechazado
+                                                @endif
+                                            @else
+                                                En proceso
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php
+                                                $comentario = $documento->validacionesComentarios
+                                                    ->where('tipo_documento', $tipo_documento)
+                                                    ->first();
+                                            @endphp
+                                            {{ $comentario ? $comentario->comentario : '' }}
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         @endforeach
                     </tbody>
@@ -102,7 +113,7 @@
             </div>
         @endif
     </div>
-    <!-- Sección de cursos y competencias -->
+
     @if ($documentos->isNotEmpty())
         <div class="card">
             <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
@@ -149,7 +160,6 @@
             </div>
         </div>
     @endif
-    <!-- Fin de la sección de cursos y competencias -->
 @stop
 
 @section('css')

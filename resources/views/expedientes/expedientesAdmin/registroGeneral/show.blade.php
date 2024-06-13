@@ -14,9 +14,13 @@
 
 @section('content')
     <div class="container">
-        <div id="success-message" class="alert alert-success" style="display: none;">
+        <div id="success-message" class="alert alert-success alert-dismissible" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             Documento actualizado correctamente.
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -180,6 +184,10 @@
         .button-right {
             float: right;
         }
+
+        .alert .close {
+            cursor: pointer;
+        }
     </style>
 @stop
 
@@ -187,6 +195,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.update-form');
+            const successMessage = document.getElementById('success-message');
+            const closeButton = successMessage.querySelector('.close');
+
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -206,13 +217,12 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                document.getElementById('success-message').style.display =
-                                    'block';
+                                successMessage.style.display = 'block';
 
                                 // Actualizar el mensaje según la acción (validar/rechazar)
                                 const action = formData.get('documento_estado');
                                 if (action === 'validar') {
-                                    form.closest('.update-form').style.display =
+                                    form.style.display =
                                     'none'; // Ocultar el formulario del documento validado
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
@@ -224,29 +234,29 @@
                                         `;
                                     }
                                 } else if (action === 'rechazar') {
-                                    // Resetear campos de validar y comentario
-                                    form.querySelector('input[type="radio"]:checked').checked =
-                                        false; // Deseleccionar el radio button seleccionado
+                                    // Dejar el formulario visible, pero limpiar los campos
                                     form.querySelector('textarea[name="comentario_documento"]')
-                                        .value = ''; // Reiniciar el campo de comentarios
-
-                                    // Mostrar mensaje de documento rechazado
-                                    const messageElement = form.querySelector(
-                                        '.alert.alert-info');
-                                    if (messageElement) {
-                                        messageElement.style.display = 'block';
-                                    }
-
-                                    // Cambiar texto del botón
-                                    form.querySelector('.btn.btn-success').innerText =
-                                        'Volver a validar';
+                                        .value = ''; // Limpiar el campo de comentarios
+                                    form.querySelectorAll('input[type="radio"]').forEach(
+                                        radio => radio.checked = false
+                                        ); // Deseleccionar todos los radio buttons
                                 }
+
+                                // Ocultar el mensaje de éxito después de 5 segundos
+                                setTimeout(() => {
+                                    successMessage.style.display = 'none';
+                                }, 5000);
                             } else if (data.error) {
                                 alert(data.error); // Manejar errores si es necesario
                             }
                         })
                         .catch(error => console.error('Error:', error));
                 });
+            });
+
+            // Agregar evento al botón de cerrar
+            closeButton.addEventListener('click', function() {
+                successMessage.style.display = 'none';
             });
         });
     </script>

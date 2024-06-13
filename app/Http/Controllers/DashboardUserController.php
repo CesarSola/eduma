@@ -49,8 +49,6 @@ class DashboardUserController extends Controller
         return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosPendientes', 'comprobantesPendientes'));
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      */
