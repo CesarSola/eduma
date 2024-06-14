@@ -84,6 +84,7 @@
                             <th>Documento</th>
                             <th>Estado</th>
                             <th>Comentario</th>
+                            <th>Acción</th> <!-- Columna para la acción -->
                         </tr>
                     </thead>
                     <tbody>
@@ -114,6 +115,12 @@
                                             @endphp
                                             {{ $comentario ? $comentario->comentario : '' }}
                                         </td>
+                                        <td>
+                                            @if (isset($estado[$tipo_documento]) && $estado[$tipo_documento] == 'rechazar')
+                                                <a href="{{ route('documentosUser.edit', ['tipo_documento' => $tipo_documento]) }}"
+                                                    class="btn btn-warning">Resubir</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endif
                             @endforeach
@@ -123,6 +130,8 @@
             </div>
         @endif
     </div>
+
+
 
     @if ($documentos->isNotEmpty())
         <div class="card">

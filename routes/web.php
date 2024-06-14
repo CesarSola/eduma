@@ -90,7 +90,8 @@ Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
 Route::resource('documentosUser', SDocumentosController::class);
-//ruta para re-subir documentos Usuario
+Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::class, 'edit'])->name('documentosUser.edit');
+Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.update');
 //ruta del registro a un EC
 // Ruta específica para el método store del controlador RegistroECController
 Route::resource('competenciaEC', RegistroECController::class);

@@ -223,7 +223,7 @@
                                 const action = formData.get('documento_estado');
                                 if (action === 'validar') {
                                     form.style.display =
-                                    'none'; // Ocultar el formulario del documento validado
+                                        'none'; // Ocultar el formulario del documento validado
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
                                             <div class="form-group row">
@@ -239,7 +239,7 @@
                                         .value = ''; // Limpiar el campo de comentarios
                                     form.querySelectorAll('input[type="radio"]').forEach(
                                         radio => radio.checked = false
-                                        ); // Deseleccionar todos los radio buttons
+                                    ); // Deseleccionar todos los radio buttons
                                 }
 
                                 // Ocultar el mensaje de éxito después de 5 segundos

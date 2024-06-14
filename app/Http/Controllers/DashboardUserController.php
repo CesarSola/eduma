@@ -45,16 +45,7 @@ class DashboardUserController extends Controller
         return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosRechazados'));
     }
 
-    public function reupload($tipo_documento)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
 
-        $usuario = Auth::user();
-
-        return view('expedientes.expedientesUser.documentosUser.reupload', compact('tipo_documento', 'usuario'));
-    }
     /**
      * Show the form for creating a new resource.
      */
