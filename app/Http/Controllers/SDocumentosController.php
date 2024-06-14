@@ -69,6 +69,7 @@ class SDocumentosController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Documentos subidos correctamente');
     }
 
+
     /**
      * Display the specified resource.
      */

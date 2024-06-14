@@ -28,27 +28,33 @@ class DashboardUserController extends Controller
             ->with('validacionesComentarios')
             ->get();
 
-        // Obtener todos los comprobantes de pago del usuario con sus validaciones
-        $comprobantes = ComprobantePago::where('user_id', $usuario->id)
-            ->with('validacionesComentarios')
-            ->get();
-
-        // Filtrar los documentos que no están validados
-        $documentosPendientes = $documentos->filter(function ($documento) {
-            return $documento->validacionesComentarios->isEmpty() || !$documento->validacionesComentarios->last()->tipo_validacion;
-        });
-
-        // Filtrar los comprobantes que no están validados
-        $comprobantesPendientes = $comprobantes->filter(function ($comprobante) {
-            return $comprobante->validacionesComentarios->isEmpty() || !$comprobante->validacionesComentarios->last()->tipo_validacion;
+        // Filtrar los documentos rechazados
+        $documentosRechazados = $documentos->filter(function ($documento) {
+            $estado = json_decode($documento->estado, true) ?? [];
+            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $tipo_documento) {
+                if (isset($estado[$tipo_documento]) && $estado[$tipo_documento] == 'rechazar') {
+                    return true;
+                }
+            }
+            return false;
         });
 
         $competencias = Estandares::all();
         $cursos = Curso::all();
 
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosPendientes', 'comprobantesPendientes'));
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosRechazados'));
     }
 
+    public function reupload($tipo_documento)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $usuario = Auth::user();
+
+        return view('expedientes.expedientesUser.documentosUser.reupload', compact('tipo_documento', 'usuario'));
+    }
     /**
      * Show the form for creating a new resource.
      */

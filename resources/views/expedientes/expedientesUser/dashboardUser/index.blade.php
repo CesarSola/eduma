@@ -62,6 +62,16 @@
         </div>
     </div>
 
+    @if ($documentos->isEmpty())
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Sube tus documentos aquí</h6>
+            <br>
+            <div class="card-body text-center">
+                <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+            </div>
+        </div>
+    @endif
+
     <br>
     <div class="card">
         @if ($documentos->isNotEmpty())
