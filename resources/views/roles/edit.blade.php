@@ -35,7 +35,7 @@
             </div>
         @endforeach
     </div>
-    
+    <br>
             <div class="box-footer mt20">
                 <button type="submit" class="btn btn-primary">{{ __('Guardar') }}</button>
             </div>
@@ -54,10 +54,26 @@
     <link rel="stylesheet" href="/css/admin_custom.css">
     <style>
         .permission-container {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 10px; /* Espacio entre elementos */
-    }
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px; /* Espacio entre elementos */
+        }
+
+        .form-check {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+        }
+
+        .form-check-label {
+            display: flex;
+            align-items: center;
+        }
     </style>
 @stop
 

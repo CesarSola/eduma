@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-
 use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
@@ -14,8 +13,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles=Role::all();
-        return view('roles.index',compact('roles'));
+        $roles = Role::all();
+        return view('roles.index', compact('roles'));
     }
 
     /**
@@ -23,31 +22,31 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions=Permission::all();
-        return view('roles.create',compact('permissions'));
+        $permissions = Permission::all();
+        return view('roles.create', compact('permissions'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'name'=>'required',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required',
+        ]);
 
-    $role = Role::create($request->all());
+        $role = Role::create($request->all());
+        $role->permissions()->sync($request->permissions);
 
-    $role->permissions()->sync($request->permissions);
+        return redirect()->route('roles.index');
+    }
 
-    return redirect()->route('roles.index'); // Elimina $role aquí
-}
     /**
      * Display the specified resource.
      */
     public function show(Role $role)
     {
-        return view('roles.show',compact('role'));
+        return view('roles.show', compact('role'));
     }
 
     /**
@@ -55,31 +54,31 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions=Permission::all();
-        return view('roles.edit',compact('role','permissions'));
+        $permissions = Permission::all();
+        return view('roles.edit', compact('role', 'permissions'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Role $role)
-{
-    $request->validate([
-        'name'=>'required',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required',
+        ]);
 
-    $role->update($request->all());
+        $role->update($request->all());
+        $role->permissions()->sync($request->permissions);
 
-    $role->permissions()->sync($request->permissions);
-
-    return redirect()->route('roles.index'); // Elimina $role aquí
-}
+        return redirect()->route('roles.index');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente');
     }
 }

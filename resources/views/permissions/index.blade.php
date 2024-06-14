@@ -29,6 +29,7 @@
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Acciones</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,8 @@
                                 @can('permissions.edit')
                                 <a class="btn btn-warning" href="{{ route('permissions.edit',$permission->id) }}"><i class="fas fa-edit"></i> Editar</a>
                                 @endcan
+                            </td>
+                            <td>
                                 @can('permissions.destroy')
                                 <form action="{{ route('permissions.destroy',$permission->id) }}" method="POST">
                                     @csrf

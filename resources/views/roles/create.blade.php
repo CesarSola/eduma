@@ -49,16 +49,27 @@
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <style>
-        /* Estilo personalizado para colocar la etiqueta encima del input */
-        .form-group label {
-            display: block;
-            margin-bottom: 5px; /* Espacio entre la etiqueta y el input */
-        }
         .permission-container {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 10px; /* Espacio entre elementos */
-         }
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px; /* Espacio entre elementos */
+        }
+
+        .form-check {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+        }
+
+        .form-check-label {
+            display: flex;
+            align-items: center;
+        }
     </style>
 @stop
 
