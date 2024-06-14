@@ -63,8 +63,8 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>Eduma</b>TICS',
+    'logo_img' => 'vendor/adminlte/dist/img/logo.jpeg',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -84,13 +84,13 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => false,
+        'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/logo.jpeg',
             'alt' => 'Auth Logo',
             'class' => '',
-            'width' => 50,
-            'height' => 50,
+            'width' => 160,
+            'height' => 160,
         ],
     ],
 
@@ -113,11 +113,11 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/logo.jpeg',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'width' => 100,
+            'height' => 100,
         ],
     ],
 
@@ -312,7 +312,7 @@ return [
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
-        [       'text' => 'Roles',
+        [   'text' => 'Roles',
             'url'  => 'roles',
             'icon' => 'fas fa-fw fa-user',
             'can'  => 'roles.index',
@@ -328,11 +328,6 @@ return [
             'url'         => 'users',
             'icon'        => 'fas fa-fw fa-users',
             'can'         => 'users.index',
-        ],
-        [
-            'text' => 'codigos postales',
-            'url' => 'codigos-postales',
-            'icon' => 'fas fa-fw fa-road',
         ],
         [
             'header' => 'ADMINISTRADOR'
