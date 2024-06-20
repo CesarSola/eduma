@@ -36,69 +36,60 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
+        // Obtener todos los documentos y el comprobante de pago
+        $registroGeneral = User::with(['documentos', 'comprobantes'])->findOrFail($id);
 
-        // Log para verificar que se está obteniendo el usuario correctamente
-        Log::info('ID de usuario: ' . $id);
-
-        $registroGeneral = User::with(['documentos' => function ($query) {
-            $query->where('estado', 'pendiente'); // Solo obtener documentos pendientes
-        }, 'comprobantes' => function ($query) {
-            $query->where('estado', 'pendiente'); // Solo obtener comprobantes pendientes
-        }])->findOrFail($id);
-
-        // Log para verificar que se están obteniendo los documentos correctamente
-        Log::info('Documentos del usuario: ' . json_encode($registroGeneral->documentos));
-
-        // Log para verificar que se está obteniendo el comprobante de pago correctamente
-        Log::info('Comprobante de pago del usuario: ' . json_encode($registroGeneral->comprobantes));
         // Filtrar documentos específicos
-        $documentos = $registroGeneral->documentos;
+        $documentos = $registroGeneral->documentos->filter(function ($documento) {
+            return $documento->validacionesComentarios->isEmpty() || $documento->validacionesComentarios->contains(function ($validacion) {
+                return $validacion->tipo_validacion != 'validar';
+            });
+        });
 
         // Filtrar comprobante de pago
-        $comprobantePago = $registroGeneral->comprobantes->firstWhere('comprobante_pago', '!=', null);
+        $comprobantePago = $registroGeneral->comprobantes->filter(function ($comprobante) {
+            return $comprobante->validacionesComentarios->isEmpty() || $comprobante->validacionesComentarios->contains(function ($validacion) {
+                return $validacion->tipo_validacion != 'validar';
+            });
+        })->first();
 
         return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'comprobantePago'));
     }
 
-    public function updateDocumentos(Request $request, $id)
+    public function updateDocumento(Request $request, $id, $documentoNombre)
     {
-        $registroGeneral = User::with(['documentos.validacionesComentarios', 'comprobantes.validacionesComentarios'])->findOrFail($id);
+        $registroGeneral = User::findOrFail($id);
         $documentos = $registroGeneral->documentos;
         $comprobantes = $registroGeneral->comprobantes;
 
+        $accion = $request->input('documento_estado');
+        $comentario = $request->input('comentario_documento', '');
+
         foreach ($documentos as $documento) {
-            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
-                if ($request->has("documento_$documentoNombre")) {
-                    $accion = $request->input("documento_$documentoNombre");
-                    $comentario = $request->input("comentario_$documentoNombre", '');
+            if (isset($documento->$documentoNombre)) {
+                // Update or create validation
+                ValidacionesComentarios::updateOrCreate(
+                    [
+                        'user_id' => $registroGeneral->id,
+                        'documento_user_id' => $documento->id,
+                        'tipo_documento' => $documentoNombre
+                    ],
+                    [
+                        'tipo_validacion' => $accion,
+                        'comentario' => $comentario
+                    ]
+                );
 
-                    // Update or create validation
-                    ValidacionesComentarios::updateOrCreate(
-                        [
-                            'user_id' => $registroGeneral->id,
-                            'documento_user_id' => $documento->id,
-                            'tipo_documento' => $documentoNombre
-                        ],
-                        [
-                            'tipo_validacion' => $accion,
-                            'comentario' => $comentario
-                        ]
-                    );
-
-                    // Store the validation status in an array
-                    $estado = $documento->estado ?? [];
-                    $estado[$documentoNombre] = $accion;
-                    $documento->update(['estado' => json_encode($estado)]);
-                }
+                // Update the validation status in the document's state
+                $estado = json_decode($documento->estado, true) ?? [];
+                $estado[$documentoNombre] = $accion;
+                $documento->update(['estado' => json_encode($estado)]);
             }
         }
 
         foreach ($comprobantes as $comprobante) {
-            if ($request->has('comprobante_pago')) {
-                $accion = $request->input('comprobante_pago');
-                $comentario = $request->input('comentario_comprobante_pago', '');
-
-                // Update or create validation
+            if ($documentoNombre == 'comprobante_pago') {
+                // Update or create validation for comprobante de pago
                 ValidacionesComentarios::updateOrCreate(
                     [
                         'user_id' => $registroGeneral->id,
@@ -111,15 +102,20 @@ class DocumentosController extends Controller
                     ]
                 );
 
-                // Store the validation status in an array
-                $estado = $comprobante->estado ?? [];
+                // Update the validation status in the comprobante's state
+                $estado = json_decode($comprobante->estado, true) ?? [];
                 $estado['comprobante_pago'] = $accion;
                 $comprobante->update(['estado' => json_encode($estado)]);
             }
         }
 
-        return redirect()->route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id])
-            ->with('success', 'Documentos actualizados correctamente');
+        // Return JSON response with appropriate message
+        if ($accion == 'validar') {
+            $mensaje = 'Documento validado correctamente';
+        } else {
+            $mensaje = 'Documento rechazado correctamente';
+        }
+        return response()->json(['success' => $mensaje]);
     }
 
     /**
@@ -136,10 +132,6 @@ class DocumentosController extends Controller
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     /**
      * Remove the specified resource from storage.

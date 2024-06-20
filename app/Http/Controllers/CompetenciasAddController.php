@@ -23,7 +23,6 @@ class CompetenciasAddController extends Controller
 
     public function store(Request $request)
     {
-        // Validación de datos
         $request->validate([
             'numero' => 'nullable|string|max:200',
             'name' => 'required|string|max:255',
@@ -32,19 +31,17 @@ class CompetenciasAddController extends Controller
             'documentosnec_id.*' => 'exists:documentosnec,id',
         ]);
 
-        // Crear una nueva competencia
         $competencia = Estandares::create([
             'numero' => $request->input('numero'),
             'name' => $request->input('name'),
             'tipo' => $request->input('tipo'),
         ]);
 
-        // Asignar los documentos necesarios
         $competencia->documentosnec()->sync($request->input('documentosnec_id'));
 
-        // Redirigir a la misma página con un mensaje de éxito
         return back()->with('success', 'Competencia creada exitosamente');
     }
+
 
     public function show(string $id)
     {

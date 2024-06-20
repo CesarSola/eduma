@@ -23,20 +23,28 @@ class DashboardUserController extends Controller
             return redirect()->route('login');
         }
 
+        // Obtener todos los documentos del usuario con sus validaciones
+        $documentos = DocumentosUser::where('user_id', $usuario->id)
+            ->with('validacionesComentarios')
+            ->get();
+
+        // Filtrar los documentos rechazados
+        $documentosRechazados = $documentos->filter(function ($documento) {
+            $estado = json_decode($documento->estado, true) ?? [];
+            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $tipo_documento) {
+                if (isset($estado[$tipo_documento]) && $estado[$tipo_documento] == 'rechazar') {
+                    return true;
+                }
+            }
+            return false;
+        });
+
         $competencias = Estandares::all();
         $cursos = Curso::all();
 
-        // Obtener los documentos del usuario
-        $documentos = DocumentosUser::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
-            $query->latest();
-        }])->get();
-
-        // Obtener los comprobantes de pago del usuario
-        $comprobantes = ComprobantePago::where('user_id', $usuario->id)->with(['validacionesComentarios' => function ($query) {
-            $query->latest();
-        }])->get();
-        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'comprobantes'));
+        return view('expedientes.expedientesUser.dashboardUser.index', compact('usuario', 'cursos', 'competencias', 'documentos', 'documentosRechazados'));
     }
+
 
     /**
      * Show the form for creating a new resource.

@@ -12,18 +12,24 @@ class RegistroECController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $selectedECId = $request->query('id');
-        $estandar_id = Estandares::findOrFail($selectedECId);
+        $competencias = Estandares::all(); // Obtén todas las competencias disponibles
+        return view('expedientes.expedientesUser.registroEC.index', compact('competencias'));
+    }
 
-        // Verifica si ya existe un comprobante de pago para el usuario y el estándar actual
+    /**
+     * Show the form for uploading a payment receipt.
+     */
+    public function show($id)
+    {
+        $competencia = Estandares::findOrFail($id);
         $user = Auth::user();
         $comprobanteExistente = ComprobantePago::where('user_id', $user->id)
-            ->where('estandar_id', $selectedECId)
+            ->where('estandar_id', $id)
             ->first();
 
-        return view('expedientes.expedientesUser.registroEC.index', compact('estandar_id', 'selectedECId', 'comprobanteExistente'));
+        return view('competencias.show', compact('competencia', 'comprobanteExistente'));
     }
 
     /**
@@ -55,7 +61,7 @@ class RegistroECController extends Controller
 
             $comprobante->save();
 
-            return redirect()->route('competenciaEC.index', ['id' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
+            return redirect()->route('competenciaEC.show', ['id' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
         } else {
             return redirect()->back()->with('error', 'No se seleccionó ningún archivo para subir');
         }

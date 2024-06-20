@@ -1,3 +1,4 @@
+<!-- Formulario en la vista de subir documentos -->
 @extends('adminlte::page')
 
 @section('title', 'SICE')

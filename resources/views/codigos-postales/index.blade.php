@@ -12,16 +12,6 @@
 
 @section('content')
 
-
-    <div class="row">
-        @can('permissions.create')
-            <div class="float-right">
-                <a href="{{ route('permissions.create') }}" class="btn btn-success btn-sm float-right" data-placement="left">
-                    {{ __('Agregar') }}
-                </a>
-            </div>
-        @endcan
-    </div>
     <form action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">

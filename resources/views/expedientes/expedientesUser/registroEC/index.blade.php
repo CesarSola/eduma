@@ -3,59 +3,27 @@
 @section('title', 'SICE')
 
 @section('content_header')
-    <div class="card">
+    <div class="d-flex justify-content-between align-items-center">
         <div class="card-body-1 text-center-1">
-            <p>REGISTRO A UN EC</p>
+            <h1>Competencias</h1>
         </div>
+        <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
 @section('content')
-    <div class="card mb-3" style="max-width: 600px; margin: auto;">
-        <div class="card-body-1 d-flex justify-content-center align-items-center">
-            <div class="d-flex flex-column text-center">
-                <h6>{{ $estandar_id->numero }} {{ $estandar_id->name }} {{ $estandar_id->tipo }}
-                </h6>
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex flex-column mb-3">
-        <div class="card mb-3" style="width: 48%; align-self: flex-start;">
-            <div class="card-body">
-                <h6>REQUISITOS PARA LA EVALUACIÓN Y CERTIFICACIÓN</h6>
-                <h6>INFORMACIÓN DEL CURSO</h6>
-                <h6>{{ $estandar_id->Dnecesarios }}</h6>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-between" style="width: 100%;">
-            <div class="card mb-3" style="width: 48%; margin: auto;">
-                <div class="card-body text-center">
-                    @if ($comprobanteExistente)
-                        <p>Comprobante de pago subido correctamente.</p>
-                        <a href="{{ Storage::url($comprobanteExistente->comprobante_pago) }}" class="btn btn-primary">Ver
-                            Comprobante</a>
-                    @else
-                        <!-- Formulario para subir el comprobante de pago -->
-                        <form action="{{ route('competenciaEC.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="competencia_id" value="{{ $selectedECId }}">
-                            <div class="form-group">
-                                <label for="comprobante_pago">Comprobante de Pago (PDF):</label>
-                                <input type="file" name="comprobante_pago" class="form-control" accept=".pdf" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Subir</button>
-                        </form>
-                    @endif
+    <div class="container">
+        @foreach ($competencias as $competencia)
+            <div class="card mb-3" style="max-width: 600px; margin: auto;">
+                <div class="card-body-1 d-flex justify-content-center align-items-center">
+                    <div class="d-flex flex-column text-center">
+                        <h6>{{ $competencia->numero }} {{ $competencia->name }} {{ $competencia->tipo }}</h6>
+                        <a href="{{ route('competenciaEC.show', ['id' => $competencia->id]) }}"
+                            class="btn btn-primary">Seleccionar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="d-flex justify-content-between mt-3">
-            <a href="" class="btn btn-success">Evidencias</a>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Volver</a>
-        </div>
+        @endforeach
     </div>
 @stop
 

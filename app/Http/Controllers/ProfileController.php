@@ -30,13 +30,14 @@ class ProfileController extends Controller
         // Actualizar los campos de perfil del usuario
         $user->fill($request->validated());
 
-        // Obtener los valores del formulario y asignarlos al usuario
-        $user->secondName = $request->input('secondName');
-        $user->paternalSurname = $request->input('paternalSurname');
-        $user->maternalSurname = $request->input('maternalSurname');
         $user->age = $request->input('age');
         $user->calle_avenida = $request->input('calle_avenida');
         $user->numext = $request->input('numext');
+        $user->d_codigo = $request->input('codpos');
+        $user->d_asenta = $request->input('colonia');
+        $user->d_estado = $request->input('estado');
+        $user->d_ciudad = $request->input('ciudad');
+        $user->D_mnpio = $request->input('municipio');
         $user->d_codigo = $request->input('codigo_postal');
         $user->d_asenta = $request->input('d_asenta');
         $user->d_estado = $request->input('d_estado');
@@ -53,6 +54,11 @@ class ProfileController extends Controller
         $userName = str_replace(' ', '', $user->name . '' . $user->paternalSurname);
 
         // Validar y almacenar la fotografía digital si se ha enviado una
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoPath = $foto->storeAs('public/images/users/' . $userName, 'Foto.' . $foto->extension());
+            $user->foto = $fotoPath;
+        }
 // Validar y almacenar la fotografía digital si se ha enviado una
 if ($request->hasFile('foto')) {
     $foto = $request->file('foto');
@@ -73,8 +79,6 @@ if ($request->hasFile('foto')) {
         Log::error('No se pudo almacenar la foto en: ' . $fotoPath);
     }
 }
-
-
         // Guardar los cambios en la base de datos
         $user->save();
 
@@ -147,4 +151,4 @@ if ($request->hasFile('foto')) {
 
         return Redirect::to('/dashboard')->with('status', 'Account reactivated successfully.');
     }
-}
+    }

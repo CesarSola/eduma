@@ -20,8 +20,25 @@ class UserSeeder extends Seeder
             'password' => Hash::make('secret'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
         ]);
-    
+
         $admin->assignRole('Admin');
+
+        $admin = User::create([
+            'name' => 'Angel',
+            'email' => 'test@material.com',
+            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
+            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+        ]);
+
+        $admin->assignRole('User');
+
+        $admin = User::create([
+            'name' => 'Jose',
+            'email' => 'test2@material.com',
+            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
+            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+        ]);
+
+        $admin->assignRole('User');
     }
-    
 }
