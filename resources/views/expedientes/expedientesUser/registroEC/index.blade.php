@@ -4,7 +4,7 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <div class="card-body-1 text-center-1">
+        <div class="text-center text-white bg-success p-3 rounded">
             <h1>Competencias</h1>
         </div>
         <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
@@ -12,50 +12,29 @@
 @stop
 
 @section('content')
-    <div class="container">
-        @foreach ($competencias as $competencia)
-            <div class="card mb-3" style="max-width: 600px; margin: auto;">
-                <div class="card-body-1 d-flex justify-content-center align-items-center">
-                    <div class="d-flex flex-column text-center">
-                        <h6>{{ $competencia->numero }} {{ $competencia->name }} {{ $competencia->tipo }}</h6>
-                        <a href="{{ route('competenciaEC.show', ['id' => $competencia->id]) }}"
-                            class="btn btn-primary">Seleccionar</a>
+    <div class="container mt-4">
+        <div class="row">
+            @foreach ($competencias as $competencia)
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title mb-0">{{ $competencia->numero }} - {{ $competencia->name }}
+                                    ({{ $competencia->tipo }})
+                                </h6>
+                            </div>
+                            <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                class="btn btn-primary">Inscribirse</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 @stop
 
 @section('css')
     <style>
-        .card-title {
-            background-color: #5cb85c;
-            padding: 10px;
-            color: white;
-            border-radius: 5px;
-        }
-
-        .card-header h3 {
-            margin: 0;
-        }
-
-        .card-body {
-            background-color: #dff0d8;
-            padding: 20px;
-            border: 1px solid #5cb85c;
-            border-radius: 5px;
-        }
-
-        .card-body-1 {
-            background-color: #5cb85c;
-            padding: 10px;
-            border: 1px solid #5cb85c;
-            border-radius: 5px;
-            color: #fff;
-            text-align: center;
-        }
-
         .text-center {
             color: #000;
         }
@@ -69,19 +48,16 @@
             color: #000;
         }
 
-        .d-flex.align-items-center h6 {
-            margin-bottom: 0;
+        .card-title {
+            font-weight: bold;
+            color: #5cb85c;
         }
 
-        .btn-success {
-            background-color: #5cb85c;
-            border-color: #5cb85c;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #4cae4c;
-            border-color: #4cae4c;
+        .card-body {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
         }
 
         .btn-primary {

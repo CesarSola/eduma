@@ -21,15 +21,15 @@ class RegistroECController extends Controller
     /**
      * Show the form for uploading a payment receipt.
      */
-    public function show($id)
+    public function show($competenciaEC)
     {
-        $competencia = Estandares::findOrFail($id);
+        $competencia = Estandares::findOrFail($competenciaEC);
         $user = Auth::user();
         $comprobanteExistente = ComprobantePago::where('user_id', $user->id)
-            ->where('estandar_id', $id)
+            ->where('estandar_id', $competenciaEC)
             ->first();
 
-        return view('competencias.show', compact('competencia', 'comprobanteExistente'));
+        return view('expedientes.expedientesUser.registroEC.show', compact('competencia', 'comprobanteExistente'));
     }
 
     /**
@@ -61,7 +61,7 @@ class RegistroECController extends Controller
 
             $comprobante->save();
 
-            return redirect()->route('competenciaEC.show', ['id' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
+            return redirect()->route('competenciaEC.show', ['competenciaEC' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
         } else {
             return redirect()->back()->with('error', 'No se seleccionó ningún archivo para subir');
         }
