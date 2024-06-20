@@ -22,7 +22,7 @@
 
             <th>Nombre</th>
             <th>Descripcion</th>
-
+            <th>Documentos</th>
             <th>Acción</th>
         </tr>
     </thead>
@@ -31,6 +31,7 @@
         <tr>
             <td>{{$documentosnec->name}}</td>
             <td>{{$documentosnec->description}}</td>
+            <td>{{$documentosnec->documentos}}</td>
 
             <td>
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ $documentosnec->id }}">
