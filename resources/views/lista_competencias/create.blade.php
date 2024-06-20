@@ -1,19 +1,27 @@
-<!-- Modal -->
-<section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Crear Nuevo Documento</title>
+</head>
+<body>
 
-</section>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<div class="modal fade" id="create" tabindex="-1" aria-labelledby="create" aria-hidden="true">
+<!-- Modal -->
+<section></section>
+
+<div class="modal fade" id="create" tabindex="-1" aria-labelledby="createLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="create">Crear nuevo documento</h5>
+                <h5 class="modal-title" id="createLabel">Crear nuevo documento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="p-4 md:p-5" action="{{ route('documentosnec.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="p-4 md:p-5" action="{{ route('competenciasAD.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="numero">Número</label>
@@ -38,10 +46,16 @@
                             </div>
                         @endforeach
                     </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </form>
             </div>
-            <div class="modal-footer">
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
