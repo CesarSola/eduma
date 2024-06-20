@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DocumentosNec;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class DocumentosNecController extends Controller
@@ -33,21 +34,28 @@ class DocumentosNecController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'documentos' => 'required|file|max:2048|mimes:pdf', // Asegura que solo se permitan archivos PDF
+            'documento' => 'required|file|mimes:pdf|max:2048', // Validación para el campo 'documento'
         ]);
 
         try {
-            // Guardar el archivo PDF en storage
-            $documentosPath = $request->file('documentos')->store('documentos'); // Esto almacenará el archivo en storage/app/documentos
+            $user = Auth::user();
+            $userName = str_replace(' ', '_', $user->name);
+            $documentName = str_replace(' ', '_', $request->input('name'));
 
-            // Crear una nueva instancia de DocumentosNec y guardarla en la base de datos
-            DocumentosNec::create([
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'documentos' => $documentosPath, // Guarda la ruta del archivo en la base de datos
-            ]);
+            if ($request->hasFile('documento')) {
+                $file = $request->file('documento');
+                $filePath = $file->storeAs('public/documents/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
 
-            return back()->with('success', 'Documento creado exitosamente');
+                $documento = DocumentosNec::create([
+                    'name' => $request->input('name'),
+                    'description' => $request->input('description'),
+                    'documento' => $filePath, // Guardamos la ruta del archivo en el campo 'documento'
+                ]);
+
+                return back()->with('success', 'Documento creado exitosamente');
+            } else {
+                throw new \Exception('No se ha proporcionado un archivo válido');
+            }
         } catch (\Exception $e) {
             Log::error('Error al crear documento:', ['exception' => $e]);
             return back()->withErrors(['error' => 'Hubo un problema al intentar crear el documento.']);
@@ -59,7 +67,7 @@ class DocumentosNecController extends Controller
      */
     public function show(DocumentosNec $documentosNec)
     {
-        //
+        return view('Documentos_necesarios.show', compact('documentosNec'));
     }
 
     /**
@@ -67,7 +75,7 @@ class DocumentosNecController extends Controller
      */
     public function edit(DocumentosNec $documentosNec)
     {
-        //
+        return view('Documentos_necesarios.edit', compact('documentosNec'));
     }
 
     /**
@@ -78,11 +86,22 @@ class DocumentosNecController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'documento' => 'file|mimes:pdf|max:2048', // Permitir la actualización opcional del documento
         ]);
 
         try {
-            // Buscar el documento por su ID
             $documentosnec = DocumentosNec::findOrFail($id);
+
+            // Guardar el archivo en la misma carpeta si se proporciona uno nuevo
+            if ($request->hasFile('documento')) {
+                $user = Auth::user();
+                $userName = str_replace(' ', '_', $user->name);
+                $documentName = str_replace(' ', '_', $request->input('name'));
+
+                $file = $request->file('documento');
+                $filePath = $file->storeAs('public/documents/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
+                $documentosnec->documento = $filePath; // Actualizamos la ruta del archivo en el campo 'documento'
+            }
 
             // Actualizar los datos del documento
             $documentosnec->update([
@@ -102,6 +121,7 @@ class DocumentosNecController extends Controller
      */
     public function destroy(DocumentosNec $documentosNec)
     {
-        //
+        $documentosNec->delete();
+        return back()->with('success', 'Documento eliminado exitosamente');
     }
 }

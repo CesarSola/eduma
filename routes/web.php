@@ -110,6 +110,7 @@ Route::resource('documentosnec', DocumentosNecController::class);
 
 
 
+
 Route::middleware(['auth'])->group(function () {
     Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
 });

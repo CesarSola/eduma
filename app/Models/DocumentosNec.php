@@ -10,10 +10,11 @@ class DocumentosNec extends Model
     use HasFactory;
 
     protected $table = 'documentosnec';
+
     protected $fillable = [
         'name',
         'description',
-        'documentos',
+        'documento', // Asegúrate de incluir el campo correcto para la ruta del archivo
     ];
 
     public function estandares()
