@@ -4,8 +4,6 @@
 
 @section('content_header')
     <h1>Documentos necesarios por estandar</h1>
-    <a href="{{ route('documentosnec.teststore') }}" class="btn btn-primary">Ir a Test Store</a>
-
 @stop
 
 @section('content')

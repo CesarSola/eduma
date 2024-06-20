@@ -96,18 +96,4 @@ class DocumentosNecController extends Controller
     {
         //
     }
-    public function testStore(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-        ]);
-
-        DocumentosNec::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-        ]);
-
-        return redirect()->route('documentosnec.index')->with('success', 'Documento creado exitosamente');
-    }
 }
