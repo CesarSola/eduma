@@ -13,6 +13,7 @@ class DocumentosNec extends Model
     protected $fillable = [
         'name',
         'description',
+        'documentos',
     ];
 
     public function estandares()

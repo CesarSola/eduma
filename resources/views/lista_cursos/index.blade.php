@@ -8,44 +8,50 @@
 
 @section('content')
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">
-    <i class="fas fa-plus"></i>
-</button>
+<div class="mb-4">
+    <button data-modal-target="create-modal" data-toggle="modal" data-target="#create" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+       Crear nuevo documento
+     </button>
+</div>
+<div class="mb-4 max-w-sm flex items-center">
+    <label for="searchInput" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300">Buscar:</label>
+    <input type="text" id="searchInput" class="block w-full p-2 border border-gray-300 rounded-lg" placeholder="Buscar...">
+</div>
 
-<div class="table-responsive">
-    <table id="cursos-table" class="table table-bordered table-hover">
-        <thead  class="table table-bordered table-hover text-center">
+<div class="overflow-x-auto">
+    <table id="documentosnecTable" class="min-w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+        <thead class="bg-gray-200 dark:bg-gray-700">
             <tr>
 
-                <th class="centered-text">Numero</th>
-                <th class="centered-text">Nombre</th>
-                <th class="centered-text">Descripción</th>
-                <th class="centered-text">Estandar de competencia</th>
-                <th class="centered-text">Instructor</th>
-                <th class="centered-text">Duración</th>
-                <th class="centered-text">Modalidad</th>
-                <th class="centered-text">F.Inicio</th>
-                <th class="centered-text">F.Finalización</th>
-                <th class="centered-text">Costo</th>
-                <th class="centered-text">Certificacion</th>
-                <th class="centered-text">Acción</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Numero</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Nombre</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Descripción</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Estandar de competencia</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Instructor</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Duración</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Modalidad</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">F.Inicio</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">F.Finalización</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Costo</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Certificacion</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Acción</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($cursos as $curso)
-            <tr>
-                <td>{{$curso->id}}</td>
-                <td>{{$curso->name}}</td>
-                <td>{{$curso->description}}</td>
-                <td>{{ $curso->estandares ? $curso->estandares->numero : 'N/A' }}</td>
-                <td>{{$curso->instructor}}</td>
-                <td>{{$curso->duration}}</td>
-                <td>{{$curso->modalidad}}</td>
-                <td>{{$curso->fecha_inicio}}</td>
-                <td>{{$curso->fecha_final}}</td>
-                <td>{{$curso->costo}}</td>
-                <td>{{$curso->certification}}</td>
-                <td>
+            <tr class="border-b border-gray-300 dark:border-gray-700">
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->id}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->name}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->description}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $curso->estandares ? $curso->estandares->numero : 'N/A' }}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->instructor}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->duration}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->modalidad}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->fecha_inicio}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->fecha_final}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->costo}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$curso->certification}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editModal{{ $curso->id }}">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -91,6 +97,8 @@
 @stop
 
 @section('css')
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     {{-- Add here extra stylesheets --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <style>
@@ -102,10 +110,34 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#cursos-table').DataTable();
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const table = document.getElementById('documentosnecTable');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            searchInput.addEventListener('keyup', function () {
+                const filter = searchInput.value.toLowerCase();
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let match = false;
+                    for (let j = 0; j < cells.length; j++) {
+                        if (cells[j]) {
+                            if (cells[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                                match = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (match) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            });
         });
     </script>
 @stop

@@ -13,21 +13,43 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('documentosnec.store') }}" method="POST">
+                <form class="p-4 md:p-5" action="{{ route('documentosnec.store') }}" method="POST">
                     @csrf
 
-                    <div class="form-group">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                        <input type="text" id="name" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre" value="{{ old('name') }}" required>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
-                        <textarea id="description" name="description" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Descripción" required>{{ old('description') }}</textarea>
+                    <div class="form-group mb-4">
+                        <label for="name"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                        <input type="text" id="name" name="name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            value="{{ old('name') }}" required>
                     </div>
 
+                    <div class="form-group mb-4">
+                        <label for="description"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+                        <textarea id="description" name="description" rows="4"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Escribe la descripción aquí" required>{{ old('description') }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentos">Identificación oficial (INE o IFE):</label>
+                        <input type="file" class="form-control" name="documentos" accept="application/pdf" required
+                            onchange="previewPDF(event, 'ine_ife-preview')">
+                        <embed id="ine_ife-preview" src="#" type="application/pdf" width="100%" height="200px"
+                            style="display:none; margin-top: 10px;" />
+                    </div>
 
-                    <button type="submit" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Guardar</button>
+
+                    <div class="flex justify-between">
+                        <button type="submit"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-4">
+                            Guardar
+                        </button>
+                        <a href="{{ route('documentosnec.index') }}"
+                            class="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+                            Cancelar
+                        </a>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -35,3 +57,11 @@
         </div>
     </div>
 </div>
+<script>
+     function previewPDF(event, previewId) {
+            var output = document.getElementById(previewId);
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.classList.add('pdf-preview');
+            output.style.display = 'block';
+        }
+</script>

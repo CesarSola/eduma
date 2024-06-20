@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
@@ -10,82 +9,102 @@
 @section('content')
 <!-- Button trigger modal -->
 <div class="mb-4">
-
      <button data-modal-target="create-modal" data-toggle="modal" data-target="#create" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
         Crear nuevo documento
       </button>
 </div>
+<div class="mb-4 max-w-sm flex items-center">
+    <label for="searchInput" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300">Buscar:</label>
+    <input type="text" id="searchInput" class="block w-full p-2 border border-gray-300 rounded-lg" placeholder="Buscar...">
+</div>
 
 
-<table id="cursos-table" class="table table-bordered table-hover ">
-    <thead  class="table table-bordered table-hover text-center">
-        <tr>
 
-            <th>Nombre</th>
-            <th>Descripcion</th>
-
-            <th>Acción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($documentosnec as $documentosnec)
-        <tr>
-            <td>{{$documentosnec->name}}</td>
-            <td>{{$documentosnec->description}}</td>
-
-            <td>
-                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ $documentosnec->id }}">
-                    <i class="fas fa-edit fa-sm"></i>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm">
-                    <i class="fas fa-file-pdf fa-sm"></i>
-
-            </td>
-
-        </tr>
-        <div class="modal fade" id="editModal{{ $documentosnec->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $documentosnec->id }}" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel{{ $documentosnec->id }}">Editar documentos nececesarios</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @include('Documentos_necesarios.edit')
-                    </div>
-                    <div class="modal-footer">
+<div class="overflow-x-auto">
+    <table id="documentosnecTable" class="min-w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+        <thead class="bg-gray-200 dark:bg-gray-700">
+            <tr>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Nombre</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Descripción</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Documento</th>
+                <th class="py-2 px-4 text-gray-900 dark:text-white">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($documentosnec as $documentosnec)
+            <tr class="border-b border-gray-300 dark:border-gray-700">
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$documentosnec->name}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$documentosnec->description}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{$documentosnec->documentos}}</td>
+                <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ $documentosnec->id }}">
+                        <i class="fas fa-edit fa-sm"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <i class="fas fa-file-pdf fa-sm"></i>
+                    </button>
+                </td>
+            </tr>
+            <div class="modal fade" id="editModal{{ $documentosnec->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $documentosnec->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel{{ $documentosnec->id }}">Editar documentos necesarios</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @include('Documentos_necesarios.edit')
+                        </div>
+                        <div class="modal-footer">
+                        </div>
                     </div>
                 </div>
             </div>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<br>
 
-        @endforeach
-
-
-
-
-    </tbody>
-</table>
-
-
-  @include('Documentos_necesarios.create')
-
-
+@include('Documentos_necesarios.create')
 
 @stop
 
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 @stop
 
 @section('js')
-    <script src="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" ></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#cursos-table').DataTable();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('documentosnecTable');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        searchInput.addEventListener('keyup', function () {
+            const filter = searchInput.value.toLowerCase();
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        if (cells[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                            match = true;
+                            break;
+                        }
+                    }
+                }
+                if (match) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
         });
-    </script>
+    });
+</script>
+
 @stop

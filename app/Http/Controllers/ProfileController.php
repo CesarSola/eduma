@@ -42,17 +42,6 @@ class ProfileController extends Controller
         $user->d_estado = $request->input('d_estado');
         $user->d_ciudad = $request->input('d_ciudad');
         $user->D_mnpio = $request->input('D_mnpio');
-        $user->d_codigo = $request->input('d_codigo');
-        $user->d_asenta = $request->input('d_asenta');
-        $user->d_estado = $request->input('d_estado');
-        $user->d_ciudad = $request->input('d_ciudad');
-        $user->D_mnpio = $request->input('D_mnpio');
-        $user->age = $request->input('age');
-        $user->d_codigo = $request->input('codpos');
-        $user->d_asenta = $request->input('colonia');
-        $user->d_estado = $request->input('estado');
-        $user->d_ciudad = $request->input('ciudad');
-        $user->D_mnpio = $request->input('municipio');
         $user->phone = $request->input('phone');
 
         // Si se actualizó el email, restablecer la verificación
@@ -61,7 +50,7 @@ class ProfileController extends Controller
         }
 
         // Crear un nombre de usuario único para la carpeta de almacenamiento de la foto
-        $userName = str_replace(' ', '_', $user->name . '_' . $user->paternalSurname);
+        $userName = str_replace(' ', '', $user->name . '' . $user->paternalSurname);
 
         // Validar y almacenar la fotografía digital si se ha enviado una
 // Validar y almacenar la fotografía digital si se ha enviado una
