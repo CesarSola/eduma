@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DocumentosNec;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DocumentosNecController extends Controller
 {
@@ -12,7 +13,7 @@ class DocumentosNecController extends Controller
      */
     public function index()
     {
-         $documentosnec = DocumentosNec::all();
+        $documentosnec = DocumentosNec::all();
 
 
         return view('Documentos_necesarios.index', compact('documentosnec'));
@@ -32,21 +33,22 @@ class DocumentosNecController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
         ]);
 
-        // Crear una nueva competencia
-        DocumentosNec::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
+        try {
+            DocumentosNec::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+            ]);
 
+            return back()->with('success', 'Documento creado exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al crear documento:', ['exception' => $e]);
 
-        ]);
-
-        // Redirigir a la misma página con un mensaje de éxito
-        return back()->with('success', 'Competencia creada exitosamente');
+            return back()->withErrors(['error' => 'Hubo un problema al intentar crear el documento.']);
+        }
     }
 
     /**
@@ -68,7 +70,7 @@ class DocumentosNecController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,string $id)
+    public function update(Request $request, string $id)
     {
         $request->validate([
 
@@ -77,7 +79,7 @@ class DocumentosNecController extends Controller
         ]);
 
         // Buscar el curso por su ID
-        $documentosnec= DocumentosNec::findOrFail($id);
+        $documentosnec = DocumentosNec::findOrFail($id);
 
         $documentosnec->update([
             'name' => $request->input('name'),
@@ -93,5 +95,19 @@ class DocumentosNecController extends Controller
     public function destroy(DocumentosNec $documentosNec)
     {
         //
+    }
+    public function testStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
+
+        DocumentosNec::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ]);
+
+        return redirect()->route('documentosnec.index')->with('success', 'Documento creado exitosamente');
     }
 }

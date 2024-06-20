@@ -1,5 +1,3 @@
-<!-- resources/views/expedientes/expedientesUser/dashboardUser/index.blade.php -->
-
 @extends('adminlte::page')
 
 @section('title', 'SICE')
@@ -34,47 +32,59 @@
     </div>
 
     <br>
-    <div class="card">
-        <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos">Lista de requerimientos
-            y documentación</h6>
-        <br>
-        <div class="card d-none" id="requerimientos">
-            <div class="card-body">
-                <ul>
-                    @if ($documentos->isEmpty())
-                        <h6 class="text-center"><span>Para continuar con el proceso sube estos documentos: </span></h6>
-                        <br>
-                        <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
-                                color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato JPG,
-                                BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se recomienda
-                                acudir a un estudio fotográfico.</span></li>
-                        <br>
-                        <li><span>Identificación oficial escaneada INE o IFE Que sea legible</span></li>
-                        <br>
-                        <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
-                        <br>
-                        <li><span>CURP en formato PDF Escaneado y legible</span></li>
-                    @else
-                        <h6 class="text-center">Los documentos ya han sido subidos.</h6>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    </div>
+    @php
+        $todosDocumentosValidados = $documentos->every(function ($documento) {
+            $estado = json_decode($documento->estado, true) ?? [];
+            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $tipo_documento) {
+                if (!isset($estado[$tipo_documento]) || $estado[$tipo_documento] !== 'validar') {
+                    return false;
+                }
+            }
+            return true;
+        });
+    @endphp
 
-    @if ($documentos->isEmpty())
+    @if (!$todosDocumentosValidados)
         <div class="card">
-            <h6 style="text-align: center" class="card-title">Sube tus documentos aquí</h6>
+            <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos">Lista de
+                requerimientos y documentación</h6>
             <br>
-            <div class="card-body text-center">
-                <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+            <div class="card d-none" id="requerimientos">
+                <div class="card-body">
+                    <ul>
+                        @if ($documentos->isEmpty())
+                            <h6 class="text-center"><span>Para continuar con el proceso sube estos documentos: </span></h6>
+                            <br>
+                            <li><span>Fotografía digital: tamaño infantil 2.5 cm x 3 cm (94.50 x 113.4 pixeles) de frente A
+                                    color con fondo blanco, Sin sombras y sin lentes, Con peso máximo de 300 Kb y formato
+                                    JPG, BMP o PNG. Debido a que esta fotografía servirá para el certificado oficial se
+                                    recomienda acudir a un estudio fotográfico.</span></li>
+                            <br>
+                            <li><span>Identificación oficial escaneada INE o IFE Que sea legible</span></li>
+                            <br>
+                            <li><span>Comprobante Domiciliario Actual y escaneado de forma legible en PDF</span></li>
+                            <br>
+                            <li><span>CURP en formato PDF Escaneado y legible</span></li>
+                        @else
+                            <h6 class="text-center">Los documentos ya han sido subidos.</h6>
+                        @endif
+                    </ul>
+                </div>
             </div>
         </div>
-    @endif
 
-    <br>
-    <div class="card">
-        @if ($documentos->isNotEmpty())
+        @if ($documentos->isEmpty())
+            <div class="card">
+                <h6 style="text-align: center" class="card-title">Sube tus documentos aquí</h6>
+                <br>
+                <div class="card-body text-center">
+                    <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
+                </div>
+            </div>
+        @endif
+
+        <br>
+        <div class="card">
             <h6 style="text-align: center" class="card-title">Documentos siendo validados</h6>
             <br>
             <div class="card-body">
@@ -128,40 +138,18 @@
                     </tbody>
                 </table>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
 
-
-
-    @if ($documentos->isNotEmpty())
+    @if ($todosDocumentosValidados)
         <div class="card">
-            <h6 style="text-align: center" class="card-title">Regístrate a la evaluación de un EC</h6>
+            <h6 style="text-align: center" class="card-title">Estándares de Competencias</h6>
             <br>
-            @foreach ($competencias as $competencia)
-                @php
-                    $comprobante = $comprobantes->firstWhere('estandar_id', $competencia->id);
-                @endphp
-                <div class="card">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div class="d-flex flex-column align-items-start">
-                            <h6 class="text-left">{{ $competencia->numero }}</h6>
-                        </div>
-                        <div class="d-flex flex-column align-items-center flex-grow-1">
-                            <h6 class="text-center">{{ $competencia->name }}</h6>
-                        </div>
-                        <div class="d-flex">
-                            @if ($comprobante)
-                                <a class="btn btn-primary"
-                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Ver</a>
-                            @else
-                                <a class="btn btn-primary"
-                                    href="{{ route('competenciaEC.index', ['id' => $competencia->id]) }}">Regístrate</a>
-                            @endif
-                            <a class="btn btn-danger" href="#">Descargar</a>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <a href="{{ route('competenciaEC.index') }}" class="btn btn-primary">Ver competencias</a>
                 </div>
-            @endforeach
+            </div>
         </div>
 
         <br>
@@ -169,14 +157,11 @@
             <h6 style="text-align: center" class="card-title">Cursos</h6>
             <br>
             <div class="card">
-                <div class="card-body">
-                    <ul>
-                        @foreach ($cursos as $curso)
-                            <li>{{ $curso->name }} {{ $curso->description }} {{ $curso->competencia }}</li>
-                        @endforeach
-                    </ul>
+                <div class="card-body text-center">
+                    <a href="#" class="btn btn-primary">Ver cursos</a>
                 </div>
             </div>
+        </div>
         </div>
     @endif
 @stop

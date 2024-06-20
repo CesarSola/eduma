@@ -305,14 +305,15 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-        
+
         ['header' => 'Profile'],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
-        [   'text' => 'Roles',
+        [
+            'text' => 'Roles',
             'url'  => 'roles',
             'icon' => 'fas fa-fw fa-user',
             'can'  => 'roles.index',
@@ -372,12 +373,26 @@ return [
                     'icon' => 'fas fa-fw fa-paper-plane',
                 ],
             ],
-        ],
-        ['header' => 'USUARIO'],
-        [
-            'text' => 'Mi expediente',
-            'url' => 'usuarios',
-            'icon' => 'fas fa-fw fa-folder',
+        ], [
+            'text' => 'Usuario',
+            'icon' => 'fas fa-fw fa-house-user',
+            'submenu' => [
+                [
+                    'text' => 'Mi expediente',
+                    'url' => 'usuarios',
+                    'icon' => 'fas fa-fw fa-folder',
+                ],
+                [
+                    'text' => 'Mis cursos',
+                    'url' => '#',
+                    'icon' => 'fas fa-fw fa-folder',
+                ],
+                [
+                    'text' => 'Mis Competencias',
+                    'url' => '#',
+                    'icon' => 'fas fa-fw fa-folder',
+                ]
+            ]
         ],
         ['header' => 'AJUSTES'],
         [
