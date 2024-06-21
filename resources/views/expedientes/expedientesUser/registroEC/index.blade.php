@@ -34,7 +34,7 @@
 
                             if ($comprobanteExistente) {
                                 $inscrito = true;
-                                continue; // Saltar esta iteración si ya está inscrito
+                                $competenciaInscrita = $competencia;
                             }
                         @endphp
                         <div class="col-md-6 mb-4">
@@ -45,15 +45,22 @@
                                             ({{ $competencia->tipo }})
                                         </h6>
                                     </div>
-                                    <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                        class="btn btn-primary">Inscribirse</a>
+                                    @if ($comprobanteExistente)
+                                        <span class="text-success">Inscrito</span>
+                                    @else
+                                        <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                            class="btn btn-primary">Inscribirse</a>
+                                    @endif
+                                    @if ($inscrito && $competencia->id === $competenciaInscrita->id)
+                                        <div class="card-footer">
+                                            <h6 class="text-center">Ve a la pestaña de</h6>
+                                            <h6 class="text-center">Mis competencias</h6>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     @endforeach
-                    @if ($inscrito)
-                        <h6 class="text-center">Ve a la pestaña de competencias para mas información</h6>
-                    @endif
                 @endif
             </div>
         </div>
@@ -87,6 +94,13 @@
             padding: 20px;
         }
 
+        .card-footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+            padding: 10px;
+        }
+
         .btn-primary {
             background-color: #0275d8;
             border-color: #0275d8;
@@ -96,6 +110,12 @@
         .btn-primary:hover {
             background-color: #025aa5;
             border-color: #025aa5;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
         }
     </style>
 @stop
