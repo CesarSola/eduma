@@ -43,22 +43,22 @@ class SDocumentosController extends Controller
 
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
-            $fotoPath = $foto->storeAs('public/images/documentos/' . $userName, 'Foto.' . $foto->extension());
+            $fotoPath = $foto->storeAs('public/documents/records/users/' . $userName, 'Foto.' . $foto->extension());
         }
 
         if ($request->hasFile('ine_ife')) {
             $ineIfe = $request->file('ine_ife');
-            $ineIfePath = $ineIfe->storeAs('public/images/documentos/' . $userName, 'INE_o_IFE.' . $ineIfe->extension());
+            $ineIfePath = $ineIfe->storeAs('public/documents/records/users/' . $userName, 'INE_o_IFE.' . $ineIfe->extension());
         }
 
         if ($request->hasFile('comprobante_domiciliario')) {
             $comprobante = $request->file('comprobante_domiciliario');
-            $comprobantePath = $comprobante->storeAs('public/images/documentos/' . $userName, 'Comprobante_Domicilio.' . $comprobante->extension());
+            $comprobantePath = $comprobante->storeAs('public/documents/records/users/' . $userName, 'Comprobante_Domicilio.' . $comprobante->extension());
         }
 
         if ($request->hasFile('curp')) {
             $curp = $request->file('curp');
-            $curpPath = $curp->storeAs('public/images/documentos/' . $userName, 'CURP.' . $curp->extension());
+            $curpPath = $curp->storeAs('public/documents/records/users/' . $userName, 'CURP.' . $curp->extension());
         }
 
         $documentosUser = new DocumentosUser();
@@ -123,7 +123,7 @@ class SDocumentosController extends Controller
 
             // Almacenar el archivo en la carpeta correspondiente
             $filename = $tipo_documento . '.' . $file->extension(); // Nombre del archivo con extensión original
-            $filePath = $file->storeAs('public/images/documentos/' . $userName, $filename); // Almacenar en la misma carpeta y nombre
+            $filePath = $file->storeAs('public/documents/records/users/' . $userName, $filename); // Almacenar en la misma carpeta y nombre
 
             // Actualizar el campo correspondiente en la base de datos
             $documento->$tipo_documento = $filePath;

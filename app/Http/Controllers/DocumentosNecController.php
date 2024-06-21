@@ -44,7 +44,7 @@ class DocumentosNecController extends Controller
 
             if ($request->hasFile('documento')) {
                 $file = $request->file('documento');
-                $filePath = $file->storeAs('public/documents/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
+                $filePath = $file->storeAs('public/documents/required/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
 
                 $documento = DocumentosNec::create([
                     'name' => $request->input('name'),
@@ -99,7 +99,7 @@ class DocumentosNecController extends Controller
                 $documentName = str_replace(' ', '_', $request->input('name'));
 
                 $file = $request->file('documento');
-                $filePath = $file->storeAs('public/documents/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
+                $filePath = $file->storeAs('public/documents/required/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
                 $documentosnec->documento = $filePath; // Actualizamos la ruta del archivo en el campo 'documento'
             }
 

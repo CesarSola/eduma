@@ -145,9 +145,24 @@
         <div class="card">
             <h6 style="text-align: center" class="card-title">Estándares de Competencias</h6>
             <br>
-            <div class="card">
-                <div class="card-body text-center">
-                    <a href="{{ route('competenciaEC.index') }}" class="btn btn-primary">Ver competencias</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Inscríbete a un EC</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="{{ route('competenciaEC.index') }}" class="btn btn-primary">Ver competencias</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Mis Competencias</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Ver mis competencias</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,12 +171,26 @@
         <div class="card">
             <h6 style="text-align: center" class="card-title">Cursos</h6>
             <br>
-            <div class="card">
-                <div class="card-body text-center">
-                    <a href="#" class="btn btn-primary">Ver cursos</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Inscríbete a un Curso</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Ver Cursos</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Mis Cursos</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Ver mis cursos</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     @endif
 @stop

@@ -12,6 +12,17 @@
 @stop
 
 @section('content')
+    <div class="col-md-12 mb-8">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title mb-0">Instrucciones</h6>
+            </div>
+            <div class="card-body">
+                <h6 class="text-center">Estas son las competencias disponibles</h6>
+                <h6 class="text-center">Elige alguna e inscribete</h6>
+            </div>
+        </div>
+    </div>
     <div class="container mt-4">
         <div class="row">
             @foreach ($competencias as $competencia)
