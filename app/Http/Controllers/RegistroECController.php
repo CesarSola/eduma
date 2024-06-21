@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ComprobantePago;
 use App\Models\Estandares;
+use App\Models\User;
 
 class RegistroECController extends Controller
 {
@@ -37,8 +38,15 @@ class RegistroECController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-        $userName = str_replace(' ', '_', $user->name);
+        $userId = $request->input('user_id'); // Obtener el ID del usuario desde el formulario
+
+        // Buscar al usuario por su ID
+        $user = User::find($userId);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Usuario no encontrado');
+        }
+
         $selectedECId = $request->input('competencia_id');
 
         if (!$selectedECId) {
@@ -51,9 +59,11 @@ class RegistroECController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $comprobantePago = $request->file('comprobante_pago');
             $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobantePago->extension();
-            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
 
-            // Guardar la ruta del comprobante de pago en la base de datos
+            // Guardar el archivo en el storage
+            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $user->name, $comprobantePagoName);
+
+            // Guardar la información en la base de datos
             $comprobante = new ComprobantePago();
             $comprobante->user_id = $user->id;
             $comprobante->estandar_id = $selectedECId;

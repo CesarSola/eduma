@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('numero');
             $table->string('name');
             $table->string('tipo');
-            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('documentosnec_id')
                 ->nullable()
                 ->constrained('documentosnec')

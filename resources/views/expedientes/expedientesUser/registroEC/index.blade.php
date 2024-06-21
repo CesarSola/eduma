@@ -18,8 +18,12 @@
                 <h6 class="card-title mb-0">Instrucciones</h6>
             </div>
             <div class="card-body">
-                <h6 class="text-center">Estas son las competencias disponibles</h6>
-                <h6 class="text-center">Elige alguna e inscribete</h6>
+                @if ($competencias->isEmpty())
+                    <h6 class="text-center">Por el momento no hay ninguna competencia disponible.</h6>
+                @else
+                    <h6 class="text-center">Estas son las competencias disponibles</h6>
+                    <h6 class="text-center">Elige alguna e inscribete</h6>
+                @endif
             </div>
         </div>
     </div>
@@ -34,8 +38,20 @@
                                     ({{ $competencia->tipo }})
                                 </h6>
                             </div>
-                            <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                class="btn btn-primary">Inscribirse</a>
+                            @php
+                                $usuario = Auth::user();
+                                $comprobanteExistente = $usuario
+                                    ->comprobantes()
+                                    ->where('estandar_id', $competencia->id)
+                                    ->first();
+                            @endphp
+                            @if ($comprobanteExistente)
+                                <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                    class="btn btn-primary">Ver</a>
+                            @else
+                                <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                    class="btn btn-primary">Inscribirse</a>
+                            @endif
                         </div>
                     </div>
                 </div>

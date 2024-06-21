@@ -96,4 +96,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // Redirigir o mostrar un mensaje de éxito
     }
+    public function attachEstandarIfNotAttached($estandarId)
+    {
+        if (!$this->estandares()->where('estandar_id', $estandarId)->exists()) {
+            $this->estandares()->attach($estandarId);
+        }
+    }
 }

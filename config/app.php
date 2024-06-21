@@ -190,5 +190,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
+    'Auth' => Illuminate\Support\Facades\Auth::class,
+    'Route' => Illuminate\Support\Facades\Route::class,
 
 ];

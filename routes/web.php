@@ -53,6 +53,7 @@ require __DIR__ . '/auth.php';
 
 
 use App\Http\Controllers\CodigoPostalController;
+use App\Http\Controllers\MisCompetenciasController;
 
 // Rutas para el CRUD de códigos postales
 Route::resource('codigos-postales', CodigoPostalController::class);
@@ -93,8 +94,12 @@ Route::resource('documentosUser', SDocumentosController::class);
 Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::class, 'edit'])->name('documentosUser.edit');
 Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.update');
 //ruta del registro a un EC
-// Ruta específica para el método store del controlador RegistroECController
 Route::resource('competenciaEC', RegistroECController::class);
+//ruta de mis competencias
+Route::resource('miscompetencias', MisCompetenciasController::class);
+
+
+
 
 
 

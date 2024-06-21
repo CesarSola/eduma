@@ -389,7 +389,7 @@ return [
                 ],
                 [
                     'text' => 'Mis Competencias',
-                    'url' => '#',
+                    'url' => 'miscompetencias',
                     'icon' => 'fas fa-fw fa-folder',
                 ]
             ]
