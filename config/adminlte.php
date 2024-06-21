@@ -315,7 +315,7 @@ return [
         [
             'text' => 'Roles',
             'url'  => 'roles',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-users-cog',
             'can'  => 'roles.index',
         ],
         [
@@ -335,7 +335,7 @@ return [
         ],
         [
             'text' => 'PANEL ADMINISTRATIVO',
-            'icon' => 'fas fa-fw fa-folder-open',
+            'icon' => 'fas fa-fw fa-user-cog',
             'submenu' => [
                 [
                     'text' => 'Lista de expedientes',
@@ -375,22 +375,22 @@ return [
             ],
         ], [
             'text' => 'Usuario',
-            'icon' => 'fas fa-fw fa-house-user',
+            'icon' => 'fas fa-fw fa-user',
             'submenu' => [
                 [
-                    'text' => 'Mi expediente',
+                    'text' => 'Inicio',
                     'url' => 'usuarios',
-                    'icon' => 'fas fa-fw fa-folder',
+                    'icon' => 'fas fa-fw fa-columns',
                 ],
                 [
                     'text' => 'Mis cursos',
                     'url' => '#',
-                    'icon' => 'fas fa-fw fa-folder',
+                    'icon' => 'fas fa-fw fa-chalkboard',
                 ],
                 [
                     'text' => 'Mis Competencias',
                     'url' => 'miscompetencias',
-                    'icon' => 'fas fa-fw fa-folder',
+                    'icon' => 'fas fa-fw fa-clipboard-check',
                 ]
             ]
         ],
