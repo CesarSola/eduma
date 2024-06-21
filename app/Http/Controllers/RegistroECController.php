@@ -38,20 +38,16 @@ class RegistroECController extends Controller
      */
     public function store(Request $request)
     {
-        $userId = $request->input('user_id'); // Obtener el ID del usuario desde el formulario
-
-        // Buscar al usuario por su ID
-        $user = User::find($userId);
-
-        if (!$user) {
-            return redirect()->back()->with('error', 'Usuario no encontrado');
-        }
-
+        $user = Auth::user();
+        $userName = str_replace(' ', '_', $user->name);
         $selectedECId = $request->input('competencia_id');
 
         if (!$selectedECId) {
             return redirect()->back()->with('error', 'ID de competencia no válido');
         }
+
+        // Obtener el usuario con sus relaciones cargadas
+        $user = User::with('estandares')->findOrFail($user->id); // Asegúrate de que 'estandares' coincida con el nombre de la relación definida en el modelo User
 
         $estandar = Estandares::findOrFail($selectedECId);
         $estandarName = str_replace(' ', '_', $estandar->name);
@@ -59,17 +55,18 @@ class RegistroECController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $comprobantePago = $request->file('comprobante_pago');
             $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobantePago->extension();
+            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
 
-            // Guardar el archivo en el storage
-            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $user->name, $comprobantePagoName);
-
-            // Guardar la información en la base de datos
+            // Guardar la ruta del comprobante de pago en la base de datos
             $comprobante = new ComprobantePago();
             $comprobante->user_id = $user->id;
             $comprobante->estandar_id = $selectedECId;
             $comprobante->comprobante_pago = $comprobantePagoPath;
 
             $comprobante->save();
+
+            // Guardar la relación en la tabla pivot
+            $user->estandares()->syncWithoutDetaching([$selectedECId]);
 
             return redirect()->route('competenciaEC.show', ['competenciaEC' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
         } else {

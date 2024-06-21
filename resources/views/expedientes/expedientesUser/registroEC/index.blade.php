@@ -21,41 +21,41 @@
                 @if ($competencias->isEmpty())
                     <h6 class="text-center">Por el momento no hay ninguna competencia disponible.</h6>
                 @else
-                    <h6 class="text-center">Estas son las competencias disponibles</h6>
-                    <h6 class="text-center">Elige alguna e inscribete</h6>
+                    @php
+                        $usuario = Auth::user();
+                        $inscrito = false;
+                    @endphp
+                    @foreach ($competencias as $competencia)
+                        @php
+                            $comprobanteExistente = $usuario
+                                ->comprobantes()
+                                ->where('estandar_id', $competencia->id)
+                                ->first();
+
+                            if ($comprobanteExistente) {
+                                $inscrito = true;
+                                continue; // Saltar esta iteración si ya está inscrito
+                            }
+                        @endphp
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title mb-0">{{ $competencia->numero }} - {{ $competencia->name }}
+                                            ({{ $competencia->tipo }})
+                                        </h6>
+                                    </div>
+                                    <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                        class="btn btn-primary">Inscribirse</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    @if ($inscrito)
+                        <h6 class="text-center">Ve a la pestaña de competencias para mas información</h6>
+                    @endif
                 @endif
             </div>
-        </div>
-    </div>
-    <div class="container mt-4">
-        <div class="row">
-            @foreach ($competencias as $competencia)
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-title mb-0">{{ $competencia->numero }} - {{ $competencia->name }}
-                                    ({{ $competencia->tipo }})
-                                </h6>
-                            </div>
-                            @php
-                                $usuario = Auth::user();
-                                $comprobanteExistente = $usuario
-                                    ->comprobantes()
-                                    ->where('estandar_id', $competencia->id)
-                                    ->first();
-                            @endphp
-                            @if ($comprobanteExistente)
-                                <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                    class="btn btn-primary">Ver</a>
-                            @else
-                                <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                    class="btn btn-primary">Inscribirse</a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endforeach
         </div>
     </div>
 @stop
