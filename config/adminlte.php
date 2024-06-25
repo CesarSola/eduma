@@ -373,7 +373,7 @@ return [
                 ],
                 [
                     'text' => 'Competencias',
-                    'icon' => 'far fa-fw fa-book-bookmark',
+                    'icon' => 'fas fa-fw fa-book',
                     'submenu' => [
                         [
                             'text' => 'Registro de estandares',
@@ -389,7 +389,7 @@ return [
                 ],
                 [
                     'text' => 'Códigos Postales',
-                    'icon' => 'fas fa-fw fa-envelopes-bulk',
+                    'icon' => 'fas fa-fw fa-envelope',
                     'submenu' => [
                         [
                             'text' => 'Agregar Códigos Postales',
@@ -399,11 +399,6 @@ return [
                     ],
                 ],
             ],
-        ],
-        [
-            'text' => 'Inscripciones',
-            'url' => 'competenciasinscripcion',
-            'icon' => 'fas fa-fw fa-user-check',
         ],
         [
             'text' => 'Usuarios',
