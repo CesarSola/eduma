@@ -306,6 +306,14 @@ return [
             'text' => 'search',
         ],
         [
+            'header' => 'INICIO'
+        ],
+        [
+            'text' => 'Dashboard',
+            'url' => 'dashboard',
+            'icon' => 'fas fa-fw fa-home',
+        ],
+        [
             'header' => 'ADMINISTRADOR'
         ],
         [
@@ -331,14 +339,6 @@ return [
                     'can'         => 'users.index',
                 ],
             ]
-        ],
-        [
-            'header' => 'INICIO'
-        ],
-        [
-            'text' => 'Dashboard',
-            'url' => 'dashboard',
-            'icon' => 'fas fa-fw fa-home',
         ],
         [
             'text' => 'Admistrativos',
@@ -373,7 +373,7 @@ return [
                 ],
                 [
                     'text' => 'Competencias',
-                    'icon' => 'fas fa-fw fa-book-bookmark',
+                    'icon' => 'far fa-fw fa-book-bookmark',
                     'submenu' => [
                         [
                             'text' => 'Registro de estandares',
@@ -399,6 +399,11 @@ return [
                     ],
                 ],
             ],
+        ],
+        [
+            'text' => 'Inscripciones',
+            'url' => 'competenciasinscripcion',
+            'icon' => 'fas fa-fw fa-user-check',
         ],
         [
             'text' => 'Usuarios',
@@ -541,6 +546,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'FontAwesome' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/fontawesome-free/css/all.min.css',
                 ],
             ],
         ],
