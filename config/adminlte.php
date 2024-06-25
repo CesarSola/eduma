@@ -305,77 +305,104 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-
-        ['header' => 'Profile'],
+        [
+            'header' => 'ADMINISTRADOR'
+        ],
+        [
+            'text' => 'Roles y permisos',
+            'icon' => 'fas fa-fw fa-wrench',
+            'submenu' => [
+                [
+                    'text' => 'Roles',
+                    'url'  => 'roles',
+                    'icon' => 'fas fa-fw fa-users-cog',
+                    'can'  => 'roles.index',
+                ],
+                [
+                    'text' => 'Permisos',
+                    'url'  => 'permissions',
+                    'icon' => 'fas fa-fw fa-user-cog',
+                    'can'  => 'permissions.index',
+                ],
+                [
+                    'text'        => 'users',
+                    'url'         => 'users',
+                    'icon'        => 'fas fa-fw fa-users',
+                    'can'         => 'users.index',
+                ],
+            ]
+        ],
+        [
+            'header' => 'INICIO'
+        ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
         ],
         [
-            'text' => 'Roles',
-            'url'  => 'roles',
-            'icon' => 'fas fa-fw fa-users-cog',
-            'can'  => 'roles.index',
-        ],
-        [
-            'text' => 'Permisos',
-            'url'  => 'permissions',
-            'icon' => 'fas fa-fw fa-user-cog',
-            'can'  => 'permissions.index',
-        ],
-        [
-            'text'        => 'users',
-            'url'         => 'users',
-            'icon'        => 'fas fa-fw fa-users',
-            'can'         => 'users.index',
-        ],
-        [
-            'header' => 'ADMINISTRADOR'
-        ],
-        [
-            'text' => 'PANEL ADMINISTRATIVO',
-            'icon' => 'fas fa-fw fa-user-cog',
+            'text' => 'Admistrativos',
+            'icon' => 'fas fa-fw fa-user-tie',
             'submenu' => [
                 [
-                    'text' => 'Lista de expedientes',
-                    'url' => 'usuariosAdmin',
-                    'icon' => 'fas fa-archive',
+                    'text' => 'Expedientes',
+                    'icon' => 'fas fa-fw fa-folder',
+                    'submenu' => [
+                        [
+                            'text' => 'Lista de expedientes',
+                            'url' => 'usuariosAdmin',
+                            'icon' => 'fas fa-archive',
+                        ],
+                    ],
                 ],
                 [
-                    'text' => 'Registro de cursos',
-                    'url' => 'cursos',
-                    'icon' => 'fas fa-plus-circle',
+                    'text' => 'Cursos',
+                    'icon' => 'fas fa-fw fa-address-book',
+                    'submenu' => [
+                        [
+                            'text' => 'Registrar de cursos',
+                            'url' => 'cursos',
+                            'icon' => 'fas fa-plus-circle',
+                        ],
+                        [
+                            'text' => 'Mis cursos',
+                            'url' => 'cursos',
+                            'icon' => 'fas fa-book',
+                        ],
+                    ],
                 ],
                 [
-                    'text' => 'Mis cursos',
-                    'url' => 'cursos',
-                    'icon' => 'fas fa-book',
+                    'text' => 'Competencias',
+                    'icon' => 'fas fa-fw fa-book-bookmark',
+                    'submenu' => [
+                        [
+                            'text' => 'Registro de estandares',
+                            'url' => 'competenciasAD',
+                            'icon' => 'fas fa-tasks',
+                        ],
+                        [
+                            'text' => 'Agregar Documentos necesarios',
+                            'url' => 'documentosnec',
+                            'icon' => 'fas fa-fw fa-file-invoice',
+                        ],
+                    ],
                 ],
                 [
-                    'text' => 'Registro de estandares',
-                    'url' => 'competenciasAD',
-                    'icon' => 'fas fa-tasks',
-                ],
-                [
-                    'text' => 'Documentos necesarios',
-                    'url' => 'documentosnec',
-                    'icon' => 'fas fa-fw fa-file-invoice',
-                ],
-                [
-                    'text' => 'Inscripciones',
-                    'url' => 'competenciasinscripcion',
-                    'icon' => 'fas fa-fw fa-user-check',
-                ],
-                [
-                    'text' => 'codigos postales',
-                    'url' => 'codigos-postales',
-                    'icon' => 'fas fa-fw fa-paper-plane',
+                    'text' => 'Códigos Postales',
+                    'icon' => 'fas fa-fw fa-envelopes-bulk',
+                    'submenu' => [
+                        [
+                            'text' => 'Agregar Códigos Postales',
+                            'url' => 'codigos-postales',
+                            'icon' => 'fas fa-fw fa-paper-plane',
+                        ],
+                    ],
                 ],
             ],
-        ], [
-            'text' => 'Usuario',
-            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Usuarios',
+            'icon' => 'fas fa-fw fa-users',
             'submenu' => [
                 [
                     'text' => 'Inicio',
@@ -394,16 +421,21 @@ return [
                 ]
             ]
         ],
-        ['header' => 'AJUSTES'],
         [
-            'text' => 'Perfil',
-            'url' => 'profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Ajustes',
+            'icon' => 'fas fa-fw fa-id-badge',
+            'submenu' => [
+                [
+                    'text' => 'Perfil',
+                    'url' => 'profile',
+                    'icon' => 'fas fa-fw fa-user',
+                ],
+                [
+                    'text' => 'change_password',
+                    'url' => 'admin/settings',
+                    'icon' => 'fas fa-fw fa-lock',
+                ],
+            ],
         ],
     ],
 
