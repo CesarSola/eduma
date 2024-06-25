@@ -155,7 +155,7 @@
                         <h6 style="text-align: center" class="card-title">Mis Competencias</h6>
                         <br>
                         <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Ver mis competencias</a>
+                            <a href="{{ route('miscompetencias.index') }}" class="btn btn-primary">Ver mis competencias</a>
                         </div>
                     </div>
                 </div>
