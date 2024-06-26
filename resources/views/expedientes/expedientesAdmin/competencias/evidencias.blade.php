@@ -1,13 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Expediente')
+@section('title', 'Evidencias Competencias')
 
 @section('content_header')
-    <div class="header-flex">
+    <div class="d-flex justify-content-between align-items-center">
         <h1>Evidencias Competencias</h1>
-        <div>
-            <a href="{{ route('competencia.index', ['user_id' => $competencia->id]) }}" class="btn btn-secondary">Regresar</a>
-        </div>
+        <a href="{{ route('competencia.index', ['user_id' => $usuario->id]) }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -16,52 +14,61 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body header-flex">
-                                        <div class="left-content">
-                                            <div class="text-center">
-                                                <img src="" alt="" class="img-circle">
-                                            </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $competencia->name }}
-                                                {{ $competencia->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos:
-                                                {{ $competencia->paternalSurname }}
-                                                {{ $competencia->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $competencia->age }} años</h6>
-                                        </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="card-body header-flex">
+                        <div class="left-content">
+                            <div class="text-center">
+                                <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                             </div>
+                            <h6 class="text-left mt-2">
+                                Nombres: {{ $usuario->name }} {{ $usuario->secondName }}
+                            </h6>
+                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
+                                {{ $usuario->maternalSurname }}</h6>
+                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         </div>
-                        <div class="form-group row">
-                            <table class="table">
-                                <thead>
-                                    <tr style="text-align: center">
-                                        <th scope="col">id</th>
-                                        <th scope="col">Competencia</th>
-                                        <th scope="col">Documentos <br>(Evidencias)</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr style="text-align: center">
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td><a href="{{ route('evidenciasCU.index', ['user_id' => $competencia->id]) }}"
-                                                class="btn btn-primary">Ver</a></td>
-                                        <td>4</td>
-                                        <td><a href="#" class="btn btn-warning">Archivar</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="right-content">
+                            <span class="badge badge-info">Estatus: Activo</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Evidencias por Competencia</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre de la Evidencia</th>
+                                    <th>Competencia</th>
+                                    <th>Archivo Adjunto</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($estandares as $estandar)
+                                    @foreach ($estandar->documentosnec as $documento)
+                                        @foreach ($documento->evidencias as $evidencia)
+                                            <tr>
+                                                <td>{{ $evidencia->id }}</td>
+                                                <td>{{ $documento->name }}</td>
+                                                <td>{{ $estandar->name }}</td>
+                                                <td>
+                                                    <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
+                                                        class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                                    <!-- Agregar más acciones si es necesario -->
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -71,35 +78,40 @@
 
 @section('css')
     <style>
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .card-title {
+            background-color: #067dd2;
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
         }
 
-        .content-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+        .card-header h3 {
+            margin: 0;
         }
 
-        .left-content {
-            width: 50%;
-            float: left;
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #5cb8a9;
+            border-radius: 5px;
         }
 
-        .right-content {
-            width: 50%;
-            float: right;
-            text-align: right;
+        .text-center {
+            color: #ffffff;
         }
 
-        .button-right {
-            float: right;
+        .text-left {
+            color: #000;
+        }
+
+        .d-flex.align-items-center h6 {
+            margin-bottom: 0;
+        }
+
+        .toggle-card {
+            cursor: pointer;
         }
     </style>
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')

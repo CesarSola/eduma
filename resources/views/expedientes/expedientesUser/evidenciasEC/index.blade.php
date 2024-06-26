@@ -120,7 +120,7 @@
 
         .table thead th {
             vertical-align: bottom;
-            border-bottom: 1px solid #000000;
+            border-bottom: 2px solid #dee2e6;
         }
 
         .table-bordered {

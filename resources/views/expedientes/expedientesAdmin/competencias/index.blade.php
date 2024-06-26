@@ -3,107 +3,102 @@
 @section('title', 'Expediente')
 
 @section('content_header')
-    <div class="header-flex">
+    <div class="d-flex justify-content-between align-items-center">
         <h1>Competencias</h1>
-        <div>
-            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $competencia->id]) }}"
-                class="btn btn-secondary">Regresar</a>
-        </div>
+        <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $competencia->id]) }}"
+            class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body header-flex">
-                                        <div class="left-content">
-                                            <div class="text-center">
-                                                <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="rounded-circle">
-                                            </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $competencia->name }}
-                                                {{ $competencia->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $competencia->paternalSurname }}
-                                                {{ $competencia->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $competencia->age }} años</h6>
-                                        </div>
-                                        <div class="right-content">
-                                            <span class="badge bg-info">Estatus: Activo</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body header-flex">
+                    <div class="left-content">
+                        <div class="text-center">
+                            <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                         </div>
-                        <div class="form-group row">
-                            <table class="table">
-                                <thead>
-                                    <tr style="text-align: center">
-                                        <th scope="col">id</th>
-                                        <th scope="col">competencia</th>
-                                        <th scope="col">Documentos <br>(Evidencias)</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr style="text-align: center">
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>
-                                            <a href="{{ route('evidenciasCO.index', ['user_id' => $competencia->id]) }}"
-                                                class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
-                                        </td>
-                                        <td>4</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <p>Nombres: {{ $competencia->name }} {{ $competencia->secondName }}</p>
+                        <p>Apellidos: {{ $competencia->paternalSurname }} {{ $competencia->maternalSurname }}</p>
+                        <p>Edad {{ $competencia->age }} años</p>
+                    </div>
+                    <div class="right-content">
+                        <span class="badge badge-info">Estatus: Activo</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($competencias as $competencia)
+                        <tr>
+                            <td>{{ $competencia->id }}</td>
+                            <td>{{ $competencia->name }}</td>
+                            <td>{{ $competencia->tipo }}</td>
+                            <td>
+                                <a href="{{ route('evidenciasCO.index', ['competencia' => $competencia->id]) }}"
+                                    class="btn btn-primary">Ver Evidencias</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @stop
 
 @section('css')
     <style>
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .card-title {
+            background-color: #067dd2;
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
         }
 
-        .content-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+        .card-header h3 {
+            margin: 0;
         }
 
-        .left-content {
-            width: 50%;
-            float: left;
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #5cb8a9;
+            border-radius: 5px;
         }
 
-        .right-content {
-            width: 50%;
-            float: right;
-            text-align: right;
+        .text-center {
+            color: #ffffff;
         }
 
-        .button-right {
-            float: right;
+        .text-left {
+            color: #000;
+        }
+
+        .d-flex.align-items-center h6 {
+            margin-bottom: 0;
+        }
+
+        .toggle-card {
+            cursor: pointer;
         }
     </style>
 @stop
 
 @section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         console.log("Hi, I'm using the Laravel-AdminLTE package!");
     </script>

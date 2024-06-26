@@ -56,6 +56,9 @@
                                         <li class="list-group-item">
                                             {{ basename($documento->foto) }}
                                         </li>
+                                        <li class="list-group-item">
+                                            {{ basename($documento->curp) }}
+                                        </li>
                                         <br>
                                     @endforeach
 
@@ -80,20 +83,20 @@
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h3 class="card-title">Competencias</h3>
+                            <h3 class="card-title">Estandares</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            @if ($competencias->isNotEmpty())
+                            @if ($estandares->isNotEmpty())
                                 <ul class="list-group flex-grow-1 overflow-auto">
-                                    @foreach ($competencias as $competencia)
-                                        <li class="list-group-item">{{ $competencia->nombre }}</li>
+                                    @foreach ($estandares as $estandar)
+                                        <li class="list-group-item">{{ $estandar->name }}</li>
                                     @endforeach
                                 </ul>
                                 <a href="{{ route('competencia.index', ['user_id' => $usuariosAdmin->id]) }}"
                                     class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                             @else
                                 <div style="text-align: center">
-                                    <p>No hay competencias disponibles para este usuario.</p>
+                                    <p>No hay estándares disponibles para este usuario.</p>
                                 </div>
                             @endif
                         </div>
@@ -121,6 +124,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -144,8 +148,18 @@
         }
 
         .card-title {
+            background-color: #067dd2;
             text-align: center;
             width: 100%;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #5cb8a9;
+            border-radius: 5px;
         }
 
         .list-group-item {
@@ -178,6 +192,10 @@
 
         .btn-sm {
             padding: 0.25rem 0.5rem;
+        }
+
+        .toggle-card {
+            cursor: pointer;
         }
     </style>
 @stop

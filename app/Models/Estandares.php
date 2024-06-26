@@ -36,4 +36,8 @@ class Estandares extends Model
     {
         return $this->belongsToMany(User::class, 'user_estandares', 'estandar_id', 'user_id');
     }
+    public function estandares()
+    {
+        return $this->hasMany(Estandares::class);
+    }
 }

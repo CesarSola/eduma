@@ -21,4 +21,8 @@ class DocumentosNec extends Model
     {
         return $this->belongsToMany(Estandares::class, 'competencia_documentosnec', 'documentosnec_id', 'competencia_id');
     }
+    public function evidencias()
+    {
+        return $this->hasMany(EvidenciasCompetencias::class, 'documento_id');
+    }
 }

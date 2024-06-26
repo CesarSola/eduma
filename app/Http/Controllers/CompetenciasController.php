@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Estandares;
+use Spatie\Permission\Models\Role;
 
 class CompetenciasController extends Controller
 {
@@ -19,10 +20,12 @@ class CompetenciasController extends Controller
         // Buscar el usuario por ID, si no se proporciona ID, se obtiene el usuario autenticado
         $competencia = User::find($userId) ?? auth()->user();
 
-        // Renderizar la vista del expediente del usuario
-        return view('expedientes.expedientesAdmin.competencias.index', compact('competencia'));
-    }
+        // Obtener todas las competencias asociadas al usuario
+        $competencias = $competencia->estandares;
 
+        // Renderizar la vista del expediente de competencias del usuario
+        return view('expedientes.expedientesAdmin.competencias.index', compact('competencia', 'competencias'));
+    }
 
     /**
      * Show the form for creating a new resource.

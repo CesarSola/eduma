@@ -23,11 +23,11 @@ class EvidenciasCompetencias extends Model
 
     public function estandar()
     {
-        return $this->belongsTo(Estandares::class);
+        return $this->belongsTo(Estandares::class, 'estandar_id');
     }
 
     public function documento()
     {
-        return $this->belongsTo(DocumentosNec::class);
+        return $this->belongsTo(DocumentosNec::class, 'documento_id');
     }
 }
