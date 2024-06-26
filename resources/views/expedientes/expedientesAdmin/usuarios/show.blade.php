@@ -56,17 +56,11 @@
                                         <li class="list-group-item">
                                             {{ basename($documento->foto) }}
                                         </li>
+                                        <br>
                                         <li class="list-group-item">
                                             {{ basename($documento->curp) }}
                                         </li>
                                         <br>
-                                    @endforeach
-
-                                    <!-- Mostrar los comprobantes de pago si existen -->
-                                    @foreach ($comprobantesPago as $comprobante)
-                                        <li class="list-group-item">
-                                            {{ basename($comprobante->comprobante_pago) }}
-                                        </li>
                                     @endforeach
                                 </ul>
 
