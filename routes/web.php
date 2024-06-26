@@ -18,9 +18,6 @@ use App\Http\Controllers\RegistroECController;
 
 use Illuminate\Support\Facades\Route;
 
-use Laravel\Socialite\Facades\Socialite;
-
-use function PHPUnit\Framework\callback;
 use App\Http\Controllers\PostalCodeController;
 use App\Http\Controllers\SDocumentosController;
 
@@ -53,6 +50,8 @@ require __DIR__ . '/auth.php';
 
 
 use App\Http\Controllers\CodigoPostalController;
+use App\Http\Controllers\EvidenciasUEControlle;
+use App\Http\Controllers\EvidenciasUEController;
 use App\Http\Controllers\MisCompetenciasController;
 
 // Rutas para el CRUD de códigos postales
@@ -98,6 +97,12 @@ Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::cl
 Route::resource('competenciaEC', RegistroECController::class);
 //ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
+//ruta de evidenciasEC
+Route::resource('evidenciasEC', EvidenciasUEController::class);
+Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
+Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
+Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+
 
 
 

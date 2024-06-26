@@ -4,8 +4,8 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <div class="text-center text-white bg-success p-3 rounded">
-            <h1>Mis Competencias</h1>
+        <div class="text-center text-white bg-success p-3 rounded" style="width: 300px;">
+            <h1 style="font-size: 1.5rem; margin-bottom: 0;">Mis Competencias</h1>
         </div>
         <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
@@ -31,7 +31,12 @@
                 <ul class="list-group">
                     @foreach ($competencias as $competencia)
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ $competencia->name }} - {{ $competencia->tipo }}
+                            <div>
+                                <span style="font-weight: bold; color: #333;">{{ $competencia->name }}</span> -
+                                {{ $competencia->tipo }}
+                                <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
+                                    class="btn btn-primary btn-sm ml-2">Ver</a>
+                            </div>
                             <span class="badge badge-primary badge-pill">Inscrito</span>
                         </li>
                     @endforeach
@@ -68,6 +73,11 @@
         .badge {
             font-size: 0.8em;
             vertical-align: middle;
+        }
+
+        .btn-sm {
+            font-size: 0.8em;
+            padding: 0.25em 0.5em;
         }
     </style>
 @stop

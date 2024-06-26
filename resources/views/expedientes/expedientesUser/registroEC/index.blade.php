@@ -46,15 +46,15 @@
                                         </h6>
                                     </div>
                                     @if ($comprobanteExistente)
-                                        <span class="text-success">Inscrito</span>
+                                        <span class="badge badge-success badge-pill">Inscrito</span>
                                     @else
                                         <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
                                             class="btn btn-primary">Inscribirse</a>
                                     @endif
                                     @if ($inscrito && $competencia->id === $competenciaInscrita->id)
                                         <div class="card-footer">
-                                            <h6 class="text-center">Ve a la pestaña de</h6>
-                                            <h6 class="text-center">Mis competencias</h6>
+                                            <a href="{{ route('miscompetencias.index') }}" class="btn btn-primary">Ir a Mis
+                                                Competencias</a>
                                         </div>
                                     @endif
                                 </div>
