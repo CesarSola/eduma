@@ -20,7 +20,8 @@
         @else
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios</h6>
+                    <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios Como Evidencias para este EC
+                    </h6>
                     <div class="table-responsive">
                         <table class="table table-bordered mt-3">
                             <thead>
