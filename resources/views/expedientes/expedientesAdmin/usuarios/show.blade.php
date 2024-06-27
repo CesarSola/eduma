@@ -40,14 +40,16 @@
                         <div class="card-header">
                             <h3 class="card-title">Ver <br>Documentos de Registro General</h3>
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <a class="btn btn-primary"
-                                href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}">Ver
-                                Documentos</a>
-
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <!-- Ajuste aquí -->
+                            <div class="text-center"> <!-- Ajuste aquí -->
+                                <a href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}"
+                                    class="btn btn-primary">Ver Documentos</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
@@ -136,13 +138,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="card h-100">
                     <div class="card-header">
                         <h3 class="card-title">Validar <br>Comprobantes de pago Competencia</h3>
                     </div>
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <!-- Ajuste aquí -->
+                        <div class="text-center"> <!-- Ajuste aquí -->
+                            <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id]) }}"
+                                class="btn btn-primary">Ver Comprobante de Pago</a>
+                        </div>
                     </div>
                 </div>
             </div>

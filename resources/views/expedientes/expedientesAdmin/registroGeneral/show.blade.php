@@ -45,7 +45,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div class="card">
+                    <div class="card-body">
                         @php
                             $documentosParaRevisar = false;
                         @endphp
@@ -111,8 +115,6 @@
             </div>
         </div>
     </div>
-    </div>
-
 
 @stop
 @section('css')

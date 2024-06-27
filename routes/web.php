@@ -82,8 +82,8 @@ Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
 //rutas para validar comprobante de pagos competencias
-Route::get('/validar-cop/{id}', [ValidarCoPController::class, 'show'])->name('validarCop.show');
-Route::put('/validar-cop/{id}/update', [ValidarCoPController::class, 'update'])->name('validarCop.update');
+Route::get('validar-cop/{id}', [ValidarCoPController::class, 'show'])->name('validarCoP.show');
+Route::put('/validar-cop/{id}/update', [ValidarCoPController::class, 'update'])->name('validarCoP.update');
 
 
 //rutas del expediente Usuario
