@@ -1,20 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
-use App\Http\Controllers\CompetenciasController;
-use App\Http\Controllers\CompetenciasAddController;
-use App\Http\Controllers\CursosController;
-use App\Http\Controllers\DocumentosController;
-use App\Http\Controllers\DocumentosEcController;
-use App\Http\Controllers\DocumentosNecController;
-use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
-use App\Http\Controllers\DashboardUserController;
+
 use App\Http\Controllers\ECviewsController;
-use App\Http\Controllers\EvidenciasCompetenciasController;
-use App\Http\Controllers\EvidenciasCursosController;
-use App\Http\Controllers\RegistroECController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -49,27 +40,29 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-use App\Http\Controllers\CodigoPostalController;
-use App\Http\Controllers\EvidenciasUEControlle;
-use App\Http\Controllers\EvidenciasUEController;
-use App\Http\Controllers\MisCompetenciasController;
-
 // Rutas para el CRUD de códigos postales
+use App\Http\Controllers\CodigoPostalController;
+
 Route::resource('codigos-postales', CodigoPostalController::class);
-
 Route::post('/obtener-detalles-codigo-postal', [CodigoPostalController::class, 'obtenerDetallesCodigoPostal'])->name('obtener-detalles-codigo-postal');
-
-
-
 Route::post('/importar-excel', [CodigoPostalController::class, 'importarExcel'])->name('importar.excel');
-
-
 Route::post('/profile/update-address', [ProfileController::class, 'updateAddress'])->name('update-address');
-
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 
-//ruta index de expedientes ya no existe
-//Route::resource('expedientesAdmin', ExpedientesController::class);
+//rutas de la carpeta expedientes y sus carpetas
+use App\Http\Controllers\EvidenciasUEControlle;
+use App\Http\Controllers\ExpedientesUsuariosController;
+use App\Http\Controllers\EvidenciasCompetenciasController;
+use App\Http\Controllers\EvidenciasCursosController;
+use App\Http\Controllers\RegistroECController;
+use App\Http\Controllers\EvidenciasUEController;
+use App\Http\Controllers\MisCompetenciasController;
+use App\Http\Controllers\RegistroCursoController;
+use App\Http\Controllers\MisCursosController;
+use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\DocumentosController;
+use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\CursosController;
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta de la carpeta usuarios
@@ -95,36 +88,23 @@ Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::clas
 Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.update');
 //ruta del registro a un EC
 Route::resource('competenciaEC', RegistroECController::class);
+//ruta del registro de un curso
+Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
+//ruta de mis cursos
+Route::resource('misCursos', MisCursosController::class);
 //ruta de evidenciasEC
 Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+//ruta evidenciasCU
 
-
-use App\Http\Controllers\RegistroCursoController;
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/registro-cursos', [RegistroCursoController::class, 'index'])->name('registroCurso.index');
-    Route::get('/registro-cursos/{curso}', [RegistroCursoController::class, 'show'])->name('registroCurso.show');
-    Route::post('/registro-cursos', [RegistroCursoController::class, 'store'])->name('registroCurso.store');
-});
-
-use App\Http\Controllers\MisCursosController;
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/mis-cursos', [MisCursosController::class, 'index'])->name('misCursos.index');
-    Route::get('/mis-cursos/{curso}', [MisCursosController::class, 'show'])->name('misCursos.show');
-});
-
-
-Route::get('/mis-cursos/{curso}/evidencias', [MisCursosController::class, 'showEvidencias'])->name('evidenciasCurso.index');
-
-
-
-// routes/web.php
+// routes agregar cursos,competencias y documentos necesarios
+use App\Http\Controllers\DocumentosEcController;
+use App\Http\Controllers\CompetenciasAddController;
+use App\Http\Controllers\DocumentosNecController;
 
 Route::resource('cursos', CursosController::class);
 Route::resource('competenciasAD', CompetenciasAddController::class);

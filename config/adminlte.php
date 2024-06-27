@@ -356,25 +356,15 @@ return [
                     ],
                 ],
                 [
-                    'text' => 'Cursos',
-                    'icon' => 'fas fa-fw fa-address-book',
+                    'text' => 'Competencias y Cursos',
+                    'icon' => 'fas fa-fw fa-book',
                     'submenu' => [
+
                         [
                             'text' => 'Registrar de cursos',
                             'url' => 'cursos',
                             'icon' => 'fas fa-plus-circle',
                         ],
-                        [
-                            'text' => 'Mis cursos',
-                            'url' => 'cursos',
-                            'icon' => 'fas fa-book',
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'Competencias',
-                    'icon' => 'fas fa-fw fa-book',
-                    'submenu' => [
                         [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
@@ -411,7 +401,7 @@ return [
                 ],
                 [
                     'text' => 'Mis cursos',
-                    'url' => '#',
+                    'url' => 'misCursos',
                     'icon' => 'fas fa-fw fa-chalkboard',
                 ],
                 [
