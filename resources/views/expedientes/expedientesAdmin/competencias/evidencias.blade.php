@@ -40,35 +40,41 @@
                         <h3>Evidencias por Competencia</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre de la Evidencia</th>
-                                    <th>Competencia</th>
-                                    <th>Archivo Adjunto</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($estandares as $estandar)
-                                    @foreach ($estandar->documentosnec as $documento)
-                                        @foreach ($documento->evidencias as $evidencia)
-                                            <tr>
-                                                <td>{{ $evidencia->id }}</td>
-                                                <td>{{ $documento->name }}</td>
-                                                <td>{{ $estandar->name }}</td>
-                                                <td>
-                                                    <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
-                                                        class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                                    <!-- Agregar más acciones si es necesario -->
-                                                </td>
-                                            </tr>
+                        @if ($estandares->isEmpty() || $estandares->every(fn($estandar) => $estandar->documentosnec->isEmpty()))
+                            <div class="text-center">
+                                <p>Por el momento este usuario no tiene ningún documento.</p>
+                            </div>
+                        @else
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre de la Evidencia</th>
+                                        <th>Competencia</th>
+                                        <th>Archivo Adjunto</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estandares as $estandar)
+                                        @foreach ($estandar->documentosnec as $documento)
+                                            @foreach ($documento->evidencias as $evidencia)
+                                                <tr>
+                                                    <td>{{ $evidencia->id }}</td>
+                                                    <td>{{ $documento->name }}</td>
+                                                    <td>{{ $estandar->name }}</td>
+                                                    <td>
+                                                        <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
+                                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                                        <!-- Agregar más acciones si es necesario -->
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -97,7 +103,7 @@
         }
 
         .text-center {
-            color: #ffffff;
+            color: #000000;
         }
 
         .text-left {

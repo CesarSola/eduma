@@ -19,17 +19,17 @@ class EvidenciasCompetenciasController extends Controller
         if ($userId) {
             // Buscar el usuario por ID
             $usuario = User::findOrFail($userId);
-            $estandares = $usuario->estandares; // Obtener los estándares del usuario
         } else {
-            // Si no se proporciona un ID, obtener el usuario autenticado y sus estándares
+            // Si no se proporciona un ID, obtener el usuario autenticado
             $usuario = auth()->user();
-            $estandares = $usuario->estandares;
         }
 
-        // Cargar las relaciones necesarias para cada estándar y documento necesario
-        foreach ($estandares as $estandar) {
-            $estandar->load('documentosnec.evidencias'); // Cargar documentosNec y sus evidencias
-        }
+        // Cargar las relaciones necesarias
+        $estandares = $usuario->estandares()->with(['documentosnec' => function ($query) use ($usuario) {
+            $query->whereHas('evidencias', function ($query) use ($usuario) {
+                $query->where('user_id', $usuario->id);
+            });
+        }])->get();
 
         // Renderizar la vista de las evidencias de competencias con los datos del usuario
         return view('expedientes.expedientesAdmin.competencias.evidencias', compact('usuario', 'estandares'));

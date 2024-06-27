@@ -18,13 +18,13 @@ class CompetenciasController extends Controller
         $userId = $request->query('user_id');
 
         // Buscar el usuario por ID, si no se proporciona ID, se obtiene el usuario autenticado
-        $competencia = User::find($userId) ?? auth()->user();
+        $usuario = User::find($userId) ?? auth()->user();
 
         // Obtener todas las competencias asociadas al usuario
-        $competencias = $competencia->estandares;
+        $competencias = $usuario->estandares;
 
         // Renderizar la vista del expediente de competencias del usuario
-        return view('expedientes.expedientesAdmin.competencias.index', compact('competencia', 'competencias'));
+        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario', 'competencias'));
     }
 
     /**

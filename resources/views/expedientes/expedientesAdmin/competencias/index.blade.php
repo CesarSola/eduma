@@ -5,8 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Competencias</h1>
-        <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $competencia->id]) }}"
-            class="btn btn-secondary">Regresar</a>
+        <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -19,9 +18,9 @@
                         <div class="text-center">
                             <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
                         </div>
-                        <p>Nombres: {{ $competencia->name }} {{ $competencia->secondName }}</p>
-                        <p>Apellidos: {{ $competencia->paternalSurname }} {{ $competencia->maternalSurname }}</p>
-                        <p>Edad {{ $competencia->age }} años</p>
+                        <p>Nombres: {{ $usuario->name }} {{ $usuario->secondName }}</p>
+                        <p>Apellidos: {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
+                        <p>Edad: {{ $usuario->age }} años</p>
                     </div>
                     <div class="right-content">
                         <span class="badge badge-info">Estatus: Activo</span>
@@ -48,7 +47,7 @@
                             <td>{{ $competencia->name }}</td>
                             <td>{{ $competencia->tipo }}</td>
                             <td>
-                                <a href="{{ route('evidenciasCO.index', ['competencia' => $competencia->id]) }}"
+                                <a href="{{ route('evidenciasCO.index', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
                                     class="btn btn-primary">Ver Evidencias</a>
                             </td>
                         </tr>
@@ -80,7 +79,7 @@
         }
 
         .text-center {
-            color: #ffffff;
+            color: #000000;
         }
 
         .text-left {

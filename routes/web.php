@@ -117,7 +117,6 @@ use App\Http\Controllers\MisCursosController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/mis-cursos', [MisCursosController::class, 'index'])->name('misCursos.index');
     Route::get('/mis-cursos/{curso}', [MisCursosController::class, 'show'])->name('misCursos.show');
-    // Otras rutas necesarias para edit, update, destroy, etc.
 });
 
 

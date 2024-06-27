@@ -181,7 +181,7 @@
                         <h6 style="text-align: center" class="card-title">Mis Cursos</h6>
                         <br>
                         <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Ver mis cursos</a>
+                            <a href="{{ route('misCursos.index') }}" class="btn btn-primary">Ver mis cursos</a>
                         </div>
                     </div>
                 </div>
