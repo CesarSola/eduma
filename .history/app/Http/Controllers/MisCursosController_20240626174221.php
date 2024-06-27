@@ -16,7 +16,7 @@ class MisCursosController extends Controller
         $usuario = User::findOrFail(auth()->user()->id);
         $cursos = $usuario->cursos; // Accede a la relación de cursos
 
-        return view('expedientes.expedientesUser.miscursos.index', compact('cursos', 'usuario'));
+        return view('expedientes.expedientesUser.cursos.index', compact('cursos', 'usuario'));
     }
 
     /**

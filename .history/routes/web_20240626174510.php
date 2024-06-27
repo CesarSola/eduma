@@ -114,6 +114,8 @@ Route::middleware(['auth'])->group(function () {
 
 use App\Http\Controllers\MisCursosController;
 
+use App\Http\Controllers\MisCursosController;
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/mis-cursos', [MisCursosController::class, 'index'])->name('misCursos.index');
     Route::get('/mis-cursos/{curso}', [MisCursosController::class, 'show'])->name('misCursos.show');
@@ -121,7 +123,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/mis-cursos/{curso}/evidencias', [MisCursosController::class, 'showEvidencias'])->name('evidenciasCurso.index');
 
 
 

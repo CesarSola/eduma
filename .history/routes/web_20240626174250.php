@@ -117,11 +117,11 @@ use App\Http\Controllers\MisCursosController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/mis-cursos', [MisCursosController::class, 'index'])->name('misCursos.index');
     Route::get('/mis-cursos/{curso}', [MisCursosController::class, 'show'])->name('misCursos.show');
-    // Otras rutas necesarias para edit, update, destroy, etc.
+    Route::get('/mis-cursos/{curso}/edit', [MisCursosController::class, 'edit'])->name('misCursos.edit');
+    Route::put('/mis-cursos/{curso}', [MisCursosController::class, 'update'])->name('misCursos.update');
+    Route::delete('/mis-cursos/{curso}', [MisCursosController::class, 'destroy'])->name('misCursos.destroy');
 });
 
-
-Route::get('/mis-cursos/{curso}/evidencias', [MisCursosController::class, 'showEvidencias'])->name('evidenciasCurso.index');
 
 
 

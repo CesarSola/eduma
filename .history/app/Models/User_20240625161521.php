@@ -103,7 +103,13 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
     public function comprobantePagoCursos()
-    {
-        return $this->hasMany(ComprobantePagoCurso::class);
-    }
+{
+    return $this->hasMany(ComprobantePagoCurso::class);
+}
+
+public function cursos()
+{
+    return $this->belongsToMany(Curso::class, 'comprobante_pago_cursos')->withTimestamps();
+}
+
 }

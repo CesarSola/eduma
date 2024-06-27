@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Curso; // Asegúrate de importar el modelo Curso aquí
 use Illuminate\Http\Request;
+use App\Models\Curso;
 
-class MisCursosController extends Controller
+class RegistroCursosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $usuario = User::findOrFail(auth()->user()->id);
-        $cursos = $usuario->cursos; // Accede a la relación de cursos
-
-        return view('expedientes.expedientesUser.miscursos.index', compact('cursos', 'usuario'));
+        $cursos = Curso::all(); // Obtén todas las competencias disponibles
+        return view('expedientes.expedientesUser.registroEC.index', compact('cursos'));
     }
 
     /**
@@ -38,7 +35,7 @@ class MisCursosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Curso $curso)
+    public function show(string $id)
     {
         //
     }
@@ -46,7 +43,7 @@ class MisCursosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Curso $curso)
+    public function edit(string $id)
     {
         //
     }
@@ -54,7 +51,7 @@ class MisCursosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Curso $curso)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -62,7 +59,7 @@ class MisCursosController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Curso $curso)
+    public function destroy(string $id)
     {
         //
     }

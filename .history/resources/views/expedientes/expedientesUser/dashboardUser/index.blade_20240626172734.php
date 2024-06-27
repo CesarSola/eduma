@@ -79,7 +79,40 @@
                 <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
             </div>
         </div>
+<<<<<<< Updated upstream
     @elseif (!$todosDocumentosValidados)
+=======
+
+        <br>
+        <div class="card">
+            <h6 style="text-align: center" class="card-title">Cursos</h6>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Inscríbete a un Curso</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="{{ route('registroCurso.index') }}" class="btn btn-primary">Ver Cursos</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <h6 style="text-align: center" class="card-title">Mis Cursos</h6>
+                        <br>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Ver mis cursos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($todosDocumentosValidados)
+        <br>
+>>>>>>> Stashed changes
         <div class="card">
             <h6 style="text-align: center" class="card-title">Documentos siendo validados</h6>
             <br>
@@ -172,7 +205,7 @@
                         <h6 style="text-align: center" class="card-title">Inscríbete a un Curso</h6>
                         <br>
                         <div class="card-body text-center">
-                            <a href="{{ route('registroCurso.index') }}" class="btn btn-primary">Ver Cursos</a>
+                            <a href="#" class="btn btn-primary">Ver Cursos</a>
                         </div>
                     </div>
                 </div>

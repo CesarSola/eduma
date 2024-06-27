@@ -121,7 +121,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/mis-cursos/{curso}/evidencias', [MisCursosController::class, 'showEvidencias'])->name('evidenciasCurso.index');
 
 
 

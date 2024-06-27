@@ -102,8 +102,4 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->estandares()->attach($estandarId);
         }
     }
-    public function comprobantePagoCursos()
-    {
-        return $this->hasMany(ComprobantePagoCurso::class);
-    }
 }

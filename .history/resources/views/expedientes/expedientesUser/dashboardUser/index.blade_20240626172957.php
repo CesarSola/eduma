@@ -172,7 +172,7 @@
                         <h6 style="text-align: center" class="card-title">Inscríbete a un Curso</h6>
                         <br>
                         <div class="card-body text-center">
-                            <a href="{{ route('registroCurso.index') }}" class="btn btn-primary">Ver Cursos</a>
+                            <a href="#" class="btn btn-primary">Ver Cursos</a>
                         </div>
                     </div>
                 </div>
