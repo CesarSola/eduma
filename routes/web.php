@@ -63,8 +63,12 @@ use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
+use App\Http\Controllers\ValidarCoPController;
+
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
+//ruta index de la carpeta registroGeneral
+Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
 //ruta de la carpeta usuarios
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta comentarios-validar
@@ -77,6 +81,10 @@ Route::resource('evidenciasCU', EvidenciasCursosController::class);
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
+//rutas para validar comprobante de pagos competencias
+Route::get('/validar-cop/{id}', [ValidarCoPController::class, 'show'])->name('validarCop.show');
+Route::put('/validar-cop/{id}/update', [ValidarCoPController::class, 'update'])->name('validarCop.update');
+
 
 //rutas del expediente Usuario
 //ruta dashboard usuario

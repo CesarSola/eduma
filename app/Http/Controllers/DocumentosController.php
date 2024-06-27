@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
+use App\Models\DocumentosUser;
 use App\Models\User;
 use App\Models\ValidacionesComentarios;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($userId)
     {
+        // Obtener todos los documentos del usuario seleccionado
+        $documentos = DocumentosUser::where('user_id', $userId)->get();
+
+        // Obtener el nombre del usuario
+        $nombreUsuario = User::findOrFail($userId)->name;
+
+        return view('expedientes.expedientesAdmin.registroGeneral.index', compact('documentos', 'nombreUsuario'));
     }
+
+
+
     /**
      * Show the form for creating a new resource.
      */

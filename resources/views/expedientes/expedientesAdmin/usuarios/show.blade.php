@@ -33,51 +33,25 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-12 mt-3">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h3 class="card-title">Documentos de Registro General</h3>
+                            <h3 class="card-title">Ver <br>Documentos de Registro General</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            @if ($documentos->isNotEmpty() || $comprobantesPago->isNotEmpty())
-                                <ul class="list-group flex-grow-1 overflow-auto">
-                                    @foreach ($documentos as $documento)
-                                        <li class="list-group-item">
-                                            {{ basename($documento->ine_ife) }}
-                                        </li>
-                                        <br>
-                                        <li class="list-group-item">
-                                            {{ basename($documento->comprobante_domiciliario) }}
-                                        </li>
-                                        <br>
-                                        <li class="list-group-item">
-                                            {{ basename($documento->foto) }}
-                                        </li>
-                                        <br>
-                                        <li class="list-group-item">
-                                            {{ basename($documento->curp) }}
-                                        </li>
-                                        <br>
-                                    @endforeach
-                                </ul>
+                            <a class="btn btn-primary"
+                                href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}">Ver
+                                Documentos</a>
 
-                                <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                    class="btn btn-primary">Ver</a>
-                            @else
-                                <div style="text-align: center">
-                                    <p>No hay documentos disponibles para este usuario.</p>
-                                </div>
-                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h3 class="card-title">Estandares</h3>
+                            <h3 class="card-title">Estandares de <br> {{ $usuariosAdmin->name }}</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
                             @if ($estandares->isNotEmpty())
@@ -99,7 +73,7 @@
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h3 class="card-title">Cursos</h3>
+                            <h3 class="card-title">Cursos de <br> {{ $usuariosAdmin->name }}</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
                             @if ($cursos->isNotEmpty())
@@ -118,7 +92,68 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- Additional Cards -->
+    <div class="col-md-12 mt-3">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h3 class="card-title">Validar <br>Documentos de Registro General</h3>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        @if ($documentos->isNotEmpty() || $comprobantesPago->isNotEmpty())
+                            <ul class="list-group flex-grow-1 overflow-auto">
+                                @foreach ($documentos as $documento)
+                                    <li class="list-group-item">
+                                        {{ basename($documento->ine_ife) }}
+                                    </li>
+                                    <br>
+                                    <li class="list-group-item">
+                                        {{ basename($documento->comprobante_domiciliario) }}
+                                    </li>
+                                    <br>
+                                    <li class="list-group-item">
+                                        {{ basename($documento->foto) }}
+                                    </li>
+                                    <br>
+                                    <li class="list-group-item">
+                                        {{ basename($documento->curp) }}
+                                    </li>
+                                    <br>
+                                @endforeach
+                            </ul>
 
+                            <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                class="btn btn-primary">Ver</a>
+                        @else
+                            <div style="text-align: center">
+                                <p>No hay documentos disponibles para este usuario.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h3 class="card-title">Validar <br>Comprobantes de pago Competencia</h3>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h3 class="card-title">Validar <br>Comprobantes de pago Cursos</h3>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -167,7 +202,7 @@
 
         .overflow-auto {
             max-height: 200px;
-            /* Ajusta esta altura según sea necesario */
+            /* Adjust this height as needed */
             overflow-y: auto;
         }
 
