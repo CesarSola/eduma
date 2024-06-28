@@ -40,7 +40,8 @@
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $competencia->tipo }}</td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
                             @foreach ($competencia->documentosnec as $documento)
-                                <a" class="block hover:text-blue-600">{{ $documento->name }}</a>
+                                <a href="{{ Storage::url($documento->documentos) }}" class="block hover:text-blue-600"
+                                    download>{{ $documento->name }}</a>
                             @endforeach
                         </td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
@@ -49,8 +50,7 @@
                                 <i class="fas fa-edit fa-sm"></i>
                             </button>
                             <button type="button" class="btn btn-danger btn-sm">
-                                <i class="fas fa-file-pdf fa-sm"><a
-                                        href=" href="{{ Storage::url($documento->documentos) }}" dowloA></a></i>
+                                <i class="fas fa-file-pdf fa-sm"></i>
                             </button>
                             <a href="{{ route('competenciasAD.show', $competencia->id) }}" class="btn btn-info btn-sm">
                                 <i class="fas fa-user-plus fa-sm"></i>

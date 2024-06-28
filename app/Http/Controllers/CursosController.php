@@ -35,29 +35,40 @@ class CursosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'id_estandar' => 'required|exists:estandares,id',
-            'instructor' => 'nullable|string|max:255',
+            'name' => 'required',
+            'description' => 'required',
+            'id_estandar' => 'required',
+            'instructor' => 'nullable|string',
             'duration' => 'nullable|integer',
-            'modalidad' => 'nullable|string|max:255',
+            'modalidad' => 'nullable|string',
             'fecha_inicio' => 'nullable|date',
             'fecha_final' => 'nullable|date',
-            'costo' => 'nullable|string|max:255',
-            'certification' => 'nullable|string|max:255',
-            'documentosnec_id' => 'required|array',
-            'documentosnec_id.*' => 'exists:documentosnec,id',
+            'costo' => 'nullable|string',
+            'certification' => 'nullable|string',
+            'documentosnec_id' => 'array', // Validar que es un array
+            'documentosnec_id.*' => 'exists:documentosnec,id', // Validar que cada ID existe en la tabla documentosnec
         ]);
 
-        $curso = Curso::create($request->only([
-            'name', 'description', 'id_estandar', 'instructor', 'duration', 'modalidad',
-            'fecha_inicio', 'fecha_final', 'costo', 'certification'
-        ]));
+        $curso = Curso::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'id_estandar' => $request->id_estandar,
+            'instructor' => $request->instructor,
+            'duration' => $request->duration,
+            'modalidad' => $request->modalidad,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_final' => $request->fecha_final,
+            'costo' => $request->costo,
+            'certification' => $request->certification,
+        ]);
 
-        $curso->documentosnec()->sync($request->input('documentosnec_id'));
+        if ($request->has('documentosnec_id')) {
+            $curso->documentosnec()->attach($request->documentosnec_id);
+        }
 
-        return back()->with('success', 'Curso creado exitosamente');
+        return redirect()->route('cursos.index')->with('success', 'Curso creado exitosamente.');
     }
+
 
     public function show(string $id)
     {

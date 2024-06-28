@@ -33,6 +33,6 @@ class Curso extends Model
     }
     public function documentosnec()
     {
-        return $this->belongsToMany(DocumentosNec::class, 'curso_documentosnec');
+        return $this->belongsToMany(DocumentosNec::class, 'curso_documentosnec', 'curso_id', 'documentosnec_id');
     }
 }

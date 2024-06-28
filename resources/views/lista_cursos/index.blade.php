@@ -31,6 +31,7 @@
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Nombre</th>
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Descripción</th>
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Estandar de competencia</th>
+                    <th class="py-2 px-4 text-gray-900 dark:text-white">Documentos Necesarios</th>
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Instructor</th>
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Duración</th>
                     <th class="py-2 px-4 text-gray-900 dark:text-white">Modalidad</th>
@@ -49,6 +50,12 @@
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $curso->description }}</td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
                             {{ $curso->estandares ? $curso->estandares->numero : 'N/A' }}</td>
+                        <td class="py-2 px-4 text-gray-700 dark:text-gray-300">
+                            @foreach ($curso->documentosnec as $documento)
+                                <a href="{{ Storage::url($documento->documentos) }}" class="block hover:text-blue-600"
+                                    download>{{ $documento->name }}</a>
+                            @endforeach
+                        </td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $curso->instructor }}</td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $curso->duration }}</td>
                         <td class="py-2 px-4 text-gray-700 dark:text-gray-300">{{ $curso->modalidad }}</td>
