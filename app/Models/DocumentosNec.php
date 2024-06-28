@@ -25,4 +25,8 @@ class DocumentosNec extends Model
     {
         return $this->hasMany(EvidenciasCompetencias::class, 'documento_id');
     }
+    public function cursos()
+    {
+        return $this->belongsToMany(Curso::class, 'curso_documentosnec');
+    }
 }

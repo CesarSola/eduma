@@ -31,7 +31,18 @@
                             @endforeach
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label for="documentosnec_id">Estandar de Competencia</label>
+                        @foreach ($documentosnec as $estandar)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="documentosnec_id[]"
+                                    value="{{ $estandar->id }}" id="estandar{{ $estandar->id }}">
+                                <label class="form-check-label" for="estandar{{ $estandar->id }}">
+                                    {{ $estandar->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
                     <div class="form-group">
                         <label for="instructor">Instructor</label>
                         <input type="text" class="form-control" id="instructor" name="instructor">

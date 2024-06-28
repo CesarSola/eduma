@@ -18,8 +18,8 @@ class Curso extends Model
         'fecha_inicio',
         'fecha_final',
 
-         'costo',
-           'certification'
+        'costo',
+        'certification'
 
     ];
 
@@ -30,5 +30,9 @@ class Curso extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_curso');
+    }
+    public function documentosnec()
+    {
+        return $this->belongsToMany(DocumentosNec::class, 'curso_documentosnec');
     }
 }

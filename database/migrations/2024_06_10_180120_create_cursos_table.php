@@ -23,10 +23,17 @@ return new class extends Migration
             $table->string('instructor')->nullable();
             $table->integer('duration')->nullable();
             $table->string('modalidad')->nullable();
-            $table->string('fecha_inicio')->nullable();
-            $table->string('fecha_final')->nullable();
+            $table->date('fecha_inicio')->nullable();
+            $table->date('fecha_final')->nullable();
             $table->string('costo')->nullable();
             $table->string('certification')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('curso_documentosnec', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('curso_id')->constrained('cursos')->cascadeOnDelete();
+            $table->foreignId('documentosnec_id')->constrained('documentosnec')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -36,6 +43,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('curso_documentosnec');
         Schema::dropIfExists('cursos');
     }
 };

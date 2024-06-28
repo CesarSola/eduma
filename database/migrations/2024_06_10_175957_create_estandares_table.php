@@ -16,11 +16,6 @@ return new class extends Migration
             $table->string('numero');
             $table->string('name');
             $table->string('tipo');
-            $table->foreignId('documentosnec_id')
-                ->nullable()
-                ->constrained('documentosnec')
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
             $table->timestamps();
         });
     }
