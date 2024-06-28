@@ -25,6 +25,10 @@ class ComprobantePago extends Model
     {
         return $this->belongsTo(Estandares::class);
     }
+    public function curso()
+    {
+        return $this->belongsTo(Curso::class);
+    }
     public function validacionesComentarios()
     {
         return $this->hasMany(ValidacionesComentarios::class, 'comprobante_pago_id');

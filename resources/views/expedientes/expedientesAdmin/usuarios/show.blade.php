@@ -41,11 +41,16 @@
                             <h3 class="card-title">Ver <br>Documentos de Registro General</h3>
                         </div>
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                            <!-- Ajuste aquí -->
-                            <div class="text-center"> <!-- Ajuste aquí -->
-                                <a href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}"
-                                    class="btn btn-primary">Ver Documentos</a>
-                            </div>
+                            @if ($documentos->isNotEmpty())
+                                <div class="text-center">
+                                    <a href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}"
+                                        class="btn btn-primary">Ver Documentos</a>
+                                </div>
+                            @else
+                                <div style="text-align: center">
+                                    <p>No hay documentos disponibles para este usuario.</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -144,10 +149,13 @@
                         <h3 class="card-title">Validar <br>Comprobantes de pago Competencia</h3>
                     </div>
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                        <!-- Ajuste aquí -->
-                        <div class="text-center"> <!-- Ajuste aquí -->
-                            <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id]) }}"
-                                class="btn btn-primary">Ver Comprobante de Pago</a>
+                        <div class="text-center">
+                            @if ($comprobantesPago->isNotEmpty())
+                                <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id]) }}"
+                                    class="btn btn-primary">Ver Comprobante de Pago</a>
+                            @else
+                                <p>No hay comprobantes de pago de competencia para validar.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -157,7 +165,14 @@
                     <div class="card-header">
                         <h3 class="card-title">Validar <br>Comprobantes de pago Cursos</h3>
                     </div>
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <div class="text-center">
+                            @if ($comprobantesPago->isNotEmpty())
+                                <a href="" class="btn btn-primary">Ver Comprobante de Pago</a>
+                            @else
+                                <p>No hay comprobantes de pago de cursos para validar.</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,6 @@ use App\Models\ComprobantePago;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Curso;
-use App\Models\ComprobantePagoCurso;
 use App\Models\User;
 
 class RegistroCursoController extends Controller
@@ -61,7 +60,7 @@ class RegistroCursoController extends Controller
             $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
 
             // Guardar la ruta del comprobante de pago en la base de datos
-            $comprobante = new ComprobantePagoCurso();
+            $comprobante = new ComprobantePago();
             $comprobante->user_id = $user->id;
             $comprobante->curso_id = $selectedCursoId;
             $comprobante->comprobante_pago = $comprobantePagoPath;
