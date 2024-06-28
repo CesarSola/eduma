@@ -63,6 +63,7 @@ use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
+use App\Http\Controllers\EvidenciasUCControlle;
 use App\Http\Controllers\ValidarCoPController;
 
 //ruta de la carpeta registroGeneral
@@ -108,10 +109,10 @@ Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index']
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 //ruta evidenciasCU
-Route::resource('evidenciasCU', EvidenciasUEController::class);
-Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
-Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
-Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+Route::resource('evidenciasCU', EvidenciasUCControlle::class);
+Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
+Route::get('/evidenciasC/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
+Route::post('/evidenciasC/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
 // routes agregar cursos,competencias y documentos necesarios
 use App\Http\Controllers\DocumentosEcController;
 use App\Http\Controllers\CompetenciasAddController;

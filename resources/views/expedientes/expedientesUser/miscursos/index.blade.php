@@ -36,7 +36,7 @@
                             <div>
                                 <span style="font-weight: bold; color: #333;">{{ $curso->name }}</span> -
                                 {{ $curso->tipo }}
-                                <a href="{{ route('evidenciasCU.index', ['curso' => $curso->id]) }}"
+                                <a href="{{ route('evidenciasCU.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
                                     class="btn btn-primary btn-sm ml-2">Ver</a>
                             </div>
                             <span class="badge badge-primary badge-pill">Inscrito</span>

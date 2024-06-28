@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <div class="text-center text-white bg-success p-3 rounded shadow-sm">
-            <h1 class="mb-0">{{ $estandar->name }}</h1>
+            <h1 class="mb-0">{{ $cursos->name }}</h1>
         </div>
         <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary shadow-sm">Regresar</a>
     </div>
@@ -15,12 +15,13 @@
     <div class="container mt-4">
         @if ($documentos->isEmpty())
             <div class="alert alert-info shadow-sm" role="alert">
-                No hay documentos necesarios para este estándar.
+                No hay documentos necesarios para este curso.
             </div>
         @else
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios Como Evidencias para este EC
+                    <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios Como Evidencias para este
+                        Curso
                     </h6>
                     <div class="table-responsive">
                         <table class="table table-bordered mt-3">
@@ -40,7 +41,7 @@
                                             <a href="{{ Storage::url($documento->documento) }}" target="_blank"
                                                 class="btn btn-primary btn-sm shadow-sm">Ver</a>
                                             @if (!in_array($documento->id, $uploadedDocumentIds))
-                                                <a href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento' => $documento->id]) }}"
+                                                <a href="{{ route('evidenciasCU.show', ['id' => $cursos->id, 'documento' => $documento->id]) }}"
                                                     class="btn btn-success btn-sm shadow-sm">Subir</a>
                                             @endif
                                         </td>

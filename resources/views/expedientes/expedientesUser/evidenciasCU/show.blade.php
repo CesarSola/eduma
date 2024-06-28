@@ -7,7 +7,7 @@
         <div class="text-center text-white bg-success p-3 rounded">
             <h1>Subir Evidencia para {{ $documento->name }}</h1>
         </div>
-        <a href="{{ route('evidenciasEC.index', ['id' => $estandar->id, 'name' => $estandar->name]) }}"
+        <a href="{{ route('evidenciasCU.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
             class="btn btn-secondary">Regresar</a>
     </div>
 @stop
@@ -16,7 +16,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('evidenciasEC.upload', $documento->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('evidenciasCU.upload', $documento->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="documento">Seleccionar Documento</label>

@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curso;
 use App\Models\DocumentosNec;
-use App\Models\Estandares;
 use App\Models\EvidenciasCompetencias;
+use App\Models\EvidenciasCursos;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-
-class EvidenciasUEController extends Controller
+class EvidenciasUCControlle extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index($id, $name)
     {
-        $estandar = Estandares::find($id);
-        $documentos = $estandar->documentosnec;
-        $evidencias = EvidenciasCompetencias::where('estandar_id', $id)->where('user_id', auth()->id())->get();
+        $cursos = Curso::find($id);
+        $documentos = $cursos->documentosnec;
+        $evidencias = EvidenciasCursos::where('curso_id', $id)->where('user_id', auth()->id())->get();
 
         // Map document IDs to easily check if an evidence exists for a document
         $uploadedDocumentIds = $evidencias->pluck('documento_id')->toArray();
 
-        return view('expedientes.expedientesUser.evidenciasEC.index', compact('estandar', 'documentos', 'evidencias', 'uploadedDocumentIds'));
+        return view('expedientes.expedientesUser.evidenciasCU.index', compact('cursos', 'documentos', 'evidencias', 'uploadedDocumentIds'));
     }
 
 
@@ -33,26 +33,27 @@ class EvidenciasUEController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
-     * Store the uploaded evidence.
+     * Store a newly created resource in storage.
      */
+    public function store(Request $request)
+    {
+        //
+    }
 
     /**
      * Display the specified resource.
      */
     public function show($id, $documento_id)
     {
-        $estandar = Estandares::find($id);
+        $cursos = Curso::find($id);
         $documento = DocumentosNec::find($documento_id);
 
-        return view('expedientes.expedientesUser.evidenciasEC.show', compact('estandar', 'documento'));
+        return view('expedientes.expedientesUser.evidenciasCU.show', compact('cursos', 'documento'));
     }
-
-    /**
-     * Handle the document upload.
-     */
     public function upload(Request $request, $documento_id)
     {
         $request->validate([
@@ -66,42 +67,43 @@ class EvidenciasUEController extends Controller
 
         // Save the file in the specific directory
         $filePath = $request->file('documento')->storeAs(
-            'public/documents/evidence/competencias' . $userName,
+            'public/documents/evidence/curso' . $userName,
             $fileName
         );
 
         // Save the file information to the database
-        EvidenciasCompetencias::create([
+        EvidenciasCursos::create([
             'user_id' => auth()->id(),
-            'estandar_id' => $documento->estandares->first()->id,
+            'curso_id' => $documento->estandares->first()->id,
             'documento_id' => $documento_id,
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('evidenciasEC.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
+        return redirect()->route('evidenciasCU.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
             ->with('success', 'Documento subido correctamente');
     }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit(string $id)
     {
-        // Aquí podrías implementar la lógica para editar una evidencia si es necesario
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,)
+    public function update(Request $request, string $id)
     {
-        // Aquí podrías implementar la lógica para actualizar una evidencia si es necesario
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(string $id)
     {
-        // Aquí podrías implementar la lógica para eliminar una evidencia si es necesario
+        //
     }
 }
