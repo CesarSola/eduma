@@ -24,8 +24,8 @@
     <div class="container mt-4">
         <div class="container">
             @if ($competencias->isEmpty())
-                <div class="alert alert-info" role="alert">
-                    No tienes competencias inscritas.
+                <div class="alert alert-primary" role="alert">
+                    No tienes cursos inscritos.
                     <a class="btn btn-primary" href="{{ route('competenciaEC.index') }}">Ir a la pestaña de inscripción a un
                         curso</a>
                 </div>

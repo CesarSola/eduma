@@ -14,7 +14,9 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Lista de Documentos de {{ $nombreUsuario }}</div>
+                    <div class="card-title">
+                        <div class="card-header">Lista de Documentos de {{ $nombreUsuario }}</div>
+                    </div>
                     <div class="card-body">
                         <table class="table">
                             <thead>

@@ -108,7 +108,10 @@ Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index']
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 //ruta evidenciasCU
-
+Route::resource('evidenciasCU', EvidenciasUEController::class);
+Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
+Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
+Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 // routes agregar cursos,competencias y documentos necesarios
 use App\Http\Controllers\DocumentosEcController;
 use App\Http\Controllers\CompetenciasAddController;

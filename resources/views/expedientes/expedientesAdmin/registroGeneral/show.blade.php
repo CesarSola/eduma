@@ -29,17 +29,16 @@
                                     <div class="card-body header-flex">
                                         <div class="left-content">
                                             <div class="text-center">
-                                                <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="img-circle">
+                                                <h6 class="text-left mt-2">Nombres: {{ $registroGeneral->name }}
+                                                    {{ $registroGeneral->secondName }}</h6>
+                                                <h6 class="text-left mt-2">Apellidos:
+                                                    {{ $registroGeneral->paternalSurname }}
+                                                    {{ $registroGeneral->maternalSurname }}</h6>
+                                                <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $registroGeneral->name }}
-                                                {{ $registroGeneral->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos: {{ $registroGeneral->paternalSurname }}
-                                                {{ $registroGeneral->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
-                                        </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
+                                            <div class="right-content">
+                                                <span class="badge badge-info">Estatus: Activo</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +46,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-body">
                         @php
@@ -115,7 +113,7 @@
             </div>
         </div>
     </div>
-
+    </div>
 @stop
 @section('css')
     <style>

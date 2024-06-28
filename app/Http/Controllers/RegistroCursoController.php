@@ -70,7 +70,7 @@ class RegistroCursoController extends Controller
             // Guardar la relación en la tabla pivot
             $user->cursos()->syncWithoutDetaching([$selectedCursoId]);
 
-            return redirect()->route('curso.show', ['cursoId' => $selectedCursoId])->with('success', 'Comprobante de pago subido correctamente');
+            return redirect()->route('registroCurso.show', ['cursoId' => $selectedCursoId])->with('success', 'Comprobante de pago subido correctamente');
         } else {
             return redirect()->back()->with('error', 'No se seleccionó ningún archivo para subir');
         }
