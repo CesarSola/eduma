@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estandar_id');
+            $table->unsignedBigInteger('curso_id');
             $table->string('comprobante_pago');
             $table->json('estado')->nullable(); // Estado como JSON
             $table->timestamps();
@@ -22,6 +23,7 @@ return new class extends Migration
             // Claves foráneas
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('estandar_id')->references('id')->on('estandares')->onDelete('cascade');
+            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
     }
 

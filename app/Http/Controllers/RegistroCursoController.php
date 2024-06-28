@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ComprobantePago;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Curso;
@@ -27,12 +28,13 @@ class RegistroCursoController extends Controller
     {
         $curso = Curso::findOrFail($cursoId);
         $user = Auth::user();
-        $comprobanteExistente = ComprobantePagoCurso::where('user_id', $user->id)
+        $comprobanteExistente = ComprobantePago::where('user_id', $user->id)
             ->where('curso_id', $cursoId)
             ->first();
 
         return view('expedientes.expedientesUser.registroCurso.show', compact('curso', 'comprobanteExistente'));
     }
+
 
     /**
      * Store a newly created resource in storage.

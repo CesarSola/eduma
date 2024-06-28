@@ -77,15 +77,23 @@
                                         </div>
                                     </div>
                                 </form>
+                            @else
+                                <div class="text-center">
+                                    <p>No hay comprobantes de pago por validar.</p>
+                                </div>
                             @endif
+                        @else
+                            <div class="text-center">
+                                <p>No hay comprobantes de pago por validar.</p>
+                            </div>
                         @endif
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @stop
+
 @section('css')
     <style>
         .header-flex {
@@ -155,7 +163,6 @@
         }
     </style>
 @stop
-
 
 @section('js')
     <script>

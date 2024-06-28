@@ -48,8 +48,8 @@
                                     @if ($comprobanteExistente)
                                         <span class="text-success">Inscrito</span>
                                     @else
-                                        <a href="{{ route('registroCurso.show', ['curso' => $curso->id]) }}"
-                                            class="btn btn-primary">Inscribirse</a>
+                                        a href="{{ route('registroCurso.show', ['curso' => $curso->id]) }}"
+                                        class="btn btn-primary">Inscribirse</a>
                                     @endif
                                     @if ($inscrito && $curso->id === $cursoInscrito->id)
                                         <div class="card-footer">
