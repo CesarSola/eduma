@@ -37,7 +37,14 @@
                                                 <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
                                             </div>
                                             <div class="right-content">
-                                                <span class="badge badge-info">Estatus: Activo</span>
+                                                @if ($estadoDocumentos['sin_documentos'])
+                                                    <span class="badge badge-info">Estatus: Sin documentos por
+                                                        validar</span>
+                                                @elseif (!empty($estadoDocumentos['en_proceso']))
+                                                    <span class="badge badge-warning">Estatus: En Proceso</span>
+                                                @else
+                                                    <span class="badge badge-success">Estatus: Validado</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -128,8 +135,12 @@
         }
 
         .right-content {
-            width: 30%;
             text-align: right;
+        }
+
+        .right-content div {
+            margin-bottom: 5px;
+            /* Espacio entre cada badge */
         }
 
         .card-title {

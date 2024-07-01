@@ -23,7 +23,16 @@
                         <p>Edad: {{ $usuario->age }} años</p>
                     </div>
                     <div class="right-content">
-                        <span class="badge badge-info">Estatus: Activo</span>
+                        <!-- Mostrar el estatus de la competencia -->
+                        <span class="badge badge-info">Estatus:
+                            @foreach ($competencias as $competencia)
+                                @if ($competencia->id == $competencia->id)
+                                    Activo
+                                @else
+                                    Inactivo
+                                @endif
+                            @endforeach
+                        </span>
                     </div>
                 </div>
             </div>
@@ -47,7 +56,7 @@
                             <td>{{ $competencia->name }}</td>
                             <td>{{ $competencia->tipo }}</td>
                             <td>
-                                <a href="{{ route('evidenciasCO.index', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
+                                <a href="{{ route('evidenciasACO.index', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
                                     class="btn btn-primary">Ver Evidencias</a>
                             </td>
                         </tr>
@@ -76,6 +85,15 @@
             padding: 20px;
             border: 1px solid #5cb8a9;
             border-radius: 5px;
+        }
+
+        .right-content {
+            text-align: right;
+        }
+
+        .right-content div {
+            margin-bottom: 5px;
+            /* Espacio entre cada badge */
         }
 
         .text-center {

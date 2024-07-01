@@ -31,10 +31,20 @@ class ExpedientesUsuariosController extends Controller
         $documentos = $usuariosAdmin->documentos;
         $comprobantesPago = $usuariosAdmin->comprobantes->whereNotNull('comprobante_pago');
         $estandares = $usuariosAdmin->estandares;
-        $cursos = $usuariosAdmin->cursos; // Asegúrate de incluir esta línea
+        $cursos = $usuariosAdmin->cursos;
 
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesPago', 'estandares', 'cursos'));
+        // Determinar si todos los documentos están completos
+        $documentosCompletos = true;
+        foreach ($documentos as $documento) {
+            if (!$documento->completado) { // Asegúrate de ajustar esto según tu lógica de completitud de documentos
+                $documentosCompletos = false;
+                break;
+            }
+        }
+
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesPago', 'estandares', 'cursos', 'documentosCompletos'));
     }
+
 
 
     /**

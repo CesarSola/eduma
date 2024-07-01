@@ -51,21 +51,33 @@ class DocumentosController extends Controller
         $registroGeneral = User::with(['documentos', 'comprobantes'])->findOrFail($id);
 
         // Filtrar documentos específicos
-        $documentos = $registroGeneral->documentos->filter(function ($documento) {
-            return $documento->validacionesComentarios->isEmpty() || $documento->validacionesComentarios->contains(function ($validacion) {
-                return $validacion->tipo_validacion != 'validar';
-            });
-        });
+        $documentos = $registroGeneral->documentos;
 
-        // Filtrar comprobante de pago
-        $comprobantePago = $registroGeneral->comprobantes->filter(function ($comprobante) {
-            return $comprobante->validacionesComentarios->isEmpty() || $comprobante->validacionesComentarios->contains(function ($validacion) {
-                return $validacion->tipo_validacion != 'validar';
-            });
-        })->first();
+        // Determinar el estado de los documentos
+        $estadoDocumentos = [
+            'validado' => [],
+            'en_proceso' => [],
+            'sin_documentos' => true,
+        ];
 
-        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'comprobantePago'));
+        foreach ($documentos as $documento) {
+            $documentoEstado = json_decode($documento->estado, true) ?? [];
+
+            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
+                if (isset($documento->$documentoNombre)) {
+                    $estadoDocumentos['sin_documentos'] = false;
+                    if (isset($documentoEstado[$documentoNombre]) && $documentoEstado[$documentoNombre] == 'validar') {
+                        $estadoDocumentos['validado'][] = $documentoNombre;
+                    } else {
+                        $estadoDocumentos['en_proceso'][] = $documentoNombre;
+                    }
+                }
+            }
+        }
+
+        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'estadoDocumentos'));
     }
+
 
     public function updateDocumento(Request $request, $id, $documentoNombre)
     {

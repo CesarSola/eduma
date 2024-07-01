@@ -28,7 +28,27 @@
                         </button>
                     </div>
                     <div class="right-content">
-                        <span class="badge badge-info">Estatus: Activo</span>
+                        @if ($documentos->isNotEmpty())
+                            @if ($documentosCompletos)
+                                <div><span class="badge badge-success">Documentos Generales: Completos</span></div>
+                            @else
+                                <div><span class="badge badge-warning">Documentos Generales: Incompletos</span></div>
+                            @endif
+                        @else
+                            <div><span class="badge badge-danger">Documentos Generales: Ninguno</span></div>
+                        @endif
+
+                        @if ($cursos->isNotEmpty())
+                            <div><span class="badge badge-success">Cursos: Inscrito</span></div>
+                        @else
+                            <div><span class="badge badge-danger">Cursos: Ninguno</span></div>
+                        @endif
+
+                        @if ($estandares->isNotEmpty())
+                            <div><span class="badge badge-success">Competencias: Inscrito</span></div>
+                        @else
+                            <div><span class="badge badge-danger">Competencias: Ninguno</span></div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -168,7 +188,8 @@
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <div class="text-center">
                             @if ($comprobantesPago->isNotEmpty())
-                                <a href="" class="btn btn-primary">Ver Comprobante de Pago</a>
+                                <a href="{{ route('validarCuP.show', ['id' => $usuariosAdmin->id]) }}"
+                                    class="btn btn-primary">Ver Comprobante de Pago</a>
                             @else
                                 <p>No hay comprobantes de pago de cursos para validar.</p>
                             @endif
@@ -193,8 +214,12 @@
         }
 
         .right-content {
-            width: 30%;
             text-align: right;
+        }
+
+        .right-content div {
+            margin-bottom: 5px;
+            /* Espacio entre cada badge */
         }
 
         .card-title {

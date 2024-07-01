@@ -65,6 +65,7 @@ use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\EvidenciasUCControlle;
 use App\Http\Controllers\ValidarCoPController;
+use App\Http\Controllers\ValidarCuPController;
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
@@ -81,10 +82,13 @@ Route::resource('evidenciasACU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
-Route::resource('evidenciasCO', EvidenciasCompetenciasController::class);
+Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
 //rutas para validar comprobante de pagos competencias
 Route::get('validar-cop/{id}', [ValidarCoPController::class, 'show'])->name('validarCoP.show');
 Route::put('/validar-cop/{id}/update', [ValidarCoPController::class, 'update'])->name('validarCoP.update');
+//rutas para validar comprobante de pagos cursos
+Route::get('validar-cup/{id}', [ValidarCuPController::class, 'show'])->name('validarCuP.show');
+Route::put('/validar-cup/{id}/update', [ValidarCuPController::class, 'update'])->name('validarCuP.update');
 
 
 //rutas del expediente Usuario

@@ -26,9 +26,6 @@
                                 {{ $usuario->maternalSurname }}</h6>
                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         </div>
-                        <div class="right-content">
-                            <span class="badge badge-info">Estatus: Activo</span>
-                        </div>
                     </div>
                 </div>
             </div>

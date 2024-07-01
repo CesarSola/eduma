@@ -32,7 +32,21 @@
                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         </div>
                         <div class="right-content">
-                            <span class="badge badge-info">Estatus: Activo</span>
+                            @if ($comprobantePago)
+                                @php
+                                    $estado = json_decode($comprobantePago->estado, true) ?? [];
+                                    $status = isset($estado['comprobante_pago']) ? $estado['comprobante_pago'] : null;
+                                @endphp
+                                @if ($status == 'validar')
+                                    <span class="badge badge-success">Validado</span>
+                                @elseif ($status == 'rechazar')
+                                    <span class="badge badge-danger">Rechazado</span>
+                                @else
+                                    <span class="badge badge-warning">En proceso</span>
+                                @endif
+                            @else
+                                <span class="badge badge-warning">Sin documentos por validar</span>
+                            @endif
                         </div>
                     </div>
                 </div>

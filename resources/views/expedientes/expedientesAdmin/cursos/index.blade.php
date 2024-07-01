@@ -23,7 +23,16 @@
                         <p>Edad: {{ $usuario->age }} años</p>
                     </div>
                     <div class="right-content">
-                        <span class="badge badge-info">Estatus: Activo</span>
+                        <!-- Mostrar el estatus de la competencia -->
+                        <span class="badge badge-info">Estatus:
+                            @foreach ($cursos as $curso)
+                                @if ($curso->id == $curso->id)
+                                    Activo
+                                @else
+                                    Inactivo
+                                @endif
+                            @endforeach
+                        </span>
                     </div>
                 </div>
             </div>
@@ -91,6 +100,15 @@
             padding: 20px;
             border: 1px solid #5cb8a9;
             border-radius: 5px;
+        }
+
+        .right-content {
+            text-align: right;
+        }
+
+        .right-content div {
+            margin-bottom: 5px;
+            /* Espacio entre cada badge */
         }
 
         .text-center {

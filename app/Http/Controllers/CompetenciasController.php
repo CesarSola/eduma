@@ -21,12 +21,11 @@ class CompetenciasController extends Controller
         $usuario = User::find($userId) ?? auth()->user();
 
         // Obtener todas las competencias asociadas al usuario
-        $competencias = $usuario->estandares;
+        $competencias = Estandares::all();
 
         // Renderizar la vista del expediente de competencias del usuario
         return view('expedientes.expedientesAdmin.competencias.index', compact('usuario', 'competencias'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
