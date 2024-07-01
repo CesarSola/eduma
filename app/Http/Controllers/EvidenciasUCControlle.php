@@ -74,12 +74,12 @@ class EvidenciasUCControlle extends Controller
         // Save the file information to the database
         EvidenciasCursos::create([
             'user_id' => auth()->id(),
-            'curso_id' => $documento->estandares->first()->id,
+            'curso_id' => $documento->cursos->first()->id,
             'documento_id' => $documento_id,
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('evidenciasCU.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
+        return redirect()->route('evidenciasCU.index', ['id' => $documento->cursos->first()->id, 'name' => $documento->cursos->first()->name])
             ->with('success', 'Documento subido correctamente');
     }
 

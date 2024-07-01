@@ -77,7 +77,7 @@ Route::put('/registro-general/{id}/update-documento/{documento}', [DocumentosCon
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos
-Route::resource('evidenciasCU', EvidenciasCursosController::class);
+Route::resource('evidenciasACU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
@@ -111,8 +111,8 @@ Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'u
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
-Route::get('/evidenciasC/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
-Route::post('/evidenciasC/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
+Route::get('/evidenciasCU/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
+Route::post('/evidenciasCU/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
 // routes agregar cursos,competencias y documentos necesarios
 use App\Http\Controllers\DocumentosEcController;
 use App\Http\Controllers\CompetenciasAddController;

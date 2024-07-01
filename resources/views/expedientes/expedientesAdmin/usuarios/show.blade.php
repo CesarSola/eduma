@@ -86,14 +86,14 @@
                             @if ($cursos->isNotEmpty())
                                 <ul class="list-group flex-grow-1 overflow-auto">
                                     @foreach ($cursos as $curso)
-                                        <li class="list-group-item">{{ $curso->nombre }}</li>
+                                        <li class="list-group-item">{{ $curso->name }}</li>
                                     @endforeach
                                 </ul>
                                 <a href="{{ route('cursosExpediente.index', ['user_id' => $usuariosAdmin->id]) }}"
                                     class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                             @else
                                 <div style="text-align: center">
-                                    <p>No hay cursos disponibles para este usuario.</p>
+                                    <p>No hay estándares disponibles para este usuario.</p>
                                 </div>
                             @endif
                         </div>

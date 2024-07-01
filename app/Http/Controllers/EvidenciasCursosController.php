@@ -24,9 +24,17 @@ class EvidenciasCursosController extends Controller
             $usuario = auth()->user();
         }
 
+        // Cargar las relaciones necesarias para los cursos y sus documentos de evidencia
+        $cursos = $usuario->cursos()->with(['documentosnec' => function ($query) use ($usuario) {
+            $query->whereHas('evidencias', function ($query) use ($usuario) {
+                $query->where('user_id', $usuario->id);
+            });
+        }])->get();
+
         // Renderizar la vista de las evidencias de cursos con los datos del usuario
-        return view('expedientes.expedientesAdmin.cursos.evidencias', compact('usuario'));
+        return view('expedientes.expedientesAdmin.cursos.evidencias', compact('usuario', 'cursos'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
