@@ -131,35 +131,32 @@
                         <h3 class="card-title">Validar <br>Documentos de Registro General</h3>
                     </div>
                     <div class="card-body d-flex flex-column">
-                        @if ($documentos->isNotEmpty() || $comprobantesPago->isNotEmpty())
-                            <ul class="list-group flex-grow-1 overflow-auto">
-                                @foreach ($documentos as $documento)
-                                    <li class="list-group-item">
-                                        {{ basename($documento->ine_ife) }}
-                                    </li>
-                                    <br>
-                                    <li class="list-group-item">
-                                        {{ basename($documento->comprobante_domiciliario) }}
-                                    </li>
-                                    <br>
-                                    <li class="list-group-item">
-                                        {{ basename($documento->foto) }}
-                                    </li>
-                                    <br>
-                                    <li class="list-group-item">
-                                        {{ basename($documento->curp) }}
-                                    </li>
-                                    <br>
-                                @endforeach
-                            </ul>
+                        <ul class="list-group flex-grow-1 overflow-auto">
+                            @foreach ($documentos as $documento)
+                                <li class="list-group-item">
+                                    {{ basename($documento->ine_ife) }}
+                                </li>
+                                <br>
+                                <li class="list-group-item">
+                                    {{ basename($documento->comprobante_domiciliario) }}
+                                </li>
+                                <br>
+                                <li class="list-group-item">
+                                    {{ basename($documento->foto) }}
+                                </li>
+                                <br>
+                                <li class="list-group-item">
+                                    {{ basename($documento->curp) }}
+                                </li>
+                                <br>
+                            @endforeach
+                        </ul>
 
-                            <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                class="btn btn-primary">Ver</a>
-                        @else
-                            <div style="text-align: center">
-                                <p>No hay documentos disponibles para este usuario.</p>
-                            </div>
-                        @endif
+                        <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}" class="btn btn-primary">Ver</a>
+                        <div style="text-align: center">
+                            <p>No hay documentos disponibles para este usuario.</p>
+                        </div>
+
                     </div>
                 </div>
             </div>

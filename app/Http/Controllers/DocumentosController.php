@@ -51,33 +51,14 @@ class DocumentosController extends Controller
         $registroGeneral = User::with(['documentos'])->findOrFail($id);
 
         // Filtrar documentos específicos
-        $documentos = $registroGeneral->documentos;
+        $documentos = $registroGeneral->documentos->filter(function ($documento) {
+            return $documento->validacionesComentarios->isEmpty() || $documento->validacionesComentarios->contains(function ($validacion) {
+                return $validacion->tipo_validacion != 'validar';
+            });
+        });
 
-        // Determinar el estado de los documentos
-        $estadoDocumentos = [
-            'validado' => [],
-            'en_proceso' => [],
-            'sin_documentos' => true,
-        ];
-
-        foreach ($documentos as $documento) {
-            $documentoEstado = json_decode($documento->estado, true) ?? [];
-
-            foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre) {
-                if (isset($documento->$documentoNombre)) {
-                    $estadoDocumentos['sin_documentos'] = false;
-                    if (isset($documentoEstado[$documentoNombre]) && $documentoEstado[$documentoNombre] == 'validar') {
-                        $estadoDocumentos['validado'][] = $documentoNombre;
-                    } else {
-                        $estadoDocumentos['en_proceso'][] = $documentoNombre;
-                    }
-                }
-            }
-        }
-
-        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos', 'estadoDocumentos'));
+        return view('expedientes.expedientesAdmin.registroGeneral.show', compact('registroGeneral', 'documentos'));
     }
-
 
     public function updateDocumento(Request $request, $id, $documentoNombre)
     {
