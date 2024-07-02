@@ -21,7 +21,8 @@ class CreateDocumentosUserTable extends Migration
             $table->json('estado')->nullable(); // Estado como JSON
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // Eliminar temporalmente la restricción de clave foránea
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,7 @@ class CreateDocumentosUserTable extends Migration
      */
     public function down(): void
     {
+        // Eliminar la tabla sin preocuparse por la restricción de clave foránea aquí
         Schema::dropIfExists('documentos_user');
     }
 }

@@ -24,7 +24,11 @@ return new class extends Migration
             // Definir las claves foráneas
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('documento_user_id')->references('id')->on('documentos_user')->onDelete('cascade');
-            $table->foreign('comprobante_pago_id')->references('id')->on('comprobantes_pago')->onDelete('cascade');
+            // Cambiar la clave foránea a comprobantes_competencias
+            $table->foreign('comprobante_pago_id')->references('id')->on('comprobantes_competencias')->onDelete('cascade');
+
+            // Si necesitas mantener compatibilidad con la tabla comprobantes_pago existente:
+            // $table->foreign('comprobante_pago_id')->references('id')->on('comprobantes_pago')->onDelete('cascade');
         });
     }
 

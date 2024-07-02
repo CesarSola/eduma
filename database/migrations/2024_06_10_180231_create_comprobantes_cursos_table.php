@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comprobantes_pago', function (Blueprint $table) {
+        Schema::create('comprobantes_cursos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('estandar_id');
             $table->unsignedBigInteger('curso_id');
             $table->string('comprobante_pago');
             $table->json('estado')->nullable(); // Estado como JSON
@@ -22,7 +21,6 @@ return new class extends Migration
 
             // Claves foráneas
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('estandar_id')->references('id')->on('estandares')->onDelete('cascade');
             $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comprobantes_pago');
+        Schema::dropIfExists('comprobantes_cursos');
     }
 };
