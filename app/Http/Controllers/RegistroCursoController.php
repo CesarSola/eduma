@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ComprobantePago;
+use App\Models\ComprobantesCU;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Curso;
@@ -27,7 +28,7 @@ class RegistroCursoController extends Controller
     {
         $curso = Curso::findOrFail($cursoId);
         $user = Auth::user();
-        $comprobanteExistente = ComprobantePago::where('user_id', $user->id)
+        $comprobanteExistente = ComprobantesCU::where('user_id', $user->id)
             ->where('curso_id', $cursoId)
             ->first();
 
@@ -53,28 +54,26 @@ class RegistroCursoController extends Controller
         // Nombre del usuario y del curso para el almacenamiento del archivo
         $userName = str_replace(' ', '_', $user->name);
         $cursoName = str_replace(' ', '_', $curso->name);
-
+        $user = User::with('cursos')->findOrFail($user->id); // Asegúrate de que 'cursos' coincida con el nombre de la relación definida en el modelo User
         // Validar y guardar el comprobante de pago
         if ($request->hasFile('comprobante_pago')) {
-            $comprobantePago = $request->file('comprobante_pago');
-            $comprobantePagoName = 'Comprobante_Pago_' . $cursoName . '.' . $comprobantePago->extension();
-            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
+            $comprobanteCU = $request->file('comprobante_pago');
+            $comprobantePagoName = 'Comprobante_Pago_' . $cursoName . '.' . $comprobanteCU->extension();
+            $comprobantePagoPath = $comprobanteCU->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
 
             // Crear y guardar el registro del comprobante de pago
-            $comprobante = new ComprobantePago();
-            $comprobante->user_id = $user->id;
-            $comprobante->curso_id = $selectedCursoId;
-            $comprobante->comprobante_pago = $comprobantePagoPath;
+            $comprobanteCurso = new ComprobantesCU();
+            $comprobanteCurso->user_id = $user->id;
+            $comprobanteCurso->curso_id = $selectedCursoId;
+            $comprobanteCurso->comprobante_pago = $comprobantePagoPath;
+            $comprobanteCurso->estado = 'pendiente';
 
-            // Asignar el tipo como 'curso' al guardar el comprobante
-            $comprobante->tipo = 'curso';
-
-            $comprobante->save();
+            $comprobanteCurso->save();
 
             // Guardar la relación en la tabla pivot (si es necesario)
-            // $user->cursos()->syncWithoutDetaching([$selectedCursoId]);
+            $user->cursos()->syncWithoutDetaching([$selectedCursoId]);
 
-            return redirect()->route('registroCurso.show', ['cursoId' => $selectedCursoId])->with('success', 'Comprobante de pago subido correctamente');
+            return redirect()->route('registroCurso.show', ['registroCurso' => $selectedCursoId])->with('success', 'Comprobante de pago subido correctamente');
         } else {
             return redirect()->back()->with('error', 'No se seleccionó ningún archivo para subir');
         }

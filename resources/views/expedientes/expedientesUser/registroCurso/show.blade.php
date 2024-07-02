@@ -33,7 +33,8 @@
                 <div class="card-body text-center">
                     @if ($comprobanteExistente)
                         <p>Comprobante de pago subido correctamente.</p>
-                        <a href="{{ Storage::url($comprobanteExistente->comprobante_pago) }}" class="btn btn-primary">Ver Comprobante</a>
+                        <a href="{{ Storage::url($comprobanteExistente->comprobante_pago) }}" class="btn btn-primary">Ver
+                            Comprobante</a>
                     @else
                         <!-- Formulario para subir el comprobante de pago -->
                         <form action="{{ route('registroCurso.store') }}" method="POST" enctype="multipart/form-data">
@@ -51,8 +52,7 @@
         </div>
 
         <div class="d-flex justify-content-between mt-3">
-            <a href="" class="btn btn-success">Evidencias</a>
-            <a href="{{ route('registroCurso.index') }}" class="btn btn-secondary">Volver</a>
+            <a href="{{ route('misCursos.index') }}" class="btn btn-secondary">Ir a Mis Cursos</a>
         </div>
     </div>
 @stop

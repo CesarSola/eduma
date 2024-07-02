@@ -7,7 +7,7 @@
         <div class="text-center text-white bg-success p-3 rounded shadow-sm">
             <h1 class="mb-0">{{ $cursos->name }}</h1>
         </div>
-        <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary shadow-sm">Regresar</a>
+        <a href="{{ route('misCursos.index') }}" class="btn btn-secondary shadow-sm">Regresar</a>
     </div>
 @stop
 

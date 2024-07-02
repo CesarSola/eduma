@@ -14,7 +14,6 @@ class ComprobantesCU extends Model
         'curso_id',
         'comprobante_pago',
         'estado',
-        'tipo'
     ];
     public function user()
     {

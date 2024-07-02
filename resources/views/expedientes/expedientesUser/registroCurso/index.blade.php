@@ -28,7 +28,7 @@
                     @foreach ($cursos as $curso)
                         @php
                             $comprobanteExistente = $usuario
-                                ->comprobantes()
+                                ->comprobantesCU()
                                 ->where('curso_id', $curso->id)
                                 ->first();
 

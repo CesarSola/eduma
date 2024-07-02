@@ -52,8 +52,7 @@
         </div>
 
         <div class="d-flex justify-content-between mt-3">
-            <a href="" class="btn btn-success">Evidencias</a>
-            <a href="{{ route('competenciaEC.index') }}" class="btn btn-secondary">Volver</a>
+            <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary">Ir a Mis Competencias</a>
         </div>
     </div>
 @stop

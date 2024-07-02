@@ -14,7 +14,6 @@ class ComprobantesCO extends Model
         'estandar_id',
         'comprobante_pago',
         'estado',
-        'tipo'
     ];
 
     public function user()

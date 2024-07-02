@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ComprobantePago;
+use App\Models\ComprobantesCO;
 use App\Models\Estandares;
 use App\Models\User;
 
@@ -26,7 +26,7 @@ class RegistroECController extends Controller
     {
         $competencia = Estandares::findOrFail($competenciaEC);
         $user = Auth::user();
-        $comprobanteExistente = ComprobantePago::where('user_id', $user->id)
+        $comprobanteExistente = ComprobantesCO::where('user_id', $user->id)
             ->where('estandar_id', $competenciaEC)
             ->first();
 
@@ -51,26 +51,25 @@ class RegistroECController extends Controller
         // Nombre del usuario y de la competencia para el almacenamiento del archivo
         $userName = str_replace(' ', '_', $user->name);
         $estandarName = str_replace(' ', '_', $estandar->name);
+        // Obtener el usuario con sus relaciones cargadas
+        $user = User::with('estandares')->findOrFail($user->id); // Asegúrate de que 'estandares' coincida con el nombre de la relación definida en el modelo User
 
         // Validar y guardar el comprobante de pago
         if ($request->hasFile('comprobante_pago')) {
-            $comprobantePago = $request->file('comprobante_pago');
-            $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobantePago->extension();
-            $comprobantePagoPath = $comprobantePago->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
+            $comprobante = $request->file('comprobante_pago');
+            $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobante->extension();
+            $comprobantePagoPath = $comprobante->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
 
             // Crear y guardar el registro del comprobante de pago
-            $comprobante = new ComprobantePago();
-            $comprobante->user_id = $user->id;
-            $comprobante->estandar_id = $selectedECId;
-            $comprobante->comprobante_pago = $comprobantePagoPath;
+            $comprobanteCompetencia = new ComprobantesCO();
+            $comprobanteCompetencia->user_id = $user->id;
+            $comprobanteCompetencia->estandar_id = $selectedECId;
+            $comprobanteCompetencia->comprobante_pago = $comprobantePagoPath;
+            $comprobanteCompetencia->estado = 'pendiente'; // Puedes ajustar el estado inicial según sea necesario
 
-            // Asignar el tipo como 'competencia' al guardar el comprobante
-            $comprobante->tipo = 'competencia';
-
-            $comprobante->save();
-
-            // Guardar la relación en la tabla pivot (si es necesario)
-            // $user->estandares()->syncWithoutDetaching([$selectedECId]);
+            $comprobanteCompetencia->save();
+            // Guardar la relación en la tabla pivot
+            $user->estandares()->syncWithoutDetaching([$selectedECId]);
 
             return redirect()->route('competenciaEC.show', ['competenciaEC' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
         } else {

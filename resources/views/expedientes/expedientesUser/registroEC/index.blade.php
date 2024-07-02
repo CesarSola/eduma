@@ -28,7 +28,7 @@
                     @foreach ($competencias as $competencia)
                         @php
                             $comprobanteExistente = $usuario
-                                ->comprobantes()
+                                ->comprobantesCO()
                                 ->where('estandar_id', $competencia->id)
                                 ->first();
 

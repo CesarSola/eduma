@@ -18,7 +18,7 @@ class MisCompetenciasController extends Controller
     public function index()
     {
         $usuario = User::findOrFail(auth()->user()->id);
-        $competencias = $usuario->estandares()->with('comprobantePago')->get();
+        $competencias = $usuario->estandares()->with('comprobantesCO')->get();
 
         return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'usuario'));
     }

@@ -29,9 +29,13 @@ class Estandares extends Model
 
     // Estandares.php
 
-    public function comprobantePago()
+    public function comprobantesCO()
     {
-        return $this->hasOne(ComprobantePago::class, 'estandar_id', 'id');
+        return $this->hasOne(comprobantesCO::class, 'estandar_id', 'id');
+    }
+    public function comprobantesCU()
+    {
+        return $this->hasOne(comprobantesCU::class, 'curso_id', 'id');
     }
 
     public function users()
