@@ -66,7 +66,7 @@ class RegistroCursoController extends Controller
             $comprobanteCurso->user_id = $user->id;
             $comprobanteCurso->curso_id = $selectedCursoId;
             $comprobanteCurso->comprobante_pago = $comprobantePagoPath;
-            $comprobanteCurso->estado = 'pendiente';
+            $comprobanteCurso->tipo_validacion = 'pendiente';
 
             $comprobanteCurso->save();
 

@@ -151,7 +151,6 @@
                                 <br>
                             @endforeach
                         </ul>
-
                         <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}" class="btn btn-primary">Ver</a>
                         <div style="text-align: center">
                             <p>No hay documentos disponibles para este usuario.</p>
@@ -168,8 +167,8 @@
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <div class="text-center">
                             @if ($comprobantesCO->isNotEmpty())
-                                <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id]) }}"
-                                    class="btn btn-primary">Ver Comprobante de Pago</a>
+                                <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}" class="btn btn-primary">Ver
+                                    Comprobante de Pago</a>
                             @else
                                 <p>No hay comprobantes de pago de competencia para validar.</p>
                             @endif

@@ -25,42 +25,48 @@
                         $usuario = Auth::user();
                         $inscrito = false;
                     @endphp
-                    @foreach ($competencias as $competencia)
-                        @php
-                            $comprobanteExistente = $usuario
-                                ->comprobantesCO()
-                                ->where('estandar_id', $competencia->id)
-                                ->first();
+                    @if ($usuario)
+                        @foreach ($competencias as $competencia)
+                            @php
+                                $comprobanteExistente = $usuario
+                                    ->comprobantesCO()
+                                    ->where('estandar_id', $competencia->id)
+                                    ->first();
 
-                            if ($comprobanteExistente) {
-                                $inscrito = true;
-                                $competenciaInscrita = $competencia;
-                            }
-                        @endphp
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">{{ $competencia->numero }} - {{ $competencia->name }}
-                                            ({{ $competencia->tipo }})
-                                        </h6>
-                                    </div>
-                                    @if ($comprobanteExistente)
-                                        <span class="badge badge-success badge-pill">Inscrito</span>
-                                    @else
-                                        <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                            class="btn btn-primary">Inscribirse</a>
-                                    @endif
-                                    @if ($inscrito && $competencia->id === $competenciaInscrita->id)
-                                        <div class="card-footer">
-                                            <a href="{{ route('miscompetencias.index') }}" class="btn btn-primary">Ir a Mis
-                                                Competencias</a>
+                                if ($comprobanteExistente) {
+                                    $inscrito = true;
+                                    $competenciaInscrita = $competencia;
+                                }
+                            @endphp
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">{{ $competencia->numero }} -
+                                                {{ $competencia->name }}
+                                                ({{ $competencia->tipo }})
+                                            </h6>
                                         </div>
-                                    @endif
+                                        @if ($comprobanteExistente)
+                                            <span class="badge badge-success badge-pill">Inscrito</span>
+                                        @else
+                                            <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                                class="btn btn-primary">Inscribirse</a>
+                                        @endif
+                                        @if ($inscrito && $competencia->id === $competenciaInscrita->id)
+                                            <div class="card-footer">
+                                                <a href="{{ route('miscompetencias.index') }}" class="btn btn-primary">Ir a
+                                                    Mis
+                                                    Competencias</a>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        <h6 class="text-center">Debe estar autenticado para ver las competencias.</h6>
+                    @endif
                 @endif
             </div>
         </div>

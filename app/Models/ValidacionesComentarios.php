@@ -12,9 +12,14 @@ class ValidacionesComentarios extends Model
     protected $fillable = [
         'user_id',
         'documento_user_id',
-        'comprobante_pago_id',
+        'comprobanteCO_id',
+        'comprobanteCU_id',
         'tipo_documento',
         'tipo_validacion',
         'comentario',
     ];
+    public function comprobanteCO()
+    {
+        return $this->belongsTo(ComprobantesCO::class, 'comprobanteCO_id');
+    }
 }

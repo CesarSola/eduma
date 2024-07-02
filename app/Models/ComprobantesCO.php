@@ -13,7 +13,7 @@ class ComprobantesCO extends Model
         'user_id',
         'estandar_id',
         'comprobante_pago',
-        'estado',
+        'tipo_validacion',
     ];
 
     public function user()
@@ -31,6 +31,6 @@ class ComprobantesCO extends Model
     }
     public function validacionesComentarios()
     {
-        return $this->hasMany(ValidacionesComentarios::class, 'comprobante_pago_id');
+        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCO_id');
     }
 }

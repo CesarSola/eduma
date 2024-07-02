@@ -65,7 +65,7 @@ class RegistroECController extends Controller
             $comprobanteCompetencia->user_id = $user->id;
             $comprobanteCompetencia->estandar_id = $selectedECId;
             $comprobanteCompetencia->comprobante_pago = $comprobantePagoPath;
-            $comprobanteCompetencia->estado = 'pendiente'; // Puedes ajustar el estado inicial según sea necesario
+            // Puedes ajustar el estado inicial según sea necesario
 
             $comprobanteCompetencia->save();
             // Guardar la relación en la tabla pivot

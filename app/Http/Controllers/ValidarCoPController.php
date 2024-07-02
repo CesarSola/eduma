@@ -3,64 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ComprobantePago;
 use App\Models\ComprobantesCO;
 use App\Models\ValidacionesComentarios;
 use Illuminate\Http\Request;
 
 class ValidarCoPController extends Controller
 {
+    // Método para mostrar la vista de revisión de comprobantes de pago
     public function show($id)
     {
+        // Obtener todos los comprobantes de pago del usuario
         $usuario = User::findOrFail($id);
-        // Encuentra el comprobante de pago más reciente relacionado con el tipo especificado
-        $comprobanteCO = ComprobantesCO::where('user_id', $id)->first(); // Asegúrate de obtener el primer resultado correctamente
 
-        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuario', 'comprobanteCO'));
+        // Filtrar comprobantes específicos que necesitan revisión
+        $comprobantes = $usuario->comprobantesCO->filter(function ($comprobante) {
+            return $comprobante->validacionesComentarios->isEmpty() || $comprobante->validacionesComentarios->contains(function ($validacion) {
+                return $validacion->tipo_validacion != 'validar';
+            });
+        });
+
+        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuario', 'comprobantes'));
     }
 
-
-
-    public function update(Request $request, $id)
+    // Método para actualizar el estado de validación de un comprobante de pago
+    public function updateComprobante(Request $request, $id, $comprobanteId)
     {
         $usuario = User::findOrFail($id);
-        $estandarId = $request->input('estandar_id'); // Asumiendo que recibes el ID del estándar
-        $cursoId = $request->input('curso_id'); // Asumiendo que recibes el ID del curso
+        $comprobante = ComprobantesCO::findOrFail($comprobanteId);
 
-        // Validar y procesar el archivo subido
-        if ($request->hasFile('comprobante_pago')) {
-            $file = $request->file('comprobante_pago');
-            $filename = $file->getClientOriginalName();
-            $path = 'public/documents/records/payments/users/' . $usuario->name;
+        $accion = $request->input('documento_estado');
+        $comentario = $request->input('comentario_documento', '');
 
-            // Guardar el archivo en la carpeta del usuario con el nombre original
-            $filePath = $file->storeAs($path, $filename);
-
-            // Buscar y actualizar el comprobante de pago más reciente relacionado con estándar y curso
-            $comprobanteCO = ComprobantesCO::where('user_id', $id)
-                ->where('estandar_id', $estandarId)
-                ->where('curso_id', $cursoId)
-                ->latest()
-                ->first();
-
-            if (!$comprobanteCO) {
-                abort(404, 'Comprobante de pago no encontrado.');
-            }
-
-            $comprobanteCO->update(['comprobante_pago' => $filePath]);
-
-            $accion = $request->input('documento_estado');
-            $comentario = $request->input('comentario_documento', '');
-
-            // Actualizar el estado y comentarios del comprobante de pago
-            $estado = json_decode($comprobanteCO->estado, true) ?? [];
-            $estado['comprobante_pago'] = $accion;
-            $comprobanteCO->update(['estado' => json_encode($estado)]);
-
+        // Verificar que el comprobante de pago pertenezca al usuario
+        if ($comprobante->user_id == $usuario->id) {
+            // Update or create validation
             ValidacionesComentarios::updateOrCreate(
                 [
                     'user_id' => $usuario->id,
-                    'comprobante_pago_id' => $comprobanteCO->id,
-                    'tipo_documento' => 'comprobante_pago'
+                    'comprobanteCO_id' => $comprobante->id,
+                    'tipo_documento' => 'comprobante_pago' // Asegúrate de usar el tipo de documento correcto
                 ],
                 [
                     'tipo_validacion' => $accion,
@@ -68,7 +50,13 @@ class ValidarCoPController extends Controller
                 ]
             );
 
-            // Mensaje de éxito y respuesta JSON
+            // Actualizar el estado de validación en el estado del comprobante
+            $estado = json_decode($comprobante->estado, true) ?? [];
+            $estado['validacion_comprobante_pago'] = $accion; // Asegúrate de usar el campo de estado correcto
+            $comprobante->estado = json_encode($estado);
+            $comprobante->save();
+
+            // Retornar una respuesta JSON con el mensaje apropiado
             if ($accion == 'validar') {
                 $mensaje = 'Comprobante de pago validado correctamente';
             } else {
@@ -76,7 +64,7 @@ class ValidarCoPController extends Controller
             }
             return response()->json(['success' => $mensaje]);
         } else {
-            return response()->json(['error' => 'No se ha subido ningún archivo.']);
+            return response()->json(['error' => 'No tienes permiso para modificar este comprobante de pago.'], 403);
         }
     }
 }

@@ -61,9 +61,9 @@
                             @if ($estado == 'validar')
                                 <span class="badge badge-success badge-pill">Inscrito</span>
                             @elseif ($estado == 'rechazar')
-                                <span class="badge badge-danger badge-pill">Rechazado</span>
+                                <span class="badge badge-danger badge-pill">Comprobante: Rechazado</span>
                             @else
-                                <span class="badge badge-warning badge-pill">Subido</span>
+                                <span class="badge badge-warning badge-pill">Comprobante: Subido</span>
                             @endif
                         </li>
                     @endforeach
