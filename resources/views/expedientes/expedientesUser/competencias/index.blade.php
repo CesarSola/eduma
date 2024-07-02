@@ -33,9 +33,12 @@
                 <ul class="list-group">
                     @foreach ($competencias as $competencia)
                         @php
-                            $comprobantePago = $competencia->comprobantePago;
-                            if ($comprobantePago) {
-                                $estado = json_decode($comprobantePago->estado, true)['comprobante_pago'] ?? null;
+                            $validacionComentario = $competencia
+                                ->validacionesComentarios()
+                                ->where('tipo_documento', 'comprobante_pago')
+                                ->first();
+                            if ($validacionComentario) {
+                                $estado = $validacionComentario->tipo_validacion;
                             } else {
                                 $estado = null;
                             }
@@ -48,12 +51,10 @@
                                     <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
                                         class="btn btn-primary btn-sm ml-2">Ver</a>
                                 @elseif ($estado == 'rechazar')
-                                    @if ($estado == 'rechazar')
-                                        <a href="{{ route('miscompetencias.resubir_comprobante', ['id' => $competencia->id]) }}"
-                                            class="btn btn-danger btn-sm ml-2">
-                                            Resubir
-                                        </a>
-                                    @endif
+                                    <a href="{{ route('miscompetencias.resubir_comprobante', ['id' => $competencia->id]) }}"
+                                        class="btn btn-danger btn-sm ml-2">
+                                        Resubir Comprobante
+                                    </a>
                                 @else
                                     <span class="badge badge-warning">En validación</span>
                                 @endif
@@ -67,6 +68,7 @@
                             @endif
                         </li>
                     @endforeach
+
                 </ul>
             @endif
         </div>

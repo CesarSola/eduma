@@ -46,4 +46,8 @@ class Estandares extends Model
     {
         return $this->hasMany(Estandares::class);
     }
+    public function validacionesComentarios()
+    {
+        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCO_id', 'id');
+    }
 }

@@ -24,8 +24,18 @@ class MisCompetenciasController extends Controller
     }
 
     /**
-     * Guardar la re-subida del comprobante de pago con nuevo motivo de rechazo.
+     * Mostrar la vista para re-subir el comprobante de pago rechazado.
      */
+    public function mostrarRechazado($id)
+    {
+        $competencia = Estandares::findOrFail($id);
+        $validacionComentario = ValidacionesComentarios::where('estandar_id', $competencia->id)
+            ->where('tipo_documento', 'comprobante_pago')
+            ->first();
+
+        // Si no hay validación de comprobante, podemos manejarlo como necesario
+        return view('expedientes.expedientesUser.competencias.resubir_comprobante', compact('competencia', 'validacionComentario'));
+    }
     // Método para guardar la re-subida del comprobante de pago
     public function guardarResubirComprobante(Request $request, $id)
     {
@@ -95,11 +105,4 @@ class MisCompetenciasController extends Controller
     /**
      * Mostrar la vista para re-subir el comprobante de pago rechazado.
      */
-    public function mostrarRechazado($id)
-    {
-        $competencia = Estandares::findOrFail($id);
-        $comprobantePago = $competencia->comprobantePago; // Obtener el comprobante de pago asociado
-        $validacionComentarios = ValidacionesComentarios::where('comprobante_pago_id', $comprobantePago->id)->first();
-        return view('expedientes.expedientesUser.competencias.resubir_comprobante', compact('competencia', 'comprobantePago', 'validacionComentarios'));
-    }
 }
