@@ -48,7 +48,7 @@ class DocumentosController extends Controller
     public function show($id)
     {
         // Obtener todos los documentos y el comprobante de pago
-        $registroGeneral = User::with(['documentos', 'comprobantes'])->findOrFail($id);
+        $registroGeneral = User::with(['documentos'])->findOrFail($id);
 
         // Filtrar documentos específicos
         $documentos = $registroGeneral->documentos;
@@ -83,7 +83,6 @@ class DocumentosController extends Controller
     {
         $registroGeneral = User::findOrFail($id);
         $documentos = $registroGeneral->documentos;
-        $comprobantes = $registroGeneral->comprobantes;
 
         $accion = $request->input('documento_estado');
         $comentario = $request->input('comentario_documento', '');
@@ -110,27 +109,6 @@ class DocumentosController extends Controller
             }
         }
 
-        foreach ($comprobantes as $comprobante) {
-            if ($documentoNombre == 'comprobante_pago') {
-                // Update or create validation for comprobante de pago
-                ValidacionesComentarios::updateOrCreate(
-                    [
-                        'user_id' => $registroGeneral->id,
-                        'comprobante_pago_id' => $comprobante->id,
-                        'tipo_documento' => 'comprobante_pago'
-                    ],
-                    [
-                        'tipo_validacion' => $accion,
-                        'comentario' => $comentario
-                    ]
-                );
-
-                // Update the validation status in the comprobante's state
-                $estado = json_decode($comprobante->estado, true) ?? [];
-                $estado['comprobante_pago'] = $accion;
-                $comprobante->update(['estado' => json_encode($estado)]);
-            }
-        }
 
         // Return JSON response with appropriate message
         if ($accion == 'validar') {

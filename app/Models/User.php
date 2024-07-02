@@ -63,9 +63,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Relación de uno a muchos con el modelo ComprobantePago
-    public function comprobantes()
+    public function comprobantesCU()
     {
-        return $this->hasMany(ComprobantePago::class);
+        return $this->hasMany(comprobantesCU::class);
+    }
+    public function comprobantesCO()
+    {
+        return $this->hasMany(comprobantesCO::class);
     }
 
     // Relación muchos a muchos con el modelo Estandares
@@ -101,9 +105,5 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!$this->estandares()->where('estandar_id', $estandarId)->exists()) {
             $this->estandares()->attach($estandarId);
         }
-    }
-    public function comprobantePagoCursos()
-    {
-        return $this->hasMany(ComprobantePagoCurso::class);
     }
 }

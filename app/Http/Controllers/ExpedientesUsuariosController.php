@@ -26,10 +26,11 @@ class ExpedientesUsuariosController extends Controller
 
     public function show($id)
     {
-        $usuariosAdmin = User::with('documentos', 'comprobantes', 'estandares', 'cursos')->findOrFail($id);
+        $usuariosAdmin = User::with('documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
 
         $documentos = $usuariosAdmin->documentos;
-        $comprobantesPago = $usuariosAdmin->comprobantes->whereNotNull('comprobante_pago');
+        $comprobantesCU = $usuariosAdmin->comprobantesCU->whereNotNull('comprobantesCU');
+        $comprobantesCO = $usuariosAdmin->comprobantesCO->whereNotNull('comprobantesCO');
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
 
@@ -42,7 +43,7 @@ class ExpedientesUsuariosController extends Controller
             }
         }
 
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesPago', 'estandares', 'cursos', 'documentosCompletos'));
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos'));
     }
 
 
