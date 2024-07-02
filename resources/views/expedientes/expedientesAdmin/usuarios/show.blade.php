@@ -171,7 +171,7 @@
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <div class="text-center">
                             @if ($comprobantesPago->isNotEmpty())
-                                <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id]) }}"
+                                <a href="{{ route('validarCoP.show', ['id' => $usuariosAdmin->id, 'tipo' => 'competencia']) }}"
                                     class="btn btn-primary">Ver Comprobante de Pago</a>
                             @else
                                 <p>No hay comprobantes de pago de competencia para validar.</p>

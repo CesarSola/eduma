@@ -32,14 +32,39 @@
             @else
                 <ul class="list-group">
                     @foreach ($competencias as $competencia)
+                        @php
+                            $comprobantePago = $competencia->comprobantePago;
+                            if ($comprobantePago) {
+                                $estado = json_decode($comprobantePago->estado, true)['comprobante_pago'] ?? null;
+                            } else {
+                                $estado = null;
+                            }
+                        @endphp
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <span style="font-weight: bold; color: #333;">{{ $competencia->name }}</span> -
                                 {{ $competencia->tipo }}
-                                <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
-                                    class="btn btn-primary btn-sm ml-2">Ver</a>
+                                @if ($estado == 'validar')
+                                    <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
+                                        class="btn btn-primary btn-sm ml-2">Ver</a>
+                                @elseif ($estado == 'rechazar')
+                                    @if ($estado == 'rechazar')
+                                        <a href="{{ route('miscompetencias.resubir_comprobante', ['id' => $competencia->id]) }}"
+                                            class="btn btn-danger btn-sm ml-2">
+                                            Resubir
+                                        </a>
+                                    @endif
+                                @else
+                                    <span class="badge badge-warning">En validación</span>
+                                @endif
                             </div>
-                            <span class="badge badge-primary badge-pill">Inscrito</span>
+                            @if ($estado == 'validar')
+                                <span class="badge badge-success badge-pill">Inscrito</span>
+                            @elseif ($estado == 'rechazar')
+                                <span class="badge badge-danger badge-pill">Rechazado</span>
+                            @else
+                                <span class="badge badge-secondary badge-pill">Sin comprobante de pago</span>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -50,37 +75,7 @@
 
 @section('css')
     <style>
-        .card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .alert-info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .list-group-item {
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            margin-bottom: 5px;
-        }
-
-        .badge {
-            font-size: 0.8em;
-            vertical-align: middle;
-        }
-
-        .btn-sm {
-            font-size: 0.8em;
-            padding: 0.25em 0.5em;
-        }
+        /* Estilos personalizados aquí */
     </style>
 @stop
 

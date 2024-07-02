@@ -84,8 +84,12 @@ Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
 //rutas para validar comprobante de pagos competencias
-Route::get('validar-cop/{id}', [ValidarCoPController::class, 'show'])->name('validarCoP.show');
-Route::put('/validar-cop/{id}/update', [ValidarCoPController::class, 'update'])->name('validarCoP.update');
+// Rutas para validar comprobante de pagos de competencias
+// Rutas para validar comprobante de pagos de competencias
+Route::get('validar-cop/{id}/{tipo}', [ValidarCoPController::class, 'show'])->name('validarCoP.show');
+Route::put('validar-cop/{id}/{tipo}/update', [ValidarCoPController::class, 'update'])->name('validarCoP.update');
+
+
 //rutas para validar comprobante de pagos cursos
 Route::get('validar-cup/{id}', [ValidarCuPController::class, 'show'])->name('validarCuP.show');
 Route::put('/validar-cup/{id}/update', [ValidarCuPController::class, 'update'])->name('validarCuP.update');
@@ -105,6 +109,12 @@ Route::resource('competenciaEC', RegistroECController::class);
 Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
+Route::get('miscompetencias/{id}/mostrar-rechazado', [MisCompetenciasController::class, 'mostrarRechazado'])
+    ->name('miscompetencias.resubir_comprobante');
+Route::post('miscompetencias/{id}/guardar-resubir-comprobante', [MisCompetenciasController::class, 'guardarResubirComprobante'])
+    ->name('miscompetencias.guardarResubirComprobante');
+
+
 //ruta de mis cursos
 Route::resource('misCursos', MisCursosController::class);
 //ruta de evidenciasEC

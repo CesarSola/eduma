@@ -27,9 +27,11 @@ class Estandares extends Model
         return $this->belongsToMany(DocumentosNec::class, 'competencia_documentosnec', 'competencia_id', 'documentosnec_id');
     }
 
+    // Estandares.php
+
     public function comprobantePago()
     {
-        return $this->hasOne(ComprobantePago::class);
+        return $this->hasOne(ComprobantePago::class, 'estandar_id', 'id');
     }
 
     public function users()

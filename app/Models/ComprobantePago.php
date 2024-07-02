@@ -13,7 +13,8 @@ class ComprobantePago extends Model
         'user_id',
         'estandar_id',
         'comprobante_pago',
-        'estado'
+        'estado',
+        'tipo'
     ];
 
     public function user()
@@ -23,7 +24,7 @@ class ComprobantePago extends Model
 
     public function estandar()
     {
-        return $this->belongsTo(Estandares::class);
+        return $this->belongsTo(Estandares::class, 'estandares_id', 'id');
     }
     public function curso()
     {

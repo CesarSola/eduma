@@ -4,7 +4,7 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Validar Comprobante de Pago</h1>
+        <h1>Validar Comprobante de Pago {{ $tipo }}</h1>
         <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
@@ -35,7 +35,9 @@
                             @if ($comprobantePago)
                                 @php
                                     $estado = json_decode($comprobantePago->estado, true) ?? [];
-                                    $status = isset($estado['comprobante_pago']) ? $estado['comprobante_pago'] : null;
+                                    $status = isset($estado['comprobante_pago'])
+                                        ? $estado['comprobante_pago']
+                                        : 'en_proceso';
                                 @endphp
                                 @if ($status == 'validar')
                                     <span class="badge badge-success">Validado</span>
@@ -57,9 +59,6 @@
                                 $estado = json_decode($comprobantePago->estado, true) ?? [];
                             @endphp
                             @if (!isset($estado['comprobante_pago']) || $estado['comprobante_pago'] == 'rechazar')
-                                @php
-                                    $documentosParaRevisar = true;
-                                @endphp
                                 <form class="update-form"
                                     data-url="{{ route('registroGeneral.updateDocumento', ['id' => $usuario->id, 'documento' => 'comprobante_pago']) }}"
                                     method="POST">
