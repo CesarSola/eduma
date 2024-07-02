@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ComprobantePago;
+use App\Models\ComprobantesCU;
 use App\Models\User;
 use App\Models\ValidacionesComentarios;
 use Illuminate\Http\Request;
@@ -39,9 +40,9 @@ class ValidarCuPController extends Controller
     public function show($id)
     {
         $usuario = User::findOrFail($id);
-        $comprobantePago = ComprobantePago::where('user_id', $id)->latest()->first();
+        $comprobanteCU = ComprobantesCU::where('user_id', $id)->latest()->first();
 
-        return view('expedientes.expedientesAdmin.validarCuP.show', compact('usuario', 'comprobantePago'));
+        return view('expedientes.expedientesAdmin.validarCuP.show', compact('usuario', 'comprobanteCU'));
     }
     public function update(Request $request, $id, $documentoNombre)
     {

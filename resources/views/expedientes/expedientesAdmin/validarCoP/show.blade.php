@@ -4,7 +4,7 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Validar Comprobante de Pago {{ $tipo }}</h1>
+        <h1>Validar Comprobantes de Pago de Competencias</h1>
         <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
@@ -32,9 +32,9 @@
                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         </div>
                         <div class="right-content">
-                            @if ($comprobantePago)
+                            @if ($comprobanteCO)
                                 @php
-                                    $estado = json_decode($comprobantePago->estado, true) ?? [];
+                                    $estado = json_decode($comprobanteCO->estado, true) ?? [];
                                     $status = isset($estado['comprobante_pago'])
                                         ? $estado['comprobante_pago']
                                         : 'en_proceso';
@@ -54,9 +54,9 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        @if ($comprobantePago)
+                        @if ($comprobanteCO)
                             @php
-                                $estado = json_decode($comprobantePago->estado, true) ?? [];
+                                $estado = json_decode($comprobanteCO->estado, true) ?? [];
                             @endphp
                             @if (!isset($estado['comprobante_pago']) || $estado['comprobante_pago'] == 'rechazar')
                                 <form class="update-form"
@@ -67,7 +67,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
                                         <div class="col-sm-4">
-                                            <a href="{{ Storage::url($comprobantePago->comprobante_pago) }}" target="_blank"
+                                            <a href="{{ Storage::url($comprobanteCO->comprobante_pago) }}" target="_blank"
                                                 class="btn btn-primary">Ver</a>
                                         </div>
                                         <div class="col-sm-4">

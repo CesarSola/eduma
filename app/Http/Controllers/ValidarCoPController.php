@@ -3,28 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\ComprobantePago;
+use App\Models\ComprobantesCO;
 use App\Models\ValidacionesComentarios;
 use Illuminate\Http\Request;
 
 class ValidarCoPController extends Controller
 {
-    public function show($id, $tipo)
+    public function show($id)
     {
         $usuario = User::findOrFail($id);
-
         // Encuentra el comprobante de pago más reciente relacionado con el tipo especificado
-        $comprobantePago = ComprobantePago::where('user_id', $id)
-            ->where('tipo', $tipo)
-            ->latest()
-            ->first();
+        $comprobanteCO = ComprobantesCO::where('user_id', $id)->first(); // Asegúrate de obtener el primer resultado correctamente
 
-        if (!$comprobantePago) {
-            abort(404, 'Comprobante de pago no encontrado.');
-        }
-
-        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuario', 'comprobantePago', 'tipo'));
+        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuario', 'comprobanteCO'));
     }
+
+
 
     public function update(Request $request, $id)
     {
@@ -36,36 +30,36 @@ class ValidarCoPController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $file = $request->file('comprobante_pago');
             $filename = $file->getClientOriginalName();
-            $path = 'public/documents/records/users/' . $usuario->name;
+            $path = 'public/documents/records/payments/users/' . $usuario->name;
 
             // Guardar el archivo en la carpeta del usuario con el nombre original
             $filePath = $file->storeAs($path, $filename);
 
             // Buscar y actualizar el comprobante de pago más reciente relacionado con estándar y curso
-            $comprobantePago = ComprobantePago::where('user_id', $id)
+            $comprobanteCO = ComprobantesCO::where('user_id', $id)
                 ->where('estandar_id', $estandarId)
                 ->where('curso_id', $cursoId)
                 ->latest()
                 ->first();
 
-            if (!$comprobantePago) {
+            if (!$comprobanteCO) {
                 abort(404, 'Comprobante de pago no encontrado.');
             }
 
-            $comprobantePago->update(['comprobante_pago' => $filePath]);
+            $comprobanteCO->update(['comprobante_pago' => $filePath]);
 
             $accion = $request->input('documento_estado');
             $comentario = $request->input('comentario_documento', '');
 
             // Actualizar el estado y comentarios del comprobante de pago
-            $estado = json_decode($comprobantePago->estado, true) ?? [];
+            $estado = json_decode($comprobanteCO->estado, true) ?? [];
             $estado['comprobante_pago'] = $accion;
-            $comprobantePago->update(['estado' => json_encode($estado)]);
+            $comprobanteCO->update(['estado' => json_encode($estado)]);
 
             ValidacionesComentarios::updateOrCreate(
                 [
                     'user_id' => $usuario->id,
-                    'comprobante_pago_id' => $comprobantePago->id,
+                    'comprobante_pago_id' => $comprobanteCO->id,
                     'tipo_documento' => 'comprobante_pago'
                 ],
                 [

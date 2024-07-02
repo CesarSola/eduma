@@ -63,7 +63,7 @@
                             @elseif ($estado == 'rechazar')
                                 <span class="badge badge-danger badge-pill">Rechazado</span>
                             @else
-                                <span class="badge badge-secondary badge-pill">Sin comprobante de pago</span>
+                                <span class="badge badge-warning badge-pill">Subido</span>
                             @endif
                         </li>
                     @endforeach

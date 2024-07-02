@@ -29,22 +29,16 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin = User::with('documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
 
         $documentos = $usuariosAdmin->documentos;
-        $comprobantesCU = $usuariosAdmin->comprobantesCU->whereNotNull('comprobantesCU');
-        $comprobantesCO = $usuariosAdmin->comprobantesCO->whereNotNull('comprobantesCO');
+        $comprobantesCU = $usuariosAdmin->comprobantesCU; // No necesitas ->whereNotNull('comprobantesCU') si ya está definida en la relación
+        $comprobantesCO = $usuariosAdmin->comprobantesCO; // No necesitas ->whereNotNull('comprobantesCO') si ya está definida en la relación
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
 
-        // Determinar si todos los documentos están completos
-        $documentosCompletos = true;
-        foreach ($documentos as $documento) {
-            if (!$documento->completado) { // Asegúrate de ajustar esto según tu lógica de completitud de documentos
-                $documentosCompletos = false;
-                break;
-            }
-        }
+        $documentosCompletos = $documentos->every(fn ($documento) => $documento->completado); // Verificar si todos los documentos están completos
 
         return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos'));
     }
+
 
 
 
