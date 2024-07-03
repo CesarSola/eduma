@@ -152,12 +152,10 @@ return [
     |
     */
 
-    'layout_topnav' => null,
-    'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_boxed' => false, // Asegura que el layout no esté en modo 'boxed'
+    'layout_fixed_sidebar' => true, // Asegura que la barra lateral esté fija
+    'layout_fixed_navbar' => true, // Asegura que la barra superior (navbar) esté fija
+    'layout_fixed_footer' => true, // Opcional: fija el footer si lo deseas
 
     /*
     |--------------------------------------------------------------------------

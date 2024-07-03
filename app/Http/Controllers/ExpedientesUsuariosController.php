@@ -29,18 +29,48 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin = User::with('documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
 
         $documentos = $usuariosAdmin->documentos;
-        $comprobantesCU = $usuariosAdmin->comprobantesCU; // No necesitas ->whereNotNull('comprobantesCU') si ya está definida en la relación
-        $comprobantesCO = $usuariosAdmin->comprobantesCO; // No necesitas ->whereNotNull('comprobantesCO') si ya está definida en la relación
+        $comprobantesCU = $usuariosAdmin->comprobantesCU;
+        $comprobantesCO = $usuariosAdmin->comprobantesCO;
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
 
-        $documentosCompletos = $documentos->every(fn ($documento) => $documento->completado); // Verificar si todos los documentos están completos
+        // Verificar si todos los documentos están completos
+        $documentosCompletos = true;
 
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos'));
+        foreach ($documentos as $documento) {
+            // Obtener las validaciones y comentarios asociados a este documento
+            $validaciones = $documento->validacionesComentarios;
+
+            // Verificar si hay alguna validación que no esté completada
+            $documentoCompletado = $validaciones->every(function ($validacion) {
+                return $validacion->tipo_validacion === 'validar';
+            });
+
+            if (!$documentoCompletado) {
+                $documentosCompletos = false;
+                break;
+            }
+        }
+
+        // Verificar si hay comprobante CO subido
+        $comprobanteSubido = $comprobantesCO->isNotEmpty();
+
+        // Verificar si el comprobante CO está en validación
+        $comprobanteEnValidacion = false;
+        if ($comprobanteSubido) {
+            foreach ($comprobantesCO as $comprobante) {
+                $estado = json_decode($comprobante->estado, true) ?? [];
+                $comprobantePagoStatus = $estado['comprobante_pago'] ?? null;
+
+                if ($comprobantePagoStatus === 'validar') {
+                    $comprobanteEnValidacion = true;
+                    break;
+                }
+            }
+        }
+
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos', 'comprobanteSubido', 'comprobanteEnValidacion'));
     }
-
-
-
 
     /**
      * Show the form for creating a new resource.

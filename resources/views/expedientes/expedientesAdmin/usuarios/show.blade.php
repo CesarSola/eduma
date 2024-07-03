@@ -45,7 +45,11 @@
                         @endif
 
                         @if ($estandares->isNotEmpty())
-                            <div><span class="badge badge-success">Competencias: Inscrito</span></div>
+                            @if ($comprobanteSubido && $comprobanteEnValidacion)
+                                <div><span class="badge badge-info">Competencias: En Validación</span></div>
+                            @else
+                                <div><span class="badge badge-success">Competencias: Inscrito</span></div>
+                            @endif
                         @else
                             <div><span class="badge badge-danger">Competencias: Ninguno</span></div>
                         @endif
@@ -53,9 +57,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 mt-3">
-            <div class="row">
-                <div class="col-md-4">
+        <div class="container">
+            <div class="row mt-3">
+                <!-- Documentos de Registro General -->
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
                         <div class="card-header">
                             <h3 class="card-title">Ver <br>Documentos de Registro General</h3>
@@ -75,7 +80,8 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <!-- Estandares -->
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
                         <div class="card-header">
                             <h3 class="card-title">Estandares de <br> {{ $usuariosAdmin->name }}</h3>
@@ -97,7 +103,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+
+                <!-- Cursos -->
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
                         <div class="card-header">
                             <h3 class="card-title">Cursos de <br> {{ $usuariosAdmin->name }}</h3>
@@ -113,168 +121,175 @@
                                     class="btn btn-primary btn-block btn-sm mt-2">Ver</a>
                             @else
                                 <div style="text-align: center">
-                                    <p>No hay estándares disponibles para este usuario.</p>
+                                    <p>No hay cursos disponibles para este usuario.</p>
                                 </div>
                             @endif
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- Additional Cards -->
-    <div class="col-md-12 mt-3">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h3 class="card-title">Validar <br>Documentos de Registro General</h3>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <ul class="list-group flex-grow-1 overflow-auto">
-                            @foreach ($documentos as $documento)
-                                <li class="list-group-item">
-                                    {{ basename($documento->ine_ife) }}
-                                </li>
-                                <br>
-                                <li class="list-group-item">
-                                    {{ basename($documento->comprobante_domiciliario) }}
-                                </li>
-                                <br>
-                                <li class="list-group-item">
-                                    {{ basename($documento->foto) }}
-                                </li>
-                                <br>
-                                <li class="list-group-item">
-                                    {{ basename($documento->curp) }}
-                                </li>
-                                <br>
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}" class="btn btn-primary">Ver</a>
-                        <div style="text-align: center">
-                            <p>No hay documentos disponibles para este usuario.</p>
-                        </div>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h3 class="card-title">Validar <br>Comprobantes de pago Competencia</h3>
-                    </div>
-                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                        <div class="text-center">
-                            @if ($comprobantesCO->isNotEmpty())
-                                <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}" class="btn btn-primary">Ver
-                                    Comprobante de Pago</a>
+            <!-- Validar Documentos y Comprobantes -->
+            <div class="row mt-3">
+                <!-- Validar Documentos de Registro General -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Validar <br>Documentos de Registro General</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            @if ($documentos->isEmpty())
+                                <div style="text-align: center">
+                                    <p>No hay documentos disponibles para este usuario.</p>
+                                </div>
                             @else
-                                <p>No hay comprobantes de pago de competencia para validar.</p>
+                                <ul class="list-group flex-grow-1 overflow-auto">
+                                    @foreach ($documentos as $documento)
+                                        <li class="list-group-item">
+                                            {{ basename($documento->ine_ife) }}
+                                        </li>
+                                        <br>
+                                        <li class="list-group-item">
+                                            {{ basename($documento->comprobante_domiciliario) }}
+                                        </li>
+                                        <br>
+                                        <li class="list-group-item">
+                                            {{ basename($documento->foto) }}
+                                        </li>
+                                        <br>
+                                        <li class="list-group-item">
+                                            {{ basename($documento->curp) }}
+                                        </li>
+                                        <br>
+                                    @endforeach
+                                </ul>
+                                <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                    class="btn btn-primary">Ver</a>
                             @endif
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h3 class="card-title">Validar <br>Comprobantes de pago Cursos</h3>
+
+                <!-- Validar Comprobantes de Pago Competencia -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Validar <br>Comprobantes de pago Competencia</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <div class="text-center">
+                                @if ($comprobantesCO->isNotEmpty())
+                                    <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
+                                        class="btn btn-primary">Ver
+                                        Comprobante de Pago</a>
+                                @else
+                                    <p>No hay comprobantes de pago de competencia para validar.</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                        <div class="text-center">
-                            @if ($comprobantesCU->isNotEmpty())
-                                <a href="{{ route('validarCuP.show', ['id' => $usuariosAdmin->id]) }}"
-                                    class="btn btn-primary">Ver Comprobante de Pago</a>
-                            @else
-                                <p>No hay comprobantes de pago de cursos para validar.</p>
-                            @endif
+                </div>
+
+                <!-- Validar Comprobantes de Pago Cursos -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Validar <br>Comprobantes de pago Cursos</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <div class="text-center">
+                                @if ($comprobantesCU->isNotEmpty())
+                                    <a href="{{ route('validarCuP.show', ['id' => $usuariosAdmin->id]) }}"
+                                        class="btn btn-primary">Ver Comprobante de Pago</a>
+                                @else
+                                    <p>No hay comprobantes de pago de cursos para validar.</p>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
-@stop
 
-@section('css')
-    <style>
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    @stop
 
-        .left-content {
-            width: 70%;
-        }
+    @section('css')
+        <style>
+            .header-flex {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-        .right-content {
-            text-align: right;
-        }
+            .left-content {
+                width: 70%;
+            }
 
-        .right-content div {
-            margin-bottom: 5px;
-            /* Espacio entre cada badge */
-        }
+            .right-content {
+                text-align: right;
+            }
 
-        .card-title {
-            background-color: #067dd2;
-            text-align: center;
-            width: 100%;
-            color: white;
-            border-radius: 5px;
-        }
+            .right-content div {
+                margin-bottom: 5px;
+                /* Espacio entre cada badge */
+            }
 
-        .card-body {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #5cb8a9;
-            border-radius: 5px;
-        }
+            .card-title {
+                background-color: #067dd2;
+                text-align: center;
+                width: 100%;
+                color: white;
+                border-radius: 5px;
+            }
 
-        .list-group-item {
-            text-align: center;
-            width: 100%;
-        }
+            .card-body {
+                background-color: #ffffff;
+                padding: 20px;
+                border: 1px solid #5cb8a9;
+                border-radius: 5px;
+            }
 
-        .h-100 {
-            height: 100%;
-        }
+            .list-group-item {
+                text-align: center;
+                width: 100%;
+            }
 
-        .overflow-auto {
-            max-height: 200px;
-            /* Adjust this height as needed */
-            overflow-y: auto;
-        }
+            .h-100 {
+                height: 100%;
+            }
 
-        .btn-secondary {
-            margin-left: auto;
-        }
+            .overflow-auto {
+                max-height: 200px;
+                /* Adjust this height as needed */
+                overflow-y: auto;
+            }
 
-        .btn-success {
-            align-content: center;
-            width: 50%;
-        }
+            .btn-secondary {
+                margin-left: auto;
+            }
 
-        .btn-primary {
-            width: 100%;
-        }
+            .btn-success {
+                align-content: center;
+                width: 50%;
+            }
 
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-        }
+            .btn-primary {
+                width: 100%;
+            }
 
-        .toggle-card {
-            cursor: pointer;
-        }
-    </style>
-@stop
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+            }
 
-@section('js')
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
-    </script>
-@stop
+            .toggle-card {
+                cursor: pointer;
+            }
+        </style>
+    @stop
+
+    @section('js')
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script>
+            console.log("Hi, I'm using the Laravel-AdminLTE package!");
+        </script>
+    @stop
