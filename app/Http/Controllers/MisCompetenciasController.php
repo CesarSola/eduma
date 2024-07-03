@@ -22,7 +22,6 @@ class MisCompetenciasController extends Controller
 
         return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'usuario'));
     }
-
     /**
      * Mostrar la vista para re-subir el comprobante de pago rechazado.
      */
@@ -77,7 +76,7 @@ class MisCompetenciasController extends Controller
             $user_id = Auth::id();
 
             // Buscar el registro existente en validaciones_comentarios
-            $validacionComentario = ValidacionesComentarios::where('comprobante_pago_id', $comprobantePago->id)->first();
+            $validacionComentario = ValidacionesComentarios::where('comprobanteCO_id', $comprobantePago->id)->first();
 
             if ($validacionComentario) {
                 // Actualizar el registro existente
@@ -89,7 +88,7 @@ class MisCompetenciasController extends Controller
             } else {
                 // Crear un nuevo registro en validaciones_comentarios si no existe
                 ValidacionesComentarios::create([
-                    'comprobante_pago_id' => $comprobantePago->id,
+                    'comprobanteCO_id' => $comprobantePago->id,
                     'tipo_documento' => 'comprobante_pago',
                     'tipo_validacion' => 'pendiente',
                     'user_id' => $user_id,

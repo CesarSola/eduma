@@ -30,7 +30,10 @@
                     <div class="right-content">
                         @if ($documentos->isNotEmpty())
                             @if ($documentosCompletos)
-                                <div><span class="badge badge-success">Documentos Generales: Completos</span></div>
+                                <div><span class="badge badge-success">Documentos Generales: Completos y Validados</span>
+                                </div>
+                            @elseif ($documentosEnValidacion)
+                                <div><span class="badge badge-info">Documentos Generales: En Validación</span></div>
                             @else
                                 <div><span class="badge badge-warning">Documentos Generales: Incompletos</span></div>
                             @endif
@@ -39,13 +42,17 @@
                         @endif
 
                         @if ($cursos->isNotEmpty())
-                            <div><span class="badge badge-success">Cursos: Inscrito</span></div>
+                            @if ($comprobanteSubidoCU && $comprobanteEnValidacionCU)
+                                <div><span class="badge badge-info">Cursos: En Validación</span></div>
+                            @else
+                                <div><span class="badge badge-success">Cursos: Inscrito</span></div>
+                            @endif
                         @else
                             <div><span class="badge badge-danger">Cursos: Ninguno</span></div>
                         @endif
 
                         @if ($estandares->isNotEmpty())
-                            @if ($comprobanteSubido && $comprobanteEnValidacion)
+                            @if ($comprobanteSubidoCO && $comprobanteEnValidacionCO)
                                 <div><span class="badge badge-info">Competencias: En Validación</span></div>
                             @else
                                 <div><span class="badge badge-success">Competencias: Inscrito</span></div>
@@ -199,8 +206,9 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <div class="text-center">
                                 @if ($comprobantesCU->isNotEmpty())
-                                    <a href="{{ route('validarCuP.show', ['id' => $usuariosAdmin->id]) }}"
-                                        class="btn btn-primary">Ver Comprobante de Pago</a>
+                                    <a href="{{ route('validarCuP.show', $usuariosAdmin->id) }}" class="btn btn-primary">
+                                        Ver
+                                        Comprobante de Pago Cursos</a>
                                 @else
                                     <p>No hay comprobantes de pago de cursos para validar.</p>
                                 @endif

@@ -14,50 +14,50 @@ class ValidarCoPController extends Controller
     public function show($id)
     {
         // Obtener todos los comprobantes de pago del usuario
-        $usuario = User::findOrFail($id);
+        $usuarioCO = User::findOrFail($id);
 
         // Filtrar comprobantes específicos que necesitan revisión
-        $comprobantes = $usuario->comprobantesCO->filter(function ($comprobante) {
-            return $comprobante->validacionesComentarios->isEmpty() || $comprobante->validacionesComentarios->contains(function ($validacion) {
-                return $validacion->tipo_validacion != 'validar';
+        $comprobantesCO = $usuarioCO->comprobantesCO->filter(function ($comprobanteCO) {
+            return $comprobanteCO->validacionesComentarios->isEmpty() || $comprobanteCO->validacionesComentarios->contains(function ($validacionCU) {
+                return $validacionCU->tipo_validacion != 'validar';
             });
         });
 
-        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuario', 'comprobantes'));
+        return view('expedientes.expedientesAdmin.validarCoP.show', compact('usuarioCO', 'comprobantesCO'));
     }
 
     // Método para actualizar el estado de validación de un comprobante de pago
     public function updateComprobante(Request $request, $id, $comprobanteId)
     {
-        $usuario = User::findOrFail($id);
-        $comprobante = ComprobantesCO::findOrFail($comprobanteId);
+        $usuarioCO = User::findOrFail($id);
+        $ComprobanteCO = ComprobantesCO::findOrFail($comprobanteId);
 
-        $accion = $request->input('documento_estado');
-        $comentario = $request->input('comentario_documento', '');
+        $accionCO = $request->input('documento_estado');
+        $comentarioCO = $request->input('comentario_documento', '');
 
         // Verificar que el comprobante de pago pertenezca al usuario
-        if ($comprobante->user_id == $usuario->id) {
+        if ($ComprobanteCO->user_id == $usuarioCO->id) {
             // Update or create validation
             ValidacionesComentarios::updateOrCreate(
                 [
-                    'user_id' => $usuario->id,
-                    'comprobanteCO_id' => $comprobante->id,
+                    'user_id' => $usuarioCO->id,
+                    'comprobanteCO_id' => $ComprobanteCO->id,
                     'tipo_documento' => 'comprobante_pago' // Asegúrate de usar el tipo de documento correcto
                 ],
                 [
-                    'tipo_validacion' => $accion,
-                    'comentario' => $comentario
+                    'tipo_validacion' => $accionCO,
+                    'comentario' => $comentarioCO
                 ]
             );
 
             // Actualizar el estado de validación en el estado del comprobante
-            $estado = json_decode($comprobante->estado, true) ?? [];
-            $estado['validacion_comprobante_pago'] = $accion; // Asegúrate de usar el campo de estado correcto
-            $comprobante->estado = json_encode($estado);
-            $comprobante->save();
+            $estadoCO = json_decode($ComprobanteCO->estadoCO, true) ?? [];
+            $estadoCO['validacion_comprobante_pago'] = $accionCO; // Asegúrate de usar el campo de estadoCO correcto
+            $ComprobanteCO->estadoCO = json_encode($estadoCO);
+            $ComprobanteCO->save();
 
             // Retornar una respuesta JSON con el mensaje apropiado
-            if ($accion == 'validar') {
+            if ($accionCO == 'validar') {
                 $mensaje = 'Comprobante de pago validado correctamente';
             } else {
                 $mensaje = 'Comprobante de pago rechazado correctamente';

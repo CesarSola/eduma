@@ -42,14 +42,14 @@ class RegistroCursoController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $selectedCursoId = $request->input('curso_id');
+        $selectedECId = $request->input('curso_id');
 
-        if (!$selectedCursoId) {
+        if (!$selectedECId) {
             return redirect()->back()->with('error', 'ID de curso no válido');
         }
 
         // Obtener el curso seleccionado
-        $curso = Curso::findOrFail($selectedCursoId);
+        $curso = Curso::findOrFail($selectedECId);
 
         // Nombre del usuario y del curso para el almacenamiento del archivo
         $userName = str_replace(' ', '_', $user->name);
@@ -59,21 +59,20 @@ class RegistroCursoController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $comprobanteCU = $request->file('comprobante_pago');
             $comprobantePagoName = 'Comprobante_Pago_' . $cursoName . '.' . $comprobanteCU->extension();
-            $comprobantePagoPath = $comprobanteCU->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
+            $comprobantePagoPath = $comprobanteCU->storeAs('public/documents/records/payments/courses/' . $userName, $comprobantePagoName);
 
             // Crear y guardar el registro del comprobante de pago
             $comprobanteCurso = new ComprobantesCU();
             $comprobanteCurso->user_id = $user->id;
-            $comprobanteCurso->curso_id = $selectedCursoId;
+            $comprobanteCurso->curso_id = $selectedECId;
             $comprobanteCurso->comprobante_pago = $comprobantePagoPath;
-            $comprobanteCurso->tipo_validacion = 'pendiente';
 
             $comprobanteCurso->save();
 
             // Guardar la relación en la tabla pivot (si es necesario)
-            $user->cursos()->syncWithoutDetaching([$selectedCursoId]);
+            $user->cursos()->syncWithoutDetaching([$selectedECId]);
 
-            return redirect()->route('registroCurso.show', ['registroCurso' => $selectedCursoId])->with('success', 'Comprobante de pago subido correctamente');
+            return redirect()->route('registroCurso.show', ['registroCurso' => $selectedECId])->with('success', 'Comprobante de pago subido correctamente');
         } else {
             return redirect()->back()->with('error', 'No se seleccionó ningún archivo para subir');
         }

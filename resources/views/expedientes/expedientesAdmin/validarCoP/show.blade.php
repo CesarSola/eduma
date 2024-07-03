@@ -4,8 +4,9 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Revisión de Comprobantes de pago</h1>
-        <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuario->id]) }}" class="btn btn-secondary">Regresar</a>
+        <h1>Revisión de Comprobantes de pago Competencias</h1>
+        <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $usuarioCO->id]) }}"
+            class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -28,12 +29,12 @@
                                     <div class="card-body header-flex">
                                         <div class="left-content">
                                             <div class="text-center">
-                                                <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
-                                                    {{ $usuario->secondName }}</h6>
+                                                <h6 class="text-left mt-2">Nombres: {{ $usuarioCO->name }}
+                                                    {{ $usuarioCO->secondName }}</h6>
                                                 <h6 class="text-left mt-2">Apellidos:
-                                                    {{ $usuario->paternalSurname }}
-                                                    {{ $usuario->maternalSurname }}</h6>
-                                                <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
+                                                    {{ $usuarioCO->paternalSurname }}
+                                                    {{ $usuarioCO->maternalSurname }}</h6>
+                                                <h6 class="text-left mt-2">Edad: {{ $usuarioCO->age }} años</h6>
                                             </div>
                                             <div class="right-content">
                                                 <span class="badge badge-info">Estatus: Activo</span>
@@ -48,43 +49,43 @@
                 <div class="card">
                     <div class="card-body">
                         @php
-                            $documentosParaRevisar = false;
+                            $documentosParaRevisarCO = false;
                         @endphp
 
                         <!-- Mostrar documentos específicos -->
-                        @foreach ($comprobantes as $comprobante)
+                        @foreach ($comprobantesCO as $comprobanteCO)
                             @php
                                 $estado = json_decode($comprobante->estado, true) ?? [];
                             @endphp
                             @if (
-                                $comprobante->comprobante_pago &&
+                                $comprobanteCO->comprobante_pago &&
                                     (!isset($estado['validacion_comprobante_pago']) || $estado['validacion_comprobante_pago'] == 'rechazar'))
                                 @php
-                                    $documentosParaRevisar = true;
+                                    $documentosParaRevisarCO = true;
                                 @endphp
                                 <form class="update-form"
-                                    data-url="{{ route('validarCoP.updateComprobante', ['id' => $usuario->id, 'documento' => $comprobante]) }}"
+                                    data-url="{{ route('validarCoP.updateComprobante', ['id' => $usuarioCO->id, 'documento' => $comprobanteCO]) }}"
                                     method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
                                         <div class="col-sm-4">
-                                            <a href="{{ Storage::url($comprobante->comprobante_pago) }}" target="_blank"
+                                            <a href="{{ Storage::url($comprobanteCO->comprobante_pago) }}" target="_blank"
                                                 class="btn btn-primary">Ver</a>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="documento_estado"
-                                                    id="validar_comprobante_{{ $comprobante->id }}" value="validar">
+                                                    id="validar_comprobante_{{ $comprobanteCO->id }}" value="validar">
                                                 <label class="form-check-label"
-                                                    for="validar_comprobante_{{ $comprobante->id }}">Validar</label>
+                                                    for="validar_comprobante_{{ $comprobanteCO->id }}">Validar</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="documento_estado"
-                                                    id="rechazar_comprobante_{{ $comprobante->id }}" value="rechazar">
+                                                    id="rechazar_comprobante_{{ $comprobanteCO->id }}" value="rechazar">
                                                 <label class="form-check-label"
-                                                    for="rechazar_comprobante_{{ $comprobante->id }}">Rechazar</label>
+                                                    for="rechazar_comprobante_{{ $comprobanteCO->id }}">Rechazar</label>
                                             </div>
                                             <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
                                         </div>
@@ -96,7 +97,7 @@
                             @endif
                         @endforeach
                         <!-- Mensaje para documentos validados -->
-                        @if (!$documentosParaRevisar)
+                        @if (!$documentosParaRevisarCO)
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group row">

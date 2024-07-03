@@ -14,10 +14,15 @@ class CreateUserCursoTable extends Migration
     public function up()
     {
         Schema::create('user_curso', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('curso_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('curso_id');
+
+            // Definir las claves foráneas
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
+
+            // Definir la clave primaria compuesta
+            $table->primary(['user_id', 'curso_id']);
         });
     }
 

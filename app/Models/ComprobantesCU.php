@@ -30,6 +30,6 @@ class ComprobantesCU extends Model
     }
     public function validacionesComentarios()
     {
-        return $this->hasMany(ValidacionesComentarios::class, 'comprobante_pago_id');
+        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCU_id');
     }
 }

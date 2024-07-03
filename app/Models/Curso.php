@@ -35,4 +35,12 @@ class Curso extends Model
     {
         return $this->belongsToMany(DocumentosNec::class, 'curso_documentosnec', 'curso_id', 'documentosnec_id');
     }
+    public function validacionesComentarios()
+    {
+        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCU_id', 'id');
+    }
+    public function comprobantesCU()
+    {
+        return $this->hasOne(comprobantesCU::class, 'curso_id', 'id');
+    }
 }

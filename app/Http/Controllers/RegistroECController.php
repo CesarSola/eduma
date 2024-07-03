@@ -58,7 +58,7 @@ class RegistroECController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $comprobante = $request->file('comprobante_pago');
             $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobante->extension();
-            $comprobantePagoPath = $comprobante->storeAs('public/documents/records/payments/' . $userName, $comprobantePagoName);
+            $comprobantePagoPath = $comprobante->storeAs('public/documents/records/payments/competences/' . $userName, $comprobantePagoName);
 
             // Crear y guardar el registro del comprobante de pago
             $comprobanteCompetencia = new ComprobantesCO();

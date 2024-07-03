@@ -23,10 +23,9 @@ class ExpedientesUsuariosController extends Controller
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
-
     public function show($id)
     {
-        $usuariosAdmin = User::with('documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
+        $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
 
         $documentos = $usuariosAdmin->documentos;
         $comprobantesCU = $usuariosAdmin->comprobantesCU;
@@ -34,43 +33,67 @@ class ExpedientesUsuariosController extends Controller
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
 
-        // Verificar si todos los documentos están completos
         $documentosCompletos = true;
+        $documentosEnValidacion = false;
 
         foreach ($documentos as $documento) {
-            // Obtener las validaciones y comentarios asociados a este documento
             $validaciones = $documento->validacionesComentarios;
 
-            // Verificar si hay alguna validación que no esté completada
+            if ($validaciones->isEmpty()) {
+                // Si no hay validaciones, consideramos que el documento está en proceso
+                $documentosCompletos = false;
+                $documentosEnValidacion = true;
+                continue;
+            }
+
             $documentoCompletado = $validaciones->every(function ($validacion) {
                 return $validacion->tipo_validacion === 'validar';
             });
 
+            $documentoEnValidacion = $validaciones->contains(function ($validacion) {
+                return $validacion->tipo_validacion === 'Pendiente';
+            });
+
+            if ($documentoEnValidacion) {
+                $documentosEnValidacion = true;
+            }
+
             if (!$documentoCompletado) {
                 $documentosCompletos = false;
-                break;
             }
         }
 
-        // Verificar si hay comprobante CO subido
-        $comprobanteSubido = $comprobantesCO->isNotEmpty();
+        $comprobanteSubidoCO = $comprobantesCO->isNotEmpty();
+        $comprobanteEnValidacionCO = false;
+        if ($comprobanteSubidoCO) {
+            foreach ($comprobantesCO as $comprobanteCO) {
+                $estado = json_decode($comprobanteCO->estado, true) ?? [];
+                $comprobantePagoStatusCO = $estado['comprobante_pago'] ?? null;
 
-        // Verificar si el comprobante CO está en validación
-        $comprobanteEnValidacion = false;
-        if ($comprobanteSubido) {
-            foreach ($comprobantesCO as $comprobante) {
-                $estado = json_decode($comprobante->estado, true) ?? [];
-                $comprobantePagoStatus = $estado['comprobante_pago'] ?? null;
-
-                if ($comprobantePagoStatus === 'validar') {
-                    $comprobanteEnValidacion = true;
+                if ($comprobantePagoStatusCO === 'Pendiente') {
+                    $comprobanteEnValidacionCO = true;
                     break;
                 }
             }
         }
 
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos', 'comprobanteSubido', 'comprobanteEnValidacion'));
+        $comprobanteSubidoCU = $comprobantesCU->isNotEmpty();
+        $comprobanteEnValidacionCU = false;
+        if ($comprobanteSubidoCU) {
+            foreach ($comprobantesCU as $comprobanteCU) {
+                $estado = json_decode($comprobanteCU->estado, true) ?? [];
+                $comprobantePagoStatusCU = $estado['comprobante_pago'] ?? null;
+
+                if ($comprobantePagoStatusCU === 'Pendiente') {
+                    $comprobanteEnValidacionCU = true;
+                    break;
+                }
+            }
+        }
+
+        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos', 'documentosEnValidacion', 'comprobanteSubidoCO', 'comprobanteSubidoCU', 'comprobanteEnValidacionCU', 'comprobanteEnValidacionCO'));
     }
+
 
     /**
      * Show the form for creating a new resource.

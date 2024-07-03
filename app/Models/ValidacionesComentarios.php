@@ -22,4 +22,8 @@ class ValidacionesComentarios extends Model
     {
         return $this->belongsTo(ComprobantesCO::class, 'comprobanteCO_id');
     }
+    public function comprobanteCU()
+    {
+        return $this->belongsTo(ComprobantesCU::class, 'comprobanteCU_id');
+    }
 }

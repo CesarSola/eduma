@@ -81,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // Relación muchos a muchos con el modelo Curso
     public function cursos()
     {
-        return $this->belongsToMany(Curso::class, 'user_curso');
+        return $this->belongsToMany(Curso::class, 'user_curso', 'user_id', 'curso_id');
     }
 
     // Métodos para desactivar y reactivar cuentas de usuario
@@ -100,10 +100,16 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // Redirigir o mostrar un mensaje de éxito
     }
-    public function attachEstandarIfNotAttached($estandarId)
+    public function attachEstandarIfNotAttached1($estandarId)
     {
         if (!$this->estandares()->where('estandar_id', $estandarId)->exists()) {
             $this->estandares()->attach($estandarId);
+        }
+    }
+    public function attachEstandarIfNotAttached2($cursoId)
+    {
+        if (!$this->cursos()->where('curso_id', $cursoId)->exists()) {
+            $this->cursos()->attach($cursoId);
         }
     }
 }

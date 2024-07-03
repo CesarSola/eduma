@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <div class="text-center text-white bg-success p-3 rounded" style="width: 300px;">
-            <h1 style="font-size: 1.5rem; margin-bottom: 0;">Mis Cursos</h1>
+            <h1 style="font-size: 1.5rem; margin-bottom: 0;">Mis Competencias</h1>
         </div>
         <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title mb-0">
-                    Cursos inscritos por {{ $usuario->name }}
+                    Competencias inscritas por {{ $usuario->name }}
                 </h6>
             </div>
         </div>
@@ -32,16 +32,43 @@
             @else
                 <ul class="list-group">
                     @foreach ($cursos as $curso)
+                        @php
+                            $validacionComentario = $curso
+                                ->validacionesComentarios()
+                                ->where('tipo_documento', 'comprobante_pago')
+                                ->first();
+                            if ($validacionComentario) {
+                                $estado = $validacionComentario->tipo_validacion;
+                            } else {
+                                $estado = null;
+                            }
+                        @endphp
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <span style="font-weight: bold; color: #333;">{{ $curso->name }}</span> -
                                 {{ $curso->tipo }}
-                                <a href="{{ route('evidenciasCU.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
-                                    class="btn btn-primary btn-sm ml-2">Ver</a>
+                                @if ($estado == 'validar')
+                                    <a href="{{ route('evidenciasEC.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
+                                        class="btn btn-primary btn-sm ml-2">Ver</a>
+                                @elseif ($estado == 'rechazar')
+                                    <a href="{{ route('misCursos.resubir_comprobante', ['id' => $curso->id]) }}"
+                                        class="btn btn-danger btn-sm ml-2">
+                                        Resubir Comprobante
+                                    </a>
+                                @else
+                                    <span class="badge badge-warning">En validación</span>
+                                @endif
                             </div>
-                            <span class="badge badge-primary badge-pill">Inscrito</span>
+                            @if ($estado == 'validar')
+                                <span class="badge badge-success badge-pill">Inscrito</span>
+                            @elseif ($estado == 'rechazar')
+                                <span class="badge badge-danger badge-pill">Comprobante: Rechazado</span>
+                            @else
+                                <span class="badge badge-warning badge-pill">Comprobante: Subido</span>
+                            @endif
                         </li>
                     @endforeach
+
                 </ul>
             @endif
         </div>
@@ -50,37 +77,7 @@
 
 @section('css')
     <style>
-        .card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .alert-info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .list-group-item {
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            margin-bottom: 5px;
-        }
-
-        .badge {
-            font-size: 0.8em;
-            vertical-align: middle;
-        }
-
-        .btn-sm {
-            font-size: 0.8em;
-            padding: 0.25em 0.5em;
-        }
+        /* Estilos personalizados aquí */
     </style>
 @stop
 

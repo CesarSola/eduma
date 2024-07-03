@@ -83,16 +83,14 @@ Route::resource('evidenciasACU', EvidenciasCursosController::class);
 Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
+//ruta de la carpeta validarCoP
 Route::resource('validarCoP', ValidarCoPController::class);
 // Rutas para validar comprobante de pagos de competencias
 Route::put('/validar-cop/{id}/update-comprobante/{documento}', [ValidarCoPController::class, 'updateComprobante'])->name('validarCoP.updateComprobante');
-
-
-
-
+//ruta de la carpeta validarCoP
+Route::resource('validarCuP', ValidarCuPController::class);
 //rutas para validar comprobante de pagos cursos
-Route::get('validar-cup/{id}', [ValidarCuPController::class, 'show'])->name('validarCuP.show');
-Route::put('/validar-cup/{id}/update', [ValidarCuPController::class, 'update'])->name('validarCuP.update');
+Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPController::class, 'updateComprobante'])->name('validarCuP.updateComprobante');
 
 
 //rutas del expediente Usuario
@@ -109,14 +107,20 @@ Route::resource('competenciaEC', RegistroECController::class);
 Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
+//ruta en el cual se muestra si el comprobante de competencias ha sido rechazado(vista usuarios)
 Route::get('miscompetencias/{id}/mostrar-rechazado', [MisCompetenciasController::class, 'mostrarRechazado'])
     ->name('miscompetencias.resubir_comprobante');
+//ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
 Route::post('miscompetencias/{id}/guardar-resubir-comprobante', [MisCompetenciasController::class, 'guardarResubirComprobante'])
     ->name('miscompetencias.guardarResubirComprobante');
-
-
 //ruta de mis cursos
 Route::resource('misCursos', MisCursosController::class);
+//ruta en el cual se muestra si el comprobante de cursos ha sido rechazado(vista usuario)
+Route::get('misCursos/{id}/mostrar-rechazado', [MisCursosController::class, 'mostrarRechazado'])
+    ->name('misCursos.resubir_comprobante');
+//ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
+Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::class, 'guardarResubirComprobante'])
+    ->name('misCursos.guardarResubirComprobante');
 //ruta de evidenciasEC
 Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');

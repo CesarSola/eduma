@@ -33,10 +33,7 @@ class Estandares extends Model
     {
         return $this->hasOne(comprobantesCO::class, 'estandar_id', 'id');
     }
-    public function comprobantesCU()
-    {
-        return $this->hasOne(comprobantesCU::class, 'curso_id', 'id');
-    }
+
 
     public function users()
     {

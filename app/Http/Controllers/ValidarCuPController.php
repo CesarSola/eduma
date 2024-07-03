@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ComprobantePago;
 use App\Models\ComprobantesCU;
 use App\Models\User;
 use App\Models\ValidacionesComentarios;
@@ -10,93 +9,61 @@ use Illuminate\Http\Request;
 
 class ValidarCuPController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
+    // Método para mostrar la vista de revisión de comprobantes de pago
     public function show($id)
     {
-        $usuario = User::findOrFail($id);
-        $comprobanteCU = ComprobantesCU::where('user_id', $id)->latest()->first();
+        // Obtener el usuario junto con los comprobantes
+        $usuarioCU = User::with('comprobantesCU.validacionesComentarios')->findOrFail($id);
 
-        return view('expedientes.expedientesAdmin.validarCuP.show', compact('usuario', 'comprobanteCU'));
+        // Filtrar comprobantes específicos que necesitan revisión
+        $comprobantesCU = $usuarioCU->comprobantesCU->filter(function ($comprobanteCU) {
+            return $comprobanteCU->validacionesComentarios->isEmpty() || $comprobanteCU->validacionesComentarios->contains(function ($validacionCU) {
+                return $validacionCU->tipo_validacion != 'validar';
+            });
+        });
+
+        return view('expedientes.expedientesAdmin.validarCuP.show', compact('usuarioCU', 'comprobantesCU'));
     }
-    public function update(Request $request, $id, $documentoNombre)
+
+    // Método para actualizar el estado de validación de un comprobante de pago
+    public function updateComprobante(Request $request, $id, $comprobanteId)
     {
-        $usuario = User::findOrFail($id);
-        $comprobantes = $usuario->comprobantes;
+        $usuarioCU = User::findOrFail($id);
+        $comprobanteCU = ComprobantesCU::findOrFail($comprobanteId);
 
-        $accion = $request->input('documento_estado');
-        $comentario = $request->input('comentario_documento', '');
+        $accionCU = $request->input('documento_estado_CU');
+        $comentarioCU = $request->input('comentario_documento', '');
 
-        foreach ($comprobantes as $comprobante) {
-            if ($documentoNombre == 'comprobante_pago') {
-                // Update or create validation for comprobante de pago
-                ValidacionesComentarios::updateOrCreate(
-                    [
-                        'user_id' => $usuario->id,
-                        'comprobante_pago_id' => $comprobante->id,
-                        'tipo_documento' => 'comprobante_pago'
-                    ],
-                    [
-                        'tipo_validacion' => $accion,
-                        'comentario' => $comentario
-                    ]
-                );
+        // Verificar que el comprobante de pago pertenezca al usuario
+        if ($comprobanteCU->user_id == $usuarioCU->id) {
+            // Update or create validation
+            ValidacionesComentarios::updateOrCreate(
+                [
+                    'user_id' => $usuarioCU->id,
+                    'comprobanteCU_id' => $comprobanteCU->id,
+                    'tipo_documento' => 'comprobante_pago' // Asegúrate de usar el tipo de documento correcto
+                ],
+                [
+                    'tipo_validacion' => $accionCU,
+                    'comentario' => $comentarioCU
+                ]
+            );
 
-                // Update the validation status in the comprobante's state
-                $estado = json_decode($comprobante->estado, true) ?? [];
-                $estado['comprobante_pago'] = $accion;
-                $comprobante->update(['estado' => json_encode($estado)]);
+            // Actualizar el estado de validación en el estado del comprobante
+            $estadoCU = json_decode($comprobanteCU->estadoCU, true) ?? [];
+            $estadoCU['validacion_comprobante_pago'] = $accionCU; // Asegúrate de usar el campo de estado correcto
+            $comprobanteCU->estadoCU = json_encode($estadoCU);
+            $comprobanteCU->save();
+
+            // Retornar una respuesta JSON con el mensaje apropiado
+            if ($accionCU == 'validar') {
+                $mensajeCU = 'Comprobante de pago validado correctamente';
+            } else {
+                $mensajeCU = 'Comprobante de pago rechazado correctamente';
             }
-        }
-        dd($request->all());
-
-        // Return JSON response with appropriate message
-        if ($accion == 'validar') {
-            $mensaje = 'Documento validado correctamente';
+            return response()->json(['success' => $mensajeCU]);
         } else {
-            $mensaje = 'Documento rechazado correctamente';
+            return response()->json(['error' => 'No tienes permiso para modificar este comprobante de pago.'], 403);
         }
-        return response()->json(['success' => $mensaje]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
