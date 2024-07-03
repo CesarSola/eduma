@@ -17,9 +17,7 @@
                 <div class="card">
                     <div class="card-body header-flex">
                         <div class="left-content">
-                            <div class="text-center">
-                                <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
-                            </div>
+
                             <p>Nombres: {{ $usuariosAdmin->name }} {{ $usuariosAdmin->secondName }}</p>
                             <p>Apellidos: {{ $usuariosAdmin->paternalSurname }} {{ $usuariosAdmin->maternalSurname }}</p>
                             <p>Edad {{ $usuariosAdmin->age }} años</p>

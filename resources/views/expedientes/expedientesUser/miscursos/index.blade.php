@@ -48,7 +48,7 @@
                                 <span style="font-weight: bold; color: #333;">{{ $curso->name }}</span> -
                                 {{ $curso->tipo }}
                                 @if ($estado == 'validar')
-                                    <a href="{{ route('evidenciasEC.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
+                                    <a href="{{ route('evidenciasCU.index', ['id' => $curso->id, 'name' => $curso->name]) }}"
                                         class="btn btn-primary btn-sm ml-2">Ver</a>
                                 @elseif ($estado == 'rechazar')
                                     <a href="{{ route('misCursos.resubir_comprobante', ['id' => $curso->id]) }}"
