@@ -31,8 +31,8 @@ class ValidarCuPController extends Controller
         $usuarioCU = User::findOrFail($id);
         $comprobanteCU = ComprobantesCU::findOrFail($comprobanteId);
 
-        $accionCU = $request->input('documento_estado_CU');
-        $comentarioCU = $request->input('comentario_documento', '');
+        $accion = $request->input('documento_estado_CU');
+        $comentario = $request->input('comentario_documento', '');
 
         // Verificar que el comprobante de pago pertenezca al usuario
         if ($comprobanteCU->user_id == $usuarioCU->id) {
@@ -44,24 +44,24 @@ class ValidarCuPController extends Controller
                     'tipo_documento' => 'comprobante_pago' // Asegúrate de usar el tipo de documento correcto
                 ],
                 [
-                    'tipo_validacion' => $accionCU,
-                    'comentario' => $comentarioCU
+                    'tipo_validacion' => $accion,
+                    'comentario' => $comentario
                 ]
             );
 
             // Actualizar el estado de validación en el estado del comprobante
-            $estadoCU = json_decode($comprobanteCU->estadoCU, true) ?? [];
-            $estadoCU['validacion_comprobante_pago'] = $accionCU; // Asegúrate de usar el campo de estado correcto
-            $comprobanteCU->estadoCU = json_encode($estadoCU);
+            $estado = json_decode($comprobanteCU->estado, true) ?? [];
+            $estado['validacion_comprobante_pago'] = $accion; // Asegúrate de usar el campo de estado correcto
+            $comprobanteCU->estado = json_encode($estado);
             $comprobanteCU->save();
 
             // Retornar una respuesta JSON con el mensaje apropiado
-            if ($accionCU == 'validar') {
-                $mensajeCU = 'Comprobante de pago validado correctamente';
+            if ($accion == 'validar') {
+                $mensaje = 'Comprobante de pago validado correctamente';
             } else {
-                $mensajeCU = 'Comprobante de pago rechazado correctamente';
+                $mensaje = 'Comprobante de pago rechazado correctamente';
             }
-            return response()->json(['success' => $mensajeCU]);
+            return response()->json(['success' => $mensaje]);
         } else {
             return response()->json(['error' => 'No tienes permiso para modificar este comprobante de pago.'], 403);
         }

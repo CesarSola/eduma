@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <div class="text-center text-white bg-success p-3 rounded" style="width: 300px;">
-            <h1 style="font-size: 1.5rem; margin-bottom: 0;">Mis Competencias</h1>
+            <h1 style="font-size: 1.5rem; margin-bottom: 0;">Mis Cursos</h1>
         </div>
         <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title mb-0">
-                    Competencias inscritas por {{ $usuario->name }}
+                    Cursos inscritas por {{ $usuario->name }}
                 </h6>
             </div>
         </div>
@@ -82,7 +82,22 @@
 @stop
 
 @section('js')
+    <!-- Incluir jQuery (si no está incluido ya) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script>
-        console.log("Hola, estoy usando el paquete Laravel-AdminLTE!");
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#id_del_contenedor_a_actualizar');
+                    $('#id_del_contenedor_a_actualizar').html(updatedContent.html());
+                }
+            });
+        }, 10000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

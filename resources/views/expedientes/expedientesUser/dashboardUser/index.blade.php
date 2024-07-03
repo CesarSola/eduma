@@ -48,7 +48,7 @@
     @endphp
 
     @if (!$documentosSubidos)
-        <div class="card">
+        <div id="1" class="card">
             <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos">Lista de
                 requerimientos y documentación</h6>
             <br>
@@ -270,8 +270,8 @@
                 dataType: 'html', // Tipo de datos esperado (html en este caso)
                 success: function(response) {
                     // Actualizar el contenido de la sección específica
-                    var updatedContent = $(response).find('#id_del_contenedor_a_actualizar');
-                    $('#id_del_contenedor_a_actualizar').html(updatedContent.html());
+                    var updatedContent = $(response).find('#1');
+                    $('#1').html(updatedContent.html());
                 }
             });
         }, 10000); // 300000 milisegundos = 5 minutos

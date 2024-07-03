@@ -63,7 +63,7 @@
                                     $documentosParaRevisarCU = true;
                                 @endphp
                                 <form class="update-form"
-                                    data-url="{{ route('validarCuP.updateComprobante', ['id' => $usuarioCU->id, 'comprobanteId' => $comprobanteCU->id]) }}"
+                                    data-url="{{ route('validarCuP.updateComprobante', ['id' => $usuarioCU->id, 'documento' => $comprobanteCU]) }}"
                                     method="POST">
                                     @csrf
                                     @method('PUT')
@@ -117,7 +117,71 @@
 
 @section('css')
     <style>
-        /* Estilos personalizados */
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-content {
+            width: 70%;
+        }
+
+        .right-content {
+            width: 30%;
+            text-align: right;
+        }
+
+        .card-title {
+            background-color: #067dd2;
+            text-align: center;
+            width: 100%;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #5cb8a9;
+            border-radius: 5px;
+        }
+
+        .list-group-item {
+            text-align: center;
+            width: 100%;
+        }
+
+        .h-100 {
+            height: 100%;
+        }
+
+        .overflow-auto {
+            max-height: 200px;
+            /* Ajusta esta altura según sea necesario */
+            overflow-y: auto;
+        }
+
+        .btn-secondary {
+            margin-left: auto;
+        }
+
+        .btn-success {
+            align-content: center;
+            width: 50%;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+        }
+
+        .toggle-card {
+            cursor: pointer;
+        }
     </style>
 @stop
 
@@ -153,7 +217,7 @@
                                 const action = formData.get('documento_estado_CU');
                                 if (action === 'validar') {
                                     form.style.display =
-                                    'none'; // Ocultar el formulario del documento validado
+                                        'none'; // Ocultar el formulario del documento validado
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
                                             <div class="form-group row">
@@ -169,7 +233,7 @@
                                         .value = ''; // Limpiar el campo de comentarios
                                     form.querySelectorAll('input[type="radio"]').forEach(
                                         radio => radio.checked = false
-                                        ); // Deseleccionar todos los radio buttons
+                                    ); // Deseleccionar todos los radio buttons
                                 }
 
                                 // Ocultar el mensaje de éxito después de 5 segundos
@@ -189,5 +253,23 @@
                 successMessage.style.display = 'none';
             });
         });
+    </script>
+    <!-- Incluir jQuery (si no está incluido ya) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#id_del_contenedor_a_actualizar');
+                    $('#id_del_contenedor_a_actualizar').html(updatedContent.html());
+                }
+            });
+        }, 10000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

@@ -27,12 +27,12 @@ class MisCursosController extends Controller
     public function mostrarRechazado($id)
     {
         $curso = Curso::findOrFail($id);
-        $validacionComentario = ValidacionesComentarios::where('curso_id', $curso->id)
+        $validacionComentario = ValidacionesComentarios::where('comprobanteCU_id', $curso->id)
             ->where('tipo_documento', 'comprobante_pago')
             ->first();
 
         // Si no hay validación de comprobante, podemos manejarlo como necesario
-        return view('expedientes.expedientesUser.miscursos.resubir_comprobante', compact('competencia', 'validacionComentario'));
+        return view('expedientes.expedientesUser.misCursos.resubir_comprobante', compact('curso', 'validacionComentario'));
     }
     // Método para guardar la re-subida del comprobante de pago
     public function guardarResubirComprobante(Request $request, $id)

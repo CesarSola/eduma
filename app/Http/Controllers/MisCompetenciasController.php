@@ -28,7 +28,7 @@ class MisCompetenciasController extends Controller
     public function mostrarRechazado($id)
     {
         $competencia = Estandares::findOrFail($id);
-        $validacionComentario = ValidacionesComentarios::where('estandar_id', $competencia->id)
+        $validacionComentario = ValidacionesComentarios::where('comprobanteCO_id', $competencia->id)
             ->where('tipo_documento', 'comprobante_pago')
             ->first();
 

@@ -18,8 +18,8 @@ class ValidarCoPController extends Controller
 
         // Filtrar comprobantes específicos que necesitan revisión
         $comprobantesCO = $usuarioCO->comprobantesCO->filter(function ($comprobanteCO) {
-            return $comprobanteCO->validacionesComentarios->isEmpty() || $comprobanteCO->validacionesComentarios->contains(function ($validacionCU) {
-                return $validacionCU->tipo_validacion != 'validar';
+            return $comprobanteCO->validacionesComentarios->isEmpty() || $comprobanteCO->validacionesComentarios->contains(function ($validacion) {
+                return $validacion->tipo_validacion != 'validar';
             });
         });
 
@@ -30,34 +30,34 @@ class ValidarCoPController extends Controller
     public function updateComprobante(Request $request, $id, $comprobanteId)
     {
         $usuarioCO = User::findOrFail($id);
-        $ComprobanteCO = ComprobantesCO::findOrFail($comprobanteId);
+        $comprobantesCO = ComprobantesCO::findOrFail($comprobanteId);
 
-        $accionCO = $request->input('documento_estado');
-        $comentarioCO = $request->input('comentario_documento', '');
+        $accion = $request->input('documento_estado');
+        $comentario = $request->input('comentario_documento', '');
 
         // Verificar que el comprobante de pago pertenezca al usuario
-        if ($ComprobanteCO->user_id == $usuarioCO->id) {
+        if ($comprobantesCO->user_id == $usuarioCO->id) {
             // Update or create validation
             ValidacionesComentarios::updateOrCreate(
                 [
                     'user_id' => $usuarioCO->id,
-                    'comprobanteCO_id' => $ComprobanteCO->id,
+                    'comprobanteCO_id' => $comprobantesCO->id,
                     'tipo_documento' => 'comprobante_pago' // Asegúrate de usar el tipo de documento correcto
                 ],
                 [
-                    'tipo_validacion' => $accionCO,
-                    'comentario' => $comentarioCO
+                    'tipo_validacion' => $accion,
+                    'comentario' => $comentario
                 ]
             );
 
             // Actualizar el estado de validación en el estado del comprobante
-            $estadoCO = json_decode($ComprobanteCO->estadoCO, true) ?? [];
-            $estadoCO['validacion_comprobante_pago'] = $accionCO; // Asegúrate de usar el campo de estadoCO correcto
-            $ComprobanteCO->estadoCO = json_encode($estadoCO);
-            $ComprobanteCO->save();
+            $estado = json_decode($comprobantesCO->estado, true) ?? [];
+            $estado['validacion_comprobante_pago'] = $accion; // Asegúrate de usar el campo de estado correcto
+            $comprobantesCO->estado = json_encode($estado);
+            $comprobantesCO->save();
 
             // Retornar una respuesta JSON con el mensaje apropiado
-            if ($accionCO == 'validar') {
+            if ($accion == 'validar') {
                 $mensaje = 'Comprobante de pago validado correctamente';
             } else {
                 $mensaje = 'Comprobante de pago rechazado correctamente';

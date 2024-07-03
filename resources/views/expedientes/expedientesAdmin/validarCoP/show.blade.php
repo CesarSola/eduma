@@ -49,43 +49,43 @@
                 <div class="card">
                     <div class="card-body">
                         @php
-                            $documentosParaRevisarCO = false;
+                            $documentosParaRevisar = false;
                         @endphp
 
                         <!-- Mostrar documentos específicos -->
-                        @foreach ($comprobantesCO as $comprobanteCO)
+                        @foreach ($comprobantesCO as $comprobante)
                             @php
                                 $estado = json_decode($comprobante->estado, true) ?? [];
                             @endphp
                             @if (
-                                $comprobanteCO->comprobante_pago &&
+                                $comprobante->comprobante_pago &&
                                     (!isset($estado['validacion_comprobante_pago']) || $estado['validacion_comprobante_pago'] == 'rechazar'))
                                 @php
-                                    $documentosParaRevisarCO = true;
+                                    $documentosParaRevisar = true;
                                 @endphp
                                 <form class="update-form"
-                                    data-url="{{ route('validarCoP.updateComprobante', ['id' => $usuarioCO->id, 'documento' => $comprobanteCO]) }}"
+                                    data-url="{{ route('validarCoP.updateComprobante', ['id' => $usuarioCO->id, 'documento' => $comprobante]) }}"
                                     method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
                                         <div class="col-sm-4">
-                                            <a href="{{ Storage::url($comprobanteCO->comprobante_pago) }}" target="_blank"
+                                            <a href="{{ Storage::url($comprobante->comprobante_pago) }}" target="_blank"
                                                 class="btn btn-primary">Ver</a>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="documento_estado"
-                                                    id="validar_comprobante_{{ $comprobanteCO->id }}" value="validar">
+                                                    id="validar_comprobante_{{ $comprobante->id }}" value="validar">
                                                 <label class="form-check-label"
-                                                    for="validar_comprobante_{{ $comprobanteCO->id }}">Validar</label>
+                                                    for="validar_comprobante_{{ $comprobante->id }}">Validar</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="documento_estado"
-                                                    id="rechazar_comprobante_{{ $comprobanteCO->id }}" value="rechazar">
+                                                    id="rechazar_comprobante_{{ $comprobante->id }}" value="rechazar">
                                                 <label class="form-check-label"
-                                                    for="rechazar_comprobante_{{ $comprobanteCO->id }}">Rechazar</label>
+                                                    for="rechazar_comprobante_{{ $comprobante->id }}">Rechazar</label>
                                             </div>
                                             <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
                                         </div>
@@ -97,7 +97,7 @@
                             @endif
                         @endforeach
                         <!-- Mensaje para documentos validados -->
-                        @if (!$documentosParaRevisarCO)
+                        @if (!$documentosParaRevisar)
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group row">

@@ -127,7 +127,22 @@
 @stop
 
 @section('js')
+    <!-- Incluir jQuery (si no está incluido ya) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#id_del_contenedor_a_actualizar');
+                    $('#id_del_contenedor_a_actualizar').html(updatedContent.html());
+                }
+            });
+        }, 10000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

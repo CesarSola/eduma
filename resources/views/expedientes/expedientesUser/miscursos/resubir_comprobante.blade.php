@@ -5,7 +5,7 @@
 @section('content_header')
     <h1>Re-subir Comprobante de Pago</h1>
     <div>
-        <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary">Regresar</a>
+        <a href="{{ route('misCursos.index') }}" class="btn btn-secondary">Regresar</a>
     </div>
 @stop
 
@@ -22,10 +22,10 @@
                 </div>
             @endif
 
-            <h5 class="card-title">Competencia: {{ $competencia->name }}</h5>
+            <h5 class="card-title">Competencia: {{ $curso->name }}</h5>
             <p class="card-text">Por favor, sube nuevamente el comprobante de pago.</p>
 
-            <form action="{{ route('miscompetencias.guardarResubirComprobante', ['id' => $competencia->id]) }}" method="POST"
+            <form action="{{ route('misCursos.guardarResubirComprobante', ['id' => $curso->id]) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
 
@@ -49,7 +49,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Guardar y Re-subir</button>
-                <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ route('misCursos.index') }}" class="btn btn-secondary">Cancelar</a>
             </form>
 
         </div>
