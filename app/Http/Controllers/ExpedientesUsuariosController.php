@@ -165,7 +165,7 @@ class ExpedientesUsuariosController extends Controller
         $usuariosAdmin->update($validatedData);
 
         // Redirigir a la vista de índice con un mensaje de éxito
-        return redirect()->route('usuariosAdmin.index')
+        return redirect()->route('usuariosAdmin.show', ['usuariosAdmin' => $id])
             ->with('success', 'Usuario actualizado correctamente');
     }
 

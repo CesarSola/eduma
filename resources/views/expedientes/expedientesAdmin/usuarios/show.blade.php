@@ -1,8 +1,6 @@
 @extends('adminlte::page')
 
 @section('title', 'Expediente')
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Expediente</h1>
@@ -20,7 +18,7 @@
 
                             <p>Nombres: {{ $usuariosAdmin->name }} {{ $usuariosAdmin->secondName }}</p>
                             <p>Apellidos: {{ $usuariosAdmin->paternalSurname }} {{ $usuariosAdmin->maternalSurname }}</p>
-                            <p>Edad {{ $usuariosAdmin->age }} años</p>
+                            <p>Edad: {{ $usuariosAdmin->age }} años</p>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">
                                 Editar
@@ -218,6 +216,7 @@
                         </div>
                     </div>
                 </div>
+                @include('expedientes.expedientesAdmin.usuarios.edit')
             </div>
         </div>
     </div>
@@ -312,6 +311,6 @@
                     $('#1').html(updatedContent.html());
                 }
             });
-        }, 5000); // 300000 milisegundos = 5 minutos
+        }, 300000); // 300000 milisegundos = 5 minutos
     </script>
 @stop
