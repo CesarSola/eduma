@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@material.com',
+            'matricula' => '0000',
             'password' => Hash::make('secret'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
         ]);
@@ -28,9 +29,9 @@ class UserSeeder extends Seeder
             'secondName' => 'Adrian',
             'paternalSurname' => 'Rodriguez',
             'maternalSurname' => 'Alvarado',
-            'genero' => 'Masculino',
+            'genero' => 'Hombre',
             'phone' => '9987327293',
-            'matricula' => '1',
+            'matricula' => '0001',
             'email' => 'test@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
@@ -43,9 +44,9 @@ class UserSeeder extends Seeder
             'secondName' => 'Gilberto',
             'paternalSurname' => 'Martin',
             'maternalSurname' => 'Perez',
-            'genero' => 'Masculino',
+            'genero' => 'Hombre',
             'phone' => '9956386893',
-            'matricula' => '2',
+            'matricula' => '0002',
             'email' => 'test2@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada

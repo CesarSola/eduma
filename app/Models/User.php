@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles; // Importa el trait
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -39,6 +40,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'd_estado',
         'd_ciudad',
         'D_mnpio',
+        'genero',
+        'matricula',
         'foto',
         'phone',
         'active',
@@ -67,6 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(comprobantesCU::class);
     }
+
     public function comprobantesCO()
     {
         return $this->hasMany(comprobantesCO::class);
@@ -100,12 +104,67 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // Redirigir o mostrar un mensaje de éxito
     }
+
+    // Método para generar la matrícula automáticamente solo para usuarios con rol 'User'
+    // Dentro del modelo User
+    public static function boot()
+    {
+        parent::boot();
+
+        // Evento de creación del usuario
+        static::creating(function ($user) {
+            // Verificar si el usuario tiene el rol 'User'
+            if ($user->hasRole('User')) {
+                // Generar la matrícula solo si aún no está definida
+                if (!$user->matricula) {
+                    $user->matricula = static::generateMatricula();
+                }
+            }
+        });
+    }
+
+    public static function generateMatricula()
+    {
+        // Obtener el ID del rol "User"
+        $roleId = Role::where('name', 'User')->first()->id;
+
+        // Obtener el último número de matrícula para el rol específico
+        $latestUser = static::whereHas('roles', function ($query) use ($roleId) {
+            $query->where('role_id', $roleId);
+        })
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // Si no hay usuarios con ese rol, empezamos con '0001'
+        if (!$latestUser) {
+            return '0001';
+        }
+
+        // Obtener el último número de matrícula y generar el siguiente número
+        $lastNumber = (int) substr($latestUser->matricula, -4);
+        $newNumber = $lastNumber + 1;
+
+        // Generar la nueva matrícula y asegurar que tenga 4 dígitos
+        $newMatricula = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+
+        // Verificar si la matrícula ya existe y generar una nueva si es necesario
+        while (static::where('matricula', $newMatricula)->exists()) {
+            $newNumber++;
+            $newMatricula = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $newMatricula;
+    }
+
+
+    // Métodos adicionales según necesidades del negocio
     public function attachEstandarIfNotAttached1($estandarId)
     {
         if (!$this->estandares()->where('estandar_id', $estandarId)->exists()) {
             $this->estandares()->attach($estandarId);
         }
     }
+
     public function attachEstandarIfNotAttached2($cursoId)
     {
         if (!$this->cursos()->where('curso_id', $cursoId)->exists()) {

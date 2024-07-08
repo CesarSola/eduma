@@ -43,6 +43,7 @@ require __DIR__ . '/auth.php';
 // Rutas para el CRUD de códigos postales
 use App\Http\Controllers\CodigoPostalController;
 
+Route::get('/buscar-codigo-postal', [PostalCodeController::class, 'buscarCodigoPostal'])->name('buscarCodigoPostal');
 Route::resource('codigos-postales', CodigoPostalController::class);
 Route::post('/obtener-detalles-codigo-postal', [CodigoPostalController::class, 'obtenerDetallesCodigoPostal'])->name('obtener-detalles-codigo-postal');
 Route::post('/importar-excel', [CodigoPostalController::class, 'importarExcel'])->name('importar.excel');
@@ -50,7 +51,6 @@ Route::post('/profile/update-address', [ProfileController::class, 'updateAddress
 Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
 
 //rutas de la carpeta expedientes y sus carpetas
-use App\Http\Controllers\EvidenciasUEControlle;
 use App\Http\Controllers\ExpedientesUsuariosController;
 use App\Http\Controllers\EvidenciasCompetenciasController;
 use App\Http\Controllers\EvidenciasCursosController;

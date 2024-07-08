@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role; // Importar el modelo Role
 
 class RegisteredUserController extends Controller
 {
@@ -31,38 +32,52 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'secondName' => ['required', 'string', 'max:255'],
+            'paternalSurname' => ['required', 'string', 'max:255'],
+            'maternalSurname' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'integer'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'codigo_postal' => ['required', 'string', 'max:255'],
-            'd_asenta' => ['required', 'string', 'max:255'],
-            'D_mnpio' => ['required', 'string', 'max:255'],
-            'd_estado' => ['required', 'string', 'max:255'],
-            'd_ciudad' => ['required', 'string', 'max:255'],
-            'genero' => ['required', 'string', 'in:male,female,other'],
-
+            'phone' => ['required', 'string', 'max:255'],
+            'genero' => ['required', 'string', 'in:Hombre,Mujer,Otro'],
+            // Añadir más validaciones según sea necesario
         ]);
 
+        // Generar matrícula automáticamente
+        $matricula = User::generateMatricula();
+
+        // Crear el usuario con todos los campos necesarios incluyendo matrícula
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'd_codigo' => $request->codigo_postal,
-            'd_asenta' => $request->d_asenta,
-            'D_mnpio' => $request->D_mnpio,
-            'd_estado' => $request->d_estado,
-            'd_ciudad' => $request->d_ciudad,
-            'genero' => $request->genero,
             'secondName' => $request->secondName,
             'paternalSurname' => $request->paternalSurname,
             'maternalSurname' => $request->maternalSurname,
+            'age' => $request->age,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'calle_avenida' => $request->calle_avenida,
+            'numext' => $request->numext,
+            'd_asenta' => $request->d_asenta,
+            'd_estado' => $request->d_estado,
+            'd_ciudad' => $request->d_ciudad,
+            'D_mnpio' => $request->D_mnpio,
+            'd_codigo' => $request->codigo_postal,
             'phone' => $request->phone,
+            'genero' => $request->genero,
+            'matricula' => $matricula, // Asignar la matrícula generada
         ]);
 
+        // Asignar automáticamente el rol 'User' al usuario creado
+        $user->assignRole('User');
+
+        // Evento de registro
         event(new Registered($user));
 
+        // Iniciar sesión automáticamente después de registrar al usuario
         Auth::login($user);
 
+        // Redirigir al dashboard u otra página después del registro
         return redirect(route('dashboard', absolute: false));
     }
 }

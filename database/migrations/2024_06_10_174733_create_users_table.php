@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('paternalSurname')->nullable();  //campo apellido paterno
             $table->string('maternalSurname')->nullable();  //campo apellido materno
             $table->string('age')->nullable();  //campo edad
-            $table->string('genero')->nullable();  //campo edad
-            $table->string('matricula')->nullable(); // campo matricula
+            $table->string('genero')->nullable();  //campo genero
+            $table->string('matricula')->unique();
             $table->string('password'); // campo contraseña
             $table->string('calle_avenida')->nullable(); // Campo calle/avenida
             $table->string('numext')->nullable(); // Campo numext

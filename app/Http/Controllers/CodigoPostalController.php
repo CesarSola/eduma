@@ -7,6 +7,7 @@ use App\Models\CodigoPostal;
 
 use Maatwebsite\Excel\Facades\Excel; // Importa la clase Excel desde su espacio de nombres correcto
 use App\Imports\CodigosPostalesImport;
+use Illuminate\Support\Facades\Log;
 
 class CodigoPostalController extends Controller
 {
@@ -69,7 +70,12 @@ class CodigoPostalController extends Controller
 
         $archivo = $request->file('archivo_excel');
 
-        Excel::import(new CodigosPostalesImport, $archivo);
+        try {
+            Excel::import(new CodigosPostalesImport, $archivo);
+        } catch (\Exception $e) {
+            Log::error('Error durante la importación:', ['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['msg' => 'Ocurrió un error durante la importación. Verifica el archivo y vuelve a intentarlo.']);
+        }
 
         return redirect()->back()->with('success', '¡Los datos se han importado correctamente!');
     }
