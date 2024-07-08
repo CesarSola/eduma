@@ -24,7 +24,13 @@ class UserSeeder extends Seeder
         $admin->assignRole('Admin');
 
         $admin = User::create([
-            'name' => 'Angel',
+            'name' => 'Miguel',
+            'secondName' => 'Adrian',
+            'paternalSurname' => 'Rodriguez',
+            'maternalSurname' => 'Alvarado',
+            'genero' => 'Masculino',
+            'phone' => '9987327293',
+            'matricula' => '1',
             'email' => 'test@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
@@ -34,6 +40,12 @@ class UserSeeder extends Seeder
 
         $admin = User::create([
             'name' => 'Jose',
+            'secondName' => 'Gilberto',
+            'paternalSurname' => 'Martin',
+            'maternalSurname' => 'Perez',
+            'genero' => 'Masculino',
+            'phone' => '9956386893',
+            'matricula' => '2',
             'email' => 'test2@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
