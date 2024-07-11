@@ -262,7 +262,64 @@
                                     </div>
                                 @enderror
                             </div>
-
+                            <!-- Calle/Avenida -->
+                            <div class="input-group mb-3">
+                                <input type="text" name="calle_avenida"
+                                    class="form-control @error('calle_avenida') is-invalid @enderror"
+                                    placeholder="{{ __('Calle/Avenida') }}" value="{{ old('calle_avenida') }}"
+                                    required>
+                                @error('calle_avenida')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!-- Número Exterior -->
+                            <div class="input-group mb-3">
+                                <input type="text" name="numext"
+                                    class="form-control @error('numext') is-invalid @enderror"
+                                    placeholder="{{ __('Número Exterior') }}" value="{{ old('numext') }}" required>
+                                @error('numext')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!--Nacimiento -->
+                            <div class="input-group mb-3">
+                                <input type="date" name="nacimiento"
+                                    class="form-control @error('nacimiento') is-invalid @enderror"
+                                    placeholder="{{ __('Fecha de Nacimiento') }}" value="{{ old('nacimiento') }}"
+                                    required>
+                                @error('nacimiento')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!--Nacionalidad -->
+                            <div class="input-group mb-3">
+                                <input type="text" name="nacionalidad"
+                                    class="form-control @error('nacionalidad') is-invalid @enderror"
+                                    placeholder="{{ __('Nacionalidad') }}" value="{{ old('nacionalidad') }}"
+                                    required>
+                                @error('nacionalidad')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!-- CURP -->
+                            <div class="input-group mb-3">
+                                <input type="text" name="curp"
+                                    class="form-control @error('curp') is-invalid @enderror"
+                                    placeholder="{{ __('Curp') }}" value="{{ old('curp') }}" required>
+                                @error('curp')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <!-- Edad -->
                             <div class="input-group mb-3">
                                 <input type="number" name="age"
@@ -274,7 +331,6 @@
                                     </div>
                                 @enderror
                             </div>
-
 
                             <!-- Teléfono -->
                             <div class="input-group mb-3">
@@ -305,7 +361,6 @@
                                     </div>
                                 @enderror
                             </div>
-
                             <div class="row">
                                 <div class="col-8">
                                     <div class="icheck-primary">
@@ -326,7 +381,9 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -445,8 +502,6 @@
             });
         });
     </script>
-
-
 </body>
 
 </html>

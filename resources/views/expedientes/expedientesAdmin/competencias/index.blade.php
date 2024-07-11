@@ -24,15 +24,23 @@
                     </div>
                     <div class="right-content">
                         <!-- Mostrar el estatus de la competencia -->
-                        <span class="badge badge-info">Estatus:
-                            @foreach ($competencias as $competencia)
-                                @if ($competencia->id == $competencia->id)
+                        @foreach ($competencias as $competencia)
+                            <span class="badge badge-info">Estatus:
+                                @php
+                                    $comprobanteValidado = false;
+                                    if ($competencia->comprobantesCO) {
+                                        $comprobanteValidado = $competencia->comprobantesCO->estado === 'validado';
+                                    }
+                                @endphp
+
+                                @if ($comprobanteValidado)
                                     Activo
                                 @else
                                     Inactivo
                                 @endif
-                            @endforeach
-                        </span>
+                            </span>
+                        @endforeach
+
                     </div>
                 </div>
             </div>

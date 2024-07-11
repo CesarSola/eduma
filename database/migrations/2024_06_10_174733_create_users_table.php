@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('age')->nullable();  //campo edad
             $table->string('genero')->nullable();  //campo genero
             $table->string('matricula')->unique();
+            $table->string('curp')->nullable(); // Cambiado a string para almacenar CURP
+            $table->string('nacionalidad')->nullable(); // Cambiado a string para almacenar nacionalidad
+            $table->date('nacimiento')->nullable();
             $table->string('password'); // campo contraseña
             $table->string('calle_avenida')->nullable(); // Campo calle/avenida
             $table->string('numext')->nullable(); // Campo numext

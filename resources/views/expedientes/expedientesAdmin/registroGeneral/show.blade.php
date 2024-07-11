@@ -36,9 +36,6 @@
                                                     {{ $registroGeneral->maternalSurname }}</h6>
                                                 <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
                                             </div>
-                                            <div class="right-content">
-                                                <span class="badge badge-info">Estatus: Activo</span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -216,17 +213,23 @@
 
                                 // Actualizar el mensaje según la acción (validar/rechazar)
                                 const action = formData.get('documento_estado');
+                                const documentRow = form.closest('.form-group.row');
+
                                 if (action === 'validar') {
-                                    form.style.display =
-                                        'none'; // Ocultar el formulario del documento validado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                            <div class="form-group row">
-                                                <div class="col-sm-12 text-center">
-                                                    <p>Todos los documentos disponibles han sido validados.</p>
-                                                </div>
+                                    // Ocultar el formulario del documento validado
+                                    documentRow.style.display = 'none';
+
+                                    // Verificar si ya no quedan formularios para revisar
+                                    if (!document.querySelector(
+                                            '.update-form:not([style*="display: none"])')) {
+                                        const cardBody = document.querySelector('.card-body');
+                                        cardBody.innerHTML = `
+                                        <div class="form-group row">
+                                            <div class="col-sm-12 text-center">
+                                                <p>Todos los documentos disponibles han sido validados.</p>
                                             </div>
-                                        `;
+                                        </div>
+                                    `;
                                     }
                                 } else if (action === 'rechazar') {
                                     // Dejar el formulario visible, pero limpiar los campos
@@ -255,4 +258,5 @@
             });
         });
     </script>
+
 @stop

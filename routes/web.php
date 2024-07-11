@@ -66,6 +66,7 @@ use App\Http\Controllers\CursosController;
 use App\Http\Controllers\EvidenciasUCControlle;
 use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
+use App\Http\Controllers\WordController;
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
@@ -126,11 +127,20 @@ Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+Route::post('/upload-ficha/{userId}/{standardId}', [\App\Http\Controllers\EvidenciasUEController::class, 'uploadFicha'])->name('upload-ficha');
+Route::post('/upload-carta/{userId}', [\App\Http\Controllers\EvidenciasUEController::class, 'uploadCarta'])->name('upload-carta');
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
 Route::get('/evidenciasCU/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
 Route::post('/evidenciasCU/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
+
+//ruta para generar el autorellenado de documentos word
+Route::get('/generate-word/{userId}/{standardId}', [WordController::class, 'generateWord'])->name('generate-word');
+Route::get('/generate-carta/{userId}', [WordController::class, 'generateCarta'])->name('generate-carta');
+
+
+
 // routes agregar cursos,competencias y documentos necesarios
 use App\Http\Controllers\DocumentosEcController;
 use App\Http\Controllers\CompetenciasAddController;

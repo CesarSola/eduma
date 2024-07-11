@@ -13,76 +13,115 @@
 
 @section('content')
     <div class="container mt-4">
-        @if ($documentos->isEmpty())
-            <div class="alert alert-info shadow-sm" role="alert">
-                No hay documentos necesarios para este estándar.
-            </div>
-        @else
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios Como Evidencias para este EC
-                    </h6>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($documentos as $documento)
-                                    <tr>
-                                        <td>{{ $documento->name }}</td>
-                                        <td>{{ $documento->description }}</td>
-                                        <td>
-                                            <a href="{{ Storage::url($documento->documento) }}" target="_blank"
-                                                class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                            @if (!in_array($documento->id, $uploadedDocumentIds))
-                                                <a href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento' => $documento->id]) }}"
-                                                    class="btn btn-success btn-sm shadow-sm">Subir</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="card">
+                        <form action="{{ route('generate-word', ['userId' => Auth::id(), 'standardId' => $estandar->id]) }}"
+                            method="GET">
+                            @csrf
+                            <div class="mb-3">
+                                <h6 class="card-title text-primary font-weight-bold">Descarga la ficha de inscripcion</h6>
+                                <button type="submit" class="btn btn-success btn-sm shadow-sm mt-3">Descargar
+                                    Ficha</button>
+                            </div>
+                        </form>
+                        <form action="{{ route('generate-carta', ['userId' => Auth::id()]) }}" method="GET">
+                            @csrf
+                            <div class="mb-3">
+                                <h6 class="card-title text-primary font-weight-bold">Descarga la Carta de aceptacion</h6>
+                                <button type="submit" class="btn btn-success btn-sm shadow-sm mt-3">Descargar
+                                    Ficha</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        @endif
 
-        @if ($evidencias->isNotEmpty())
-            <div class="card mt-4 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title text-primary font-weight-bold">Evidencias Subidas</h6>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>Documento</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($evidencias as $evidencia)
-                                    <tr>
-                                        <td>{{ $evidencia->documento->name }}</td>
-                                        <td></td>
-                                        <td>
-                                            <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
-                                                class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        @foreach ($documentos as $documento)
+                            <h6 class="card-title text-primary font-weight-bold">Sube tu ficha ya firmada</h6>
+                            <a href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento' => $documento->id]) }}"
+                                class="btn btn-success btn-sm shadow-sm">Sube tu ficha</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
+    </div>
+    @if ($documentos->isEmpty())
+        <div class="alert alert-info shadow-sm" role="alert">
+            No hay documentos necesarios para este estándar.
+        </div>
+    @else
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-primary font-weight-bold">Documentos Necesarios Como Evidencias para este
+                    EC
+                </h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($documentos as $documento)
+                                <tr>
+                                    <td>{{ $documento->name }}</td>
+                                    <td>{{ $documento->description }}</td>
+                                    <td>
+                                        <a href="{{ Storage::url($documento->documento) }}" target="_blank"
+                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                        @if (!in_array($documento->id, $uploadedDocumentIds))
+                                            <a href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento' => $documento->id]) }}"
+                                                class="btn btn-success btn-sm shadow-sm">Subir</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($evidencias->isNotEmpty())
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-primary font-weight-bold">Evidencias Subidas</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($evidencias as $evidencia)
+                                <tr>
+                                    <td>{{ $evidencia->documento->name }}</td>
+                                    <td>{{ $evidencia->estado }}</td> {{-- Asegúrate de mostrar el estado si está validado --}}
+                                    <td>
+                                        <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
+                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
     </div>
 @stop
 

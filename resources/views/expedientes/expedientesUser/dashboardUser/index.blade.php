@@ -262,19 +262,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-        // Función para recargar la sección cada 5 minutos
-        setInterval(function() {
-            $.ajax({
-                url: window.location.href, // URL actual, puede ser ajustada según necesidad
-                type: 'GET', // Método de solicitud GET
-                dataType: 'html', // Tipo de datos esperado (html en este caso)
-                success: function(response) {
-                    // Actualizar el contenido de la sección específica
-                    var updatedContent = $(response).find('#1');
-                    $('#1').html(updatedContent.html());
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleCards = document.querySelectorAll('.toggle-card');
+
+            toggleCards.forEach(function(card) {
+                const targetId = card.getAttribute('data-target');
+                const target = document.querySelector(targetId);
+
+                // Load the state from localStorage
+                const state = localStorage.getItem(targetId);
+                if (state === 'open') {
+                    target.classList.remove('d-none');
+                } else {
+                    target.classList.add('d-none');
                 }
+
+                card.addEventListener('click', function() {
+                    target.classList.toggle('d-none');
+
+                    // Save the state to localStorage
+                    const isOpen = !target.classList.contains('d-none');
+                    localStorage.setItem(targetId, isOpen ? 'open' : 'closed');
+                });
             });
-        }, 10000); // 300000 milisegundos = 5 minutos
+
+            // Recarga la sección "requerimientos" cada 5 minutos
+            setInterval(function() {
+                const requerimientosSection = document.querySelector('#requerimientos');
+                if (!requerimientosSection.classList.contains('d-none')) {
+                    location.reload();
+                }
+            }, 5 * 60 * 1000); // 5 minutos en milisegundos
+        });
     </script>
 
 @stop

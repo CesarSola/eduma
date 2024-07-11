@@ -17,9 +17,10 @@ class ProfileController extends Controller
     public function edit(Request $request)
     {
         $codigosPostales = CodigoPostal::all(); // Obtener todos los códigos postales
+        $user = $request->user(); // Obtener el usuario actual
         return view('profile.edit', [
-            'user' => $request->user(),
-            'codigosPostales' => $codigosPostales, // Pasar los códigos postales a la vista
+            'user' => $user,
+            'codigosPostales' => $codigosPostales,
         ]);
     }
 
@@ -44,6 +45,9 @@ class ProfileController extends Controller
         $user->d_ciudad = $request->input('d_ciudad');
         $user->D_mnpio = $request->input('D_mnpio');
         $user->phone = $request->input('phone');
+        $user->curp = $request->input('curp');
+        $user->nacimiento = $request->input('nacimiento');
+        $user->nacionalidad = $request->input('nacionalidad');
 
         // Si se actualizó el email, restablecer la verificación
         if ($user->isDirty('email')) {
@@ -56,35 +60,36 @@ class ProfileController extends Controller
         // Validar y almacenar la fotografía digital si se ha enviado una
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
-            $fotoPath = $foto->storeAs('public/images/users/' . $userName, 'Foto.' . $foto->extension());
+            $fotoPath = $foto->storeAs('public/images/profiles/users' . $userName, 'Foto.' . $foto->extension());
             $user->foto = $fotoPath;
         }
-// Validar y almacenar la fotografía digital si se ha enviado una
-if ($request->hasFile('foto')) {
-    $foto = $request->file('foto');
+        // Validar y almacenar la fotografía digital si se ha enviado una
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
 
-    // Generar un nombre de archivo único basado en la fecha actual
-    $fileName = date('mdY') . '_' . uniqid() . '.' . $foto->getClientOriginalExtension();
+            // Generar un nombre de archivo único basado en la fecha actual
+            $fileName = date('mdY') . '_' . uniqid() . '.' . $foto->getClientOriginalExtension();
 
-    // Usar el método storeAs y especificar el disco 'public'
-    $fotoPath = $foto->storeAs('public/images/profiles/' . $userName, $fileName);
+            // Usar el método storeAs y especificar el disco 'public'
+            $fotoPath = $foto->storeAs('public/images/profiles/users' . $userName, $fileName);
 
-    // Registrar la ruta para depuración
-    Log::info('Foto almacenada en: ' . $fotoPath);
+            // Registrar la ruta para depuración
+            Log::info('Foto almacenada en: ' . $fotoPath);
 
-    // Verificar si el archivo fue almacenado correctamente
-    if (Storage::exists($fotoPath)) {
-        $user->foto = str_replace('public/', 'storage/', $fotoPath);
-    } else {
-        Log::error('No se pudo almacenar la foto en: ' . $fotoPath);
-    }
-}
+            // Verificar si el archivo fue almacenado correctamente
+            if (Storage::exists($fotoPath)) {
+                $user->foto = str_replace('public/', 'storage/', $fotoPath);
+            } else {
+                Log::error('No se pudo almacenar la foto en: ' . $fotoPath);
+            }
+        }
         // Guardar los cambios en la base de datos
         $user->save();
 
         // Redirigir de vuelta al formulario de edición de perfil con un mensaje de éxito
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
 
     public function destroy(Request $request): RedirectResponse
     {
@@ -151,4 +156,4 @@ if ($request->hasFile('foto')) {
 
         return Redirect::to('/dashboard')->with('status', 'Account reactivated successfully.');
     }
-    }
+}

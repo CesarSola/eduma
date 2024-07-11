@@ -19,6 +19,8 @@ class CreateEvidenciasCompetenciasTable extends Migration
             $table->foreignId('estandar_id')->constrained('estandares')->onDelete('cascade');
             $table->foreignId('documento_id')->constrained('documentosnec')->onDelete('cascade');
             $table->string('file_path');
+            $table->string('ficha_registro_path')->nullable(); // Campo para la ficha de registro
+            $table->string('carta_firma_path')->nullable(); // Campo para la carta de la firma
             $table->timestamps();
         });
     }
