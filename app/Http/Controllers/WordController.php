@@ -8,44 +8,67 @@ use App\Models\EvidenciasCompetencias;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class WordController extends Controller
 {
-    public function uploadFicha(Request $request, $userId, $standardId)
+    public function show($id, $tipoDocumento)
     {
-        $request->validate([
-            'ficha_registro' => 'required|file|mimes:doc,docx|max:2048',
-        ]);
-
-        // Guardar el archivo de ficha de registro
-        $filePath = $request->file('ficha_registro')->store('public/documents/fichas');
-
-        // Guardar en la tabla evidencias_comentarios
-        $evidencia = new EvidenciasCompetencias();
-        $evidencia->user_id = $userId;
-        $evidencia->estandar_id = $standardId;
-        $evidencia->ficha_registro_path = $filePath;
-        $evidencia->save();
-
-        return redirect()->back()->with('success', 'Ficha de registro subida correctamente.');
+        $estandar = Estandares::find($id);
+        return view('expedientes.expedientesUser.evidenciasEC.ficha-carta.show', compact('estandar', 'tipoDocumento'));
     }
 
-    public function uploadCarta(Request $request, $userId)
+
+    /**
+     * Handle the ficha_registro upload.
+     */
+    public function uploadFichaRegistro(Request $request, $id)
     {
         $request->validate([
-            'carta_firma' => 'required|file|mimes:doc,docx|max:2048',
+            'ficha_registro' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        // Guardar el archivo de carta de autorización
-        $filePath = $request->file('carta_firma')->store('public/documents/cartas');
+        $user = auth()->user();
+        $fileName = 'ficha_registro_' . Str::slug($user->name) . '.' . $request->file('ficha_registro')->getClientOriginalExtension();
 
-        // Guardar en la tabla evidencias_comentarios
-        $evidencia = new EvidenciasCompetencias();
-        $evidencia->user_id = $userId;
-        $evidencia->carta_firma_path = $filePath;
-        $evidencia->save();
+        $filePath = $request->file('ficha_registro')->storeAs(
+            'public/documents/evidence/competencias/' . Str::slug($user->name),
+            $fileName
+        );
 
-        return redirect()->back()->with('success', 'Carta de autorización subida correctamente.');
+        EvidenciasCompetencias::updateOrCreate(
+            ['user_id' => $user->id, 'estandar_id' => $id],
+            ['ficha_registro_path' => $filePath]
+        );
+
+        return redirect()->route('evidenciasEC.index', ['id' => $id, 'name' => Estandares::find($id)->name])
+            ->with('success', 'Ficha de Registro subida correctamente');
+    }
+
+    /**
+     * Handle the carta_firma upload.
+     */
+    public function uploadCartaFirma(Request $request, $id)
+    {
+        $request->validate([
+            'carta_firma' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $user = auth()->user();
+        $fileName = 'carta_firma_' . Str::slug($user->name) . '.' . $request->file('carta_firma')->getClientOriginalExtension();
+
+        $filePath = $request->file('carta_firma')->storeAs(
+            'public/documents/evidence/competencias/' . Str::slug($user->name),
+            $fileName
+        );
+
+        EvidenciasCompetencias::updateOrCreate(
+            ['user_id' => $user->id, 'estandar_id' => $id],
+            ['carta_firma_path' => $filePath]
+        );
+
+        return redirect()->route('evidenciasEC.index', ['id' => $id, 'name' => Estandares::find($id)->name])
+            ->with('success', 'Carta de Firma subida correctamente');
     }
 
     public function generateWord($userId, $standardId)

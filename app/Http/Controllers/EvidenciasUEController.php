@@ -21,10 +21,21 @@ class EvidenciasUEController extends Controller
         $documentos = $estandar->documentosnec;
         $evidencias = EvidenciasCompetencias::where('estandar_id', $id)->where('user_id', auth()->id())->get();
 
+        // Verificar si existen los documentos específicos en las columnas correspondientes
+        $ficha_registro = EvidenciasCompetencias::where('estandar_id', $id)
+            ->where('user_id', auth()->id())
+            ->whereNotNull('ficha_registro_path')
+            ->exists();
+
+        $carta_firma = EvidenciasCompetencias::where('estandar_id', $id)
+            ->where('user_id', auth()->id())
+            ->whereNotNull('carta_firma_path')
+            ->exists();
+
         // Map document IDs to easily check if an evidence exists for a document
         $uploadedDocumentIds = $evidencias->pluck('documento_id')->toArray();
 
-        return view('expedientes.expedientesUser.evidenciasEC.index', compact('estandar', 'documentos', 'evidencias', 'uploadedDocumentIds'));
+        return view('expedientes.expedientesUser.evidenciasEC.index', compact('estandar', 'documentos', 'evidencias', 'ficha_registro', 'carta_firma', 'uploadedDocumentIds'));
     }
 
 

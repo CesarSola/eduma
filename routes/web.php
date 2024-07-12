@@ -127,8 +127,12 @@ Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
-Route::post('/upload-ficha/{userId}/{standardId}', [\App\Http\Controllers\EvidenciasUEController::class, 'uploadFicha'])->name('upload-ficha');
-Route::post('/upload-carta/{userId}', [\App\Http\Controllers\EvidenciasUEController::class, 'uploadCarta'])->name('upload-carta');
+
+Route::get('word/{id}/{tipoDocumento}/show', [WordController::class, 'show'])->name('word.show');
+Route::post('word/{id}/upload-ficha-registro', [WordController::class, 'uploadFichaRegistro'])->name('word.uploadFichaRegistro');
+Route::post('word/{id}/upload-carta-firma', [WordController::class, 'uploadCartaFirma'])->name('word.uploadCartaFirma');
+
+
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
