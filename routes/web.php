@@ -89,7 +89,6 @@ Route::resource('validarCuP', ValidarCuPController::class);
 //rutas para validar comprobante de pagos cursos
 Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPController::class, 'updateComprobante'])->name('validarCuP.updateComprobante');
 
-
 //rutas del expediente Usuario
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
