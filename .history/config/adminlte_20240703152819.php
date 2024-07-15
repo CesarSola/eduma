@@ -387,7 +387,6 @@ return [
                             'text' => 'Agregar Códigos Postales',
                             'url' => 'codigos-postales',
                             'icon' => 'fas fa-fw fa-paper-plane',
-                            'can' => 'codigos-postales.index',
                         ],
                     ],
                 ],
