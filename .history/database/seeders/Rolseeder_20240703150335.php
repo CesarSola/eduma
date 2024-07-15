@@ -39,8 +39,6 @@ class Rolseeder extends Seeder
             ['name' => 'permissions.index', 'description' => 'Tabla de permisos'],
             ['name' => 'permissions.show', 'description' => 'Vista de permisos'],
             ['name' => 'permissions.create', 'description' => 'Crear un permiso'],
-            ['name' => 'permissions.edit', 'description' => 'Editar un permiso'],
-            ['name' => 'permissions.destroy', 'description' => 'Eliminar un permiso'],
         ];
 
         foreach ($permissions as $permissionData) {

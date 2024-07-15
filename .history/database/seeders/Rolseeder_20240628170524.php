@@ -31,16 +31,11 @@ class Rolseeder extends Seeder
             ['name' => 'users.index', 'description' => 'Ver listado de Usuarios'],
             ['name' => 'users.edit', 'description' => 'Asignar Un Rol'],
             ['name' => 'users.update', 'description' => 'Actualizar Un Rol'],
-            ['name' => 'roles.index', 'description' => 'Ver listado de usuarios'],
-            ['name' => 'roles.show', 'description' => 'Vista de roles'],
-            ['name' => 'roles.create', 'description' => 'Crear un rol'],
-            ['name' => 'roles.edit', 'description' => 'Editar un rol'],
-            ['name' => 'roles.destroy', 'description' => 'Eliminar un rol'],
-            ['name' => 'permissions.index', 'description' => 'Tabla de permisos'],
-            ['name' => 'permissions.show', 'description' => 'Vista de permisos'],
-            ['name' => 'permissions.create', 'description' => 'Crear un permiso'],
-            ['name' => 'permissions.edit', 'description' => 'Editar un permiso'],
-            ['name' => 'permissions.destroy', 'description' => 'Eliminar un permiso'],
+            ['name' => 'roles.index', 'description' => 'Ver listado de invernaderos'],
+            ['name' => 'roles.show', 'description' => 'Ver Vista de Invernaderos'],
+            ['name' => 'roles.create', 'description' => 'Crear un invenadero'],
+            ['name' => 'roles.edit', 'description' => 'Editar un invernadero'],
+            ['name' => 'roles.destroy', 'description' => 'Eliminar un invernadero'],
         ];
 
         foreach ($permissions as $permissionData) {

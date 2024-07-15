@@ -360,22 +360,19 @@ return [
                     'submenu' => [
 
                         [
-                            'text' => 'Agregar Documentos necesarios',
-                            'url' => 'documentosnec',
-                            'icon' => 'fas fa-fw fa-file-invoice',
-                            'can' => 'documentosnec.index',
+                            'text' => 'Registrar de cursos',
+                            'url' => 'cursos',
+                            'icon' => 'fas fa-plus-circle',
                         ],
                         [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
                             'icon' => 'fas fa-tasks',
-                            'can' => 'competenciasAD.index',
                         ],
                         [
-                            'text' => 'Registrar de cursos',
-                            'url' => 'cursos',
-                            'icon' => 'fas fa-plus-circle',
-                            'can' => 'cursos.index',
+                            'text' => 'Agregar Documentos necesarios',
+                            'url' => 'documentosnec',
+                            'icon' => 'fas fa-fw fa-file-invoice',
                         ],
                     ],
                 ],
@@ -387,7 +384,6 @@ return [
                             'text' => 'Agregar Códigos Postales',
                             'url' => 'codigos-postales',
                             'icon' => 'fas fa-fw fa-paper-plane',
-                            'can' => 'codigos-postales.index',
                         ],
                     ],
                 ],
