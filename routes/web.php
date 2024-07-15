@@ -21,6 +21,16 @@ Route::get('/google-auth/callback', [GoogleController::class, 'callback'])
 
 Route::post('/buscar-colonia', [ColoniaController::class, 'buscarColonia']);
 
+//Route::get('/colonias', [PostalCodeController::class, 'index']);
+//
+Route::get('/google-auth/redirect', [GoogleController::class, 'redirect'])
+    ->name('auth.redirect');
+
+Route::get('/google-auth/callback', [GoogleController::class, 'callback'])
+    ->name('auth.callback');
+
+Route::post('/buscar-colonia', [ColoniaController::class, 'buscarColonia']);
+
 //
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -28,6 +38,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -65,9 +76,47 @@ use App\Http\Controllers\ValidarCuPController;
 use App\Http\Controllers\WordController;
 
 //ruta de la carpeta registroGeneral
+});
+
+require __DIR__ . '/auth.php';
+
+
+// Rutas para el CRUD de códigos postales
+use App\Http\Controllers\CodigoPostalController;
+
+Route::get('/buscar-codigo-postal', [PostalCodeController::class, 'buscarCodigoPostal'])->name('buscarCodigoPostal');
+Route::resource('codigos-postales', CodigoPostalController::class);
+Route::post('/obtener-detalles-codigo-postal', [CodigoPostalController::class, 'obtenerDetallesCodigoPostal'])->name('obtener-detalles-codigo-postal');
+Route::post('/importar-excel', [CodigoPostalController::class, 'importarExcel'])->name('importar.excel');
+Route::post('/profile/update-address', [ProfileController::class, 'updateAddress'])->name('update-address');
+Route::get('/colonias', [PostalCodeController::class, 'getColoniasPorCPColonias']);
+
+//rutas de la carpeta expedientes y sus carpetas
+use App\Http\Controllers\ExpedientesUsuariosController;
+use App\Http\Controllers\EvidenciasCompetenciasController;
+use App\Http\Controllers\EvidenciasCursosController;
+use App\Http\Controllers\RegistroECController;
+use App\Http\Controllers\EvidenciasUEController;
+use App\Http\Controllers\MisCompetenciasController;
+use App\Http\Controllers\RegistroCursoController;
+use App\Http\Controllers\MisCursosController;
+use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\DocumentosController;
+use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\CursosController;
+use App\Http\Controllers\EvidenciasUCControlle;
+use App\Http\Controllers\ValidarCoPController;
+use App\Http\Controllers\ValidarCuPController;
+use App\Http\Controllers\WordController;
+
+//ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta index de la carpeta registroGeneral
+//ruta index de la carpeta registroGeneral
 Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
+//ruta de la carpeta usuarios
+Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
+//ruta comentarios-validar
 //ruta de la carpeta usuarios
 Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta comentarios-validar
@@ -81,11 +130,23 @@ Route::resource('competencia', CompetenciasController::class);
 //ruta del show de evidencias competencias
 Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
 //ruta de la carpeta validarCoP
+//ruta de la carpeta cursos
+Route::resource('cursosExpediente', CursosController::class);
+//ruta del show de evidencias cursos
+Route::resource('evidenciasACU', EvidenciasCursosController::class);
+//ruta de la carpeta competencias
+Route::resource('competencia', CompetenciasController::class);
+//ruta del show de evidencias competencias
+Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
+//ruta de la carpeta validarCoP
 Route::resource('validarCoP', ValidarCoPController::class);
+// Rutas para validar comprobante de pagos de competencias
 // Rutas para validar comprobante de pagos de competencias
 Route::put('/validar-cop/{id}/update-comprobante/{documento}', [ValidarCoPController::class, 'updateComprobante'])->name('validarCoP.updateComprobante');
 //ruta de la carpeta validarCoP
+//ruta de la carpeta validarCoP
 Route::resource('validarCuP', ValidarCuPController::class);
+//rutas para validar comprobante de pagos cursos
 //rutas para validar comprobante de pagos cursos
 Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPController::class, 'updateComprobante'])->name('validarCuP.updateComprobante');
 
@@ -94,16 +155,32 @@ Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPContro
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
+
+//rutas del expediente Usuario
+//ruta dashboard usuario
+Route::resource('usuarios', DashboardUserController::class);
+//ruta para subir documentos Usuario
 Route::resource('documentosUser', SDocumentosController::class);
+//rutas para resubir los documentos cuando han sido rechazados
 //rutas para resubir los documentos cuando han sido rechazados
 Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::class, 'edit'])->name('documentosUser.edit');
 Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.update');
 //ruta del registro a un EC
+//ruta del registro a un EC
 Route::resource('competenciaEC', RegistroECController::class);
+//ruta del registro de un curso
 //ruta del registro de un curso
 Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias
+//ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
+//ruta en el cual se muestra si el comprobante de competencias ha sido rechazado(vista usuarios)
+Route::get('miscompetencias/{id}/mostrar-rechazado', [MisCompetenciasController::class, 'mostrarRechazado'])
+    ->name('miscompetencias.resubir_comprobante');
+//ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
+Route::post('miscompetencias/{id}/guardar-resubir-comprobante', [MisCompetenciasController::class, 'guardarResubirComprobante'])
+    ->name('miscompetencias.guardarResubirComprobante');
+//ruta de mis cursos
 //ruta en el cual se muestra si el comprobante de competencias ha sido rechazado(vista usuarios)
 Route::get('miscompetencias/{id}/mostrar-rechazado', [MisCompetenciasController::class, 'mostrarRechazado'])
     ->name('miscompetencias.resubir_comprobante');
@@ -119,10 +196,24 @@ Route::get('misCursos/{id}/mostrar-rechazado', [MisCursosController::class, 'mos
 Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::class, 'guardarResubirComprobante'])
     ->name('misCursos.guardarResubirComprobante');
 //ruta de evidenciasEC
+//ruta en el cual se muestra si el comprobante de cursos ha sido rechazado(vista usuario)
+Route::get('misCursos/{id}/mostrar-rechazado', [MisCursosController::class, 'mostrarRechazado'])
+    ->name('misCursos.resubir_comprobante');
+//ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
+Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::class, 'guardarResubirComprobante'])
+    ->name('misCursos.guardarResubirComprobante');
+//ruta de evidenciasEC
 Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+//ruta evidenciasCU
+
+Route::get('word/{id}/{tipoDocumento}/show', [WordController::class, 'show'])->name('word.show');
+Route::post('word/{id}/upload-ficha-registro', [WordController::class, 'uploadFichaRegistro'])->name('word.uploadFichaRegistro');
+Route::post('word/{id}/upload-carta-firma', [WordController::class, 'uploadCartaFirma'])->name('word.uploadCartaFirma');
+
+
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
@@ -147,7 +238,6 @@ Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
 Route::resource('documentosnec', DocumentosNecController::class);
 
-//rutas perfiles
 Route::middleware(['auth'])->group(function () {
     Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
 });
