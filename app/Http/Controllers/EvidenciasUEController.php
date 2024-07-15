@@ -38,21 +38,6 @@ class EvidenciasUEController extends Controller
         return view('expedientes.expedientesUser.evidenciasEC.index', compact('estandar', 'documentos', 'evidencias', 'ficha_registro', 'carta_firma', 'uploadedDocumentIds'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-    }
-
-    /**
-     * Store the uploaded evidence.
-     */
-
-    /**
-     * Display the specified resource.
-     */
     public function show($id, $documento_id)
     {
         $estandar = Estandares::find($id);
@@ -67,7 +52,7 @@ class EvidenciasUEController extends Controller
     public function upload(Request $request, $documento_id)
     {
         $request->validate([
-            'documento' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'documento' => 'required|file|mimes:pdf|max:2048',
         ]);
 
         $documento = DocumentosNec::find($documento_id);
@@ -91,28 +76,5 @@ class EvidenciasUEController extends Controller
 
         return redirect()->route('evidenciasEC.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
             ->with('success', 'Documento subido correctamente');
-    }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
-        // Aquí podrías implementar la lógica para editar una evidencia si es necesario
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request,)
-    {
-        // Aquí podrías implementar la lógica para actualizar una evidencia si es necesario
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy()
-    {
-        // Aquí podrías implementar la lógica para eliminar una evidencia si es necesario
     }
 }

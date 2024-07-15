@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EvidenciasCompetencias;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -24,17 +25,14 @@ class EvidenciasCompetenciasController extends Controller
             $usuario = auth()->user();
         }
 
-        // Cargar las relaciones necesarias
-        $estandares = $usuario->estandares()->with(['documentosnec' => function ($query) use ($usuario) {
-            $query->whereHas('evidencias', function ($query) use ($usuario) {
-                $query->where('user_id', $usuario->id);
-            });
-        }])->get();
+        // Cargar las evidencias con relaciones pre-cargadas
+        $evidencias = EvidenciasCompetencias::where('user_id', $usuario->id)
+            ->with('documento', 'estandar')
+            ->get();
 
         // Renderizar la vista de las evidencias de competencias con los datos del usuario
-        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('usuario', 'estandares'));
+        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('usuario', 'evidencias'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

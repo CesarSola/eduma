@@ -91,6 +91,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Curso::class, 'user_curso', 'user_id', 'curso_id');
     }
 
+    public function evidencias()
+    {
+        return $this->belongsToMany(EvidenciasCompetencias::class);
+    }
+
     // Métodos para desactivar y reactivar cuentas de usuario
     public function deactivateAccount(User $user)
     {

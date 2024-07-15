@@ -37,37 +37,55 @@
                         <h3>Evidencias por Competencia</h3>
                     </div>
                     <div class="card-body">
-                        @if ($estandares->isEmpty() || $estandares->every(fn($estandar) => $estandar->documentosnec->isEmpty()))
+                        @if ($evidencias->isEmpty())
                             <div class="text-center">
-                                <p>Por el momento este usuario no tiene ningún documento.</p>
+                                <p>Por el momento este usuario no tiene ninguna evidencia de competencias.</p>
                             </div>
                         @else
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Nombre de la Evidencia</th>
+                                        <th>Nombre del Documento</th>
                                         <th>Competencia</th>
-                                        <th>Archivo Adjunto</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($estandares as $estandar)
-                                        @foreach ($estandar->documentosnec as $documento)
-                                            @foreach ($documento->evidencias as $evidencia)
-                                                <tr>
-                                                    <td>{{ $evidencia->id }}</td>
-                                                    <td>{{ $documento->name }}</td>
-                                                    <td>{{ $estandar->name }}</td>
-                                                    <td>
-                                                        <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
-                                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                                        <!-- Agregar más acciones si es necesario -->
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endforeach
+                                    @foreach ($evidencias as $evidencia)
+                                        @if ($evidencia->documento_id)
+                                            <tr>
+                                                <td>{{ $evidencia->id }}</td>
+                                                <td>{{ $evidencia->documento->name ?? 'Documento no disponible' }}</td>
+                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>
+                                                    <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
+                                                        class="btn btn-primary btn-sm shadow-sm">Ver Archivo</a>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @if ($evidencia->ficha_registro_path)
+                                            <tr>
+                                                <td>{{ $evidencia->id }}</td>
+                                                <td>Ficha de Registro</td>
+                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>
+                                                    <a href="{{ Storage::url($evidencia->ficha_registro_path) }}"
+                                                        target="_blank" class="btn btn-info btn-sm shadow-sm">Ver Ficha</a>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @if ($evidencia->carta_firma_path)
+                                            <tr>
+                                                <td>{{ $evidencia->id }}</td>
+                                                <td>Carta de Firma</td>
+                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>
+                                                    <a href="{{ Storage::url($evidencia->carta_firma_path) }}"
+                                                        target="_blank" class="btn btn-info btn-sm shadow-sm">Ver Carta</a>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

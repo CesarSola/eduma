@@ -19,32 +19,13 @@
                 <form action="{{ route('evidenciasEC.upload', $documento->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="documento">Seleccionar Documento</label>
-                        <input type="file" class="form-control @error('documento') is-invalid @enderror" id="documento"
-                            name="documento">
+                        <label for="documento">Seleccionar Documento (solo PDF)</label>
+                        <input type="file" class="form-control-file @error('documento') is-invalid @enderror"
+                            id="documento" name="documento" accept=".pdf">
                         @error('documento')
                             <span class="invalid-feedback" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
-
-                    <div class="form-group">
-                        <label for="ficha_registro">Seleccionar Ficha de Registro</label>
-                        <input type="file" class="form-control @error('ficha_registro') is-invalid @enderror"
-                            id="ficha_registro" name="ficha_registro">
-                        @error('ficha_registro')
-                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="carta_firma">Seleccionar Carta de la Firma</label>
-                        <input type="file" class="form-control @error('carta_firma') is-invalid @enderror"
-                            id="carta_firma" name="carta_firma">
-                        @error('carta_firma')
-                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Subir</button>
                 </form>
             </div>

@@ -32,4 +32,8 @@ class EvidenciasCompetencias extends Model
     {
         return $this->belongsTo(DocumentosNec::class, 'documento_id');
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

@@ -17,11 +17,18 @@ class MisCompetenciasController extends Controller
      */
     public function index()
     {
-        $usuario = User::findOrFail(auth()->user()->id);
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login'); // Or wherever you want to redirect unauthenticated users
+        }
+
+        $usuario = User::findOrFail($user->id);
         $competencias = $usuario->estandares()->with(['comprobantesCO.validacionesComentarios'])->get();
 
         return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'usuario'));
     }
+
     /**
      * Mostrar la vista para re-subir el comprobante de pago rechazado.
      */

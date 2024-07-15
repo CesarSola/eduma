@@ -127,21 +127,40 @@ Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
-
-Route::get('word/{id}/{tipoDocumento}/show', [WordController::class, 'show'])->name('word.show');
-Route::post('word/{id}/upload-ficha-registro', [WordController::class, 'uploadFichaRegistro'])->name('word.uploadFichaRegistro');
-Route::post('word/{id}/upload-carta-firma', [WordController::class, 'uploadCartaFirma'])->name('word.uploadCartaFirma');
-
-
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
 Route::get('/evidenciasCU/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
 Route::post('/evidenciasCU/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
-
 //ruta para generar el autorellenado de documentos word
 Route::get('/generate-word/{userId}/{standardId}', [WordController::class, 'generateWord'])->name('generate-word');
 Route::get('/generate-carta/{userId}', [WordController::class, 'generateCarta'])->name('generate-carta');
+//rutas de para subir ficha de registro y carta firma EC
+Route::get('word/{id}/{tipoDocumento}/show', [WordController::class, 'show'])->name('word.show');
+Route::post('word/{id}/upload-ficha-registro', [WordController::class, 'uploadFichaRegistro'])->name('word.uploadFichaRegistro');
+Route::post('word/{id}/upload-carta-firma', [WordController::class, 'uploadCartaFirma'])->name('word.uploadCartaFirma');
+Route::get('/ver/archivo/{userId}/{tipo}/{fileName}', function ($userId, $tipo, $fileName) {
+    // Determinar la carpeta base dependiendo del tipo de archivo
+    $basePath = '';
+
+    if ($tipo === 'ficha') {
+        $basePath = 'public/documents/evidence/competencias/' . $userId . '/ficha_registro/';
+    } elseif ($tipo === 'carta') {
+        $basePath = 'public/documents/evidence/competencias/' . $userId . '/carta_firma/';
+    } else {
+        abort(404); // Si el tipo no es válido, mostrar error 404
+    }
+
+    // Construir la ruta completa al archivo
+    $filePath = storage_path('app/' . $basePath . $fileName);
+
+    // Verificar si el archivo existe y devolverlo
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+
+    abort(404); // Si el archivo no existe, mostrar error 404
+})->name('ver.archivo');
 
 
 
