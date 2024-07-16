@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('ficha_registro_path')->nullable(); // Campo para la ficha de registro
             $table->string('carta_firma_path')->nullable(); // Campo para la carta de la firma
             $table->timestamps();
-            $table->timestamps();
         });
     }
 

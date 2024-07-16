@@ -82,7 +82,20 @@
 @stop
 
 @section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        console.log("Hola, estoy usando el paquete Laravel-AdminLTE!");
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#1');
+                    $('#1').html(updatedContent.html());
+                }
+            });
+        }, 3000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

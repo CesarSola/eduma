@@ -73,6 +73,27 @@
             </table>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Competencias</th>
+                        <th>Agregar Fechas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ $competencia->id }}</td>
+                        <td>{{ $competencia->name }}</td>
+                        <td><a href="{{ route('events.calendario') }}" class="btn btn-primary">Agregar</a></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 @stop
 
 @section('css')

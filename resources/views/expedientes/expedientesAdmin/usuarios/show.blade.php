@@ -311,6 +311,6 @@
                     $('#1').html(updatedContent.html());
                 }
             });
-        }, 300000); // 300000 milisegundos = 5 minutos
+        }, 3000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

@@ -183,4 +183,75 @@ class ExpedientesUsuariosController extends Controller
         return redirect()->route('usuariosAdmin.index')
             ->with('success', 'Usuario eliminado correctamente');
     }
+
+    public function actualizarContenido($id)
+    {
+        $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
+
+        $documentos = $usuariosAdmin->documentos;
+        $comprobantesCU = $usuariosAdmin->comprobantesCU;
+        $comprobantesCO = $usuariosAdmin->comprobantesCO;
+        $estandares = $usuariosAdmin->estandares;
+        $cursos = $usuariosAdmin->cursos;
+
+        $documentosCompletos = true;
+        $documentosEnValidacion = false;
+
+        foreach ($documentos as $documento) {
+            $validaciones = $documento->validacionesComentarios;
+
+            if ($validaciones->isEmpty()) {
+                // Si no hay validaciones, consideramos que el documento está en proceso
+                $documentosCompletos = false;
+                $documentosEnValidacion = true;
+                continue;
+            }
+
+            $documentoCompletado = $validaciones->every(function ($validacion) {
+                return $validacion->tipo_validacion === 'validar';
+            });
+
+            $documentoEnValidacion = $validaciones->contains(function ($validacion) {
+                return $validacion->tipo_validacion === 'Pendiente';
+            });
+
+            if ($documentoEnValidacion) {
+                $documentosEnValidacion = true;
+            }
+
+            if (!$documentoCompletado) {
+                $documentosCompletos = false;
+            }
+        }
+
+        $comprobanteSubidoCO = $comprobantesCO->isNotEmpty();
+        $comprobanteEnValidacionCO = false;
+        if ($comprobanteSubidoCO) {
+            foreach ($comprobantesCO as $comprobanteCO) {
+                $estado = json_decode($comprobanteCO->estado, true) ?? [];
+                $comprobantePagoStatusCO = $estado['comprobante_pago'] ?? null;
+
+                if ($comprobantePagoStatusCO === 'Pendiente') {
+                    $comprobanteEnValidacionCO = true;
+                    break;
+                }
+            }
+        }
+
+        $comprobanteSubidoCU = $comprobantesCU->isNotEmpty();
+        $comprobanteEnValidacionCU = false;
+        if ($comprobanteSubidoCU) {
+            foreach ($comprobantesCU as $comprobanteCU) {
+                $estado = json_decode($comprobanteCU->estado, true) ?? [];
+                $comprobantePagoStatusCU = $estado['comprobante_pago'] ?? null;
+
+                if ($comprobantePagoStatusCU === 'Pendiente') {
+                    $comprobanteEnValidacionCU = true;
+                    break;
+                }
+            }
+        }
+
+        return view('expedientes.expedientesAdmin.usuarios.contenido', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos', 'documentosEnValidacion', 'comprobanteSubidoCO', 'comprobanteSubidoCU', 'comprobanteEnValidacionCU', 'comprobanteEnValidacionCO'));
+    }
 }
