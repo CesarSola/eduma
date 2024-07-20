@@ -37,11 +37,7 @@
                                 ->validacionesComentarios()
                                 ->where('tipo_documento', 'comprobante_pago')
                                 ->first();
-                            if ($validacionComentario) {
-                                $estado = $validacionComentario->tipo_validacion;
-                            } else {
-                                $estado = null;
-                            }
+                            $estado = $validacionComentario ? $validacionComentario->tipo_validacion : null;
                         @endphp
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
@@ -68,8 +64,8 @@
                             @endif
                         </li>
                     @endforeach
-
                 </ul>
+
             @endif
         </div>
     </div>

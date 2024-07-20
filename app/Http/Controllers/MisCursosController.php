@@ -17,7 +17,13 @@ class MisCursosController extends Controller
     public function index()
     {
         $usuario = User::findOrFail(auth()->user()->id);
-        $cursos = $usuario->cursos()->with('comprobantesCU')->get(); // Accede a la relación de cursos
+
+        // Obtén los estándares del usuario autenticado
+        $cursos = $usuario->cursos()->with(['comprobantesCU' => function ($query) use ($usuario) {
+            // Filtra los comprobantes para que solo incluya aquellos que pertenecen al usuario autenticado
+            $query->where('user_id', $usuario->id);
+        }])->get();
+
 
         return view('expedientes.expedientesUser.miscursos.index', compact('cursos', 'usuario'));
     }

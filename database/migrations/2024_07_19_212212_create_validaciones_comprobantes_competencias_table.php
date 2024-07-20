@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evidencias_competencias_user', function (Blueprint $table) {
+        Schema::create('validaciones_comprobantes_competencias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('evidencias_competencias_id');
+            $table->unsignedBigInteger('comprobante_id');
             $table->unsignedBigInteger('user_id');
-            // Otros campos si son necesarios
+            $table->string('tipo_documento');
+            $table->enum('tipo_validacion', ['validar', 'rechazar', 'pendiente'])->default('pendiente');
+            $table->text('comentario')->nullable();
             $table->timestamps();
-
-            $table->foreign('evidencias_competencias_id')->references('id')->on('evidencias_competencias')->onDelete('cascade');
+            $table->foreign('comprobante_id')->references('id')->on('comprobantes_competencias')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evidencias_competencias_user');
+        Schema::dropIfExists('validaciones_comprobantes_competencias');
     }
 };

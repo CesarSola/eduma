@@ -68,12 +68,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(DocumentosUser::class);
     }
 
-    // Relación de uno a muchos con el modelo ComprobantePago
+    //relacón donde el comprobante de cursos toma el id de usuario
     public function comprobantesCU()
     {
         return $this->hasMany(comprobantesCU::class);
     }
-
+    //relacón donde el comprobante de competencias toma el id de usuario
     public function comprobantesCO()
     {
         return $this->hasMany(comprobantesCO::class);
@@ -90,10 +90,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Curso::class, 'user_curso', 'user_id', 'curso_id');
     }
-
+    // relacion donde validaciones comprobantes competencias toma el id del usuario
     public function evidencias()
     {
-        return $this->belongsToMany(EvidenciasCompetencias::class);
+        return $this->belongsToMany(ValidacionesComprobantesCompetencias::class);
+    }
+    // relacion donde guardar cartas
+    public function cartas()
+    {
+        return $this->hasMany(CartasDocumentos::class);
+    }
+    // relacion donde guardar fichas
+    public function fichas()
+    {
+        return $this->hasMany(FichasDocumentos::class);
     }
 
     // Métodos para desactivar y reactivar cuentas de usuario
@@ -165,14 +175,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    // Métodos adicionales según necesidades del negocio
+    // relaciones para agregar las relaciones de comprobantesCO y validaciones comprobantes competencias en la tabla pivot user_estandares
     public function attachEstandarIfNotAttached1($estandarId)
     {
         if (!$this->estandares()->where('estandar_id', $estandarId)->exists()) {
             $this->estandares()->attach($estandarId);
         }
     }
-
+    // relaciones para agregar las relaciones de comprobantesCU y validaciones comprobantes cursos en la tabla pivot user_curso
     public function attachEstandarIfNotAttached2($cursoId)
     {
         if (!$this->cursos()->where('curso_id', $cursoId)->exists()) {

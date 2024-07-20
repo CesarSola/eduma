@@ -15,22 +15,20 @@ class ComprobantesCO extends Model
         'comprobante_pago',
         'tipo_validacion',
     ];
-
+    //relacion del comprobante con el usuario
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    //relación del comprobante con el estandar
     public function estandar()
     {
         return $this->belongsTo(Estandares::class, 'estandares_id', 'id');
     }
-    public function curso()
+
+    // Relación con ValidacionesComprobantesCompetencias
+    public function validaciones()
     {
-        return $this->belongsTo(Curso::class);
-    }
-    public function validacionesComentarios()
-    {
-        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCO_id');
+        return $this->hasMany(ValidacionesComprobantesCompetencias::class, 'comprobante_id');
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ComprobantesCO;
 use App\Models\Estandares;
 use App\Models\User;
 use App\Models\ValidacionesComentarios;
+use App\Models\ValidacionesComprobantesCompetencias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -17,17 +19,21 @@ class MisCompetenciasController extends Controller
      */
     public function index()
     {
+        $userId = auth()->id(); // Obtén el ID del usuario autenticado
+
+        // Obtener todos los estándares del usuario con comprobantes y validaciones
+        $competencias = Estandares::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->with(['comprobantesCO.validaciones'])
+            ->get();
+
+        // Obtener el usuario completo para usar en la vista
         $user = auth()->user();
 
-        if (!$user) {
-            return redirect()->route('login'); // Or wherever you want to redirect unauthenticated users
-        }
-
-        $usuario = User::findOrFail($user->id);
-        $competencias = $usuario->estandares()->with(['comprobantesCO.validacionesComentarios'])->get();
-
-        return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'usuario'));
+        return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'user'));
     }
+
 
     /**
      * Mostrar la vista para re-subir el comprobante de pago rechazado.
@@ -35,68 +41,81 @@ class MisCompetenciasController extends Controller
     public function mostrarRechazado($id)
     {
         $competencia = Estandares::findOrFail($id);
-        $validacionComentario = ValidacionesComentarios::where('comprobanteCO_id', $competencia->id)
-            ->where('tipo_documento', 'comprobante_pago')
+        $validacionComentario = ValidacionesComprobantesCompetencias::where('comprobante_id', $competencia->id)
+            ->where('comprobante_id', 'tipo_validacion')
             ->first();
 
         // Si no hay validación de comprobante, podemos manejarlo como necesario
         return view('expedientes.expedientesUser.competencias.resubir_comprobante', compact('competencia', 'validacionComentario'));
     }
-    // Método para guardar la re-subida del comprobante de pago
     public function guardarResubirComprobante(Request $request, $id)
     {
-        $competencia = Estandares::findOrFail($id);
-        $comprobantePago = $competencia->comprobantePago;
+        $estandar = Estandares::findOrFail($id);
+        $comprobantePago = $estandar->comprobantesCO()->first();
 
-        // Validar el formulario
         $request->validate([
             'nuevo_comprobante_pago' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // Obtener el archivo del formulario
         $nuevoComprobante = $request->file('nuevo_comprobante_pago');
 
         try {
-            // Obtener el nombre del usuario para la carpeta de almacenamiento
             $user = Auth::user();
             $userName = str_replace(' ', '_', $user->name);
+            $userSecondName = str_replace(' ', '_', $user->secondName);
+            $userPaternalSurname = str_replace(' ', '_', $user->paternalSurname);
+            $userMaternalSurname = str_replace(' ', '_', $user->maternalSurname);
+            $userMatricula = str_replace(' ', '_', $user->matricula);
 
-            // Almacenar el archivo en la carpeta correspondiente con el nombre del estándar
-            $fileName = 'Comprobante_Pago_' . $competencia->name . '.' . $nuevoComprobante->getClientOriginalExtension();
-            $filePath = $nuevoComprobante->storeAs('public/documents/records/users/' . $userName, $fileName);
+            $folderPath = 'documents/records/payments/competences/standards/' .
+                $userMatricula . '/' .
+                $userName . ' ' .
+                $userSecondName . ' ' .
+                $userPaternalSurname . ' ' .
+                $userMaternalSurname;
 
-            // Actualizar el comprobante de pago en la base de datos
+            $fileName = 'Comprobante_Pago_' . str_replace(' ', '_', $estandar->name) . '.' . $nuevoComprobante->getClientOriginalExtension();
+            $filePath = $nuevoComprobante->storeAs($folderPath, $fileName, 'public');
+
+            $fullPath = storage_path('app/public/' . $filePath);
+
+            Log::info('Archivo almacenado en: ' . $filePath);
+            Log::info('Ruta completa del archivo: ' . $fullPath);
+
+            if (file_exists($fullPath)) {
+                Log::info('El archivo realmente existe en la ruta: ' . $fullPath);
+            } else {
+                Log::error('El archivo no se encuentra en la ruta esperada: ' . $fullPath);
+            }
+
+            // Eliminar el archivo antiguo si existe
+            if ($comprobantePago && !is_null($comprobantePago->comprobante_pago) && Storage::exists($comprobantePago->comprobante_pago)) {
+                Storage::delete($comprobantePago->comprobante_pago);
+                Log::info('Archivo antiguo eliminado: ' . $comprobantePago->comprobante_pago);
+            }
+
+            // Actualizar la base de datos
             if ($comprobantePago) {
-                // Eliminar el archivo anterior si existe
-                if (!is_null($comprobantePago->path) && Storage::exists($comprobantePago->path)) {
-                    Storage::delete($comprobantePago->path);
-                }
-
-                // Actualizar la información del comprobante de pago
                 $comprobantePago->update([
-                    'estado' => json_encode(['comprobante_pago' => 'en_validacion']),
-                    'path' => $filePath,
+                    'comprobante_pago' => $filePath,
+                    'estado' => json_encode(['comprobante' => 'pendiente']),
                 ]);
             }
 
-            // Obtener el ID del usuario autenticado
+            // Actualizar o crear validación de comprobante
             $user_id = Auth::id();
-
-            // Buscar el registro existente en validaciones_comentarios
-            $validacionComentario = ValidacionesComentarios::where('comprobanteCO_id', $comprobantePago->id)->first();
+            $validacionComentario = ValidacionesComprobantesCompetencias::where('comprobante_id', $comprobantePago->id)->first();
 
             if ($validacionComentario) {
-                // Actualizar el registro existente
                 $validacionComentario->update([
-                    'tipo_documento' => 'comprobante_pago',
+                    'tipo_documento' => 'comprobante',
                     'tipo_validacion' => 'pendiente',
                     'user_id' => $user_id,
                 ]);
             } else {
-                // Crear un nuevo registro en validaciones_comentarios si no existe
-                ValidacionesComentarios::create([
-                    'comprobanteCO_id' => $comprobantePago->id,
-                    'tipo_documento' => 'comprobante_pago',
+                ValidacionesComprobantesCompetencias::create([
+                    'comprobante_id' => $comprobantePago->id,
+                    'tipo_documento' => 'comprobante',
                     'tipo_validacion' => 'pendiente',
                     'user_id' => $user_id,
                 ]);
@@ -104,11 +123,8 @@ class MisCompetenciasController extends Controller
 
             return redirect()->route('miscompetencias.index')->with('success', 'Comprobante de pago re-enviado correctamente.');
         } catch (\Exception $e) {
-            // Captura cualquier excepción y muestra un mensaje de error
+            Log::error('Error al guardar el archivo: ' . $e->getMessage());
             return back()->withInput()->withErrors(['error' => 'Error al guardar el archivo: ' . $e->getMessage()]);
         }
     }
-    /**
-     * Mostrar la vista para re-subir el comprobante de pago rechazado.
-     */
 }

@@ -23,7 +23,7 @@ class DocumentosNec extends Model
     }
     public function evidencias()
     {
-        return $this->hasMany(EvidenciasCompetencias::class, 'documento_id');
+        return $this->hasMany(DocumentosEvidencias::class, 'documento_id');
     }
     public function cursos()
     {

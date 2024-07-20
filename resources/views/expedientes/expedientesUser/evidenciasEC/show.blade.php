@@ -19,9 +19,11 @@
                 <form action="{{ route('evidenciasEC.upload', $documento->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="documento">Seleccionar Documento (solo PDF)</label>
+                        <label for="documento">Seleccionar Documento </label>
                         <input type="file" class="form-control-file @error('documento') is-invalid @enderror"
                             id="documento" name="documento" accept=".pdf">
+                        <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                            subirlo.</small>
                         @error('documento')
                             <span class="invalid-feedback" role="alert">{{ $message }}</span>
                         @enderror

@@ -50,6 +50,10 @@ class RegistroECController extends Controller
 
         // Nombre del usuario y de la competencia para el almacenamiento del archivo
         $userName = str_replace(' ', '_', $user->name);
+        $userSecondName = str_replace(' ', '_', $user->secondName);
+        $userPaternalSurname = str_replace(' ', '_', $user->paternalSurname);
+        $userMaternalSurname = str_replace(' ', '_', $user->maternalSurname);
+        $userMatricula = str_replace(' ', '_', $user->matricula);
         $estandarName = str_replace(' ', '_', $estandar->name);
         // Obtener el usuario con sus relaciones cargadas
         $user = User::with('estandares')->findOrFail($user->id); // Asegúrate de que 'estandares' coincida con el nombre de la relación definida en el modelo User
@@ -58,7 +62,15 @@ class RegistroECController extends Controller
         if ($request->hasFile('comprobante_pago')) {
             $comprobante = $request->file('comprobante_pago');
             $comprobantePagoName = 'Comprobante_Pago_' . $estandarName . '.' . $comprobante->extension();
-            $comprobantePagoPath = $comprobante->storeAs('public/documents/records/payments/competences/' . $userName, $comprobantePagoName);
+            $comprobantePagoPath = $comprobante->storeAs(
+                'public/documents/records/payments/competences/standards/' .
+                    $userMatricula . '/' .
+                    $userName . ' ' .
+                    $userSecondName . ' ' .
+                    $userPaternalSurname . ' ' .
+                    $userMaternalSurname,
+                $comprobantePagoName
+            );
 
             // Crear y guardar el registro del comprobante de pago
             $comprobanteCompetencia = new ComprobantesCO();

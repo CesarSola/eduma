@@ -6,6 +6,7 @@ use App\Models\DocumentosNec;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentosNecController extends Controller
 {
@@ -115,6 +116,18 @@ class DocumentosNecController extends Controller
             return back()->withErrors(['error' => 'Hubo un problema al intentar actualizar el documento.']);
         }
     }
+    public function download($id)
+    {
+        $documento = DocumentosNec::findOrFail($id);
+        $filePath = $documento->documento;
+
+        if (Storage::exists($filePath)) {
+            return Storage::download($filePath);
+        }
+
+        return redirect()->back()->with('error', 'Archivo no encontrado.');
+    }
+
 
     /**
      * Remove the specified resource from storage.

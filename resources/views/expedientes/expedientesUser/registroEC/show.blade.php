@@ -53,6 +53,7 @@
 
         <div class="d-flex justify-content-between mt-3">
             <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary">Ir a Mis Competencias</a>
+            <a href="{{ route('competenciaEC.index') }}" class="btn btn-secondary">Ir a Competencias Disponibles</a>
         </div>
     </div>
 @stop

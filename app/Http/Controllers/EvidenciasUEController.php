@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartasDocumentos;
+use App\Models\DocumentosEvidencias;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
-use App\Models\EvidenciasCompetencias;
-use Illuminate\Support\Facades\Storage;
+use App\Models\FichasDocumentos;
+use App\Models\ValidacionesCartas;
+use App\Models\ValidacionesEvidencias;
+use App\Models\ValidacionesFichas;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class EvidenciasUEController extends Controller
 {
@@ -18,24 +22,46 @@ class EvidenciasUEController extends Controller
     public function index($id, $name)
     {
         $estandar = Estandares::find($id);
-        $documentos = $estandar->documentosnec;
-        $evidencias = EvidenciasCompetencias::where('estandar_id', $id)->where('user_id', auth()->id())->get();
+        $user_id = auth()->id();
 
-        // Verificar si existen los documentos específicos en las columnas correspondientes
-        $ficha_registro = EvidenciasCompetencias::where('estandar_id', $id)
-            ->where('user_id', auth()->id())
-            ->whereNotNull('ficha_registro_path')
-            ->exists();
+        $evidencias = DocumentosEvidencias::where('estandar_id', $id)
+            ->where('user_id', $user_id)
+            ->get();
 
-        $carta_firma = EvidenciasCompetencias::where('estandar_id', $id)
-            ->where('user_id', auth()->id())
-            ->whereNotNull('carta_firma_path')
-            ->exists();
+        $ficha_registro = FichasDocumentos::where('estandar_id', $id)
+            ->where('user_id', $user_id)
+            ->first();
 
-        // Map document IDs to easily check if an evidence exists for a document
-        $uploadedDocumentIds = $evidencias->pluck('documento_id')->toArray();
+        // Verifica el contenido de estado en CartasDocumentos
+        $carta_firma = CartasDocumentos::where('estandar_id', $id)
+            ->where('user_id', $user_id)
+            ->first();
 
-        return view('expedientes.expedientesUser.evidenciasEC.index', compact('estandar', 'documentos', 'evidencias', 'ficha_registro', 'carta_firma', 'uploadedDocumentIds'));
+        // Verifica si hay registros en validaciones_fichas
+        $fichas_validaciones = ValidacionesFichas::where('estandar_id', $id)
+            ->whereIn('ficha_id', $evidencias->pluck('ficha_id')->filter())
+            ->get();
+
+        // Verifica si hay registros en validaciones_cartas
+        $cartas_validaciones = ValidacionesCartas::where('estandar_id', $id)
+            ->whereIn('carta_id', $evidencias->pluck('carta_id')->filter())
+            ->get();
+
+        // Verifica si se está filtrando correctamente
+        $carta_validada = $cartas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
+        $ficha_validada = $fichas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
+
+
+        return view('expedientes.expedientesUser.evidenciasEC.index', compact(
+            'estandar',
+            'evidencias',
+            'ficha_registro',
+            'carta_firma',
+            'fichas_validaciones',
+            'cartas_validaciones',
+            'carta_validada',
+            'ficha_validada'
+        ));
     }
 
     public function show($id, $documento_id)
@@ -62,12 +88,12 @@ class EvidenciasUEController extends Controller
 
         // Save the file in the specific directory
         $filePath = $request->file('documento')->storeAs(
-            'public/documents/evidence/competencias' . $userName,
+            'public/documents/evidence/competencias/' . $userName,
             $fileName
         );
 
         // Save the file information to the database
-        EvidenciasCompetencias::create([
+        DocumentosEvidencias::create([
             'user_id' => auth()->id(),
             'estandar_id' => $documento->estandares->first()->id,
             'documento_id' => $documento_id,

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Estandares;
-use Spatie\Permission\Models\Role;
+use App\Models\FechaCompetencia;
+use Illuminate\Support\Facades\Redirect;
 
 class CompetenciasController extends Controller
 {
@@ -20,12 +21,13 @@ class CompetenciasController extends Controller
         // Buscar el usuario por ID, si no se proporciona ID, se obtiene el usuario autenticado
         $usuario = User::find($userId) ?? auth()->user();
 
-        // Obtener todas las competencias asociadas al usuario
-        $competencias = Estandares::with('comprobantesCO')->get();
+        // Obtener todas las competencias asociadas al usuario con sus fechas y comprobantesCO
+        $competencias = $usuario->estandares()->with(['fechas', 'comprobantesCO'])->get();
 
         // Renderizar la vista del expediente de competencias del usuario
         return view('expedientes.expedientesAdmin.competencias.index', compact('usuario', 'competencias'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -37,17 +39,34 @@ class CompetenciasController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function agregarFechas($competenciaId)
     {
-        //
+        // Aquí puedes obtener la competencia por su ID y pasarla a la vista
+        $competencia = Estandares::findOrFail($competenciaId);
+        return view('expedientes.expedientesAdmin.competencias.agregar-fechas', compact('competencia'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function guardarFechas(Request $request, $competenciaId)
     {
-        //
+        // Valida y guarda las fechas para la competencia
+        $request->validate([
+            'fechas.*' => 'required|date',
+        ]);
+
+        $competencia = Estandares::findOrFail($competenciaId);
+
+        // Eliminar todas las fechas existentes para esta competencia
+        $competencia->fechas()->delete();
+
+        foreach ($request->fechas as $fecha) {
+            // Crea una nueva fecha asociada a la competencia
+            $fechaCompetencia = new FechaCompetencia();
+            $fechaCompetencia->fecha = $fecha;
+
+            // Guarda la fecha asociada a la competencia
+            $competencia->fechas()->save($fechaCompetencia);
+        }
+        return Redirect::route('competencia.index')->with('success', 'Fechas agregadas correctamente');
     }
 
     /**

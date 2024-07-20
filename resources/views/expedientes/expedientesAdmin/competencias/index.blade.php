@@ -28,8 +28,22 @@
                             <span class="badge badge-info">Estatus:
                                 @php
                                     $comprobanteValidado = false;
+
+                                    // Verificar si hay comprobantes de competencias y procesarlos
                                     if ($competencia->comprobantesCO) {
-                                        $comprobanteValidado = $competencia->comprobantesCO->estado === 'validado';
+                                        foreach ($competencia->comprobantesCO as $comprobante) {
+                                            // Asegurarnos de que $comprobante es un objeto
+                                            if (is_object($comprobante)) {
+                                                $estado = json_decode($comprobante->estado, true);
+                                                if (
+                                                    isset($estado['validacion_comprobante_pago']) &&
+                                                    $estado['validacion_comprobante_pago'] === 'validar'
+                                                ) {
+                                                    $comprobanteValidado = true;
+                                                    break; // Salir del bucle una vez encontrado un comprobante validado
+                                                }
+                                            }
+                                        }
                                     }
                                 @endphp
 
@@ -40,7 +54,6 @@
                                 @endif
                             </span>
                         @endforeach
-
                     </div>
                 </div>
             </div>
@@ -80,20 +93,33 @@
                     <tr>
                         <th>ID</th>
                         <th>Competencias</th>
+                        <th>Fechas Asignadas</th>
                         <th>Agregar Fechas</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ $competencia->id }}</td>
-                        <td>{{ $competencia->name }}</td>
-                        <td><a href="{{ route('events.calendario') }}" class="btn btn-primary">Agregar</a></td>
-
-                    </tr>
+                    @foreach ($competencias as $competencia)
+                        <tr>
+                            <td>{{ $competencia->id }}</td>
+                            <td>{{ $competencia->name }}</td>
+                            <td>
+                                <ul>
+                                    @foreach ($competencia->fechas as $fecha)
+                                        <li>{{ $fecha->fecha }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="{{ route('competencias.agregar-fechas', ['competencia' => $competencia->id]) }}"
+                                    class="btn btn-primary">Agregar</a>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
+
 @stop
 
 @section('css')

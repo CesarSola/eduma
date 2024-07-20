@@ -32,7 +32,7 @@ class SDocumentosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'foto' => 'file|mimes:jpg,bmp,png,pdf|max:2048',
+            'foto' => 'file|mimes:jpg,bmp,png|max:2048',
             'ine_ife' => 'file|mimes:jpg,bmp,png,pdf|max:2048',
             'comprobante_domiciliario' => 'file|mimes:jpg,bmp,png,pdf|max:2048',
             'curp' => 'file|mimes:jpg,bmp,png,pdf|max:2048',
@@ -40,25 +40,29 @@ class SDocumentosController extends Controller
 
         $user = Auth::user();
         $userName = str_replace(' ', '_', $user->name);
+        $userSecondName = str_replace(' ', '_', $user->secondName);
+        $userPaternalSurname = str_replace(' ', '_', $user->paternalSurname);
+        $userMaternalSurname = str_replace(' ', '_', $user->maternalSurname);
+        $userMatricula = str_replace(' ', '_', $user->matricula);
 
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
-            $fotoPath = $foto->storeAs('public/documents/records/users/' . $userName, 'Foto.' . $foto->extension());
+            $fotoPath = $foto->storeAs('public/documents/records/users/general/' . $userMatricula . '/' . $userName . ' ' . $userSecondName . ' ' . $userPaternalSurname . ' ' . $userMaternalSurname, 'Foto.' . $foto->extension());
         }
 
         if ($request->hasFile('ine_ife')) {
             $ineIfe = $request->file('ine_ife');
-            $ineIfePath = $ineIfe->storeAs('public/documents/records/users/' . $userName, 'INE_o_IFE.' . $ineIfe->extension());
+            $ineIfePath = $ineIfe->storeAs('public/documents/records/users/general/' . $userMatricula . '/' . $userName . ' ' . $userSecondName . ' ' . $userPaternalSurname . ' ' . $userMaternalSurname, 'INE_o_IFE.' . $ineIfe->extension());
         }
 
         if ($request->hasFile('comprobante_domiciliario')) {
             $comprobante = $request->file('comprobante_domiciliario');
-            $comprobantePath = $comprobante->storeAs('public/documents/records/users/' . $userName, 'Comprobante_Domicilio.' . $comprobante->extension());
+            $comprobantePath = $comprobante->storeAs('public/documents/records/users/general/' . $userMatricula . '/' . $userName . ' ' . $userSecondName . ' ' . $userPaternalSurname . ' ' . $userMaternalSurname, 'Comprobante_Domicilio.' . $comprobante->extension());
         }
 
         if ($request->hasFile('curp')) {
             $curp = $request->file('curp');
-            $curpPath = $curp->storeAs('public/documents/records/users/' . $userName, 'CURP.' . $curp->extension());
+            $curpPath = $curp->storeAs('public/documents/records/users/general/' . $userMatricula . '/' . $userName . ' ' . $userSecondName . ' ' . $userPaternalSurname . ' ' . $userMaternalSurname, 'CURP.' . $curp->extension());
         }
 
         $documentosUser = new DocumentosUser();

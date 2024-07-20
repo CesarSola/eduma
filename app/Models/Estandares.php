@@ -17,34 +17,39 @@ class Estandares extends Model
         'tipo'
     ];
 
-    public function cursos()
-    {
-        return $this->hasMany(Curso::class, 'id');
-    }
-
+    //relación de documentos necesarios a la hora de crear los estandares
     public function documentosnec()
     {
         return $this->belongsToMany(DocumentosNec::class, 'competencia_documentosnec', 'competencia_id', 'documentosnec_id');
     }
 
-    // Estandares.php
-
+    //relacion comprobantes pago competencias
     public function comprobantesCO()
     {
-        return $this->hasOne(comprobantesCO::class, 'estandar_id', 'id');
+        return $this->hasMany(ComprobantesCO::class, 'estandar_id', 'id');
     }
 
-
+    //relación de estandares con fechas
+    public function fechas()
+    {
+        return $this->hasMany(FechaCompetencia::class, 'competencia_id');
+    }
+    //relación de usuarios con estandares
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_estandares', 'estandar_id', 'user_id');
     }
-    public function estandares()
-    {
-        return $this->hasMany(Estandares::class);
-    }
+
+    // Obtener validaciones a través de comprobantes
     public function validacionesComentarios()
     {
-        return $this->hasMany(ValidacionesComentarios::class, 'comprobanteCO_id', 'id');
+        return $this->hasManyThrough(
+            ValidacionesComprobantesCompetencias::class,
+            ComprobantesCO::class,
+            'estandar_id', // Foreign key on ComprobantesCO table
+            'comprobante_id', // Foreign key on ValidacionesComprobantesCompetencias table
+            'id', // Local key on Estandares table
+            'id'  // Local key on ComprobantesCO table
+        );
     }
 }

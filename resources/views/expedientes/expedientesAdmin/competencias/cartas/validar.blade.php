@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Expediente')
+@section('title', 'Validación de Carta')
 
 @section('content_header')
     <div class="header-flex">
-        <h1>Revisión de Documentos Generales</h1>
+        <h1>Revisión de Carta</h1>
         <div>
-            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id]) }}"
+            <a href="{{ route('evidenciasACO.index', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
                 class="btn btn-secondary">Regresar</a>
         </div>
     </div>
@@ -17,6 +17,9 @@
     <div class="container">
         <div id="success-message" class="alert alert-success" style="display: none;">
             Documento actualizado correctamente.
+            <button type="button" class="close" aria-label="Close" onclick="this.parentElement.style.display='none';">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -31,12 +34,12 @@
                                                 <img src="{{ asset('path_to_default_avatar') }}" alt=""
                                                     class="img-circle">
                                             </div>
-                                            <h6 class="text-left mt-2">Nombres: {{ $registroGeneral->name }}
-                                                {{ $registroGeneral->secondName }}</h6>
+                                            <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
+                                                {{ $usuario->secondName }}</h6>
                                             <h6 class="text-left mt-2">Apellidos:
-                                                {{ $registroGeneral->paternalSurname }}
-                                                {{ $registroGeneral->maternalSurname }}</h6>
-                                            <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
+                                                {{ $usuario->paternalSurname }}
+                                                {{ $usuario->maternalSurname }}</h6>
+                                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                                         </div>
                                         <div class="right-content">
                                             <span class="badge badge-info">Estatus: Activo</span>
@@ -51,52 +54,50 @@
                         @endphp
 
                         <!-- Mostrar documentos específicos -->
-                        @foreach ($documentos as $documento)
-                            @foreach (['foto', 'ine_ife', 'comprobante_domiciliario', 'curp'] as $documentoNombre)
+                        @foreach ($cartasDocumentos as $carta)
+                            @php
+                                $estado = json_decode($carta->estado, true) ?? [];
+                            @endphp
+                            @if ($carta->file_path && (!isset($estado['estado']) || $estado['estado'] == 'rechazar'))
                                 @php
-                                    $estado = json_decode($documento->estado, true) ?? [];
+                                    $documentosParaRevisar = true;
                                 @endphp
-                                @if ($documento->$documentoNombre && (!isset($estado[$documentoNombre]) || $estado[$documentoNombre] == 'rechazar'))
-                                    @php
-                                        $documentosParaRevisar = true;
-                                    @endphp
-                                    <form class="update-form"
-                                        data-url="{{ route('registroGeneral.updateDocumento', ['id' => $registroGeneral->id, 'documento' => $documentoNombre]) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $documentoNombre)) }}</label>
-                                            <div class="col-sm-4">
-                                                <a href="{{ Storage::url($documento->$documentoNombre) }}" target="_blank"
-                                                    class="btn btn-primary">Ver</a>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="documento_estado"
-                                                        id="validar_{{ $documentoNombre }}" value="validar">
-                                                    <label class="form-check-label"
-                                                        for="validar_{{ $documentoNombre }}">Validar</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="documento_estado"
-                                                        id="rechazar_{{ $documentoNombre }}" value="rechazar">
-                                                    <label class="form-check-label"
-                                                        for="rechazar_{{ $documentoNombre }}">Rechazar</label>
-                                                </div>
-                                                <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button type="submit" class="btn btn-success">Listo</button>
-                                            </div>
+                                <form class="update-form"
+                                    data-url="{{ route('ValidarCarta.updateDocumento', ['id' => $usuario->id, 'cartaId' => $carta->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-sm-2 col-form-label">{{ ucfirst(str_replace('_', ' ', $carta->nombre)) }}</label>
+                                        <div class="col-sm-4">
+                                            <a href="{{ Storage::url($carta->file_path) }}" target="_blank"
+                                                class="btn btn-primary">Ver</a>
                                         </div>
-                                    </form>
-                                @endif
-                            @endforeach
+                                        <div class="col-sm-4">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="documento_estado"
+                                                    id="validar_{{ $carta->nombre }}" value="validar">
+                                                <label class="form-check-label"
+                                                    for="validar_{{ $carta->nombre }}">Validar</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="documento_estado"
+                                                    id="rechazar_{{ $carta->nombre }}" value="rechazar">
+                                                <label class="form-check-label"
+                                                    for="rechazar_{{ $carta->nombre }}">Rechazar</label>
+                                            </div>
+                                            <textarea class="form-control mt-2" name="comentario_documento" placeholder="Agregar comentarios"></textarea>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-success">Listo</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            @endif
                         @endforeach
-                        <!-- Mensaje para documentos validados -->
 
+                        <!-- Mensaje para documentos validados -->
                         @if (!$documentosParaRevisar)
                             <div class="form-group row">
                                 <div class="col-sm-12 text-center">
@@ -164,11 +165,15 @@
                         })
                         .then(response => response.json())
                         .then(data => {
+                            const successMessage = document.getElementById('success-message');
                             if (data.success) {
-                                document.getElementById('success-message').style.display =
-                                    'block';
+                                successMessage.style.display = 'block';
 
-                                // Actualizar el mensaje según la acción (validar/rechazar)
+                                // Ocultar el mensaje después de 3 segundos
+                                setTimeout(() => {
+                                    successMessage.style.display = 'none';
+                                }, 3000);
+
                                 const action = formData.get('documento_estado');
                                 if (action === 'validar') {
                                     form.closest('.update-form').style.display =

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEvidenciasCompetenciasTable extends Migration
+class CreateDocumentosEvidenciasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateEvidenciasCompetenciasTable extends Migration
      */
     public function up()
     {
-        Schema::create('evidencias_competencias', function (Blueprint $table) {
+        Schema::create('documentos_evidencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('estandar_id')->constrained('estandares')->onDelete('cascade');
             $table->foreignId('documento_id')->nullable()->constrained('documentosnec')->onDelete('cascade');
+            $table->string('nombre');
             $table->string('file_path')->nullable();
-            $table->string('ficha_registro_path')->nullable(); // Campo para la ficha de registro
-            $table->string('carta_firma_path')->nullable(); // Campo para la carta de la firma
+            $table->json('estado')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateEvidenciasCompetenciasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evidencias_competencias');
+        Schema::dropIfExists('documentos_evidencias');
     }
 }

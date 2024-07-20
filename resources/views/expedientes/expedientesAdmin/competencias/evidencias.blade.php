@@ -1,7 +1,5 @@
 @extends('adminlte::page')
 
-@section('title', 'Evidencias Competencias')
-
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Evidencias Competencias</h1>
@@ -10,85 +8,190 @@
 @stop
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body header-flex">
-                        <div class="left-content">
-                            <div class="text-center">
-                                <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
+    <div id="1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body header-flex">
+                            <div class="left-content">
+                                <h6 class="text-left mt-2">
+                                    Nombres: {{ $usuario->name }} {{ $usuario->secondName }}
+                                </h6>
+                                <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
+                                    {{ $usuario->maternalSurname }}</h6>
+                                <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                             </div>
-                            <h6 class="text-left mt-2">
-                                Nombres: {{ $usuario->name }} {{ $usuario->secondName }}
-                            </h6>
-                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
-                                {{ $usuario->maternalSurname }}</h6>
-                            <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Evidencias por Competencia</h3>
-                    </div>
-                    <div class="card-body">
-                        @if ($evidencias->isEmpty())
-                            <div class="text-center">
-                                <p>Por el momento este usuario no tiene ninguna evidencia de competencias.</p>
-                            </div>
-                        @else
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre del Documento</th>
-                                        <th>Competencia</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($evidencias as $evidencia)
-                                        @if ($evidencia->documento_id)
+            <!-- Sección de evidencias -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Evidencias por Competencia</h3>
+                        </div>
+                        <div class="card-body">
+                            @if ($fichas->isEmpty() && $cartas->isEmpty() && $documentos->isEmpty())
+                                <div class="text-center">
+                                    <p>Por el momento este usuario no tiene ninguna evidencia de competencias.</p>
+                                </div>
+                            @else
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tipo de Documento</th>
+                                            <th>Nombre del Documento</th>
+                                            <th>Competencia</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($documentos as $documento)
                                             <tr>
-                                                <td>{{ $evidencia->id }}</td>
-                                                <td>{{ $evidencia->documento->name ?? 'Documento no disponible' }}</td>
-                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>{{ $documento->id }}</td>
+                                                <td>Documento</td>
+                                                <td>{{ $documento->documento->name ?? 'Documento no disponible' }}</td>
+                                                <td>{{ $documento->estandar->name ?? 'Competencia no disponible' }}</td>
                                                 <td>
-                                                    <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
+                                                    <a href="{{ Storage::url($documento->file_path) }}" target="_blank"
                                                         class="btn btn-primary btn-sm shadow-sm">Ver Archivo</a>
                                                 </td>
                                             </tr>
-                                        @endif
-                                        @if ($evidencia->ficha_registro_path)
+                                        @endforeach
+
+                                        @foreach ($fichas as $ficha)
                                             <tr>
-                                                <td>{{ $evidencia->id }}</td>
+                                                <td>{{ $ficha->id }}</td>
                                                 <td>Ficha de Registro</td>
-                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>{{ $ficha->nombre ?? 'Ficha no disponible' }}</td>
+                                                <td>{{ $ficha->estandar->name ?? 'Competencia no disponible' }}</td>
                                                 <td>
-                                                    <a href="{{ Storage::url($evidencia->ficha_registro_path) }}"
-                                                        target="_blank" class="btn btn-info btn-sm shadow-sm">Ver Ficha</a>
+                                                    <a href="{{ Storage::url($ficha->file_path) }}" target="_blank"
+                                                        class="btn btn-info btn-sm shadow-sm">Ver Ficha</a>
                                                 </td>
                                             </tr>
-                                        @endif
-                                        @if ($evidencia->carta_firma_path)
+                                        @endforeach
+
+                                        @foreach ($cartas as $carta)
                                             <tr>
-                                                <td>{{ $evidencia->id }}</td>
+                                                <td>{{ $carta->id }}</td>
                                                 <td>Carta de Firma</td>
-                                                <td>{{ $evidencia->estandar->name ?? 'Competencia no disponible' }}</td>
+                                                <td>{{ $carta->nombre ?? 'Carta no disponible' }}</td>
+                                                <td>{{ $carta->estandar->name ?? 'Competencia no disponible' }}</td>
                                                 <td>
-                                                    <a href="{{ Storage::url($evidencia->carta_firma_path) }}"
-                                                        target="_blank" class="btn btn-info btn-sm shadow-sm">Ver Carta</a>
+                                                    <a href="{{ Storage::url($carta->file_path) }}" target="_blank"
+                                                        class="btn btn-info btn-sm shadow-sm">Ver Carta</a>
                                                 </td>
                                             </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sección para validar fichas -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3>Validar Fichas</h3>
+                </div>
+                <div class="card-body">
+                    @if ($fichas->isNotEmpty())
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Ficha</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($fichas as $ficha)
+                                    <tr>
+                                        <td>{{ $ficha->nombre }}</td>
+                                        <td>
+                                            <a href="{{ route('fichas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                                class="btn btn-primary">
+                                                Validar Ficha
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No hay fichas para validar.</p>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Sección para validar cartas -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3>Validar Cartas</h3>
+                </div>
+                <div class="card-body">
+                    @if ($cartas->isNotEmpty())
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Carta</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cartas as $carta)
+                                    <tr>
+                                        <td>{{ $carta->nombre }}</td>
+                                        <td>
+                                            <a href="{{ route('cartas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                                class="btn btn-primary">
+                                                Validar Carta
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No hay cartas para validar.</p>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Sección para validar documentos -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3>Validar Documentos</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach ($documentos as $documento)
+                            <li class="list-group-item">
+                                Documento: {{ $documento->documento->name ?? 'Documento no disponible' }}
+                            </li>
+                        @endforeach
+                    </ul>
+                    <div class="text-center mt-3">
+                        @if ($documentos->isNotEmpty())
+                            @php
+                                // Obtén el primer documento id si está disponible
+                                $firstDocumentoId = $documentos->first()->id ?? null;
+                            @endphp
+                            @if ($firstDocumentoId)
+                                <a href="{{ route('validarDocumentos', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                    class="btn btn-primary">
+                                    Validar Documentos
+                                </a>
+                            @else
+                                <p class="text-muted">No hay documentos para validar.</p>
+                            @endif
+                        @else
+                            <p class="text-muted">No hay documentos para validar.</p>
                         @endif
                     </div>
                 </div>
@@ -96,6 +199,7 @@
         </div>
     </div>
 @stop
+
 
 @section('css')
     <style>
@@ -136,7 +240,20 @@
 @stop
 
 @section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#1');
+                    $('#1').html(updatedContent.html());
+                }
+            });
+        }, 3000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

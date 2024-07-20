@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Estandares;
 use App\Models\EvidenciasCompetencias;
+use App\Models\FichasDocumentos;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
@@ -24,26 +25,43 @@ class WordController extends Controller
      */
     public function uploadFichaRegistro(Request $request, $id)
     {
+        // Validar la solicitud
         $request->validate([
-            'ficha_registro' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'ficha_registro' => 'required|file|mimes:pdf|max:2048',
         ]);
 
+        // Obtener el usuario autenticado
         $user = auth()->user();
-        $fileName = 'ficha_registro_' . Str::slug($user->name) . '.' . $request->file('ficha_registro')->getClientOriginalExtension();
 
+        // Generar el nombre del archivo usando el nombre completo y matrícula del usuario
+        $fileName = 'ficha_registro_' .
+            Str::slug($user->name) . '_' .
+            Str::slug($user->secondName) . '_' .
+            Str::slug($user->paternalSurname) . '_' .
+            Str::slug($user->maternalSurname) . '_' . // Asegúrate de que el campo esté presente en el modelo User
+            $user->matricula . '.' .
+            $request->file('ficha_registro')->getClientOriginalExtension();
+
+        // Almacenar el archivo en el directorio especificado
         $filePath = $request->file('ficha_registro')->storeAs(
-            'public/documents/evidence/competencias/' . Str::slug($user->name),
+            'public/documents/evidence/competencias/fichas/' . Str::slug($user->name),
             $fileName
         );
 
-        EvidenciasCompetencias::updateOrCreate(
-            ['user_id' => $user->id, 'estandar_id' => $id],
-            ['ficha_registro_path' => $filePath]
-        );
+        // Guardar la información en la tabla fichas_documentos
+        $ficha = FichasDocumentos::create([
+            'nombre' => $fileName,
+            'file_path' => $filePath,
+            'user_id' => $user->id,
+            'estandar_id' => $id,
+            'matricula' => $user->matricula, // Agrega este campo si lo necesitas en la base de datos
+        ]);
 
+        // Redirigir con un mensaje de éxito
         return redirect()->route('evidenciasEC.index', ['id' => $id, 'name' => Estandares::find($id)->name])
             ->with('success', 'Ficha de Registro subida correctamente');
     }
+
 
     /**
      * Handle the carta_firma upload.
@@ -55,7 +73,13 @@ class WordController extends Controller
         ]);
 
         $user = auth()->user();
-        $fileName = 'carta_firma_' . Str::slug($user->name) . '.' . $request->file('carta_firma')->getClientOriginalExtension();
+        $fileName = 'carta_firma_' .
+            Str::slug($user->name) . '_' .
+            Str::slug($user->secondName) . '_' .
+            Str::slug($user->paternalSurname) . '_' .
+            Str::slug($user->maternalSurname) . '_' . // Asegúrate de que el campo esté presente en el modelo User
+            $user->matricula . '.' .
+            $request->file('carta_firma')->getClientOriginalExtension();
 
         $filePath = $request->file('carta_firma')->storeAs(
             'public/documents/evidence/competencias/' . Str::slug($user->name),
@@ -104,13 +128,13 @@ class WordController extends Controller
         $templateProcessor->setValue('competencia_name', $competencia->name);
 
         // Asegurarse de que la carpeta exista
-        if (!Storage::exists('public/documents/required/form/')) {
-            Storage::makeDirectory('public/documents/required/form/');
+        if (!Storage::exists('public/documents/required/form/toke/')) {
+            Storage::makeDirectory('public/documents/required/form/toke/');
         }
 
         // Crear un nombre de archivo único usando el nombre del usuario y el número de competencia
-        $fileName = 'Ficha_de_Registro_' . $user->name . '_' . $competencia->numero . '.docx';
-        $outputPath = storage_path('app/public/documents/required/form/' . $fileName);
+        $fileName = 'Ficha_de_Registro_' . ' de ' . $user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname . '_' . $user->matricula . '_' . $competencia->numero . '.docx';
+        $outputPath = storage_path('app/public/documents/required/form/toke/' . $fileName);
         $templateProcessor->saveAs($outputPath);
 
         // Descargar el archivo sin eliminarlo después
@@ -133,13 +157,13 @@ class WordController extends Controller
         $templateProcessor->setValue('user_maternalSurname', $user->maternalSurname);
 
         // Asegurarse de que la carpeta exista
-        if (!Storage::exists('public/documents/required/form/')) {
-            Storage::makeDirectory('public/documents/required/form/');
+        if (!Storage::exists('public/documents/required/form/letter/')) {
+            Storage::makeDirectory('public/documents/required/form/letter/');
         }
 
         // Crear un nombre de archivo único usando el nombre del usuario
-        $fileName = 'Carta_para_la_autorización_de_uso_de_firma_digital_' . $user->name . '.docx';
-        $outputPath = storage_path('app/public/documents/required/form/' . $fileName);
+        $fileName = 'Carta_para_la_autorización_de_uso_de_firma_digital_' . ' de ' . $user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname . '_' . $user->matricula . '.docx';
+        $outputPath = storage_path('app/public/documents/required/form/letter/' . $fileName);
         $templateProcessor->saveAs($outputPath);
 
         // Descargar el archivo sin eliminarlo después

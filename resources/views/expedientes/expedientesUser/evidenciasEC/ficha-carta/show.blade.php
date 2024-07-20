@@ -16,7 +16,10 @@
                         @csrf
                         <div class="mb-3">
                             <label for="ficha_registro" class="form-label">Ficha de Registro</label>
-                            <input type="file" class="form-control" id="ficha_registro" name="ficha_registro" required>
+                            <input type="file" class="form-control" id="ficha_registro" name="ficha_registro"
+                                accept=".pdf" required>
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                                subirlo.</small>
                         </div>
                         <button type="submit" class="btn btn-success">Subir Ficha de Registro</button>
                     </form>
@@ -26,7 +29,10 @@
                         @csrf
                         <div class="mb-3">
                             <label for="carta_firma" class="form-label">Carta de Firma</label>
-                            <input type="file" class="form-control" id="carta_firma" name="carta_firma" required>
+                            <input type="file" class="form-control" id="carta_firma" name="carta_firma" accept=".pdf"
+                                required>
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                                subirlo.</small>
                         </div>
                         <button type="submit" class="btn btn-success">Subir Carta de Firma</button>
                     </form>

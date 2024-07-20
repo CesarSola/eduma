@@ -34,6 +34,9 @@
                                 onchange="previewImage(event, 'foto-preview')">
                             <img id="foto-preview" src="#" alt="Vista previa de la foto"
                                 style="display:none; width: 200px; height: auto; margin-top: 10px;" />
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato jpeg/image para
+                                poder
+                                subirlo.</small>
                         </div>
 
                         <div class="form-group">
@@ -42,6 +45,8 @@
                                 onchange="previewPDF(event, 'ine_ife-preview')">
                             <embed id="ine_ife-preview" src="#" type="application/pdf" width="100%" height="200px"
                                 style="display:none; margin-top: 10px;" />
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                                subirlo.</small>
                         </div>
 
                         <div class="form-group">
@@ -51,6 +56,8 @@
                                 onchange="previewPDF(event, 'comprobante_domiciliario-preview')">
                             <embed id="comprobante_domiciliario-preview" src="#" type="application/pdf"
                                 width="100%" height="200px" style="display:none; margin-top: 10px;" />
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                                subirlo.</small>
                         </div>
 
                         <div class="form-group">
@@ -59,6 +66,8 @@
                                 onchange="previewPDF(event, 'curp-preview')">
                             <embed id="curp-preview" src="#" type="application/pdf" width="100%" height="200px"
                                 style="display:none; margin-top: 10px;" />
+                            <small class="form-text text-muted">Asegúrate de que tu archivo sea en formato PDF para poder
+                                subirlo.</small>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Subir documentos</button>

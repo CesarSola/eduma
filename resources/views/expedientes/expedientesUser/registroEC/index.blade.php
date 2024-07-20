@@ -12,62 +12,65 @@
 @stop
 
 @section('content')
-    <div class="col-md-12 mb-8">
-        <div class="card h-100">
-            <div class="card-body">
-                <h6 class="card-title mb-0">Instrucciones</h6>
-            </div>
-            <div class="card-body">
-                @if ($competencias->isEmpty())
-                    <h6 class="text-center">Por el momento no hay ninguna competencia disponible.</h6>
-                @else
-                    @php
-                        $usuario = Auth::user();
-                        $inscrito = false;
-                    @endphp
-                    @if ($usuario)
-                        @foreach ($competencias as $competencia)
-                            @php
-                                $comprobanteExistente = $usuario
-                                    ->comprobantesCO()
-                                    ->where('estandar_id', $competencia->id)
-                                    ->first();
+    <div id="1">
+        <div class="col-md-12 mb-8">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-title mb-0">Instrucciones</h6>
+                </div>
+                <div class="card-body">
+                    @if ($competencias->isEmpty())
+                        <h6 class="text-center">Por el momento no hay ninguna competencia disponible.</h6>
+                    @else
+                        @php
+                            $usuario = Auth::user();
+                            $inscrito = false;
+                        @endphp
+                        @if ($usuario)
+                            @foreach ($competencias as $competencia)
+                                @php
+                                    $comprobanteExistente = $usuario
+                                        ->comprobantesCO()
+                                        ->where('estandar_id', $competencia->id)
+                                        ->first();
 
-                                if ($comprobanteExistente) {
-                                    $inscrito = true;
-                                    $competenciaInscrita = $competencia;
-                                }
-                            @endphp
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="card-title mb-0">{{ $competencia->numero }} -
-                                                {{ $competencia->name }}
-                                                ({{ $competencia->tipo }})
-                                            </h6>
-                                        </div>
-                                        @if ($comprobanteExistente)
-                                            <span class="badge badge-success badge-pill">Inscrito</span>
-                                        @else
-                                            <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
-                                                class="btn btn-primary">Inscribirse</a>
-                                        @endif
-                                        @if ($inscrito && $competencia->id === $competenciaInscrita->id)
-                                            <div class="card-footer">
-                                                <a href="{{ route('miscompetencias.index') }}" class="btn btn-primary">Ir a
-                                                    Mis
-                                                    Competencias</a>
+                                    if ($comprobanteExistente) {
+                                        $inscrito = true;
+                                        $competenciaInscrita = $competencia;
+                                    }
+                                @endphp
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-0">{{ $competencia->numero }} -
+                                                    {{ $competencia->name }}
+                                                    ({{ $competencia->tipo }})
+                                                </h6>
                                             </div>
-                                        @endif
+                                            @if ($comprobanteExistente)
+                                                <span class="badge badge-success badge-pill">Inscrito</span>
+                                            @else
+                                                <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
+                                                    class="btn btn-primary">Inscribirse</a>
+                                            @endif
+                                            @if ($inscrito && $competencia->id === $competenciaInscrita->id)
+                                                <div class="card-footer">
+                                                    <a href="{{ route('miscompetencias.index') }}"
+                                                        class="btn btn-primary">Ir a
+                                                        Mis
+                                                        Competencias</a>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <h6 class="text-center">Debe estar autenticado para ver las competencias.</h6>
+                            @endforeach
+                        @else
+                            <h6 class="text-center">Debe estar autenticado para ver las competencias.</h6>
+                        @endif
                     @endif
-                @endif
+                </div>
             </div>
         </div>
     </div>
@@ -127,9 +130,7 @@
 @stop
 
 @section('js')
-    <!-- Incluir jQuery (si no está incluido ya) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // Función para recargar la sección cada 5 minutos
         setInterval(function() {
@@ -139,10 +140,10 @@
                 dataType: 'html', // Tipo de datos esperado (html en este caso)
                 success: function(response) {
                     // Actualizar el contenido de la sección específica
-                    var updatedContent = $(response).find('#id_del_contenedor_a_actualizar');
-                    $('#id_del_contenedor_a_actualizar').html(updatedContent.html());
+                    var updatedContent = $(response).find('#1');
+                    $('#1').html(updatedContent.html());
                 }
             });
-        }, 10000); // 300000 milisegundos = 5 minutos
+        }, 3000); // 300000 milisegundos = 5 minutos
     </script>
 @stop

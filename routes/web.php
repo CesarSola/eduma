@@ -60,31 +60,45 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\EvidenciasUCControlle;
+use App\Http\Controllers\ValidarCartasController;
 use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
+use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\WordController;
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
 //ruta index de la carpeta registroGeneral
 Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
-//ruta de la carpeta usuarios
-Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta comentarios-validar
 Route::put('/registro-general/{id}/update-documento/{documento}', [DocumentosController::class, 'updateDocumento'])->name('registroGeneral.updateDocumento');
+//ruta de la carpeta usuarios
+Route::resource('usuariosAdmin', ExpedientesUsuariosController::class);
 //ruta de la carpeta cursos
 Route::resource('cursosExpediente', CursosController::class);
 //ruta del show de evidencias cursos
 Route::resource('evidenciasACU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
+Route::get('competencias/{competencia}/agregar-fechas', [CompetenciasController::class, 'agregarFechas'])->name('competencias.agregar-fechas');
+Route::post('competencias/{competencia}/guardar-fechas', [CompetenciasController::class, 'guardarFechas'])->name('competencias.guardar-fechas');
 //ruta del show de evidencias competencias
 Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
+// Ruta para validar fichas
+Route::get('/validar-fichas/{user_id}/{competencia}', [ValidarFichasController::class, 'show'])->name('fichas.show');
+// Ruta para actualizar una ficha
+Route::put('/validar--fichas/{id}/ficha/{fichaId}', [ValidarFichasController::class, 'updateFicha'])->name('ValidarFicha.updateDocumento');
+// Ruta para validar cartas
+Route::get('/validar-carta/{user_id}/{competencia}', [ValidarCartasController::class, 'show'])->name('cartas.show');
+// Ruta para actualizar una carta
+Route::put('/validar--carta/{id}/carta/{cartaId}', [ValidarCartasController::class, 'updateCarta'])->name('ValidarCarta.updateDocumento');
+// Ruta para validar documentos
+Route::get('/validar-documentos/{user_id}/{competencia}', [EvidenciasCompetenciasController::class, 'showValidarDocumentos'])->name('validarDocumentos');
 //ruta de la carpeta validarCoP
 Route::resource('validarCoP', ValidarCoPController::class);
 // Rutas para validar comprobante de pagos de competencias
 Route::put('/validar-cop/{id}/update-comprobante/{documento}', [ValidarCoPController::class, 'updateComprobante'])->name('validarCoP.updateComprobante');
-//ruta de la carpeta validarCoP
+//ruta de la carpeta validarCuP
 Route::resource('validarCuP', ValidarCuPController::class);
 //rutas para validar comprobante de pagos cursos
 Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPController::class, 'updateComprobante'])->name('validarCuP.updateComprobante');
@@ -145,6 +159,9 @@ Route::resource('competenciasAD', CompetenciasAddController::class);
 Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
 Route::resource('documentosnec', DocumentosNecController::class);
+Route::get('/documentos/download/{id}', [DocumentosNecController::class, 'download'])->name('document.download');
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
