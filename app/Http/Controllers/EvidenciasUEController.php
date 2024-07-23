@@ -48,12 +48,10 @@ class EvidenciasUEController extends Controller
             ->with('cartas') // Cargar la relación de carta
             ->get();
 
-        // Consultar validaciones de documentos
-        $validaciones_documentos = ValidacionesEvidencias::where('user_id', $user_id)
-            ->whereIn('documento_id', $evidencias->pluck('id'))
+        // Obtener validaciones de documentos
+        $validaciones_documentos = ValidacionesEvidencias::where('estandar_id', $id)
             ->get();
-
-        // Consultar documentos necesarios (asegúrate de definir la lógica)
+        // Consultar documentos necesarios
         $documentos_necesarios = DocumentosNec::whereHas('estandares', function ($query) use ($id) {
             $query->where('estandares.id', $id);
         })->get();
@@ -90,10 +88,36 @@ class EvidenciasUEController extends Controller
 
         return view('expedientes.expedientesUser.evidenciasEC.show', compact('estandar', 'documento'));
     }
+    public function upload(Request $request, $documento_id)
+    {
+        $request->validate([
+            'documento' => 'required|file|mimes:pdf|max:2048',
+        ]);
 
-    /**
-     * Handle the document upload.
-     */
+        $documento = DocumentosNec::find($documento_id);
+        $user = auth()->user();
+        $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension(); // Create the new file name
+
+        // Save the file in the specific directory
+        $filePath = $request->file('documento')->storeAs(
+            'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
+            $fileName
+        );
+
+        // Save the file information to the database
+        DocumentosEvidencias::create([
+            'user_id' => auth()->id(),
+            'estandar_id' => $documento->estandares->first()->id,
+            'documento_id' => $documento_id,
+            'file_path' => $filePath,
+            'nombre' => $documento->name,  // Add this line to provide a value for the 'nombre' field
+            'estado' => 'pendiente',       // If 'estado' field is also required, make sure to provide a value
+        ]);
+
+        return redirect()->route('evidenciasEC.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
+            ->with('success', 'Documento subido correctamente');
+    }
+
     public function resubir(Request $request, $id)
     {
         $request->validate([

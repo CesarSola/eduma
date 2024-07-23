@@ -32,22 +32,17 @@ class DocumentosEvidencias extends Model
     {
         return $this->belongsTo(DocumentosNec::class, 'documento_id');
     }
-
+    //relación con validaciones_evidencias
     public function validacionesEvidencias()
     {
         return $this->hasMany(ValidacionesEvidencias::class, 'documento_id');
     }
-
-
-    // Función que cambia el estado del documento a pendiente cuando esté vacío o sea null
-    public static function boot()
+    public function users()
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (is_null($model->estado)) {
-                $model->estado = 'pendiente'; // Establecer directamente el valor por defecto
-            }
-        });
+        return $this->belongsToMany(User::class);
+    }
+    public function validaciones()
+    {
+        return $this->hasMany(ValidacionesEvidencias::class, 'documento_id');
     }
 }

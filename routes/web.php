@@ -141,9 +141,8 @@ Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index']
 Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 //rutas para resubir documentos de evidencias 
-Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'showResubirForm'])->name('evidencias.resubir');
+Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'show'])->name('evidencias.resubir');
 Route::post('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'resubir'])->name('evidencias.resubir.submit');
-
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');

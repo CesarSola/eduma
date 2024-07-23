@@ -38,9 +38,8 @@ class ValidacionesEvidencias extends Model
     {
         return $this->belongsToMany(DocumentosEvidencias::class, 'documento_id');
     }
-    // Modelo ValidacionesEvidencias
     public function documentoEvidencia()
     {
-        return $this->belongsTo(DocumentosEvidencias::class, 'evidencia_id');
+        return $this->belongsTo(DocumentosEvidencias::class, 'documento_id');
     }
 }

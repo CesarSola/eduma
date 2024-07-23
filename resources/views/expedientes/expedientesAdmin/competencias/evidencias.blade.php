@@ -185,24 +185,23 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 70%;">Documento</th> <!-- Ancho fijo para nombre -->
-                                    <th style="width: 30%;">Acción</th> <!-- Ancho fijo para acción -->
+                                    <th style="width: 70%;">Documento</th>
+                                    <th style="width: 30%;">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php $todosDocumentosValidados = true; @endphp
                                 @foreach ($documentos as $documento)
                                     <tr>
                                         <td>{{ $documento->documento->name ?? 'Documento no disponible' }}</td>
                                         <td>
                                             @php
-                                                // Verifica si el documento ha sido validado
-                                                $isValidado =
-                                                    isset($documentos_validaciones[$documento->id]) &&
-                                                    $documentos_validaciones[$documento->id]->tipo_validacion;
+                                                $isValidado = isset($documentos_validaciones[$documento->id]);
                                             @endphp
                                             @if ($isValidado)
                                                 <span class="text-success">Documento validado</span>
                                             @else
+                                                @php $todosDocumentosValidados = false; @endphp
                                                 <a href="{{ route('documentosE.show', ['user_id' => $usuario->id, 'competencia_id' => $competencia->id]) }}"
                                                     class="btn btn-primary">
                                                     Validar Documentos Evidencias

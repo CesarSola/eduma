@@ -18,12 +18,9 @@ class EvidenciasCompetenciasController extends Controller
     public function index(Request $request)
     {
         $userId = $request->query('user_id');
-        $competenciaId = $request->query('competencia'); // Suponiendo que es un ID
+        $competenciaId = $request->query('competencia');
 
-        // Obtener el usuario
         $usuario = $userId ? User::findOrFail($userId) : auth()->user();
-
-        // Obtener la competencia (estándar)
         $competencia = Estandares::findOrFail($competenciaId);
 
         // Obtener documentos
@@ -42,6 +39,13 @@ class EvidenciasCompetenciasController extends Controller
             ->where('estandar_id', $competenciaId)
             ->get();
 
+
+        // Obtener validaciones de documentos
+        $documentos_validaciones = ValidacionesEvidencias::where('user_id', $usuario->id)
+            ->where('estandar_id', $competenciaId)
+            ->get()
+            ->keyBy('documento_id');
+
         // Obtener validaciones de fichas
         $fichas_validaciones = ValidacionesFichas::where('user_id', $usuario->id)
             ->where('estandar_id', $competenciaId)
@@ -54,8 +58,11 @@ class EvidenciasCompetenciasController extends Controller
             ->get()
             ->keyBy('carta_id');
 
-        // Combina todos los resultados en una sola colección
-        $evidencias = $documentos->merge($fichas)->merge($cartas);
+        // Verificar si todos los documentos están validados
+        $todosDocumentosValidados = $documentos->every(function ($documento) use ($documentos_validaciones) {
+            return isset($documentos_validaciones[$documento->id]);
+        });
+
 
         return view('expedientes.expedientesAdmin.competencias.evidencias', compact(
             'usuario',
@@ -64,8 +71,9 @@ class EvidenciasCompetenciasController extends Controller
             'cartas_validaciones',
             'fichas',
             'cartas',
-            'evidencias',
-            'competencia'
+            'competencia',
+            'documentos_validaciones',
+            'todosDocumentosValidados'
         ));
     }
 

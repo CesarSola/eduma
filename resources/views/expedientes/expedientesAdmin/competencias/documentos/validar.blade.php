@@ -13,7 +13,6 @@
 @stop
 
 @section('content')
-
     <div class="container">
         <div id="success-message" class="alert alert-success" style="display: none;">
             Documento actualizado correctamente.
@@ -36,8 +35,7 @@
                                             </div>
                                             <h6 class="text-left mt-2">Nombres: {{ $usuario->name }}
                                                 {{ $usuario->secondName }}</h6>
-                                            <h6 class="text-left mt-2">Apellidos:
-                                                {{ $usuario->paternalSurname }}
+                                            <h6 class="text-left mt-2">Apellidos: {{ $usuario->paternalSurname }}
                                                 {{ $usuario->maternalSurname }}</h6>
                                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                                         </div>
@@ -53,12 +51,11 @@
                             $documentosParaRevisar = false;
                         @endphp
 
-                        <!-- Mostrar documentos específicos -->
                         @foreach ($documentos as $documento)
                             @php
                                 $estado = json_decode($documento->estado, true) ?? [];
                             @endphp
-                            @if ($documento->file_path && (!isset($estado['estado']) || $estado['estado'] == 'rechazar'))
+                            @if ($documento->file_path && (!isset($estado[$documento->nombre]) || $estado[$documento->nombre] == 'rechazar'))
                                 @php
                                     $documentosParaRevisar = true;
                                 @endphp
@@ -97,7 +94,6 @@
                             @endif
                         @endforeach
 
-                        <!-- Mensaje para documentos validados -->
                         @if (!$documentosParaRevisar)
                             <div class="form-group row">
                                 <div class="col-sm-12 text-center">
@@ -180,12 +176,12 @@
                                         'none'; // Ocultar el formulario del documento validado
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
-                                            <div class="form-group row">
-                                                <div class="col-sm-12 text-center">
-                                                    <p>Todos los documentos disponibles han sido validados.</p>
-                                                </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-12 text-center">
+                                                <p>Todos los documentos disponibles han sido validados.</p>
                                             </div>
-                                        `;
+                                        </div>
+                                    `;
                                     }
                                 } else if (action === 'rechazar') {
                                     // Resetear campos de validar y comentario

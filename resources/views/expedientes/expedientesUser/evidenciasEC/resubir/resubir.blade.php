@@ -7,7 +7,8 @@
         <div class="text-center text-white bg-success p-3 rounded shadow-sm">
             <h1 class="mb-0">Resubir Documentos</h1>
         </div>
-        <a href="{{ route('miscompetencias.index') }}" class="btn btn-secondary shadow-sm">Regresar</a>
+        <a href="{{ route('evidenciasEC.index', ['id' => $usuario->id, 'name' => $usuario->name]) }}"
+            class="btn btn-secondary shadow-sm">Regresar</a>
     </div>
 @stop
 

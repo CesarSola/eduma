@@ -13,7 +13,7 @@ class CreateValidacionesEvidenciasTable extends Migration
             $table->foreignId('estandar_id')->constrained('estandares')->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('documento_id')->nullable()->constrained('documentos_evidencias')->onDelete('cascade');
-            $table->enum('tipo_validacion', ['validar', 'rechazar']);
+            $table->enum('tipo_validacion', ['validar', 'rechazar', 'pendiente'])->default('pendiente');
             $table->text('comentario')->nullable();
             $table->timestamps();
         });

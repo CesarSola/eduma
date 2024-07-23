@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DocumentosEvidencias;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ValidacionesFichas;
@@ -10,11 +11,14 @@ use Illuminate\Support\Str;
 
 class ResubirDocumentosController extends Controller
 {
-    public function showResubirForm($id)
+    public function show($id)
     {
         $evidencia = DocumentosEvidencias::findOrFail($id);
-        return view('expedientes.expedientesUser.evidenciasEC.resubir.resubir', compact('evidencia'));
+        $usuario = User::findOrFail($evidencia->user_id); // Obtener el usuario relacionado
+
+        return view('expedientes.expedientesUser.evidenciasEC.resubir.resubir', compact('evidencia', 'usuario'));
     }
+
 
     public function resubir(Request $request, $id)
     {
