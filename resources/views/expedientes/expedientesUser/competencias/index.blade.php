@@ -26,9 +26,9 @@
             <div class="container">
                 @if ($competencias->isEmpty())
                     <div class="alert alert-primary" role="alert">
-                        No tienes cursos inscritos.
+                        No tienes Competencias inscritos.
                         <a class="btn btn-primary" href="{{ route('competenciaEC.index') }}">Ir a la pestaña de inscripción
-                            a un curso</a>
+                            a una competencia</a>
                     </div>
                 @else
                     <ul class="list-group">

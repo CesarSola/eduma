@@ -105,7 +105,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(FichasDocumentos::class);
     }
-
+    // Relación con DocumentosEvidencias
+    public function documentosE()
+    {
+        return $this->hasMany(DocumentosEvidencias::class, 'user_id');
+    }
     // Métodos para desactivar y reactivar cuentas de usuario
     public function deactivateAccount(User $user)
     {

@@ -60,9 +60,11 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\EvidenciasUCControlle;
+use App\Http\Controllers\ResubirDocumentosController;
 use App\Http\Controllers\ValidarCartasController;
 use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
+use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\WordController;
 
@@ -93,7 +95,9 @@ Route::get('/validar-carta/{user_id}/{competencia}', [ValidarCartasController::c
 // Ruta para actualizar una carta
 Route::put('/validar--carta/{id}/carta/{cartaId}', [ValidarCartasController::class, 'updateCarta'])->name('ValidarCarta.updateDocumento');
 // Ruta para validar documentos
-Route::get('/validar-documentos/{user_id}/{competencia}', [EvidenciasCompetenciasController::class, 'showValidarDocumentos'])->name('validarDocumentos');
+Route::get('/validar-documentos/{user_id}/{competencia_id}', [ValidarDocumentosController::class, 'show'])->name('documentosE.show');
+// Ruta para actualizar una documento
+Route::put('/validar-documento/{id}/{competencia_id}', [ValidarDocumentosController::class, 'updateDocumento'])->name('ValidarDocumento.updateDocumento');
 //ruta de la carpeta validarCoP
 Route::resource('validarCoP', ValidarCoPController::class);
 // Rutas para validar comprobante de pagos de competencias
@@ -134,8 +138,12 @@ Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::
 //ruta de evidenciasEC
 Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
-Route::get('/evidencias/{id}/{documento}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
+Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
+//rutas para resubir documentos de evidencias 
+Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'showResubirForm'])->name('evidencias.resubir');
+Route::post('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'resubir'])->name('evidencias.resubir.submit');
+
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
@@ -159,6 +167,7 @@ Route::resource('competenciasAD', CompetenciasAddController::class);
 Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
 Route::resource('documentosnec', DocumentosNecController::class);
+Route::get('document/download/{id}', [DocumentosNecController::class, 'download'])->name('document.download');
 Route::get('/documentos/download/{id}', [DocumentosNecController::class, 'download'])->name('document.download');
 
 

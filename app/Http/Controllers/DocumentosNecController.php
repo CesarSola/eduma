@@ -41,11 +41,12 @@ class DocumentosNecController extends Controller
         try {
             $user = Auth::user();
             $userName = str_replace(' ', '_', $user->name);
+            $userSecondName = str_replace(' ', '_', $user->secondName);
             $documentName = str_replace(' ', '_', $request->input('name'));
 
             if ($request->hasFile('documento')) {
                 $file = $request->file('documento');
-                $filePath = $file->storeAs('public/documents/required/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
+                $filePath = $file->storeAs('public/documents/required/required documents/' . $userName . ' ' . $userSecondName, $documentName . '.' . $file->getClientOriginalExtension());
 
                 $documento = DocumentosNec::create([
                     'name' => $request->input('name'),
@@ -97,10 +98,11 @@ class DocumentosNecController extends Controller
             if ($request->hasFile('documento')) {
                 $user = Auth::user();
                 $userName = str_replace(' ', '_', $user->name);
+                $userSecondName = str_replace(' ', '_', $user->secondName);
                 $documentName = str_replace(' ', '_', $request->input('name'));
 
                 $file = $request->file('documento');
-                $filePath = $file->storeAs('public/documents/required/' . $userName, $documentName . '.' . $file->getClientOriginalExtension());
+                $filePath = $file->storeAs('public/documents/required/required documents/' . $userName . ' ' . $userSecondName, $documentName . '.' . $file->getClientOriginalExtension());
                 $documentosnec->documento = $filePath; // Actualizamos la ruta del archivo en el campo 'documento'
             }
 

@@ -36,7 +36,8 @@
                         <div class="card-body">
                             @if ($fichas->isEmpty() && $cartas->isEmpty() && $documentos->isEmpty())
                                 <div class="text-center">
-                                    <p>Por el momento este usuario no tiene ninguna evidencia de competencias.</p>
+                                    <p class="text-muted">Por el momento este usuario no tiene ninguna evidencia de
+                                        competencias.</p>
                                 </div>
                             @else
                                 <table class="table">
@@ -114,17 +115,23 @@
                                     <tr>
                                         <td>{{ $ficha->nombre }}</td>
                                         <td>
-                                            <a href="{{ route('fichas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
-                                                class="btn btn-primary">
-                                                Validar Ficha
-                                            </a>
+                                            @if (isset($fichas_validaciones[$ficha->id]) && $fichas_validaciones[$ficha->id]->tipo_validacion)
+                                                <span class="text-success">Ficha validada</span>
+                                            @else
+                                                <a href="{{ route('fichas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                                    class="btn btn-primary">
+                                                    Validar Ficha
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @else
-                        <p class="text-muted">No hay fichas para validar.</p>
+                        <div class="text-center">
+                            <p class="text-muted">No hay fichas para validar.</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -148,52 +155,69 @@
                                     <tr>
                                         <td>{{ $carta->nombre }}</td>
                                         <td>
-                                            <a href="{{ route('cartas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
-                                                class="btn btn-primary">
-                                                Validar Carta
-                                            </a>
+                                            @if (isset($cartas_validaciones[$carta->id]) && $cartas_validaciones[$carta->id]->tipo_validacion)
+                                                <span class="text-success">Carta validada</span>
+                                            @else
+                                                <a href="{{ route('cartas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                                    class="btn btn-primary">
+                                                    Validar Carta
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @else
-                        <p class="text-muted">No hay cartas para validar.</p>
+                        <div class="text-center">
+                            <p class="text-muted">No hay cartas para validar.</p>
+                        </div>
                     @endif
                 </div>
             </div>
-
             <!-- Sección para validar documentos -->
             <div class="card mt-4">
                 <div class="card-header">
                     <h3>Validar Documentos</h3>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        @foreach ($documentos as $documento)
-                            <li class="list-group-item">
-                                Documento: {{ $documento->documento->name ?? 'Documento no disponible' }}
-                            </li>
-                        @endforeach
-                    </ul>
-                    <div class="text-center mt-3">
-                        @if ($documentos->isNotEmpty())
-                            @php
-                                // Obtén el primer documento id si está disponible
-                                $firstDocumentoId = $documentos->first()->id ?? null;
-                            @endphp
-                            @if ($firstDocumentoId)
-                                <a href="{{ route('validarDocumentos', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
-                                    class="btn btn-primary">
-                                    Validar Documentos
-                                </a>
-                            @else
-                                <p class="text-muted">No hay documentos para validar.</p>
-                            @endif
-                        @else
+                    @if ($documentos->isNotEmpty())
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70%;">Documento</th> <!-- Ancho fijo para nombre -->
+                                    <th style="width: 30%;">Acción</th> <!-- Ancho fijo para acción -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($documentos as $documento)
+                                    <tr>
+                                        <td>{{ $documento->documento->name ?? 'Documento no disponible' }}</td>
+                                        <td>
+                                            @php
+                                                // Verifica si el documento ha sido validado
+                                                $isValidado =
+                                                    isset($documentos_validaciones[$documento->id]) &&
+                                                    $documentos_validaciones[$documento->id]->tipo_validacion;
+                                            @endphp
+                                            @if ($isValidado)
+                                                <span class="text-success">Documento validado</span>
+                                            @else
+                                                <a href="{{ route('documentosE.show', ['user_id' => $usuario->id, 'competencia_id' => $competencia->id]) }}"
+                                                    class="btn btn-primary">
+                                                    Validar Documentos Evidencias
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-center">
                             <p class="text-muted">No hay documentos para validar.</p>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -235,6 +259,14 @@
 
         .toggle-card {
             cursor: pointer;
+        }
+
+        .action-cell {
+            display: flex;
+            justify-content: flex-start;
+            /* Alinea el contenido a la izquierda */
+            align-items: center;
+            /* Centra verticalmente el contenido */
         }
     </style>
 @stop

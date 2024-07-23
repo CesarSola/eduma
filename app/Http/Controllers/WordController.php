@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartasDocumentos;
 use App\Models\User;
 use App\Models\Estandares;
 use App\Models\EvidenciasCompetencias;
@@ -44,7 +45,7 @@ class WordController extends Controller
 
         // Almacenar el archivo en el directorio especificado
         $filePath = $request->file('ficha_registro')->storeAs(
-            'public/documents/evidence/competencias/fichas/' . Str::slug($user->name),
+            'public/documents/evidence/competencias/fichas/' . $user->matricula . '/' . Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
             $fileName
         );
 
@@ -82,14 +83,19 @@ class WordController extends Controller
             $request->file('carta_firma')->getClientOriginalExtension();
 
         $filePath = $request->file('carta_firma')->storeAs(
-            'public/documents/evidence/competencias/' . Str::slug($user->name),
+            'public/documents/evidence/competencias/cartas/' . $user->matricula . '/' .  Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
             $fileName
         );
 
-        EvidenciasCompetencias::updateOrCreate(
-            ['user_id' => $user->id, 'estandar_id' => $id],
-            ['carta_firma_path' => $filePath]
-        );
+
+        // Guardar la información en la tabla fichas_documentos
+        $ficha = CartasDocumentos::create([
+            'nombre' => $fileName,
+            'file_path' => $filePath,
+            'user_id' => $user->id,
+            'estandar_id' => $id,
+            'matricula' => $user->matricula, // Agrega este campo si lo necesitas en la base de datos
+        ]);
 
         return redirect()->route('evidenciasEC.index', ['id' => $id, 'name' => Estandares::find($id)->name])
             ->with('success', 'Carta de Firma subida correctamente');

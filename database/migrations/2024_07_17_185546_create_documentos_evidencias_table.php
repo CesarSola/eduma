@@ -20,7 +20,7 @@ class CreateDocumentosEvidenciasTable extends Migration
             $table->foreignId('documento_id')->nullable()->constrained('documentosnec')->onDelete('cascade');
             $table->string('nombre');
             $table->string('file_path')->nullable();
-            $table->json('estado')->nullable();
+            $table->string('estado')->default('pendiente');
             $table->timestamps();
         });
     }

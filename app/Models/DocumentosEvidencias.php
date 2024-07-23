@@ -15,6 +15,7 @@ class DocumentosEvidencias extends Model
         'documento_id',
         'nombre',
         'file_path',
+        'estado'
     ];
 
     public function user()
@@ -35,5 +36,18 @@ class DocumentosEvidencias extends Model
     public function validacionesEvidencias()
     {
         return $this->hasMany(ValidacionesEvidencias::class, 'documento_id');
+    }
+
+
+    // Función que cambia el estado del documento a pendiente cuando esté vacío o sea null
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->estado)) {
+                $model->estado = 'pendiente'; // Establecer directamente el valor por defecto
+            }
+        });
     }
 }

@@ -13,8 +13,6 @@ class EvidenciasCompetencias extends Model
         'user_id',
         'estandar_id',
         'documento_id',
-        'ficha_registro_path',
-        'carta_firma_path',
         'file_path',
     ];
 

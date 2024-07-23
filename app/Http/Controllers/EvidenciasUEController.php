@@ -13,6 +13,7 @@ use App\Models\ValidacionesFichas;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class EvidenciasUEController extends Controller
 {
@@ -24,34 +25,44 @@ class EvidenciasUEController extends Controller
         $estandar = Estandares::find($id);
         $user_id = auth()->id();
 
+        // Obtener evidencias
         $evidencias = DocumentosEvidencias::where('estandar_id', $id)
             ->where('user_id', $user_id)
             ->get();
 
+        // Obtener ficha de registro y carta de firma
         $ficha_registro = FichasDocumentos::where('estandar_id', $id)
             ->where('user_id', $user_id)
             ->first();
 
-        // Verifica el contenido de estado en CartasDocumentos
         $carta_firma = CartasDocumentos::where('estandar_id', $id)
             ->where('user_id', $user_id)
             ->first();
 
-        // Verifica si hay registros en validaciones_fichas
-        $fichas_validaciones = ValidacionesFichas::where('estandar_id', $id)
-            ->whereIn('ficha_id', $evidencias->pluck('ficha_id')->filter())
+        // Obtener validaciones para ficha y carta
+        $fichas_validaciones = ValidacionesFichas::where('ficha_id', optional($ficha_registro)->id)
+            ->with('fichas') // Cargar la relación de ficha
             ->get();
 
-        // Verifica si hay registros en validaciones_cartas
-        $cartas_validaciones = ValidacionesCartas::where('estandar_id', $id)
-            ->whereIn('carta_id', $evidencias->pluck('carta_id')->filter())
+        $cartas_validaciones = ValidacionesCartas::where('carta_id', optional($carta_firma)->id)
+            ->with('cartas') // Cargar la relación de carta
             ->get();
 
-        // Verifica si se está filtrando correctamente
+        // Consultar validaciones de documentos
+        $validaciones_documentos = ValidacionesEvidencias::where('user_id', $user_id)
+            ->whereIn('documento_id', $evidencias->pluck('id'))
+            ->get();
+
+        // Consultar documentos necesarios (asegúrate de definir la lógica)
+        $documentos_necesarios = DocumentosNec::whereHas('estandares', function ($query) use ($id) {
+            $query->where('estandares.id', $id);
+        })->get();
+
+        // Determinar si las fichas y cartas han sido validadas
         $carta_validada = $cartas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
         $ficha_validada = $fichas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
 
-
+        // Pasar datos a la vista
         return view('expedientes.expedientesUser.evidenciasEC.index', compact(
             'estandar',
             'evidencias',
@@ -59,9 +70,17 @@ class EvidenciasUEController extends Controller
             'carta_firma',
             'fichas_validaciones',
             'cartas_validaciones',
+            'validaciones_documentos',
             'carta_validada',
-            'ficha_validada'
+            'ficha_validada',
+            'documentos_necesarios'
         ));
+    }
+
+    public function download($id)
+    {
+        $documento = DocumentosNec::findOrFail($id);
+        return Storage::download($documento->documento);
     }
 
     public function show($id, $documento_id)
@@ -75,32 +94,37 @@ class EvidenciasUEController extends Controller
     /**
      * Handle the document upload.
      */
-    public function upload(Request $request, $documento_id)
+    public function resubir(Request $request, $id)
     {
         $request->validate([
-            'documento' => 'required|file|mimes:pdf|max:2048',
+            'file' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        $documento = DocumentosNec::find($documento_id);
+        $evidencia = DocumentosEvidencias::findOrFail($id);
+        $documento = $evidencia->documento; // Obtener el documento relacionado
         $user = auth()->user();
-        $userName = Str::slug($user->name);  // Convert the user's name to a URL-friendly format
-        $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension(); // Create the new file name
 
-        // Save the file in the specific directory
-        $filePath = $request->file('documento')->storeAs(
-            'public/documents/evidence/competencias/' . $userName,
+        // Crear nombre de archivo
+        $fileName = Str::slug($documento->name) . '.' . $request->file('file')->getClientOriginalExtension();
+
+        // Crear ruta de almacenamiento
+        $filePath = $request->file('file')->storeAs(
+            'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' .  Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
             $fileName
         );
 
-        // Save the file information to the database
-        DocumentosEvidencias::create([
-            'user_id' => auth()->id(),
-            'estandar_id' => $documento->estandares->first()->id,
-            'documento_id' => $documento_id,
-            'file_path' => $filePath,
-        ]);
+        // Elimina el archivo viejo si es necesario
+        if (Storage::exists($evidencia->file_path)) {
+            Storage::delete($evidencia->file_path);
+        }
 
-        return redirect()->route('evidenciasEC.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
-            ->with('success', 'Documento subido correctamente');
+        // Actualiza el registro en la base de datos
+        $evidencia->file_path = $filePath;
+        $evidencia->nombre = $fileName; // Agrega este campo si es necesario
+        $evidencia->estado = 'pendiente'; // Cambia el estado a 'pendiente'
+        $evidencia->save();
+
+        return redirect()->route('expedientes.expedientesUser.evidenciasEC.index')
+            ->with('success', 'Documento resubido con éxito.');
     }
 }

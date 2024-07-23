@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CartasDocumentos;
 use App\Models\DocumentosEvidencias;
+use App\Models\Estandares;
 use App\Models\FichasDocumentos;
 use App\Models\User;
+use App\Models\ValidacionesCartas;
 use App\Models\ValidacionesEvidencias;
+use App\Models\ValidacionesFichas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -15,31 +18,57 @@ class EvidenciasCompetenciasController extends Controller
     public function index(Request $request)
     {
         $userId = $request->query('user_id');
-        $competencia = $request->query('competencia');
+        $competenciaId = $request->query('competencia'); // Suponiendo que es un ID
 
+        // Obtener el usuario
         $usuario = $userId ? User::findOrFail($userId) : auth()->user();
+
+        // Obtener la competencia (estándar)
+        $competencia = Estandares::findOrFail($competenciaId);
 
         // Obtener documentos
         $documentos = DocumentosEvidencias::where('user_id', $usuario->id)
-            ->where('estandar_id', $competencia)
-            ->with('documento', 'estandar') // Asegúrate de que estas relaciones estén correctamente definidas
+            ->where('estandar_id', $competenciaId)
+            ->with('documento', 'estandar')
             ->get();
 
         // Obtener fichas
         $fichas = FichasDocumentos::where('user_id', $usuario->id)
-            ->where('estandar_id', $competencia)
+            ->where('estandar_id', $competenciaId)
             ->get();
 
         // Obtener cartas
         $cartas = CartasDocumentos::where('user_id', $usuario->id)
-            ->where('estandar_id', $competencia)
+            ->where('estandar_id', $competenciaId)
             ->get();
+
+        // Obtener validaciones de fichas
+        $fichas_validaciones = ValidacionesFichas::where('user_id', $usuario->id)
+            ->where('estandar_id', $competenciaId)
+            ->get()
+            ->keyBy('ficha_id');
+
+        // Obtener validaciones de cartas
+        $cartas_validaciones = ValidacionesCartas::where('user_id', $usuario->id)
+            ->where('estandar_id', $competenciaId)
+            ->get()
+            ->keyBy('carta_id');
 
         // Combina todos los resultados en una sola colección
         $evidencias = $documentos->merge($fichas)->merge($cartas);
 
-        return view('expedientes.expedientesAdmin.competencias.evidencias', compact('usuario', 'documentos', 'fichas', 'cartas', 'evidencias', 'competencia'));
+        return view('expedientes.expedientesAdmin.competencias.evidencias', compact(
+            'usuario',
+            'documentos',
+            'fichas_validaciones',
+            'cartas_validaciones',
+            'fichas',
+            'cartas',
+            'evidencias',
+            'competencia'
+        ));
     }
+
 
     public function updateEvidencia(Request $request, $id, $evidenciaId)
     {
@@ -60,8 +89,6 @@ class EvidenciasCompetenciasController extends Controller
                 [
                     'user_id' => $usuario->id,
                     'evidencia_id' => $evidenciaId,
-                    'ficha_id' => null, // Asegúrate de ajustar esto según tus necesidades
-                    'carta_id' => null, // Asegúrate de ajustar esto según tus necesidades
                 ],
                 [
                     'tipo_validacion' => $accion,

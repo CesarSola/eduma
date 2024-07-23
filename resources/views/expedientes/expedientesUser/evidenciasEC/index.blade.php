@@ -112,8 +112,8 @@
                                         {{-- Validaciones de fichas --}}
                                         @foreach ($fichas_validaciones as $validacion)
                                             <tr>
-                                                <td>Ficha de Registro</td>
-                                                <td>{{ ucfirst($validacion->estado) }}</td>
+                                                <td>{{ $validacion->fichas->nombre ?? 'Nombre no disponible' }}</td>
+                                                <td>{{ ucfirst($validacion->tipo_validacion) }}</td>
                                                 <td>{{ $validacion->comentario }}</td>
                                                 <td>
                                                     {{-- Lógica para la acción si es necesario --}}
@@ -124,8 +124,8 @@
                                         {{-- Validaciones de cartas --}}
                                         @foreach ($cartas_validaciones as $validacion)
                                             <tr>
-                                                <td>Carta para la Autorización de Uso de Firma Digital</td>
-                                                <td>{{ ucfirst($validacion->estado) }}</td>
+                                                <td>{{ $validacion->cartas->nombre ?? 'Nombre no disponible' }}</td>
+                                                <td>{{ ucfirst($validacion->tipo_validacion) }}</td>
                                                 <td>{{ $validacion->comentario }}</td>
                                                 <td>
                                                     {{-- Lógica para la acción si es necesario --}}
@@ -135,7 +135,7 @@
 
                                         @if ($fichas_validaciones->isEmpty() && $cartas_validaciones->isEmpty())
                                             <tr>
-                                                <td colspan="4">No hay validaciones disponibles</td>
+                                                <td class="text-muted" colspan="4">No hay validaciones disponibles</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -144,10 +144,8 @@
                         </div>
                     </div>
                 @endif
-
                 {{-- Mostrar documentos para subir --}}
                 @if ($carta_validada && $ficha_validada)
-                    {{ dd($ficha_registro, $carta_firma, $ficha_validada, $carta_validada) }}
                     <div class="card">
                         <div class="alert alert-secondary shadow-sm mt-4" role="alert">
                             Descarga los formatos de los documentos y adáptalos a tus necesidades, luego súbelos para su
@@ -163,46 +161,35 @@
                                         <thead>
                                             <tr>
                                                 <th>Documento</th>
-                                                <th>Estado</th>
+                                                <th>Nombre</th>
                                                 <th>Acciones</th>
+                                                <th>Subir Evidencias</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- Mostrar la ficha --}}
-                                            <tr>
-                                                <td>Ficha</td>
-                                                <td>
-                                                    {{ $ficha_registro ? ($ficha_registro->validada ? 'Validada' : 'No validada') : 'No disponible' }}
-                                                </td>
-                                                <td>
-                                                    @if ($ficha_registro)
-                                                        <a href="{{ Storage::url($ficha_registro->file_path) }}"
-                                                            target="_blank" class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                                        <a href="{{ route('document.download', $ficha_registro->id) }}"
-                                                            class="btn btn-danger btn-sm shadow-sm">Descargar</a>
-                                                    @endif
-                                                </td>
-                                            </tr>
-
-                                            {{-- Mostrar la carta --}}
-                                            <tr>
-                                                <td>Carta</td>
-                                                <td>
-                                                    {{ $carta_firma ? ($carta_firma->validada ? 'Validada' : 'No validada') : 'No disponible' }}
-                                                </td>
-                                                <td>
-                                                    @if ($carta_firma)
-                                                        <a href="{{ Storage::url($carta_firma->file_path) }}"
-                                                            target="_blank" class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                                        <a href="{{ route('document.download', $carta_firma->id) }}"
-                                                            class="btn btn-danger btn-sm shadow-sm">Descargar</a>
-                                                    @endif
-                                                </td>
-                                            </tr>
-
-                                            @if (!$ficha_registro && !$carta_firma)
+                                            {{-- Mostrar las evidencias --}}
+                                            @foreach ($documentos_necesarios as $documento)
                                                 <tr>
-                                                    <td colspan="3">No se han subido la ficha y la carta.</td>
+                                                    <td>{{ $documento->name }}</td>
+                                                    <td>{{ $documento->description }}</td>
+                                                    <td>
+                                                        <a href="{{ Storage::url($documento->documento) }}" target="_blank"
+                                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                                        <a href="{{ route('document.download', $documento->id) }}"
+                                                            class="btn btn-danger btn-sm shadow-sm">Descargar</a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-success btn-sm shadow-sm"
+                                                            href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento_id' => $documento->id]) }}">
+                                                            Subir
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                            @if ($documentos_necesarios->isEmpty())
+                                                <tr>
+                                                    <td class="text-muted" colspan="3">No se han subido documentos.</td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -211,8 +198,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {{-- Mostrar evidencias subidas --}}
                     <div class="card mt-4 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-header text-primary font-weight-bold">Evidencias Subidas</h6>
@@ -229,12 +214,23 @@
                                         @foreach ($evidencias as $evidencia)
                                             {{-- Filtrar para mostrar solo documentos válidos --}}
                                             @if ($evidencia->documento_id)
+                                                @php
+                                                    // Obtener la validación correspondiente
+                                                    $validacion = $validaciones_documentos
+                                                        ->where('documento_id', $evidencia->documento_id)
+                                                        ->first();
+                                                    $estado = $validacion ? $validacion->tipo_validacion : 'pendiente';
+                                                @endphp
                                                 <tr>
                                                     <td>{{ optional($evidencia->documento)->name }}</td>
-                                                    <td>{{ $evidencia->estado }}</td>
+                                                    <td>{{ ucfirst($estado) }}</td>
                                                     <td>
                                                         <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
                                                             class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                                        @if ($estado === 'rechazar')
+                                                            <a href="{{ route('evidencias.resubir', ['id' => $evidencia->id]) }}"
+                                                                class="btn btn-warning btn-sm shadow-sm">Resubir</a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endif
