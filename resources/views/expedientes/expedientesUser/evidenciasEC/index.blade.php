@@ -16,20 +16,27 @@
         <div class="container mt-4">
             <div class="card">
                 <div class="card-body text-center">
-                    {{-- Mostrar solo si la ficha de registro no ha sido subida --}}
                     @if (!$ficha_registro)
                         <div class="card">
-                            <form id="form-ficha-registro"
-                                action="{{ route('generate-word', ['userId' => Auth::id(), 'standardId' => $estandar->id]) }}"
-                                method="GET">
-                                @csrf
-                                <div class="mb-3">
-                                    <h6 class="card-title text-primary font-weight-bold">Descarga la Ficha de Inscripción
-                                    </h6>
-                                    <button type="submit" class="btn btn-success btn-sm shadow-sm mt-3">Descargar
-                                        Ficha</button>
-                                </div>
-                            </form>
+                            <h6 class="card-header bg-success text-white text-center font-weight-bold">Carta de Firma
+                                Digital y
+                                Ficha
+                                de
+                                Inscripción</h6>
+                            <br>
+                            <div class="card">
+                                <form id="form-ficha-registro"
+                                    action="{{ route('generate-word', ['userId' => Auth::id(), 'standardId' => $estandar->id]) }}"
+                                    method="GET">
+                                    @csrf
+                                    <div class="mb-3 d-flex flex-column align-items-center">
+                                        <h6 class="card-title text-primary font-weight-bold">Descarga la Ficha de
+                                            Inscripción
+                                        </h6>
+                                        <button type="submit" class="btn btn-success shadow-sm mt-3">Descargar
+                                            Ficha</button>
+                                    </div>
+                                </form>
                     @endif
 
                     {{-- Mostrar solo si la carta de firma digital no ha sido subida --}}
@@ -37,9 +44,9 @@
                         <form id="form-carta-aceptacion" action="{{ route('generate-carta', ['userId' => Auth::id()]) }}"
                             method="GET">
                             @csrf
-                            <div class="mb-3">
+                            <div class="mb-3 d-flex flex-column align-items-center">
                                 <h6 class="card-title text-primary font-weight-bold">Descarga la Carta de Firma Digital</h6>
-                                <button type="submit" class="btn btn-success btn-sm shadow-sm mt-3">Descargar
+                                <button type="submit" class="btn btn-success shadow-sm mt-3">Descargar
                                     Carta</button>
                             </div>
                         </form>
@@ -48,40 +55,42 @@
 
                 {{-- Mostrar la sección de subida de documentos solo si ambos documentos no han sido subidos --}}
                 @if (!$ficha_registro || !$carta_firma)
-                    <div class="container mt-4">
-                        <div class="card">
-                            <div class="card-body">
-                                {{-- Botón para subir la ficha --}}
-                                <div class="mb-3">
-                                    <h6 class="card-title text-primary font-weight-bold">Sube tu ficha de registro,
-                                        verificando que los datos sean correctos y ya firmada</h6>
-                                    @if ($ficha_registro)
-                                        <br>
-                                        <div class="alert alert-secondary shadow-sm mt-4" role="alert">
-                                            <p style="margin: 0;">Ya has subido la ficha de registro.</p>
-                                        </div>
-                                    @else
-                                        <a href="{{ route('word.show', ['id' => $estandar->id, 'tipoDocumento' => 'ficha_registro']) }}"
-                                            class="btn btn-success btn-sm shadow-sm">Subir ficha</a>
-                                    @endif
-                                </div>
-                                {{-- Botón para subir la carta de aceptación --}}
-                                <div class="mb-3">
-                                    <h6 class="card-title text-primary font-weight-bold">Sube tu carta de de Firma Digital,
-                                        leyendo detalladamente y ya firmada</h6>
-                                    @if ($carta_firma)
-                                        <br>
-                                        <div class="alert alert-secondary shadow-sm mt-4" role="alert">
-                                            <p style="margin: 0;">Ya has subido la carta de firma digital.</p>
-                                        </div>
-                                    @else
-                                        <a href="{{ route('word.show', ['id' => $estandar->id, 'tipoDocumento' => 'carta_firma']) }}"
-                                            class="btn btn-success btn-sm shadow-sm">Subir carta</a>
-                                    @endif
-                                </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            {{-- Botón para subir la ficha --}}
+                            <div class="mb-3 d-flex flex-column align-items-center">
+                                <h6 class="card-title text-primary font-weight-bold">Sube tu ficha de registro,
+                                    verificando que los datos sean correctos y ya firmada</h6>
+                                @if ($ficha_registro)
+                                    <br>
+                                    <div class="alert alert-secondary shadow-sm mt-4" role="alert">
+                                        <p style="margin: 0;">Ya has subido la ficha de registro.</p>
+                                    </div>
+                                @else
+                                    <br>
+                                    <a href="{{ route('word.show', ['id' => $estandar->id, 'tipoDocumento' => 'ficha_registro']) }}"
+                                        class="btn btn-success shadow-sm">Subir ficha</a>
+                                @endif
+                            </div>
+                            {{-- Botón para subir la carta de aceptación --}}
+                            <div class="mb-3 d-flex flex-column align-items-center">
+                                <h6 class="card-title text-primary font-weight-bold">Sube tu carta de de Firma Digital,
+                                    leyendo detalladamente y ya firmada</h6>
+                                @if ($carta_firma)
+                                    <br>
+                                    <div class="alert alert-secondary shadow-sm mt-4" role="alert">
+                                        <p style="margin: 0;">Ya has subido la carta de firma digital.</p>
+                                    </div>
+                                @else
+                                    <br>
+                                    <a href="{{ route('word.show', ['id' => $estandar->id, 'tipoDocumento' => 'carta_firma']) }}"
+                                        class="btn btn-success shadow-sm">Subir carta</a>
+                                @endif
                             </div>
                         </div>
                     </div>
+
                     @if (!$ficha_registro || !$carta_firma)
                         <div class="alert alert-info shadow-sm mt-4" role="alert">
                             Sube tanto la ficha de registro como la carta de tu firma digital, para ver la sección de los
@@ -144,18 +153,19 @@
                         </div>
                     </div>
                 @endif
-                {{-- Mostrar documentos para subir --}}
                 @if ($carta_validada && $ficha_validada)
-                    <div class="card">
-                        <div class="alert alert-secondary shadow-sm mt-4" role="alert">
-                            Descarga los formatos de los documentos y adáptalos a tus necesidades, luego súbelos para su
-                            revisión y aprobación.
-                        </div>
+                    @if (!$todos_documentos_validos)
+                        @if (!$hay_evidencias_subidas)
+                            <div class="alert alert-secondary shadow-sm mt-4" role="alert">
+                                Descarga los formatos de los documentos y adáptalos a tus necesidades, luego súbelos
+                                para su
+                                revisión y aprobación.
+                            </div>
+                        @endif
                         <div class="card mt-4 shadow-sm">
                             <div class="card-body">
-                                <h6 class="card-header text-primary font-weight-bold">
-                                    Evidencias Para Subir
-                                </h6>
+                                <h6 class="card-header bg-success text-white text-center font-weight-bold">Evidencias
+                                    Para Subir</h6>
                                 <div class="table-responsive">
                                     <table class="table table-bordered mt-3">
                                         <thead>
@@ -167,8 +177,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- Mostrar las evidencias --}}
                                             @foreach ($documentos_necesarios as $documento)
+                                                @php
+                                                    $documento_subido = $documento->isSubidoPorUsuario(
+                                                        auth()->id(),
+                                                        $estandar->id,
+                                                    );
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $documento->name }}</td>
                                                     <td>{{ $documento->description }}</td>
@@ -179,17 +194,20 @@
                                                             class="btn btn-danger btn-sm shadow-sm">Descargar</a>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-success btn-sm shadow-sm"
-                                                            href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento_id' => $documento->id]) }}">
-                                                            Subir
-                                                        </a>
+                                                        @if (!$documento_subido)
+                                                            <a class="btn btn-success btn-sm shadow-sm"
+                                                                href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento_id' => $documento->id]) }}">Subir</a>
+                                                        @else
+                                                            <span class="badge badge-info">Subido</span>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
 
                                             @if ($documentos_necesarios->isEmpty())
                                                 <tr>
-                                                    <td class="text-muted" colspan="3">No se han subido documentos.</td>
+                                                    <td class="text-muted" colspan="4">No se han subido documentos.
+                                                    </td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -197,53 +215,83 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card mt-4 shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-header text-primary font-weight-bold">Evidencias Subidas</h6>
-                            <div class="table-responsive">
-                                <table class="table table-bordered mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th>Documento</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($evidencias as $evidencia)
-                                            {{-- Filtrar para mostrar solo documentos válidos --}}
-                                            @if ($evidencia->documento_id)
-                                                @php
-                                                    // Obtener la validación correspondiente
-                                                    $validacion = $validaciones_documentos
-                                                        ->where('documento_id', $evidencia->documento_id)
-                                                        ->first();
-                                                    $estado = $validacion ? $validacion->tipo_validacion : 'pendiente';
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ optional($evidencia->documento)->name }}</td>
-                                                    <td>{{ ucfirst($estado) }}</td>
-                                                    <td>
-                                                        <a href="{{ Storage::url($evidencia->file_path) }}" target="_blank"
-                                                            class="btn btn-primary btn-sm shadow-sm">Ver</a>
-                                                        @if ($estado === 'rechazar')
-                                                            <a href="{{ route('evidencias.resubir', ['id' => $evidencia->id]) }}"
-                                                                class="btn btn-warning btn-sm shadow-sm">Resubir</a>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+
+                        @if ($documentos_necesarios->isNotEmpty())
+                            <div class="card">
+                                <div class="card-header bg-success text-white text-center font-weight-bold">Verifica el
+                                    estado de
+                                    tus
+                                    evidencias en la siguiente pestaña</div>
+                                <a class="btn btn-success mt-4"
+                                    href="{{ route('mis.evidencias', ['id' => $estandar->id, 'name' => $estandar->name]) }}">Ir
+                                    a mis Evidencias Subidas</a>
                             </div>
-                        </div>
-                    </div>
-                    @if ($evidencias->isEmpty())
-                        <div class="alert alert-info shadow-sm mt-4" role="alert">
-                            Aún no tienes evidencias subidas, sube tus evidencias para su respectiva revisión y aprobación.
-                        </div>
+                        @endif
+                    @endif
+                @endif
+                @if ($fechas_elegidas->isEmpty())
+                    @if ($todos_documentos_validos)
+                        @if ($carta_validada && $ficha_validada)
+                            <div class="card mt-4 border- shadow-sm">
+                                <div class="card-header bg-success text-white text-center font-weight-bold">
+                                    Elige una Fecha para el plan de evaluación en la siguiente pestaña
+                                </div>
+                                <div class="card-body text-center">
+                                    <a href="{{ route('fechas.index', ['estandar_id' => $estandar]) }}"
+                                        class="btn btn-success">
+                                        Ir a Elegir Fecha del Plan de Evaluación
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                @endif
+                @if ($fechas_elegidas->isNotEmpty())
+                    @if ($todos_documentos_validos)
+                        @if ($carta_validada && $ficha_validada)
+                            <div class="card mt-4 border-success shadow-sm">
+                                <div class="card-header bg-success text-white text-center font-weight-bold">
+                                    Fecha Elegida
+                                </div>
+                                <div class="card-body">
+                                    @if ($fechas_elegidas->isNotEmpty())
+                                        <ul class="list-unstyled">
+                                            @foreach ($fechas_elegidas as $fecha)
+                                                <li
+                                                    class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                                    <div class="d-flex flex-column">
+                                                        <span class="font-weight-bold">Fecha:</span>
+                                                        <span>{{ $fecha->fechaCompetencia->fecha->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="font-weight-bold">Horario:</span>
+                                                        <span>{{ $fecha->horarioCompetencia->horaFormatted }}</span>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-muted text-center">No has elegido ninguna fecha aún.</p>
+                                    @endif
+                                </div>
+                                <div class="card-header bg-success text-white text-center font-weight-bold">Decarga tu plan
+                                    de Evaluación</div>
+                                <div class="card-body">
+                                    <form id="form-plan"
+                                        action="{{ route('generate-plan', ['userId' => Auth::id(), 'standardId' => $id]) }}"
+                                        method="GET">
+                                        @csrf
+                                        <div class="mb-3 d-flex flex-column align-items-center">
+                                            <h6 class="card-title text-primary font-weight-bold">Descarga el Plan de
+                                                Evaluación
+                                                de tu Estándar</h6>
+                                            <button type="submit" class="btn btn-success shadow-sm mt-3">Descargar
+                                                Plan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 @endif
             </div>
@@ -259,6 +307,51 @@
             border-radius: 5px;
             padding: 20px;
             margin-bottom: 20px;
+        }
+
+        .card {
+            border-radius: 0.75rem;
+            /* Bordes redondeados */
+        }
+
+        .card-header {
+            border-bottom: 2px solid #33b300;
+            /* Borde inferior para el encabezado */
+            background-color: #33b300;
+            /* Fondo azul oscuro */
+            color: #ffffff;
+            /* Texto blanco */
+            font-size: 1.25rem;
+            /* Tamaño de fuente aumentado */
+            font-weight: bold;
+            /* Negrita */
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            /* Relleno adicional para el cuerpo */
+        }
+
+        .card-body ul {
+            padding-left: 0;
+            /* Elimina el relleno de la lista */
+        }
+
+        .card-body li {
+            padding: 0.5rem 0;
+            /* Espaciado interno en los elementos de la lista */
+            border-bottom: 1px solid #dee2e6;
+            /* Borde inferior sutil */
+        }
+
+        .card-body .font-weight-bold {
+            font-weight: bold;
+            /* Negrita para etiquetas */
+        }
+
+        .card-body .text-muted {
+            font-style: italic;
+            /* Estilo de fuente en cursiva para texto sin datos */
         }
 
         .alert-info {
@@ -351,6 +444,7 @@
             text-align: center;
         }
     </style>
+
 @stop
 
 @section('js')

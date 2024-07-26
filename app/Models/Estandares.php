@@ -14,9 +14,13 @@ class Estandares extends Model
     protected $fillable = [
         'numero',
         'name',
-        'tipo'
+        'tipo',
+        'documentos' // Agrega este campo
     ];
-
+    //sirve para guardar el array de documentos necesarios
+    protected $casts = [
+        'documentos' => 'array', // Asegura que el campo sea tratado como un array
+    ];
     //relación de documentos necesarios a la hora de crear los estandares
     public function documentosnec()
     {
@@ -34,6 +38,7 @@ class Estandares extends Model
     {
         return $this->hasMany(FechaCompetencia::class, 'competencia_id');
     }
+
     //relación de usuarios con estandares
     public function users()
     {

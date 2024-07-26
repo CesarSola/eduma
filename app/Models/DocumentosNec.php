@@ -12,6 +12,7 @@ class DocumentosNec extends Model
     protected $table = 'documentosnec';
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'documento', // Asegúrate de incluir el campo correcto para la ruta del archivo
@@ -21,6 +22,7 @@ class DocumentosNec extends Model
     {
         return $this->belongsToMany(Estandares::class, 'competencia_documentosnec', 'documentosnec_id', 'competencia_id');
     }
+
     public function evidencias()
     {
         return $this->hasMany(DocumentosEvidencias::class, 'documento_id');
@@ -28,5 +30,15 @@ class DocumentosNec extends Model
     public function cursos()
     {
         return $this->belongsToMany(Curso::class, 'curso_documentosnec', 'documentosnec_id', 'curso_id');
+    }
+
+    public function isSubidoPorUsuario($userId, $estandarId)
+    {
+        return $this->evidencias()
+            ->where('user_id', $userId)
+            ->whereHas('estandar', function ($query) use ($estandarId) {
+                $query->where('id', $estandarId);
+            })
+            ->exists();
     }
 }

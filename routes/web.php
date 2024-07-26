@@ -59,7 +59,10 @@ use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
+use App\Http\Controllers\ElegirFechaController;
+use App\Http\Controllers\EvidenciasSubidasController;
 use App\Http\Controllers\EvidenciasUCControlle;
+use App\Http\Controllers\PlanEvaluacionController;
 use App\Http\Controllers\ResubirDocumentosController;
 use App\Http\Controllers\ValidarCartasController;
 use App\Http\Controllers\ValidarCoPController;
@@ -143,14 +146,23 @@ Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'u
 //rutas para resubir documentos de evidencias 
 Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'show'])->name('evidencias.resubir');
 Route::post('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'resubir'])->name('evidencias.resubir.submit');
+//ruta de la vista de evidencias subidas
+Route::get('mis-evidencias/{id}/{name}', [EvidenciasSubidasController::class, 'index'])->name('mis.evidencias');
+//ruta de elegir fecha 
+Route::get('/fechas', [ElegirFechaController::class, 'index'])->name('fechas.index');
+Route::get('/fechas/{id}', [ElegirFechaController::class, 'show'])->name('fechas.show');
+Route::post('/fechas', [ElegirFechaController::class, 'store'])->name('fechas.store');
 //ruta evidenciasCU
 Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
 Route::get('/evidenciasCU/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
 Route::post('/evidenciasCU/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
 //ruta para generar el autorellenado de documentos word
-Route::get('/generate-word/{userId}/{standardId}', [WordController::class, 'generateWord'])->name('generate-word');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/generate-word/{userId}/{standardId}', [WordController::class, 'generateWord'])->name('generate-word');
+});
 Route::get('/generate-carta/{userId}', [WordController::class, 'generateCarta'])->name('generate-carta');
+Route::get('/generate-plan/{userId}/{standardId}', [PlanEvaluacionController::class, 'generatePlan'])->name('generate-plan');
 //rutas de para subir ficha de registro y carta firma EC
 Route::get('word/{id}/{tipoDocumento}/show', [WordController::class, 'show'])->name('word.show');
 Route::post('word/{id}/upload-ficha-registro', [WordController::class, 'uploadFichaRegistro'])->name('word.uploadFichaRegistro');

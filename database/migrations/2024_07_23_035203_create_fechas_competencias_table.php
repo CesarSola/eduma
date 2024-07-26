@@ -13,6 +13,8 @@ class CreateFechasCompetenciasTable extends Migration
     {
         Schema::create('fechas_competencias', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('competencia_id');
             $table->foreign('competencia_id')->references('id')->on('estandares')->onDelete('cascade');
             $table->date('fecha');

@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Horario extends Model
+{
+    use HasFactory;
+    protected $table = 'horarios_competencias';
+    protected $fillable = [
+        'user_id',
+        'competencia_id',
+        'hora',
+    ];
+
+    public function fechaCompetencia()
+    {
+        return $this->belongsTo(FechaCompetencia::class, 'fecha_competencia_id');
+    }
+
+    // Accesor para formatear la hora
+    public function getHoraFormattedAttribute()
+    {
+        return Carbon::parse($this->hora)->format('H:i');
+    }
+}

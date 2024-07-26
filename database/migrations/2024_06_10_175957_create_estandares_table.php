@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('numero');
             $table->string('name');
             $table->string('tipo');
+            $table->json('documentos')->nullable();
             $table->timestamps();
         });
     }

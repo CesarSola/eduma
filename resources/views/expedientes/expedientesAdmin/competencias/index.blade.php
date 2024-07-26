@@ -94,6 +94,7 @@
                         <th>ID</th>
                         <th>Competencias</th>
                         <th>Fechas Asignadas</th>
+                        <th>Horarios Asignados</th>
                         <th>Agregar Fechas</th>
                     </tr>
                 </thead>
@@ -102,15 +103,31 @@
                         <tr>
                             <td>{{ $competencia->id }}</td>
                             <td>{{ $competencia->name }}</td>
+
                             <td>
                                 <ul>
                                     @foreach ($competencia->fechas as $fecha)
-                                        <li>{{ $fecha->fecha }}</li>
+                                        <strong>
+                                            <li>{{ $fecha->fecha->format('d/m/Y') }}</li>
+                                        </strong>
                                     @endforeach
                                 </ul>
                             </td>
                             <td>
-                                <a href="{{ route('competencias.agregar-fechas', ['competencia' => $competencia->id]) }}"
+                                <ul>
+                                    @foreach ($competencia->fechas as $fecha)
+                                        <ul>
+                                            @foreach ($fecha->horarios as $horario)
+                                                <strong>
+                                                    <li>{{ $horario->hora }}</li>
+                                                </strong>
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="{{ route('competencias.agregar-fechas', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
                                     class="btn btn-primary">Agregar</a>
                             </td>
                         </tr>
@@ -119,7 +136,6 @@
             </table>
         </div>
     </div>
-
 @stop
 
 @section('css')

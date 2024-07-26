@@ -3,7 +3,9 @@
 @section('title', 'Agregar Fechas')
 
 @section('content_header')
-    <h1>Agregar Fechas a {{ $competencia->name }}</h1>
+    <h1>Agregar Fechas a {{ $competencia->name }} para {{ $usuario->name }} {{ $usuario->secondName }}
+        {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</h1>
+    <a href="{{ route('competencia.index', ['user_id' => $selectedUserId]) }}" class="btn btn-secondary mt-3">Regresar</a>
 @stop
 
 @section('content')
@@ -11,25 +13,42 @@
         <div class="card-body">
             <!-- Formulario para agregar fechas -->
             <form action="{{ route('competencias.guardar-fechas', ['competencia' => $competencia->id]) }}" method="POST"
-                id="formAgregarFechas">
+                id="formGuardarFechas">
                 @csrf
+                <input type="hidden" name="user_id" value="{{ $selectedUserId }}">
+
                 <div id="fechasContainer">
-                    @foreach ($competencia->fechas as $fecha)
-                        <div class="form-group">
+                    @foreach ($fechasUsuario as $index => $fecha)
+                        <div class="form-group mb-4">
                             <label for="fecha">Fecha:</label>
-                            <input type="date" name="fechas[]" class="form-control" value="{{ $fecha->fecha }}" readonly>
+                            <input type="date" name="fechas[]" class="form-control"
+                                value="{{ $fecha->fecha->format('Y-m-d') }}" required>
+                            <label for="hora" class="mt-2">Horarios:</label>
+                            @foreach ($fecha->horarios as $horario)
+                                <input type="time" name="horarios[{{ $index }}][]" class="form-control mb-2"
+                                    value="{{ $horario->hora }}" required>
+                            @endforeach
+                            <div class="horariosContainer mt-2">
+                                <!-- Aquí se agregarán nuevos campos de hora -->
+                            </div>
                         </div>
                     @endforeach
 
-                    @for ($i = count($competencia->fechas); $i < 3; $i++)
-                        <div class="form-group">
+                    @for ($i = count($fechasUsuario); $i < 3; $i++)
+                        <div class="form-group mb-4">
                             <label for="fecha">Fecha:</label>
                             <input type="date" name="fechas[]" class="form-control" required>
+                            <label for="hora" class="mt-2">Horarios:</label>
+                            <div class="horariosContainer">
+                                <input type="time" name="horarios[{{ $i }}][]" class="form-control mb-2"
+                                    required>
+                            </div>
                         </div>
                     @endfor
                 </div>
-                <button type="button" class="btn btn-success" id="btnAgregarFecha">Agregar Otra Fecha</button>
-                <button type="submit" class="btn btn-primary">Agregar Fechas</button>
+                @unless ($tieneFechasYHorarios)
+                    <button type="submit" class="btn btn-primary btn-block">Guardar Fechas y Horarios</button>
+                @endunless
             </form>
         </div>
     </div>
@@ -37,25 +56,24 @@
 
 @section('js')
     <script>
-        // Script para agregar dinámicamente más campos de fecha
         document.addEventListener('DOMContentLoaded', function() {
-            const btnAgregarFecha = document.getElementById('btnAgregarFecha');
-            const fechasContainer = document.getElementById('fechasContainer');
+            document.getElementById('fechasContainer').addEventListener('click', function(event) {
+                if (event.target && event.target.classList.contains('btnAgregarHorario')) {
+                    const formGroup = event.target.closest('.form-group');
+                    const horariosContainer = formGroup.querySelector('.horariosContainer');
 
-            btnAgregarFecha.addEventListener('click', function() {
-                // Verificar cuántos campos de fecha hay actualmente
-                const camposFecha = fechasContainer.querySelectorAll('.form-group').length;
+                    // Contar los campos de horario existentes para esta fecha
+                    const existingHorariosCount = formGroup.querySelectorAll('input[type="time"]').length;
 
-                if (camposFecha < 3) {
-                    const nuevaFechaInput = document.createElement('div');
-                    nuevaFechaInput.classList.add('form-group');
-                    nuevaFechaInput.innerHTML = `
-                        <label for="fecha">Fecha:</label>
-                        <input type="date" name="fechas[]" class="form-control" required>
-                    `;
-                    fechasContainer.appendChild(nuevaFechaInput);
-                } else {
-                    alert('Solo se permiten 3 fechas.');
+                    // Crear un nuevo campo de horario
+                    const nuevoCampoHorario = document.createElement('input');
+                    nuevoCampoHorario.type = 'time';
+                    nuevoCampoHorario.name =
+                        `horarios[${existingHorariosCount}][]`; // Usar el conteo actual como índice
+                    nuevoCampoHorario.classList.add('form-control', 'mb-2');
+                    nuevoCampoHorario.required = true;
+
+                    horariosContainer.appendChild(nuevoCampoHorario);
                 }
             });
         });

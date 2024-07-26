@@ -32,6 +32,7 @@
                     </label>
                 </div>
             @endforeach
+
         </div>
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>

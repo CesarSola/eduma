@@ -6,6 +6,7 @@ use App\Models\CartasDocumentos;
 use App\Models\DocumentosEvidencias;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
+use App\Models\FechaElegida;
 use App\Models\FichasDocumentos;
 use App\Models\ValidacionesCartas;
 use App\Models\ValidacionesEvidencias;
@@ -25,11 +26,6 @@ class EvidenciasUEController extends Controller
         $estandar = Estandares::find($id);
         $user_id = auth()->id();
 
-        // Obtener evidencias
-        $evidencias = DocumentosEvidencias::where('estandar_id', $id)
-            ->where('user_id', $user_id)
-            ->get();
-
         // Obtener ficha de registro y carta de firma
         $ficha_registro = FichasDocumentos::where('estandar_id', $id)
             ->where('user_id', $user_id)
@@ -41,16 +37,11 @@ class EvidenciasUEController extends Controller
 
         // Obtener validaciones para ficha y carta
         $fichas_validaciones = ValidacionesFichas::where('ficha_id', optional($ficha_registro)->id)
-            ->with('fichas') // Cargar la relación de ficha
             ->get();
 
         $cartas_validaciones = ValidacionesCartas::where('carta_id', optional($carta_firma)->id)
-            ->with('cartas') // Cargar la relación de carta
             ->get();
 
-        // Obtener validaciones de documentos
-        $validaciones_documentos = ValidacionesEvidencias::where('estandar_id', $id)
-            ->get();
         // Consultar documentos necesarios
         $documentos_necesarios = DocumentosNec::whereHas('estandares', function ($query) use ($id) {
             $query->where('estandares.id', $id);
@@ -60,18 +51,39 @@ class EvidenciasUEController extends Controller
         $carta_validada = $cartas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
         $ficha_validada = $fichas_validaciones->where('tipo_validacion', 'validar')->isNotEmpty();
 
+        // Determinar si hay evidencias subidas y si todas están validadas
+        $hay_evidencias_subidas = $documentos_necesarios->filter(function ($documento) use ($user_id, $id) {
+            return $documento->isSubidoPorUsuario($user_id, $id);
+        })->isNotEmpty();
+
+        // Consulta para determinar si todas las evidencias están validadas
+        $todos_documentos_validos = ValidacionesEvidencias::where('estandar_id', $id)
+            ->where('user_id', $user_id)
+            ->where('tipo_validacion', 'validar')
+            ->count() === $documentos_necesarios->count();
+
+        // Obtener las fechas elegidas por el usuario
+        $fechas_elegidas = FechaElegida::where('user_id', $user_id)
+            ->whereHas('fechaCompetencia', function ($query) use ($id) {
+                $query->where('fecha_competencia_id', $id);
+            })
+            ->with('fechaCompetencia')
+            ->get();
+
         // Pasar datos a la vista
         return view('expedientes.expedientesUser.evidenciasEC.index', compact(
             'estandar',
-            'evidencias',
             'ficha_registro',
             'carta_firma',
             'fichas_validaciones',
             'cartas_validaciones',
-            'validaciones_documentos',
             'carta_validada',
             'ficha_validada',
-            'documentos_necesarios'
+            'documentos_necesarios',
+            'todos_documentos_validos',
+            'hay_evidencias_subidas',
+            'fechas_elegidas',
+            'id' // Asegúrate de pasar esta variable a la vista
         ));
     }
 
@@ -92,63 +104,34 @@ class EvidenciasUEController extends Controller
     {
         $request->validate([
             'documento' => 'required|file|mimes:pdf|max:2048',
+            'estandar_id' => 'required|exists:estandares,id', // Validar el estandar_id
         ]);
 
         $documento = DocumentosNec::find($documento_id);
-        $user = auth()->user();
-        $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension(); // Create the new file name
+        $estandarId = $request->input('estandar_id'); // Obtener el estandar_id desde la solicitud
+        $estandar = Estandares::find($estandarId);
 
-        // Save the file in the specific directory
+        if (!$documento || !$estandar) {
+            return redirect()->back()->with('error', 'Documento o Estándar no encontrados.');
+        }
+
+        $user = auth()->user();
+        $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension();
         $filePath = $request->file('documento')->storeAs(
             'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
             $fileName
         );
 
-        // Save the file information to the database
         DocumentosEvidencias::create([
             'user_id' => auth()->id(),
-            'estandar_id' => $documento->estandares->first()->id,
+            'estandar_id' => $estandarId, // Usar el estandar_id de la solicitud
             'documento_id' => $documento_id,
             'file_path' => $filePath,
-            'nombre' => $documento->name,  // Add this line to provide a value for the 'nombre' field
-            'estado' => 'pendiente',       // If 'estado' field is also required, make sure to provide a value
+            'nombre' => $documento->name,
+            'estado' => 'pendiente',
         ]);
 
-        return redirect()->route('evidenciasEC.index', ['id' => $documento->estandares->first()->id, 'name' => $documento->estandares->first()->name])
+        return redirect()->route('evidenciasEC.index', ['id' => $estandarId, 'name' => $estandar->name])
             ->with('success', 'Documento subido correctamente');
-    }
-
-    public function resubir(Request $request, $id)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:pdf|max:2048',
-        ]);
-
-        $evidencia = DocumentosEvidencias::findOrFail($id);
-        $documento = $evidencia->documento; // Obtener el documento relacionado
-        $user = auth()->user();
-
-        // Crear nombre de archivo
-        $fileName = Str::slug($documento->name) . '.' . $request->file('file')->getClientOriginalExtension();
-
-        // Crear ruta de almacenamiento
-        $filePath = $request->file('file')->storeAs(
-            'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' .  Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
-            $fileName
-        );
-
-        // Elimina el archivo viejo si es necesario
-        if (Storage::exists($evidencia->file_path)) {
-            Storage::delete($evidencia->file_path);
-        }
-
-        // Actualiza el registro en la base de datos
-        $evidencia->file_path = $filePath;
-        $evidencia->nombre = $fileName; // Agrega este campo si es necesario
-        $evidencia->estado = 'pendiente'; // Cambia el estado a 'pendiente'
-        $evidencia->save();
-
-        return redirect()->route('expedientes.expedientesUser.evidenciasEC.index')
-            ->with('success', 'Documento resubido con éxito.');
     }
 }

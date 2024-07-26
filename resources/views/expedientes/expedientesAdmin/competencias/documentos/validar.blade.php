@@ -6,7 +6,7 @@
     <div class="header-flex">
         <h1>Revisión de Documento</h1>
         <div>
-            <a href="{{ route('evidenciasACO.index', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+            <a href="{{ route('evidenciasACO.index', ['user_id' => $usuario->id, 'competencia' => $competencia->id]) }}"
                 class="btn btn-secondary">Regresar</a>
         </div>
     </div>
@@ -55,7 +55,7 @@
                             @php
                                 $estado = json_decode($documento->estado, true) ?? [];
                             @endphp
-                            @if ($documento->file_path && (!isset($estado[$documento->nombre]) || $estado[$documento->nombre] == 'rechazar'))
+                            @if ($documento->file_path && (!isset($estado[$documento->nombre]) || $estado[$documento->nombre] == 'pendiente'))
                                 @php
                                     $documentosParaRevisar = true;
                                 @endphp
@@ -183,26 +183,19 @@
                                         </div>
                                     `;
                                     }
-                                } else if (action === 'rechazar') {
-                                    // Resetear campos de validar y comentario
-                                    form.querySelector('input[type="radio"]:checked').checked =
-                                        false; // Deseleccionar el radio button seleccionado
-                                    form.querySelector('textarea[name="comentario_documento"]')
-                                        .value = ''; // Reiniciar el campo de comentarios
-
-                                    // Mostrar mensaje de documento rechazado
-                                    const messageElement = form.querySelector(
-                                        '.alert.alert-info');
-                                    if (messageElement) {
-                                        messageElement.style.display = 'block';
+                                } else {
+                                    form.closest('.update-form').style.display =
+                                    'none'; // Ocultar el formulario del documento rechazado
+                                    if (!document.querySelector('.update-form')) {
+                                        document.querySelector('.card-header').innerHTML += `
+                                        <div class="form-group row">
+                                            <div class="col-sm-12 text-center">
+                                                <p>Todos los documentos disponibles han sido validados.</p>
+                                            </div>
+                                        </div>
+                                    `;
                                     }
-
-                                    // Cambiar texto del botón
-                                    form.querySelector('.btn.btn-success').innerText =
-                                        'Volver a validar';
                                 }
-                            } else if (data.error) {
-                                alert(data.error); // Manejar errores si es necesario
                             }
                         })
                         .catch(error => console.error('Error:', error));

@@ -14,9 +14,12 @@ class ValidarDocumentosController extends Controller
         $usuario = User::with('documentosE')->findOrFail($user_id);
         $competencia = Estandares::findOrFail($documento_id);
 
+        // Filtrar documentos que están pendientes
         $documentos = $usuario->documentosE->filter(function ($documento) use ($documento_id) {
-            return $documento->estandar_id == $documento_id;
+            $estado = json_decode($documento->estado, true) ?? [];
+            return $documento->estandar_id == $documento_id && (!isset($estado[$documento->nombre]) || $estado[$documento->nombre] == 'pendiente');
         });
+
         return view('expedientes.expedientesAdmin.competencias.documentos.validar', compact('usuario', 'documentos', 'competencia'));
     }
 

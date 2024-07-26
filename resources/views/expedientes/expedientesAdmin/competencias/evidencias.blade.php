@@ -26,12 +26,15 @@
                     </div>
                 </div>
             </div>
+            <div class="alert alert-info">
+                <p class="text-center"><strong>Estandar:</strong> {{ $competencia->name }}</p>
+            </div>
             <!-- Sección de evidencias -->
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Evidencias por Competencia</h3>
+                            <h3>Evidencias</h3>
                         </div>
                         <div class="card-body">
                             @if ($fichas->isEmpty() && $cartas->isEmpty() && $documentos->isEmpty())
@@ -190,18 +193,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $todosDocumentosValidados = true; @endphp
                                 @foreach ($documentos as $documento)
                                     <tr>
                                         <td>{{ $documento->documento->name ?? 'Documento no disponible' }}</td>
                                         <td>
                                             @php
-                                                $isValidado = isset($documentos_validaciones[$documento->id]);
+                                                // Verifica el estado de validación del documento
+                                                $estado_validacion =
+                                                    $documentos_validaciones[$documento->id]->tipo_validacion ??
+                                                    'pendiente';
                                             @endphp
-                                            @if ($isValidado)
+                                            @if ($estado_validacion === 'validar')
                                                 <span class="text-success">Documento validado</span>
+                                            @elseif ($estado_validacion === 'rechazar')
+                                                <span class="text-danger">Documento rechazado</span>
                                             @else
-                                                @php $todosDocumentosValidados = false; @endphp
                                                 <a href="{{ route('documentosE.show', ['user_id' => $usuario->id, 'competencia_id' => $competencia->id]) }}"
                                                     class="btn btn-primary">
                                                     Validar Documentos Evidencias
@@ -219,6 +225,7 @@
                     @endif
                 </div>
             </div>
+
         </div>
     </div>
 @stop
@@ -266,6 +273,28 @@
             /* Alinea el contenido a la izquierda */
             align-items: center;
             /* Centra verticalmente el contenido */
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #9eeefd;
+            border-color: #9cdee8;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: .375rem;
+            /* Bordes redondeados */
+            font-size: 1rem;
+            /* Tamaño de fuente */
+        }
+
+        /* Texto centrado */
+        .alert p {
+            margin-bottom: 0;
+            text-align: center;
         }
     </style>
 @stop

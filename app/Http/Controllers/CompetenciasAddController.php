@@ -35,11 +35,37 @@ class CompetenciasAddController extends Controller
             'numero' => $request->input('numero'),
             'name' => $request->input('name'),
             'tipo' => $request->input('tipo'),
+            'documentos' => json_encode($request->input('documentosnec_id')), // Convierte el array a JSON
         ]);
 
+        // Sincroniza los documentos con la relación
         $competencia->documentosnec()->sync($request->input('documentosnec_id'));
 
         return back()->with('success', 'Competencia creada exitosamente');
+    }
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'numero' => 'nullable|string|max:200',
+            'name' => 'required|string|max:255',
+            'tipo' => 'required|string',
+            'documentosnec_id' => 'required|array',
+            'documentosnec_id.*' => 'exists:documentosnec,id',
+        ]);
+
+        $competencia = Estandares::findOrFail($id);
+
+        $competencia->update([
+            'numero' => $request->input('numero'),
+            'name' => $request->input('name'),
+            'tipo' => $request->input('tipo'),
+            'documentos' => json_encode($request->input('documentosnec_id')), // Convierte el array a JSON
+        ]);
+
+        // Sincroniza los documentos con la relación
+        $competencia->documentosnec()->sync($request->input('documentosnec_id'));
+
+        return back()->with('success', 'Competencia actualizada exitosamente');
     }
 
 
@@ -55,32 +81,6 @@ class CompetenciasAddController extends Controller
         $competencia = Estandares::findOrFail($id);
         $documentosnec = DocumentosNec::all();
         return view('lista_competencias.edit', compact('competencia', 'documentosnec'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        // Validación de datos
-        $request->validate([
-            'numero' => 'nullable|string|max:200',
-            'name' => 'required|string|max:255',
-            'tipo' => 'required|string',
-            'documentosnec_id' => 'required|array',
-            'documentosnec_id.*' => 'exists:documentosnec,id',
-        ]);
-
-        // Buscar la competencia por su ID
-        $competencia = Estandares::findOrFail($id);
-
-        $competencia->update([
-            'numero' => $request->input('numero'),
-            'name' => $request->input('name'),
-            'tipo' => $request->input('tipo'),
-        ]);
-
-        // Actualizar los documentos necesarios
-        $competencia->documentosnec()->sync($request->input('documentosnec_id'));
-
-        return back()->with('success', 'Competencia actualizada exitosamente');
     }
 
     public function destroy(string $id)
