@@ -7,23 +7,27 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ValidacionesFichas;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ResubirDocumentosController extends Controller
 {
     public function show($id)
     {
-        $evidencia = DocumentosEvidencias::findOrFail($id);
+        $evidencia = DocumentosEvidencias::with('estandar')->findOrFail($id);
         $usuario = User::findOrFail($evidencia->user_id); // Obtener el usuario relacionado
 
+        // Verificar que $evidencia corresponde al estándar correcto
         return view('expedientes.expedientesUser.evidenciasEC.resubir.resubir', compact('evidencia', 'usuario'));
     }
-
 
     public function resubir(Request $request, $id)
     {
         $request->validate([
             'file' => 'required|file|mimes:pdf|max:2048',
+        ], [
+            'file.max' => 'El archivo no puede exceder los 2MB.',
+            'file.mimes' => 'Solo se permiten archivos en formato PDF.',
         ]);
 
         // Obtener la evidencia de documentos
@@ -55,11 +59,14 @@ class ResubirDocumentosController extends Controller
             $validacion->save();
         }
 
-        // Redireccionar a la ruta correcta con los parámetros necesarios
-        $estandar_id = $documento->estandares->first()->id;
-        $estandar_name = $documento->estandares->first()->name;
+        // Obtener el estándar del documento
+        $estandar = $evidencia->estandar;
+        $estandar_id = $estandar ? $estandar->id : 'No disponible';
+        $estandar_name = $estandar ? $estandar->name : 'No disponible';
 
-        return redirect()->route('evidenciasEC.index', ['id' => $estandar_id, 'name' => $estandar_name])
+
+        // Redireccionar a la ruta correcta con los parámetros necesarios
+        return redirect()->route('mis.evidencias', ['id' => $estandar_id, 'name' => $estandar_name])
             ->with('success', 'Documento resubido con éxito.');
     }
 }

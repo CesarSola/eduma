@@ -7,7 +7,7 @@
         <div class="text-center text-white bg-success p-3 rounded shadow-sm">
             <h1 class="mb-0">Resubir Documentos</h1>
         </div>
-        <a href="{{ route('evidenciasEC.index', ['id' => $usuario->id, 'name' => $usuario->name]) }}"
+        <a href="{{ route('mis.evidencias', ['id' => $evidencia->estandar_id, 'name' => $evidencia->estandar->name]) }}"
             class="btn btn-secondary shadow-sm">Regresar</a>
     </div>
 @stop
@@ -16,12 +16,17 @@
     <div class="container">
         <div class="card mt-4 shadow-sm">
             <div class="card-body">
-                <h6 class="card-header text-primary font-weight-bold">Resubir Documento</h6>
+                <h6 class="card-header text-secondary font-weight-bold">{{ $usuario->name }} {{ $usuario->secondName }}
+                    {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}, sube de nuevo el documento marcado aqui
+                    para su revisión</h6>
 
                 {{-- Mostrar el nombre del documento rechazado --}}
                 <div class="alert alert-info">
-                    <p><strong>Nombre del documento rechazado:</strong> {{ optional($evidencia->documento)->name }}</p>
+                    <p><strong>Nombre del documento rechazado: </strong>
+                        {{ optional($evidencia->documento)->name }}<strong> para el Estándar: </strong>
+                        {{ optional($evidencia->estandar)->name }}</p>
                 </div>
+
 
                 <form action="{{ route('evidencias.resubir.submit', $evidencia->id) }}" method="POST"
                     enctype="multipart/form-data">

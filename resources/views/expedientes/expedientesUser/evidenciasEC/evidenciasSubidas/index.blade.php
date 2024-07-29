@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <div class="text-center text-white bg-success p-3 rounded shadow-sm">
-            <h1 class="mb-0">Evidencias Subidas para {{ $estandarName }}</h1>
+            <h1 class="mb-0">Evidencias Subidas para {{ $estandarName }} de {{ $usuarioName }}</h1>
         </div>
         <a href="{{ route('evidenciasEC.index', ['id' => $estandarId, 'name' => $estandarName]) }}"
             class="btn btn-secondary shadow-sm">Regresar</a>
@@ -23,6 +23,8 @@
                     <thead>
                         <tr>
                             <th>Nombre del Documento</th>
+                            <th>Usuario ID</th>
+                            <th>Estándar ID</th>
                             <th>Documento ID</th>
                             <th>Estado de Validación</th>
                             <th>Comentario</th>
@@ -33,6 +35,8 @@
                         @foreach ($documentos as $documento)
                             <tr>
                                 <td>{{ $documento->nombre }}</td> <!-- Nombre directamente desde DocumentosEvidencias -->
+                                <td>{{ $documento->user_id }}</td>
+                                <td>{{ $documento->estandar_id }}</td>
                                 <td>{{ $documento->documento_id }}</td>
                                 <td>
                                     @php
@@ -60,7 +64,7 @@
                                 <td>{{ $validacion ? $validacion->comentario : 'Sin comentarios' }}</td>
                                 <td>
                                     @if ($validacion && $validacion->tipo_validacion === 'rechazar')
-                                        <a href="{{ route('evidencias.resubir', ['id' => $documento->documento_id]) }}"
+                                        <a href="{{ route('evidencias.resubir', ['id' => $documento->id]) }}"
                                             class="btn btn-warning btn-sm shadow-sm">Resubir</a>
                                     @endif
                                     @if ($validacion && $validacion->tipo_validacion === 'pendiente')
@@ -75,6 +79,7 @@
         </div>
     </div>
 @stop
+
 
 @section('css')
     <style>

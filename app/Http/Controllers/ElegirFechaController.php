@@ -7,6 +7,7 @@ use App\Models\FechaCompetencia;
 use App\Models\FechaElegida;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ElegirFechaController extends Controller
 {
@@ -41,8 +42,6 @@ class ElegirFechaController extends Controller
         ]);
     }
 
-
-
     public function show($id, Request $request)
     {
         // Obtener el ID del usuario desde la solicitud o usar el usuario autenticado
@@ -72,8 +71,6 @@ class ElegirFechaController extends Controller
         ]);
     }
 
-
-
     public function store(Request $request)
     {
         // Validar la solicitud
@@ -89,11 +86,18 @@ class ElegirFechaController extends Controller
             'horario_competencia_id' => $request->input('horario_id'),
         ]);
 
-        // Obtener el estandar_id de la fecha_competencia para la redirección
+        // Obtener el competencia_id de la fecha_competencia para la redirección
         $fechaCompetencia = FechaCompetencia::find($request->input('fecha_competencia_id'));
-        $estandarId = $fechaCompetencia->estandar_id;
+        $competenciaId = $fechaCompetencia->competencia_id;
 
-        return redirect()->route('evidenciasEC.index', ['id' => $estandarId, 'name' => $estandarId->name])
+        // Obtener el objeto Competencia
+        $competencia = Estandares::find($competenciaId);
+
+        if (!$competencia) {
+            return redirect()->route('miscompetencias.index')->with('error', 'La competencia no fue encontrada.');
+        }
+
+        return redirect()->route('evidenciasEC.index', ['id' => $competenciaId, 'name' => $competencia->name])
             ->with('success', 'Fecha y horario guardados con éxito.');
     }
 }

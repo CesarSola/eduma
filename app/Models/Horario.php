@@ -20,6 +20,12 @@ class Horario extends Model
     {
         return $this->belongsTo(FechaCompetencia::class, 'fecha_competencia_id');
     }
+    // Relación con la competencia (Estandares)
+    public function competencia()
+    {
+        return $this->belongsTo(Estandares::class, 'competencia_id');
+    }
+
 
     // Accesor para formatear la hora
     public function getHoraFormattedAttribute()

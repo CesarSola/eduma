@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Storage;
 
 class EvidenciasUEController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index($id, $name)
     {
         $estandar = Estandares::find($id);
@@ -63,11 +60,11 @@ class EvidenciasUEController extends Controller
             ->count() === $documentos_necesarios->count();
 
         // Obtener las fechas elegidas por el usuario
-        $fechas_elegidas = FechaElegida::where('user_id', $user_id)
-            ->whereHas('fechaCompetencia', function ($query) use ($id) {
-                $query->where('fecha_competencia_id', $id);
-            })
-            ->with('fechaCompetencia')
+        $fechas_elegidas = FechaElegida::join('fechas_competencias', 'fechas_horarios_elegidos.fecha_competencia_id', '=', 'fechas_competencias.id')
+            ->join('horarios_competencias', 'fechas_horarios_elegidos.horario_competencia_id', '=', 'horarios_competencias.id')
+            ->where('fechas_competencias.competencia_id', $id)
+            ->where('fechas_horarios_elegidos.user_id', $user_id)
+            ->select('fechas_horarios_elegidos.*', 'fechas_competencias.fecha', 'horarios_competencias.hora')
             ->get();
 
         // Pasar datos a la vista

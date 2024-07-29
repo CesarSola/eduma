@@ -16,6 +16,11 @@ class FechaElegida extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // Definir la relación con el estándar, si es necesario
+    public function estandar()
+    {
+        return $this->belongsTo(Estandares::class, 'estandar_id');
+    }
 
     public function fechaCompetencia()
     {

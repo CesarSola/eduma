@@ -12,23 +12,30 @@ class PlanEvaluacionController extends Controller
 {
     public function generatePlan($userId, $standardId)
     {
-        // Ruta a tu plantilla de documento Word para el plan de evaluación
-        $templatePath = public_path('templates/Plan_evaluacion_EC0076.docx');
+        // Buscar el estándar usando el número pasado en standardId
+        $competencia = Estandares::where('numero', $standardId)->firstOrFail();
+
+        // Construir el nombre del archivo de la plantilla basado en el número del estándar
+        $templateFile = 'Plan_evaluacion_' . $competencia->numero . '.docx';
+        $templatePath = public_path('templates/' . $templateFile);
+
+        // Verificar si el archivo de la plantilla existe
+        if (!file_exists($templatePath)) {
+            abort(404, 'Template not found.');
+        }
+
         $templateProcessor = new TemplateProcessor($templatePath);
 
-        // Recuperar datos del usuario de la base de datos
+        // Recuperar datos del usuario
         $user = User::findOrFail($userId);
 
         // Recuperar las fechas y horarios elegidos por el usuario para este estándar
         $fechas_elegidas = FechaElegida::where('user_id', $userId)
-            ->whereHas('fechaCompetencia', function ($query) use ($standardId) {
-                $query->where('competencia_id', $standardId);
+            ->whereHas('fechaCompetencia', function ($query) use ($competencia) {
+                $query->where('competencia_id', $competencia->id);
             })
             ->with(['fechaCompetencia', 'horarioCompetencia'])
             ->get();
-
-        // Recuperar datos del estándar o competencia específico
-        $competencia = Estandares::findOrFail($standardId);
 
         // Reemplazar marcadores en la plantilla
         $templateProcessor->setValue('user_name', $user->name);
@@ -46,19 +53,17 @@ class PlanEvaluacionController extends Controller
         $templateProcessor->setValue('user_calle_avenida', $user->calle_avenida);
         $templateProcessor->setValue('user_numext', $user->numext);
 
-        // Reemplazar marcadores de competencia
         $templateProcessor->setValue('competencia_numero', $competencia->numero);
         $templateProcessor->setValue('competencia_name', $competencia->name);
 
-        // Reemplazar marcadores de fechas y horarios en la plantilla
+        // Generar el texto de fechas y horarios
+        $fechasHorariosText = "";
         foreach ($fechas_elegidas as $fecha) {
-            // Asegúrate de que 'fechaCompetencia' y 'horarioCompetencia' sean accesibles y tengan los campos correctos
             $fechaFormatted = $fecha->fechaCompetencia ? $fecha->fechaCompetencia->fecha->format('d/m/Y') : 'Fecha no disponible';
             $hora = $fecha->horarioCompetencia ? $fecha->horarioCompetencia->hora : 'Hora no disponible';
-
-            $templateProcessor->setValue('fecha_' . $fecha->id, $fechaFormatted);
-            $templateProcessor->setValue('hora_' . $fecha->id, $hora);
+            $fechasHorariosText .= $fechaFormatted . ' ' . $hora . "\n";
         }
+        $templateProcessor->setValue('fechas_horarios', $fechasHorariosText);
 
         // Asegurarse de que la carpeta exista
         if (!Storage::exists('public/documents/required/form/plan/')) {

@@ -105,7 +105,8 @@
                     <div class="card mt-4 shadow-sm">
                         <div class="card-body">
                             <div class="card-header">
-                                <h6 class="card-header text-primary font-weight-bold">Validaciones de Carta y Ficha</h6>
+                                <h6 class="card-header bg-success text-white text-center font-weight-bold">Validaciones de
+                                    Carta y Ficha</h6>
                             </div>
                             <div class="card-body">
                                 <table class="table">
@@ -223,8 +224,9 @@
                                     tus
                                     evidencias en la siguiente pestaña</div>
                                 <a class="btn btn-success mt-4"
-                                    href="{{ route('mis.evidencias', ['id' => $estandar->id, 'name' => $estandar->name]) }}">Ir
-                                    a mis Evidencias Subidas</a>
+                                    href="{{ route('mis.evidencias', ['id' => $estandar->id, 'user_id' => auth()->id(), 'name' => $estandar->name]) }}">
+                                    Ir a mis Evidencias Subidas
+                                </a>
                             </div>
                         @endif
                     @endif
@@ -274,11 +276,12 @@
                                         <p class="text-muted text-center">No has elegido ninguna fecha aún.</p>
                                     @endif
                                 </div>
-                                <div class="card-header bg-success text-white text-center font-weight-bold">Decarga tu plan
-                                    de Evaluación</div>
+                                <div class="card-header bg-success text-white text-center font-weight-bold">Descarga tu plan
+                                    de Evaluación
+                                </div>
                                 <div class="card-body">
                                     <form id="form-plan"
-                                        action="{{ route('generate-plan', ['userId' => Auth::id(), 'standardId' => $id]) }}"
+                                        action="{{ route('generate-plan', ['userId' => Auth::id(), 'standardId' => $estandar->numero]) }}"
                                         method="GET">
                                         @csrf
                                         <div class="mb-3 d-flex flex-column align-items-center">
@@ -290,7 +293,6 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
                         @endif
                     @endif
                 @endif
