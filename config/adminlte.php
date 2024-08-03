@@ -30,8 +30,10 @@ return [
     |
     */
 
-    'use_ico_only' => false,
-    'use_full_favicon' => false,
+    'title' => 'SICE',
+    'use_ico_only' => true,
+    'use_full_favicon' => true,
+
 
     /*
     |--------------------------------------------------------------------------
@@ -83,16 +85,17 @@ return [
     |
     */
 
+    'logo' => '<b>Eduma</b>TICS',
+    'logo_img' => 'vendor/adminlte/dist/img/logo.jpeg',
     'auth_logo' => [
         'enabled' => true,
         'img' => [
             'path' => 'vendor/adminlte/dist/img/logo.jpeg',
-            'alt' => 'Auth Logo',
-            'class' => '',
             'width' => 160,
             'height' => 160,
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -114,12 +117,12 @@ return [
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/logo.jpeg',
-            'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 100,
             'height' => 100,
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -134,8 +137,8 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-info',
     'usermenu_image' => false,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
@@ -153,9 +156,10 @@ return [
     */
 
     'layout_boxed' => false, // Asegura que el layout no esté en modo 'boxed'
-    'layout_fixed_sidebar' => true, // Asegura que la barra lateral esté fija
-    'layout_fixed_navbar' => true, // Asegura que la barra superior (navbar) esté fija
-    'layout_fixed_footer' => true, // Opcional: fija el footer si lo deseas
+    'layout_fixed_sidebar' => true,
+    'layout_fixed_navbar' => true,
+    'layout_fixed_footer' => true,
+
 
     /*
     |--------------------------------------------------------------------------
@@ -188,15 +192,15 @@ return [
     |
     */
 
-    'classes_body' => '',
-    'classes_brand' => '',
-    'classes_brand_text' => '',
-    'classes_content_wrapper' => '',
+    'classes_body' => 'bg-light text-dark min-vh-100',
+    'classes_brand' => 'bg-gradient-info border border-primary shadow-lg',
+    'classes_brand_text' => 'text-light',
+    'classes_content_wrapper' => 'p-3 bg-white shadow-sm',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-dark-info elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-info navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -213,9 +217,9 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
-    'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => false,
+    'sidebar_collapse' => true,
+    'sidebar_collapse_auto_size' => true,
+    'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
@@ -343,6 +347,17 @@ return [
             'icon' => 'fas fa-fw fa-user-tie',
             'submenu' => [
                 [
+                    'text' => 'Evaluadores',
+                    'icon' => 'fas fa-fw fa-user-shield',
+                    'submenu' => [
+                        [
+                            'text' => 'Agrega tus evaluadores',
+                            'url' => 'evaluadores',
+                            'icon' => 'fas fa-fw fa-user-plus',
+                        ],
+                    ],
+                ],
+                [
                     'text' => 'Expedientes',
                     'icon' => 'fas fa-fw fa-folder',
                     'submenu' => [
@@ -463,21 +478,21 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],
@@ -508,11 +523,11 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
                 ],
             ],

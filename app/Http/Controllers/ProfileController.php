@@ -71,7 +71,7 @@ class ProfileController extends Controller
             $fileName = date('mdY') . '_' . uniqid() . '.' . $foto->getClientOriginalExtension();
 
             // Usar el método storeAs y especificar el disco 'public'
-            $fotoPath = $foto->storeAs('public/images/profiles/users' . $userName, $fileName);
+            $fotoPath = $foto->storeAs('public/images/profiles/users/' . $userName, $fileName);
 
             // Registrar la ruta para depuración
             Log::info('Foto almacenada en: ' . $fotoPath);

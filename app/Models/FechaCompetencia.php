@@ -25,9 +25,14 @@ class FechaCompetencia extends Model
     {
         return $this->belongsTo(Estandares::class, 'competencia_id');
     }
-
+    // relacion con la tabla horarios(no se si lo sigo necesitando)
     public function horarios()
     {
         return $this->hasMany(Horario::class, 'fecha_competencia_id');
+    }
+    // relacion con la tabla usuarios
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

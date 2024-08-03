@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
 use App\Http\Controllers\ECviewsController;
@@ -60,16 +62,32 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\ElegirFechaController;
+use App\Http\Controllers\EvaluadoresController;
 use App\Http\Controllers\EvidenciasSubidasController;
 use App\Http\Controllers\EvidenciasUCControlle;
+use App\Http\Controllers\FechasController;
 use App\Http\Controllers\PlanEvaluacionController;
 use App\Http\Controllers\ResubirDocumentosController;
+use App\Http\Controllers\SubirPlanEvaluacionController;
 use App\Http\Controllers\ValidarCartasController;
 use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
 use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\WordController;
+//ruta del calendario
+Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
+Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
+//ruta de agregar fechas 
+Route::get('competencias/{competencia}/agregar-fechas', [FechasController::class, 'show'])->name('competencias.agregar-fechas');
+Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
+Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
+
+
+//rutas de evaluadores 
+Route::resource('evaluadores', EvaluadoresController::class);
+
+
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
@@ -85,8 +103,6 @@ Route::resource('cursosExpediente', CursosController::class);
 Route::resource('evidenciasACU', EvidenciasCursosController::class);
 //ruta de la carpeta competencias
 Route::resource('competencia', CompetenciasController::class);
-Route::get('competencias/{competencia}/agregar-fechas', [CompetenciasController::class, 'agregarFechas'])->name('competencias.agregar-fechas');
-Route::post('competencias/{competencia}/guardar-fechas', [CompetenciasController::class, 'guardarFechas'])->name('competencias.guardar-fechas');
 //ruta del show de evidencias competencias
 Route::resource('evidenciasACO', EvidenciasCompetenciasController::class);
 // Ruta para validar fichas
@@ -141,6 +157,10 @@ Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::
 //ruta de evidenciasEC
 Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
+// Ruta para el formulario del plan de evaluación
+Route::get('/plan-evaluacion/{id}', [SubirPlanEvaluacionController::class, 'show'])->name('Plan.show');
+// Ruta para almacenar el documento
+Route::post('/documentos/store', [SubirPlanEvaluacionController::class, 'store'])->name('plan.store');
 Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 //rutas para resubir documentos de evidencias 

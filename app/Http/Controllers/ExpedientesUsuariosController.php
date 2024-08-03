@@ -13,16 +13,19 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
+        // Obtener los roles 'admin' y 'evaluador'
         $adminRole = Role::where('name', 'admin')->first();
+        $evaluadorRole = Role::where('name', 'evaluador')->first();
 
-        // Obtener solo los usuarios que no tienen el rol de administrador
-        $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole) {
-            $query->where('role_id', $adminRole->id);
+        // Obtener solo los usuarios que no tienen los roles 'admin' y 'evaluador'
+        $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole, $evaluadorRole) {
+            $query->whereIn('role_id', [$adminRole->id, $evaluadorRole->id]);
         })->with('documentos')->get();
 
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
+
     public function show($id)
     {
         $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);

@@ -15,7 +15,7 @@ class Rolseeder extends Seeder
     {
         // Crear roles
         $role1 = Role::firstOrCreate(['name' => 'Admin']);
-        $role2 = Role::firstOrCreate(['name' => 'User']);
+        $role3 = Role::firstOrCreate(['name' => 'Evaluador']);
 
         // Crear o verificar si el permiso ya existe antes de crearlo
         $dashboardPermission = Permission::firstOrCreate(
@@ -24,18 +24,19 @@ class Rolseeder extends Seeder
         );
 
         // Asignar el permiso a los roles
-        $dashboardPermission->syncRoles([$role1, $role2]);
+        $dashboardPermission->syncRoles([$role1, $role3]);
 
         // Crear o verificar si los permisos ya existen antes de crearlos
         $permissions = [
+            ['name' => 'dashboard', 'description' => 'Ver el Dashboard'],
             ['name' => 'users.index', 'description' => 'Ver listado de Usuarios'],
             ['name' => 'users.edit', 'description' => 'Asignar Un Rol'],
             ['name' => 'users.update', 'description' => 'Actualizar Un Rol'],
-            ['name' => 'roles.index', 'description' => 'Ver listado de invernaderos'],
-            ['name' => 'roles.show', 'description' => 'Ver Vista de Invernaderos'],
-            ['name' => 'roles.create', 'description' => 'Crear un invenadero'],
-            ['name' => 'roles.edit', 'description' => 'Editar un invernadero'],
-            ['name' => 'roles.destroy', 'description' => 'Eliminar un invernadero'],
+            ['name' => 'roles.index', 'description' => 'Ver listado de Roles'],
+            ['name' => 'roles.show', 'description' => 'Ver Vista de Roles'],
+            ['name' => 'roles.create', 'description' => 'Crear un Rol'],
+            ['name' => 'roles.edit', 'description' => 'Editar un Rol'],
+            ['name' => 'roles.destroy', 'description' => 'Eliminar un Rol'],
         ];
 
         foreach ($permissions as $permissionData) {

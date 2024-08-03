@@ -8,6 +8,7 @@ use App\Models\DocumentosNec;
 use App\Models\Estandares;
 use App\Models\FechaElegida;
 use App\Models\FichasDocumentos;
+use App\Models\PlanesEvaluacion;
 use App\Models\ValidacionesCartas;
 use App\Models\ValidacionesEvidencias;
 use App\Models\ValidacionesFichas;

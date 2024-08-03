@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
         // Generar matrícula automáticamente
         $matricula = User::generateMatricula();
 
-        // Crear el usuario con todos los campos necesarios incluyendo matrícula
+        // Crear el usuario con todos los campos necesarios incluyendo matrícula y rol
         $user = User::create([
             'name' => $request->name,
             'secondName' => $request->secondName,
@@ -69,6 +69,7 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'genero' => $request->genero,
             'matricula' => $matricula, // Asignar la matrícula generada
+            'rol' => 'User', // Guardar el rol 'User' en el campo rol
         ]);
 
         // Asignar automáticamente el rol 'User' al usuario creado

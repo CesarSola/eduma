@@ -14,6 +14,7 @@ class Horario extends Model
         'user_id',
         'competencia_id',
         'hora',
+        'fecha_competencia_id', // Asegúrate de que esté aquí
     ];
 
     public function fechaCompetencia()

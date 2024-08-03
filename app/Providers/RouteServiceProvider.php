@@ -17,8 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard
-    '; // O la ruta correcta a tu página de inicio de sesión
+    public const HOME = '/dashboard'; // O la ruta correcta a tu página de inicio de sesión
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

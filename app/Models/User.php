@@ -48,6 +48,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'foto',
         'phone',
         'active',
+        'rol',
+        'email_verified_at',
+        'remember_token',
     ];
 
     // Campos que deben estar ocultos para la serialización
@@ -61,6 +64,18 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function adminlte_image()
+    {
+        // Verifica si el campo 'foto' tiene un valor
+        if ($this->foto) {
+            // Retorna la URL completa a la imagen
+            return asset('storage/' . $this->foto);
+        }
+
+        // Retorna una imagen predeterminada si el campo 'foto' está vacío
+        return 'https://picsum.photos/300/300';
+    }
+
 
     // Relación de uno a muchos con el modelo DocumentosUser
     public function documentos()
@@ -177,7 +192,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $newMatricula;
     }
-
+    //relacion con planes de evaluacion
+    public function planesEvaluacion()
+    {
+        return $this->hasMany(PlanesEvaluacion::class);
+    }
 
     // relaciones para agregar las relaciones de comprobantesCO y validaciones comprobantes competencias en la tabla pivot user_estandares
     public function attachEstandarIfNotAttached1($estandarId)
