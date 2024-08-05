@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles; // Importa el trait
 
@@ -66,16 +67,14 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
     public function adminlte_image()
     {
-        // Verifica si el campo 'foto' tiene un valor
-        if ($this->foto) {
-            // Retorna la URL completa a la imagen
-            return asset('storage/' . $this->foto);
-        }
-
-        // Retorna una imagen predeterminada si el campo 'foto' está vacío
-        return 'https://picsum.photos/300/300';
+        // Verifica que la ruta en 'foto' es relativa a la carpeta 'public'
+        return asset($this->foto);
     }
 
+    public function adminlte_desc()
+    {
+        return $this->email;
+    }
 
     // Relación de uno a muchos con el modelo DocumentosUser
     public function documentos()

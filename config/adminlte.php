@@ -138,9 +138,9 @@ return [
 
     'usermenu_enabled' => true,
     'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-info',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
+    'usermenu_header_class' => 'bg-success',
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
     'usermenu_profile_url' => false,
 
     /*
@@ -193,14 +193,14 @@ return [
     */
 
     'classes_body' => 'bg-light text-dark min-vh-100',
-    'classes_brand' => 'bg-gradient-info border border-primary shadow-lg',
+    'classes_brand' => 'bg-gradient-success border border-success shadow-lg',
     'classes_brand_text' => 'text-light',
     'classes_content_wrapper' => 'p-3 bg-white shadow-sm',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-info elevation-4',
+    'classes_sidebar' => 'sidebar-light-white elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-info navbar-light',
+    'classes_topnav' => 'bg-gradient-success border border-success shadow-lg navbar-dark text-white',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -314,6 +314,7 @@ return [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
+            'icon_color' => 'success',
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -345,59 +346,71 @@ return [
         [
             'text' => 'Admistrativos',
             'icon' => 'fas fa-fw fa-user-tie',
+            'icon_color' => 'info',
             'submenu' => [
                 [
                     'text' => 'Evaluadores',
                     'icon' => 'fas fa-fw fa-user-shield',
+                    'icon_color' => 'primary',
                     'submenu' => [
                         [
                             'text' => 'Agrega tus evaluadores',
                             'url' => 'evaluadores',
                             'icon' => 'fas fa-fw fa-user-plus',
+                            'icon_color' => 'success',
+
                         ],
                     ],
                 ],
                 [
                     'text' => 'Expedientes',
                     'icon' => 'fas fa-fw fa-folder',
+                    'icon_color' => 'primary',
                     'submenu' => [
                         [
                             'text' => 'Lista de expedientes',
                             'url' => 'usuariosAdmin',
                             'icon' => 'fas fa-archive',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
                 [
                     'text' => 'Competencias y Cursos',
                     'icon' => 'fas fa-fw fa-book',
+                    'icon_color' => 'primary',
                     'submenu' => [
 
                         [
                             'text' => 'Registrar de cursos',
                             'url' => 'cursos',
                             'icon' => 'fas fa-plus-circle',
+                            'icon_color' => 'success',
                         ],
                         [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
                             'icon' => 'fas fa-tasks',
+                            'icon_color' => 'success',
                         ],
                         [
                             'text' => 'Agregar Documentos necesarios',
                             'url' => 'documentosnec',
                             'icon' => 'fas fa-fw fa-file-invoice',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
                 [
                     'text' => 'Códigos Postales',
                     'icon' => 'fas fa-fw fa-envelope',
+                    'icon_color' => 'primary',
                     'submenu' => [
                         [
                             'text' => 'Agregar Códigos Postales',
                             'url' => 'codigos-postales',
                             'icon' => 'fas fa-fw fa-paper-plane',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
@@ -406,37 +419,45 @@ return [
         [
             'text' => 'Usuarios',
             'icon' => 'fas fa-fw fa-users',
+            'icon_color' => 'info',
             'submenu' => [
                 [
                     'text' => 'Inicio',
                     'url' => 'usuarios',
                     'icon' => 'fas fa-fw fa-columns',
+                    'icon_color' => 'orange',
                 ],
                 [
                     'text' => 'Mis cursos',
                     'url' => 'misCursos',
                     'icon' => 'fas fa-fw fa-chalkboard',
+                    'icon_color' => 'purple',
                 ],
                 [
                     'text' => 'Mis Competencias',
                     'url' => 'miscompetencias',
                     'icon' => 'fas fa-fw fa-clipboard-check',
+                    'icon_color' => 'teal',
                 ]
             ]
         ],
         [
             'text' => 'Ajustes',
             'icon' => 'fas fa-fw fa-id-badge',
+            'icon_color' => 'info',
             'submenu' => [
                 [
                     'text' => 'Perfil',
                     'url' => 'profile',
                     'icon' => 'fas fa-fw fa-user',
+                    'icon_color' => 'indigo',
                 ],
                 [
                     'text' => 'change_password',
                     'url' => 'admin/settings',
                     'icon' => 'fas fa-fw fa-lock',
+                    'icon_color' => 'danger',
+
                 ],
             ],
         ],
