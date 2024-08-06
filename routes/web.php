@@ -224,3 +224,28 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
+
+
+use App\Http\Controllers\FormController;
+
+Route::get('encuestas/{estandar_id}', [FormController::class, 'showForm']);
+Route::post('encuestas/{estandar_id}', [FormController::class, 'submitForm'])->name('form.submit');
+
+Route::get('/admin/encuestas', [App\Http\Controllers\SurveyController::class, 'index'])->name('admin.surveys');
+Route::get('/admin/encuestas/download', [App\Http\Controllers\SurveyController::class, 'download'])->name('admin.surveys.download');
+Route::get('/admin/encuestas/{id}/download', [App\Http\Controllers\SurveyController::class, 'downloadIndividual'])->name('admin.surveys.downloadIndividual');
+
+Route::get('/survey/download/{id}', [App\Http\Controllers\SurveyController::class, 'downloadIndividual'])->name('survey.download');
+
+
+// routes/web.php
+use App\Http\Controllers\SurveyController;
+
+Route::get('/survey/download-file/{id}', [SurveyController::class, 'downloadIndividual'])->name('survey.downloadFile');
+
+
+use App\Http\Controllers\AtencionUsuariosController;
+
+Route::get('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'create'])->name('formato-atencion.create');
+Route::post('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'store'])->name('formato-atencion.store');
+Route::get('/formato-atencion/download/{estandar_id}', [AtencionUsuariosController::class, 'download'])->name('formato-atencion.download');

@@ -1,11 +1,12 @@
 <x-guest-layout>
     <x-slot name="logo">
         <a href="/">
-            <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+            <img src="{{ asset('img/logo.jpeg') }}" class="w-20 h-20" alt="Your Logo">
         </a>
     </x-slot>
 
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        @yield('content')
         <div class="max-w-md w-full space-y-8">
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
