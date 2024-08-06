@@ -30,8 +30,10 @@ return [
     |
     */
 
-    'use_ico_only' => false,
-    'use_full_favicon' => false,
+    'title' => 'SICE',
+    'use_ico_only' => true,
+    'use_full_favicon' => true,
+
 
     /*
     |--------------------------------------------------------------------------
@@ -83,16 +85,17 @@ return [
     |
     */
 
+    'logo' => '<b>Eduma</b>TICS',
+    'logo_img' => 'vendor/adminlte/dist/img/logo.jpeg',
     'auth_logo' => [
         'enabled' => true,
         'img' => [
             'path' => 'vendor/adminlte/dist/img/logo.jpeg',
-            'alt' => 'Auth Logo',
-            'class' => '',
             'width' => 160,
             'height' => 160,
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -114,12 +117,12 @@ return [
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/logo.jpeg',
-            'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 100,
             'height' => 100,
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -134,10 +137,10 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-success',
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
     'usermenu_profile_url' => false,
 
     /*
@@ -153,9 +156,10 @@ return [
     */
 
     'layout_boxed' => false, // Asegura que el layout no esté en modo 'boxed'
-    'layout_fixed_sidebar' => true, // Asegura que la barra lateral esté fija
-    'layout_fixed_navbar' => true, // Asegura que la barra superior (navbar) esté fija
-    'layout_fixed_footer' => true, // Opcional: fija el footer si lo deseas
+    'layout_fixed_sidebar' => true,
+    'layout_fixed_navbar' => true,
+    'layout_fixed_footer' => true,
+
 
     /*
     |--------------------------------------------------------------------------
@@ -188,15 +192,15 @@ return [
     |
     */
 
-    'classes_body' => '',
-    'classes_brand' => '',
-    'classes_brand_text' => '',
-    'classes_content_wrapper' => '',
+    'classes_body' => 'bg-light text-dark min-vh-100',
+    'classes_brand' => 'bg-gradient-success border border-success shadow-lg',
+    'classes_brand_text' => 'text-light',
+    'classes_content_wrapper' => 'p-3 bg-white shadow-sm',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-white elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'bg-gradient-success border border-success shadow-lg navbar-dark text-white',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -213,9 +217,9 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
-    'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => false,
+    'sidebar_collapse' => true,
+    'sidebar_collapse_auto_size' => true,
+    'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
@@ -304,12 +308,15 @@ return [
             'text' => 'search',
         ],
         [
-            'header' => 'INICIO'
+            'header' => 'INICIO',
+            'can'  => 'dashboard',
         ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
+            'icon_color' => 'success',
+            'can'  => 'dashboard',
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -341,32 +348,53 @@ return [
         [
             'text' => 'Admistrativos',
             'icon' => 'fas fa-fw fa-user-tie',
+            'icon_color' => 'info',
+            'can'  => 'evaluadores.index',
             'submenu' => [
+                [
+                    'text' => 'Evaluadores',
+                    'icon' => 'fas fa-fw fa-user-shield',
+                    'icon_color' => 'primary',
+                    'submenu' => [
+                        [
+                            'text' => 'Agrega tus evaluadores',
+                            'url' => 'evaluadores',
+                            'icon' => 'fas fa-fw fa-user-plus',
+                            'icon_color' => 'success',
+
+                        ],
+                    ],
+                ],
                 [
                     'text' => 'Expedientes',
                     'icon' => 'fas fa-fw fa-folder',
+                    'icon_color' => 'primary',
                     'submenu' => [
                         [
                             'text' => 'Lista de expedientes',
                             'url' => 'usuariosAdmin',
                             'icon' => 'fas fa-archive',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
                 [
                     'text' => 'Competencias y Cursos',
                     'icon' => 'fas fa-fw fa-book',
+                    'icon_color' => 'primary',
                     'submenu' => [
 
                         [
                             'text' => 'Registrar de cursos',
                             'url' => 'cursos',
                             'icon' => 'fas fa-plus-circle',
+                            'icon_color' => 'success',
                         ],
                         [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
                             'icon' => 'fas fa-tasks',
+                            'icon_color' => 'success',
                         ],
                         [
                             'text' => 'Agregar diagnosticos',
@@ -377,17 +405,20 @@ return [
                             'text' => 'Regitro de diagnosticos',
                             'url' => '',
                             'icon' => 'fas fa-fw fa-file-invoice',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
                 [
                     'text' => 'Códigos Postales',
                     'icon' => 'fas fa-fw fa-envelope',
+                    'icon_color' => 'primary',
                     'submenu' => [
                         [
                             'text' => 'Agregar Códigos Postales',
                             'url' => 'codigos-postales',
                             'icon' => 'fas fa-fw fa-paper-plane',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
@@ -396,37 +427,45 @@ return [
         [
             'text' => 'Usuarios',
             'icon' => 'fas fa-fw fa-users',
+            'icon_color' => 'info',
             'submenu' => [
                 [
                     'text' => 'Inicio',
                     'url' => 'usuarios',
                     'icon' => 'fas fa-fw fa-columns',
+                    'icon_color' => 'orange',
                 ],
                 [
                     'text' => 'Mis cursos',
                     'url' => 'misCursos',
                     'icon' => 'fas fa-fw fa-chalkboard',
+                    'icon_color' => 'purple',
                 ],
                 [
                     'text' => 'Mis Competencias',
                     'url' => 'miscompetencias',
                     'icon' => 'fas fa-fw fa-clipboard-check',
+                    'icon_color' => 'teal',
                 ]
             ]
         ],
         [
             'text' => 'Ajustes',
             'icon' => 'fas fa-fw fa-id-badge',
+            'icon_color' => 'info',
             'submenu' => [
                 [
                     'text' => 'Perfil',
                     'url' => 'profile',
                     'icon' => 'fas fa-fw fa-user',
+                    'icon_color' => 'indigo',
                 ],
                 [
                     'text' => 'change_password',
                     'url' => 'admin/settings',
                     'icon' => 'fas fa-fw fa-lock',
+                    'icon_color' => 'danger',
+
                 ],
             ],
         ],
@@ -468,21 +507,21 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],
@@ -513,11 +552,11 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
                 ],
             ],

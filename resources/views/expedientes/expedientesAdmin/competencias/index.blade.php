@@ -127,8 +127,8 @@
                                 </ul>
                             </td>
                             <td>
-                                <a href="{{ route('competencias.agregar-fechas', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
-                                    class="btn btn-primary">Agregar</a>
+                                <a href="{{ route('calendario.index', ['competenciaId' => $competencia->id, 'user_id' => $userId]) }}"
+                                    class="btn btn-primary">Ver Todas las Fechas</a>
                             </td>
                         </tr>
                     @endforeach

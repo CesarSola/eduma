@@ -297,6 +297,20 @@
                     @endif
                 @endif
             </div>
+            <div class="card">
+                <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu plan de evaluación
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 d-flex flex-column align-items-center">
+                        <h6 class="card-title text-primary font-weight-bold">Sube tu plan de evaluación después de la fecha
+                            pactada con tu evaluador</h6>
+                        <br>
+                        <!-- En tu vista Blade -->
+                        <a href="{{ route('Plan.show', ['id' => $estandar->id]) }}" class="btn btn-success">Subir Plan de
+                            Evaluación</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @stop

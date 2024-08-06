@@ -26,20 +26,20 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse|View
     {
         $request->authenticate();
-    
+
         $request->session()->regenerate();
-    
+
         // Obtener el usuario que está intentando iniciar sesión
         $user = Auth::user();
-    
+
         // Verificar si la cuenta está desactivada
         if (!$user->active) {
             return view('auth.login')->with('inactive', true)->with('email', $request->email);
         }
-    
-        return redirect()->intended(route('dashboard', absolute: false));
+
+        return redirect()->intended(route('usuarios.index', absolute: false));
     }
-    
+
 
 
     /**

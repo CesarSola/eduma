@@ -31,8 +31,9 @@ class CompetenciasController extends Controller
             ->get();
 
         // Renderizar la vista del expediente de competencias del usuario
-        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario', 'competencias'));
+        return view('expedientes.expedientesAdmin.competencias.index', compact('usuario', 'competencias', 'userId'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -119,8 +120,6 @@ class CompetenciasController extends Controller
 
         return Redirect::route('competencia.index')->with('success', 'Fechas y horarios agregados correctamente');
     }
-
-
 
     /**
      * Show the form for editing the specified resource.

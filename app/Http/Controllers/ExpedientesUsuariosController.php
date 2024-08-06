@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\SurveyResponse; // Asegúrate de importar el modelo SurveyResponse
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Models\AtencionUsuario;
 
 class ExpedientesUsuariosController extends Controller
 {
@@ -13,26 +15,35 @@ class ExpedientesUsuariosController extends Controller
      */
     public function index()
     {
+        // Obtener los roles 'admin' y 'evaluador'
         $adminRole = Role::where('name', 'admin')->first();
+        $evaluadorRole = Role::where('name', 'evaluador')->first();
 
-        // Obtener solo los usuarios que no tienen el rol de administrador
-        $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole) {
-            $query->where('role_id', $adminRole->id);
+        // Obtener solo los usuarios que no tienen los roles 'admin' y 'evaluador'
+        $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole, $evaluadorRole) {
+            $query->whereIn('role_id', [$adminRole->id, $evaluadorRole->id]);
         })->with('documentos')->get();
 
         // Renderizar la vista con la lista de usuarios
         return view('expedientes.expedientesAdmin.usuarios.index', compact('usuariosAdmin'));
     }
+
     public function show($id)
     {
         $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
 
+        // Recuperar documentos, comprobantes, estándares y cursos
         $documentos = $usuariosAdmin->documentos;
         $comprobantesCU = $usuariosAdmin->comprobantesCU;
         $comprobantesCO = $usuariosAdmin->comprobantesCO;
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
+        
+        // Recuperar respuestas de encuestas y cargar la relación estandar
+        $surveyResponses = SurveyResponse::where('user_id', $id)->with('estandar')->get();
+        $atencionUsuario = AtencionUsuario::where('user_id', $id)->with('estandar')->get();
 
+        // Comprobar el estado de los documentos y comprobantes
         $documentosCompletos = true;
         $documentosEnValidacion = false;
 
@@ -40,7 +51,6 @@ class ExpedientesUsuariosController extends Controller
             $validaciones = $documento->validacionesComentarios;
 
             if ($validaciones->isEmpty()) {
-                // Si no hay validaciones, consideramos que el documento está en proceso
                 $documentosCompletos = false;
                 $documentosEnValidacion = true;
                 continue;
@@ -91,9 +101,25 @@ class ExpedientesUsuariosController extends Controller
             }
         }
 
-        return view('expedientes.expedientesAdmin.usuarios.show', compact('usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 'documentosCompletos', 'documentosEnValidacion', 'comprobanteSubidoCO', 'comprobanteSubidoCU', 'comprobanteEnValidacionCU', 'comprobanteEnValidacionCO'));
+        return view('expedientes.expedientesAdmin.usuarios.show', compact(
+            'usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 
+            'documentosCompletos', 'documentosEnValidacion', 'comprobanteSubidoCO', 'comprobanteSubidoCU', 
+            'comprobanteEnValidacionCU', 'comprobanteEnValidacionCO', 'surveyResponses','atencionUsuario'
+        ));
     }
 
+    /**
+     * Show the expediente for the specified user.
+     */
+    public function showExpediente($user_id)
+    {
+        $usuario = User::findOrFail($user_id);
+        $atencionUsuario = AtencionUsuario::where('user_id', $user_id)->with('estandar')->get();
+        // Recuperar todas las respuestas de encuesta para el usuario y cargar la relación estandar
+        $surveyResponses = SurveyResponse::where('user_id', $user_id)->with('estandar')->get();
+
+        return view('expedientes.show', compact('usuario', 'surveyResponses','atencionUsuario'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -101,7 +127,6 @@ class ExpedientesUsuariosController extends Controller
     public function create()
     {
         // Mostrar el formulario de creación de un nuevo recurso
-
     }
 
     /**
