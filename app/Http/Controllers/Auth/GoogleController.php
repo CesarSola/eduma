@@ -14,14 +14,15 @@ class GoogleController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
-    public function callback(){
+    public function callback()
+    {
         $user = Socialite::driver('google')->user();
 
-        $findUser = User::where('google_id',$user->id)->first();
-        if($findUser){
+        $findUser = User::where('google_id', $user->id)->first();
+        if ($findUser) {
             Auth::login($findUser);
             return redirect()->intended('/dashboard');
-        }else{
+        } else {
             $user = User::updateOrCreate([
                 'email' => $user->email,
             ], [
@@ -33,11 +34,7 @@ class GoogleController extends Controller
             ]);
 
             Auth::login($user);
-
-
         }
-        return redirect()->intended('dashboard');
+        return redirect()->intended('usuarios.index');
     }
-
-
 }

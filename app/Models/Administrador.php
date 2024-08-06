@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class Evaluadores extends Authenticatable
+class Administrador extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasRoles; // Usa el trait
 
-    protected $table = 'evaluadores';
+    protected $table = 'administradores';
     protected $guard_name = 'web';
-
 
     protected $fillable = [
         'name',

@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'age' => 'required|integer',
         // Agrega más reglas según sea necesario
     ];
-
+    protected $guard_name = 'web';
     // Campos que se pueden asignar masivamente
     protected $fillable = [
         'name',
@@ -68,7 +68,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adminlte_image()
     {
         // Verifica que la ruta en 'foto' es relativa a la carpeta 'public'
-        return asset($this->foto);
+        if ($this->foto && file_exists(public_path($this->foto))) {
+            return asset($this->foto);
+        } else {
+            // Retorna una imagen predeterminada si la foto no existe
+            return 'https://picsum.photos/300/300';
+        }
     }
 
     public function adminlte_desc()
