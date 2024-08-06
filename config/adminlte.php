@@ -369,8 +369,13 @@ return [
                             'icon' => 'fas fa-tasks',
                         ],
                         [
-                            'text' => 'Agregar Documentos necesarios',
-                            'url' => 'documentosnec',
+                            'text' => 'Agregar diagnosticos',
+                            'url' => 'diagnosticos',
+                            'icon' => 'fas fa-fw fa-file-invoice',
+                        ],
+                        [
+                            'text' => 'Regitro de diagnosticos',
+                            'url' => '',
                             'icon' => 'fas fa-fw fa-file-invoice',
                         ],
                     ],

@@ -7,7 +7,9 @@ use App\Http\Controllers\ECviewsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostalCodeController;
 use App\Http\Controllers\SDocumentosController;
-
+use App\Http\Controllers\DiagnosticoController;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Exception\Exception;
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -69,7 +71,9 @@ use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
 use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
+use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
+use App\Http\Controllers\FormularioController;
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
@@ -143,12 +147,12 @@ Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
-//rutas para resubir documentos de evidencias 
+//rutas para resubir documentos de evidencias
 Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'show'])->name('evidencias.resubir');
 Route::post('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'resubir'])->name('evidencias.resubir.submit');
 //ruta de la vista de evidencias subidas
 Route::get('mis-evidencias/{id}/{name}', [EvidenciasSubidasController::class, 'index'])->name('mis.evidencias');
-//ruta de elegir fecha 
+//ruta de elegir fecha
 Route::get('/fechas', [ElegirFechaController::class, 'index'])->name('fechas.index');
 Route::get('/fechas/{id}', [ElegirFechaController::class, 'show'])->name('fechas.show');
 Route::post('/fechas', [ElegirFechaController::class, 'store'])->name('fechas.store');
@@ -204,3 +208,16 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
+Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
+Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
+
+Route::get('/formulario', function() {
+    return view('Diagnosticos.formulario');
+})->name('formulario'); // Asigna un nombre a la ruta
+
+// web.php
+
+
+
+Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
+Route::resource('diagnosticos', DiagnosticoController::class);

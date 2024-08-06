@@ -40,8 +40,11 @@ class FormularioController extends Controller
             'productos_no3' => 'required|integer',
             'productos_suma3' => 'required|integer',
             'recomendacion' => 'required|string',
-            'decision' => 'required|string', // Agregado para validar la decisión
-            'estado' => 'required|string', // Agregado para validar la decisión
+            'current_date' => 'required|date',
+            'decision' => 'required|string',
+
+
+
         ]);
 
         $user = Auth::user();
@@ -51,7 +54,10 @@ class FormularioController extends Controller
         'porcentaje_si' => $validatedData['porcentaje_si'],
         'recomendacion' => $validatedData['recomendacion'],
         'decision' => $validatedData['decision'],
-        'estado' => $validatedData['estado'],
+        'fecha' => $validatedData['current_date'], // Guardar la fecha actual
+        'estandar' => 'EC0301', // Valor por defecto
+        'estado' => '1', // Valor por defecto
+
     ]);
 
         try {
@@ -73,14 +79,17 @@ class FormularioController extends Controller
         // Establecer los valores de productos, conocimientos y actitudes
         $this->setCategoryValues($templateProcessor, $validatedData);
 
+        $templateProcessor->setValue('currentDate', $this->ensureValue($validatedData['current_date']));
+
         // Obtener y establecer el porcentaje calculado
         $templateProcessor->setValue('numSi', $this->ensureValue($validatedData['num_si']));
         $templateProcessor->setValue('numNo', $this->ensureValue($validatedData['num_no']));
         $templateProcessor->setValue('porcentajeSi', $this->ensureValue($validatedData['porcentaje_si']));
         $templateProcessor->setValue('recomendacion', $this->ensureValue($validatedData['recomendacion']));
+        $templateProcessor->setValue('decision', $this->ensureValue($validatedData['decision']));
 
         // Establecer el valor de decisión en la plantilla
-        $templateProcessor->setValue('decision', $this->ensureValue($validatedData['decision']));
+
 
         // Generar un nombre de archivo único
         $filename = 'Autodiagnostico_' . $user->name . '_' . $user->paternalSurname . '.docx';
@@ -106,6 +115,7 @@ class FormularioController extends Controller
         $templateProcessor->setValue('phone', $this->ensureValue($user->phone));
         $templateProcessor->setValue('calle_avenida', $this->ensureValue($user->calle_avenida));
         $templateProcessor->setValue('numext', $this->ensureValue($user->numext));
+        $templateProcessor->setValue('curp', $this->ensureValue($user->curp));
     }
 
     private function setCategoryValues($templateProcessor, $data)

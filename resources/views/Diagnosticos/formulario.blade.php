@@ -1335,9 +1335,12 @@ button:hover {
     <input type="hidden" id="porcentaje-si-input" name="porcentaje_si" value="">
     <input type="hidden" id="recomendacion-input" name="recomendacion" value="">
 
-    <button class="btn btn-primary" type="button" onclick="contabilizarTodasRespuestas2()">Enviar respuestas</button>
 
-    <!-- Sección de decisión, inicialmente oculta -->
+    <input type="hidden" id="current_date" name="current_date">
+
+    <button type="button" class="primary" onclick="contabilizarTodasRespuestas2()">Enviar resultados</button>
+    <br>
+
     <div id="decision-section" style="display: none;">
         <br>
         <label>¿Usted desea?</label>
@@ -1346,15 +1349,12 @@ button:hover {
         <br>
         <input type="radio" name="decision" value="Asesorarme" required> Asesorarme
         <br>
-        <input type="hidden" name="estado" value="1">
-        <br>
-        <button type="submit" value="submit" id="submitBtn">Descarga y enviar resultados</button>
-        <br>
-    </div>
+        <button type="submit" value="submit">Descarga y enviar resultados</button>
 
+    </div>
     </form>
 </div>
-<form action=""></form>
+
 <br>
 <h2>Tabla de Porcentaje</h2>
 <table id="tabla-resultados" border="1">
@@ -1452,6 +1452,8 @@ button:hover {
         contabilizarRespuestas1();
         contabilizarRespuestas2();
         calcularResultados3();
+        const currentDate = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+        document.getElementById('current_date').value = currentDate;
          document.getElementById('decision-section').style.display = 'block';
     }
 </script>
