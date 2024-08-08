@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,7 +23,7 @@ class UserSeeder extends Seeder
 
         $admin->assignRole('Admin');
 
-        $admin = User::create([
+        $user1 = User::create([
             'name' => 'Miguel',
             'secondName' => 'Adrian',
             'paternalSurname' => 'Rodriguez',
@@ -37,9 +36,9 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
         ]);
 
-        $admin->assignRole('User');
+        $user1->assignRole('User');
 
-        $admin = User::create([
+        $user2 = User::create([
             'name' => 'Jose',
             'secondName' => 'Gilberto',
             'paternalSurname' => 'Martin',
@@ -52,6 +51,6 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
         ]);
 
-        $admin->assignRole('User');
+        $user2->assignRole('User');
     }
 }

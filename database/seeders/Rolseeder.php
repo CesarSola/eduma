@@ -15,6 +15,7 @@ class Rolseeder extends Seeder
     {
         // Crear roles
         $role1 = Role::firstOrCreate(['name' => 'Admin']);
+        $role2 = Role::firstOrCreate(['name' => 'User']); // Asegúrate de crear el rol 'User'
         $role3 = Role::firstOrCreate(['name' => 'Evaluador']);
 
         // Crear o verificar si el permiso ya existe antes de crearlo

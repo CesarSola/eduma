@@ -11,7 +11,7 @@ class Evaluadores extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles; // Usa el trait
 
-    protected $table = 'evaluadores';
+    protected $table = 'users';
 
     protected $fillable = [
         'name',

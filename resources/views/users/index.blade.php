@@ -13,8 +13,13 @@
 
 <div class="card">
     <div class="card-body">
+        <!-- Formulario de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="search" class="form-control" placeholder="Buscar...">
+        </div>
+
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" id="userTable">
                 <thead class="thead-dark">
                     <tr>
                         <th>Id</th>
@@ -26,11 +31,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $user->id}}</td>
+                    @foreach ($users as $user) <!-- Aquí se reciben los usuarios filtrados -->
+                    <tr data-role="{{ implode(',', $user->roles->pluck('name')->toArray()) }}">
+                        <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{$user->email}}</td>
+                        <td>{{ $user->email }}</td>
                         <td>
                             @foreach ($user->roles as $role)
                             <span class="badge badge-primary">{{ $role->name }}</span>
@@ -44,7 +49,7 @@
                             @endif
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-warning" href="{{ route('users.edit',$user->id) }}"><i class="fa fa-fw fa-edit"></i> Editar</a>
+                            <a class="btn btn-sm btn-warning" href="{{ route('users.edit', $user->id) }}"><i class="fa fa-fw fa-edit"></i> Editar</a>
                         </td>
                     </tr>
                     @endforeach
@@ -61,5 +66,37 @@
 @stop
 
 @section('js')
-<script> console.log('Hi!'); </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+        const userTable = document.getElementById('userTable');
+        const rows = userTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+            Array.from(rows).forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const textContent = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                if (textContent.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+
+        // Ordenar administradores primero
+        const sortedRows = Array.from(rows).sort((a, b) => {
+            const rolesA = a.dataset.role.split(',');
+            const rolesB = b.dataset.role.split(',');
+            if (rolesA.includes('Admin') && !rolesB.includes('Admin')) return -1;
+            if (!rolesA.includes('Admin') && rolesB.includes('Admin')) return 1;
+            return 0;
+        });
+
+        sortedRows.forEach(row => userTable.querySelector('tbody').appendChild(row));
+    });
+</script>
 @stop

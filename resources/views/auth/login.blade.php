@@ -15,8 +15,7 @@
     </style>
 </head>
 
-<body >
-
+<body>
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
             <!-- Título y Descripción -->
@@ -24,6 +23,13 @@
                 <h3 class="text-lg font-bold text-neutral-600 leading-6 lg:text-4xl">Iniciar sesión</h3>
                 <p class="mt-4 text-base text-gray-500">Inicia sesión y evalúate con nosotros.</p>
             </div>
+
+        <!-- Mensajes de error -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>¡Error!</strong> Correo electrónico o contraseña incorrectos.
+            </div>
+        @endif
 
             <!-- Formulario de inicio de sesión -->
             <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-6">
@@ -67,34 +73,29 @@
                 </div>
             </form>
 
-          <!-- Forgot Password and Registration Links -->
-          <div class="flex justify-between items-center mt-4">
-            @if (Route::has('password.request'))
-              <a href="{{ route('password.request') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
-                ¿Olvidaste tu contraseña?
-              </a>
-            @endif
+            <!-- Forgot Password and Registration Links -->
+            <div class="flex justify-between items-center mt-4">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                @endif
 
-            <a href="{{ route('register') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
-              Registrarme
-            </a>
-          </div>
-          @if($inactive ?? false)
-          <div class="mb-3">
-              <p class="text-danger">This account is deactivated. Please reactivate it.</p>
-              <p class="text-muted">{{ __('Email') }}: {{ $email }}</p>
-          </div>
-          <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('profile.reactivate') }}">
-            {{ __('Reactivate your account') }}
-        </a>
-          @endif
+                <a href="{{ route('register') }}" class="text-base font-medium text-gray-500 focus:outline-none hover:text-neutral-600 focus:text-blue-600 sm:text-sm">
+                    Registrarme
+                </a>
             </div>
-            </form>
-          </div>
+            @if($inactive ?? false)
+            <div class="mb-3">
+                <p class="text-danger">Esta cuenta está desactivada. Por favor, reactívala.</p>
+                <p class="text-muted">{{ __('Email') }}: {{ $email }}</p>
+            </div>
+            <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('profile.reactivate') }}">
+                {{ __('Reactiva tu cuenta') }}
+            </a>
+            @endif
         </div>
-      </div>
     </div>
-
 </body>
 
 </html>

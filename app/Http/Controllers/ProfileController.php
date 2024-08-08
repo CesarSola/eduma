@@ -30,7 +30,10 @@ class ProfileController extends Controller
 
         // Actualizar los campos de perfil del usuario
         $user->fill($request->validated());
-
+        $user->secondName = $request->input('secondName');
+        $user->paternalSurname = $request->input('paternalSurname');
+        $user->maternalSurname = $request->input('maternalSurname');
+        $user->genero = $request->input('genero');
         $user->age = $request->input('age');
         $user->calle_avenida = $request->input('calle_avenida');
         $user->numext = $request->input('numext');

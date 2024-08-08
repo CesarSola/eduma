@@ -17,7 +17,7 @@ class ExpedientesUsuariosController extends Controller
     {
         // Obtener los roles 'admin' y 'evaluador'
         $adminRole = Role::where('name', 'admin')->first();
-        $evaluadorRole = Role::where('name', 'evaluador')->first();
+        $evaluadorRole = Role::where('name', 'Evaluadores')->first();
 
         // Obtener solo los usuarios que no tienen los roles 'admin' y 'evaluador'
         $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole, $evaluadorRole) {
