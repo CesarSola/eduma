@@ -80,16 +80,17 @@ use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
+use App\Http\Controllers\FormularioController;
 //ruta del calendario
 Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
 Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
-//ruta de agregar fechas 
+//ruta de agregar fechas
 Route::get('competencias/{competencia}/agregar-fechas', [FechasController::class, 'show'])->name('competencias.agregar-fechas');
 Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
 
 
-//rutas de evaluadores 
+//rutas de evaluadores
 Route::resource('evaluadores', EvaluadoresController::class);
 Route::get('evaluadores/{evaluador}', [EvaluadoresController::class, 'show'])->name('evaluadores.show');
 Route::get('asignar-evaluadores', [AsignarEvaController::class, 'index'])->name('asignar.evaluadores');
@@ -226,6 +227,21 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
+
+Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
+Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
+
+Route::get('/formulario', function () {
+    return view('Diagnosticos.formulario');
+})->name('formulario'); // Asigna un nombre a la ruta
+
+// web.php
+
+
+
+Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
+Route::resource('diagnosticos', DiagnosticoController::class);
+
 
 use App\Http\Controllers\FormController;
 
