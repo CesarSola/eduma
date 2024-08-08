@@ -12,6 +12,7 @@ use App\Http\Controllers\SDocumentosController;
 use App\Http\Controllers\DiagnosticoController;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\Exception\Exception;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -78,8 +79,6 @@ use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
-
-use App\Http\Controllers\FormularioController;
 //ruta del calendario
 Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
 Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
@@ -89,11 +88,10 @@ Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasControlle
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
 
 
-Route::resource('evaluadores',EvaluadoresController::class);
-
-
+//rutas de evaluadores 
+Route::resource('evaluadores', EvaluadoresController::class);
 //ruta de la carpeta registroGeneral
-Route::resource('registroGeneral', DocumentosController::class);
+// Route::resource('registroGeneral', DocumentosController::class);
 //ruta index de la carpeta registroGeneral
 Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
 //ruta comentarios-validar
@@ -135,8 +133,8 @@ Route::resource('usuarios', DashboardUserController::class);
 //ruta para subir documentos Usuario
 Route::resource('documentosUser', SDocumentosController::class);
 //rutas para resubir los documentos cuando han sido rechazados
-Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::class, 'edit'])->name('documentosUser.edit');
-Route::put('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.update');
+Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::class, 'edit'])->name('documentosUser.editByTipo');
+Route::post('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.updateByTipo');
 //ruta del registro a un EC
 Route::resource('competenciaEC', RegistroECController::class);
 //ruta del registro de un curso
@@ -158,7 +156,7 @@ Route::get('misCursos/{id}/mostrar-rechazado', [MisCursosController::class, 'mos
 Route::post('misCursos/{id}/guardar-resubir-comprobante', [MisCursosController::class, 'guardarResubirComprobante'])
     ->name('misCursos.guardarResubirComprobante');
 //ruta de evidenciasEC
-Route::resource('evidenciasEC', EvidenciasUEController::class);
+// Route::resource('evidenciasEC', EvidenciasUEController::class);
 Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index'])->name('evidenciasEC.index');
 // Ruta para el formulario del plan de evaluación
 Route::get('/plan-evaluacion/{id}', [SubirPlanEvaluacionController::class, 'show'])->name('Plan.show');
@@ -176,7 +174,7 @@ Route::get('/fechas', [ElegirFechaController::class, 'index'])->name('fechas.ind
 Route::get('/fechas/{id}', [ElegirFechaController::class, 'show'])->name('fechas.show');
 Route::post('/fechas', [ElegirFechaController::class, 'store'])->name('fechas.store');
 //ruta evidenciasCU
-Route::resource('evidenciasCU', EvidenciasUCControlle::class);
+// Route::resource('evidenciasCU', EvidenciasUCControlle::class);
 Route::get('/evidenciasCU/{id}/{name}', [EvidenciasUCControlle::class, 'index'])->name('evidenciasCU.index');
 Route::get('/evidenciasCU/{id}/{documento}/show', [EvidenciasUCControlle::class, 'show'])->name('evidenciasCU.show');
 Route::post('/evidenciasCU/{documento}/upload', [EvidenciasUCControlle::class, 'upload'])->name('evidenciasCU.upload');
@@ -201,20 +199,15 @@ Route::resource('competenciasAD', CompetenciasAddController::class);
 Route::resource('ECinfo', ECviewsController::class);
 Route::resource('documentos', DocumentosEcController::class);
 Route::resource('documentosnec', DocumentosNecController::class);
-Route::get('document/download/{id}', [DocumentosNecController::class, 'download'])->name('document.download');
 Route::get('/documentos/download/{id}', [DocumentosNecController::class, 'download'])->name('document.download');
 
 
-
-Route::middleware(['auth'])->group(function () {
-    Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
-});
 
 Route::get('/profile/reactivate', function () {
     return view('auth.reactivate');
 })->name('profile.reactivate');
 
-Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivate');
+Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivatePost');
 
 
 
@@ -227,22 +220,6 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
-
-Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
-Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
-
-Route::get('/formulario', function() {
-    return view('Diagnosticos.formulario');
-})->name('formulario'); // Asigna un nombre a la ruta
-
-// web.php
-
-
-
-Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
-Route::resource('diagnosticos', DiagnosticoController::class);
-
-
 
 use App\Http\Controllers\FormController;
 
@@ -267,4 +244,3 @@ use App\Http\Controllers\AtencionUsuariosController;
 Route::get('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'create'])->name('formato-atencion.create');
 Route::post('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'store'])->name('formato-atencion.store');
 Route::get('/formato-atencion/download/{estandar_id}', [AtencionUsuariosController::class, 'download'])->name('formato-atencion.download');
-

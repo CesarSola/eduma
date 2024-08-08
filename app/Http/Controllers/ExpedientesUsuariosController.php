@@ -17,7 +17,7 @@ class ExpedientesUsuariosController extends Controller
     {
         // Obtener los roles 'admin' y 'evaluador'
         $adminRole = Role::where('name', 'admin')->first();
-        $evaluadorRole = Role::where('name', 'Evaluadores')->first();
+        $evaluadorRole = Role::where('name', 'Evaluador')->first();
 
         // Obtener solo los usuarios que no tienen los roles 'admin' y 'evaluador'
         $usuariosAdmin = User::whereDoesntHave('roles', function ($query) use ($adminRole, $evaluadorRole) {
@@ -38,7 +38,7 @@ class ExpedientesUsuariosController extends Controller
         $comprobantesCO = $usuariosAdmin->comprobantesCO;
         $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
-        
+
         // Recuperar respuestas de encuestas y cargar la relación estandar
         $surveyResponses = SurveyResponse::where('user_id', $id)->with('estandar')->get();
         $atencionUsuario = AtencionUsuario::where('user_id', $id)->with('estandar')->get();
@@ -102,9 +102,20 @@ class ExpedientesUsuariosController extends Controller
         }
 
         return view('expedientes.expedientesAdmin.usuarios.show', compact(
-            'usuariosAdmin', 'documentos', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos', 
-            'documentosCompletos', 'documentosEnValidacion', 'comprobanteSubidoCO', 'comprobanteSubidoCU', 
-            'comprobanteEnValidacionCU', 'comprobanteEnValidacionCO', 'surveyResponses','atencionUsuario'
+            'usuariosAdmin',
+            'documentos',
+            'comprobantesCU',
+            'comprobantesCO',
+            'estandares',
+            'cursos',
+            'documentosCompletos',
+            'documentosEnValidacion',
+            'comprobanteSubidoCO',
+            'comprobanteSubidoCU',
+            'comprobanteEnValidacionCU',
+            'comprobanteEnValidacionCO',
+            'surveyResponses',
+            'atencionUsuario'
         ));
     }
 
@@ -118,7 +129,7 @@ class ExpedientesUsuariosController extends Controller
         // Recuperar todas las respuestas de encuesta para el usuario y cargar la relación estandar
         $surveyResponses = SurveyResponse::where('user_id', $user_id)->with('estandar')->get();
 
-        return view('expedientes.show', compact('usuario', 'surveyResponses','atencionUsuario'));
+        return view('expedientes.show', compact('usuario', 'surveyResponses', 'atencionUsuario'));
     }
 
     /**

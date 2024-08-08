@@ -309,14 +309,12 @@ return [
         ],
         [
             'header' => 'INICIO',
-            'can'  => 'dashboard',
         ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
             'icon_color' => 'success',
-            'can'  => 'dashboard',
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -349,7 +347,6 @@ return [
             'text' => 'Admistrativos',
             'icon' => 'fas fa-fw fa-user-tie',
             'icon_color' => 'info',
-            'can'  => 'evaluadores.index',
             'submenu' => [
                 [
                     'text' => 'Evaluadores',

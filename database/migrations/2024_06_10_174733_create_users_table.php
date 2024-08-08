@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('maternalSurname')->nullable();  //campo apellido materno
             $table->string('age')->nullable();  //campo edad
             $table->string('genero')->nullable();  //campo genero
-            $table->string('matricula')->unique();
+            $table->string('matricula')->nullable()->unique();
             $table->string('curp')->nullable(); // Cambiado a string para almacenar CURP
             $table->string('nacionalidad')->nullable(); // Cambiado a string para almacenar nacionalidad
             $table->date('nacimiento')->nullable();
