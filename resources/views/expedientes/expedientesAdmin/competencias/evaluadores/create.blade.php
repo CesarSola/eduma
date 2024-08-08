@@ -40,6 +40,8 @@
                         <input type="password" class="form-control" id="password_confirmation"
                             name="password_confirmation" required>
                     </div>
+                    <!-- Aquí puedes agregar un campo oculto para el rol si es necesario -->
+                    <input type="hidden" name="role" value="Evaluador">
                 </form>
             </div>
             <div class="modal-footer">

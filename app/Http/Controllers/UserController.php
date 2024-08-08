@@ -15,7 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        $users = User::whereDoesntHave('roles', function($query) {
+            $query->where('name', 'Evaluador');
+        })->get();
+    
 
         return view('users.index', compact('users'));
     }

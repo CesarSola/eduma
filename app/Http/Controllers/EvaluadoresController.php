@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Cambiar a User
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role; // Asegúrate de importar el modelo Role
+use Spatie\Permission\Models\Role;
 
 class EvaluadoresController extends Controller
 {
     public function index()
     {
-        $evaluadores = User::role('Evaluador')->get(); // Obtener solo los usuarios con el rol 'Evaluador'
+        $evaluadores = User::role('Evaluador')->get();
         return view('expedientes.expedientesAdmin.competencias.evaluadores.index', compact('evaluadores'));
+    }
+
+    public function create()
+    {
+        return view('expedientes.expedientesAdmin.competencias.evaluadores.create');
     }
 
     public function store(Request $request)
@@ -26,7 +31,8 @@ class EvaluadoresController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
+        // Crear el usuario
         $user = User::create([
             'name' => $request->name,
             'secondName' => $request->secondName,
@@ -34,38 +40,47 @@ class EvaluadoresController extends Controller
             'maternalSurname' => $request->maternalSurname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'rol' => 'Evaluador',
             'email_verified_at' => now(),
-            'remember_token' => Str::random(10), // Genera un token aleatorio
+            'remember_token' => Str::random(10),
+            // Dejar 'matricula' fuera para los evaluadores
         ]);
-
-
+    
+        // Asignar el rol de Evaluador
         $user->assignRole('Evaluador');
-
+    
         return redirect()->route('evaluadores.index')->with('success', 'Evaluador creado exitosamente.');
     }
-
+    
     public function show(User $evaluador)
     {
-        return view('evaluadores.show', compact('evaluador'));
+        return view('expedientes.expedientesAdmin.competencias.evaluadores.show', compact('evaluador'));
     }
 
     public function edit(User $evaluador)
     {
-        return view('evaluadores.edit', compact('evaluador'));
+        return view('expedientes.expedientesAdmin.competencias.evaluadores.edit', compact('evaluador'));
     }
 
     public function update(Request $request, $id)
     {
         $evaluador = User::findOrFail($id);
 
-        $evaluador->update([
-            'name' => $request->input('name'),
-            'secondName' => $request->input('secondName'),
-            'paternalSurname' => $request->input('paternalSurname'),
-            'maternalSurname' => $request->input('maternalSurname'),
-            'email' => $request->input('email'),
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'secondName' => 'nullable|string|max:255',
+            'paternalSurname' => 'required|string|max:255',
+            'maternalSurname' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $evaluador->id,
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
+
+        $data = $request->only(['name', 'secondName', 'paternalSurname', 'maternalSurname', 'email']);
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $evaluador->update($data);
 
         return redirect()->route('evaluadores.index')->with('success', 'Evaluador actualizado correctamente.');
     }
