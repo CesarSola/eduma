@@ -78,23 +78,23 @@ use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\FormularioController;
-=======
+
 //ruta del calendario
 Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
 Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
-//ruta de agregar fechas 
+//ruta de agregar fechas
 Route::get('competencias/{competencia}/agregar-fechas', [FechasController::class, 'show'])->name('competencias.agregar-fechas');
 Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
 
 
-//rutas de evaluadores 
+//rutas de evaluadores
 Route::resource('evaluadores', EvaluadoresController::class);
 
 
->>>>>>> 340e9db59ab17f1155769fbccd747dc778a71be3
+
 
 //ruta de la carpeta registroGeneral
 Route::resource('registroGeneral', DocumentosController::class);
@@ -231,7 +231,7 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
-<<<<<<< HEAD
+
 Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
 Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
 
@@ -245,7 +245,7 @@ Route::get('/formulario', function() {
 
 Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
 Route::resource('diagnosticos', DiagnosticoController::class);
-=======
+
 
 
 use App\Http\Controllers\FormController;
@@ -271,4 +271,4 @@ use App\Http\Controllers\AtencionUsuariosController;
 Route::get('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'create'])->name('formato-atencion.create');
 Route::post('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'store'])->name('formato-atencion.store');
 Route::get('/formato-atencion/download/{estandar_id}', [AtencionUsuariosController::class, 'download'])->name('formato-atencion.download');
->>>>>>> 340e9db59ab17f1155769fbccd747dc778a71be3
+

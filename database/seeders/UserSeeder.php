@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         $evaluadorRole = Role::firstOrCreate(['name' => 'Evaluador']);
         $userRole = Role::firstOrCreate(['name' => 'User']);
 
-        Administrador::create([
+        $admin = Administrador::create([
             'name' => 'Juan',
             'secondName' => 'Gabriel',
             'paternalSurname' => 'Contreras',
@@ -30,9 +30,11 @@ class UserSeeder extends Seeder
             'rol' => 'Admin',
             'password' => Hash::make('12345'),
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ])->assignRole($adminRole);
+        ]);
 
-        Evaluadores::create([
+        $admin->assignRole($adminRole);
+
+        $evaluador = Evaluadores::create([
             'name' => 'Fabiola',
             'secondName' => 'Anel',
             'paternalSurname' => 'Cuevas',
@@ -41,9 +43,11 @@ class UserSeeder extends Seeder
             'email' => 'evaluador@material.com',
             'password' => Hash::make('12345'),
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ])->assignRole($evaluadorRole);
+        ]);
 
-        User::create([
+        $evaluador->assignRole($evaluadorRole);
+
+        $user = User::create([
             'name' => 'Miguel',
             'secondName' => 'Aleman',
             'paternalSurname' => 'Rodriguez',
@@ -52,12 +56,11 @@ class UserSeeder extends Seeder
             'matricula' => '0001',
             'password' => Hash::make('12345'),
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-<<<<<<< HEAD
         ]);
 
-        $admin->assignRole('User');
+        $user->assignRole($userRole);
 
-        $admin = User::create([
+        $admin2 = User::create([
             'name' => 'Jose',
             'secondName' => 'Gilberto',
             'paternalSurname' => 'Martin',
@@ -68,12 +71,8 @@ class UserSeeder extends Seeder
             'email' => 'test2@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-
         ]);
 
-        $admin->assignRole('User');
-=======
-        ])->assignRole($userRole);
->>>>>>> 340e9db59ab17f1155769fbccd747dc778a71be3
+        $admin2->assignRole($userRole);
     }
 }
