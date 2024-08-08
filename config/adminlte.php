@@ -308,13 +308,15 @@ return [
             'text' => 'search',
         ],
         [
-            'header' => 'INICIO'
+            'header' => 'INICIO',
+            'can'  => 'dashboard',
         ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
             'icon_color' => 'success',
+            'can'  => 'dashboard',
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -347,6 +349,7 @@ return [
             'text' => 'Admistrativos',
             'icon' => 'fas fa-fw fa-user-tie',
             'icon_color' => 'info',
+            'can'  => 'evaluadores.index',
             'submenu' => [
                 [
                     'text' => 'Evaluadores',
@@ -394,8 +397,13 @@ return [
                             'icon_color' => 'success',
                         ],
                         [
-                            'text' => 'Agregar Documentos necesarios',
-                            'url' => 'documentosnec',
+                            'text' => 'Agregar diagnosticos',
+                            'url' => 'diagnosticos',
+                            'icon' => 'fas fa-fw fa-file-invoice',
+                        ],
+                        [
+                            'text' => 'Regitro de diagnosticos',
+                            'url' => '',
                             'icon' => 'fas fa-fw fa-file-invoice',
                             'icon_color' => 'success',
                         ],

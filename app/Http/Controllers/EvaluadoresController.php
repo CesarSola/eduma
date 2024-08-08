@@ -32,13 +32,6 @@ class EvaluadoresController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
     
-        // Asignar matricula solo si el rol es 'User'
-        $matricula = null;
-        if ($request->input('role') === 'User') {
-            $lastMatricula = User::role('User')->max('matricula');
-            $matricula = $lastMatricula ? str_pad(intval($lastMatricula) + 1, 4, '0', STR_PAD_LEFT) : '0000';
-        }
-    
         // Crear el usuario
         $user = User::create([
             'name' => $request->name,
@@ -49,19 +42,14 @@ class EvaluadoresController extends Controller
             'password' => Hash::make($request->password),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
-            'matricula' => $matricula, // Asignar el valor de matricula si es necesario
+            // Dejar 'matricula' fuera para los evaluadores
         ]);
     
-        // Asignar el rol de Evaluador o User basado en el campo oculto 'role'
-        if ($request->input('role') === 'Evaluador') {
-            $user->assignRole('Evaluador');
-        } else {
-            $user->assignRole('User');
-        }
+        // Asignar el rol de Evaluador
+        $user->assignRole('Evaluador');
     
-        return redirect()->route('evaluadores.index')->with('success', 'Usuario creado exitosamente.');
+        return redirect()->route('evaluadores.index')->with('success', 'Evaluador creado exitosamente.');
     }
-    
     
     public function show(User $evaluador)
     {

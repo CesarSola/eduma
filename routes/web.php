@@ -9,7 +9,9 @@ use App\Http\Controllers\ECviewsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostalCodeController;
 use App\Http\Controllers\SDocumentosController;
-
+use App\Http\Controllers\DiagnosticoController;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Exception\Exception;
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -74,7 +76,10 @@ use App\Http\Controllers\ValidarCoPController;
 use App\Http\Controllers\ValidarCuPController;
 use App\Http\Controllers\ValidarDocumentosController;
 use App\Http\Controllers\ValidarFichasController;
+use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
+
+use App\Http\Controllers\FormularioController;
 //ruta del calendario
 Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
 Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
@@ -84,9 +89,7 @@ Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasControlle
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
 
 
-//rutas de evaluadores 
-Route::resource('evaluadores', EvaluadoresController::class);
-
+Route::resource('evaluadores',EvaluadoresController::class);
 
 
 //ruta de la carpeta registroGeneral
@@ -163,12 +166,12 @@ Route::get('/plan-evaluacion/{id}', [SubirPlanEvaluacionController::class, 'show
 Route::post('/documentos/store', [SubirPlanEvaluacionController::class, 'store'])->name('plan.store');
 Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
-//rutas para resubir documentos de evidencias 
+//rutas para resubir documentos de evidencias
 Route::get('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'show'])->name('evidencias.resubir');
 Route::post('evidencias/resubir/{id}', [ResubirDocumentosController::class, 'resubir'])->name('evidencias.resubir.submit');
 //ruta de la vista de evidencias subidas
 Route::get('mis-evidencias/{id}/{name}', [EvidenciasSubidasController::class, 'index'])->name('mis.evidencias');
-//ruta de elegir fecha 
+//ruta de elegir fecha
 Route::get('/fechas', [ElegirFechaController::class, 'index'])->name('fechas.index');
 Route::get('/fechas/{id}', [ElegirFechaController::class, 'show'])->name('fechas.show');
 Route::post('/fechas', [ElegirFechaController::class, 'store'])->name('fechas.store');
@@ -225,6 +228,21 @@ Route::middleware(['can:users.edit'])->group(function () {
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
 
+Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
+Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
+
+Route::get('/formulario', function() {
+    return view('Diagnosticos.formulario');
+})->name('formulario'); // Asigna un nombre a la ruta
+
+// web.php
+
+
+
+Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
+Route::resource('diagnosticos', DiagnosticoController::class);
+
+
 
 use App\Http\Controllers\FormController;
 
@@ -249,3 +267,4 @@ use App\Http\Controllers\AtencionUsuariosController;
 Route::get('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'create'])->name('formato-atencion.create');
 Route::post('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'store'])->name('formato-atencion.store');
 Route::get('/formato-atencion/download/{estandar_id}', [AtencionUsuariosController::class, 'download'])->name('formato-atencion.download');
+

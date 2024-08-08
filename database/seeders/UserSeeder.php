@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Administrador;
+use App\Models\Evaluadores;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -13,27 +16,47 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::create([
-            'name' => 'Admin',
+        // Verifica que los roles existan antes de asignar
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $evaluadorRole = Role::firstOrCreate(['name' => 'Evaluador']);
+        $userRole = Role::firstOrCreate(['name' => 'User']);
+
+        Administrador::create([
+            'name' => 'Juan',
+            'secondName' => 'Gabriel',
+            'paternalSurname' => 'Contreras',
+            'maternalSurname' => 'Sansores',
             'email' => 'admin@material.com',
-            'matricula' => '0000',
-            'password' => Hash::make('secret'), // Asegúrate de cifrar la contraseña
+            'rol' => 'Admin',
+            'password' => Hash::make('12345'),
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ]);
+        ])->assignRole($adminRole);
 
-        $admin->assignRole('Admin');
+        Evaluadores::create([
+            'name' => 'Fabiola',
+            'secondName' => 'Anel',
+            'paternalSurname' => 'Cuevas',
+            'maternalSurname' => 'López',
+            'rol' => 'Evaluador',
+            'email' => 'evaluador@material.com',
+            'password' => Hash::make('12345'),
+            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+        ])->assignRole($evaluadorRole);
 
+<<<<<<< HEAD
         $user1 = User::create([
+=======
+        User::create([
+>>>>>>> e0890295d6c83ee05dbe574b9004a51648d1f3ec
             'name' => 'Miguel',
-            'secondName' => 'Adrian',
+            'secondName' => 'Aleman',
             'paternalSurname' => 'Rodriguez',
-            'maternalSurname' => 'Alvarado',
-            'genero' => 'Hombre',
-            'phone' => '9987327293',
-            'matricula' => '0001',
+            'maternalSurname' => 'Medina',
             'email' => 'test@material.com',
-            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
+            'matricula' => '0001',
+            'password' => Hash::make('12345'),
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+<<<<<<< HEAD
         ]);
 
         $user1->assignRole('User');
@@ -49,8 +72,16 @@ class UserSeeder extends Seeder
             'email' => 'test2@material.com',
             'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
             'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+
         ]);
 
+<<<<<<< HEAD
         $user2->assignRole('User');
+=======
+        $admin->assignRole('User');
+=======
+        ])->assignRole($userRole);
+>>>>>>> 340e9db59ab17f1155769fbccd747dc778a71be3
+>>>>>>> e0890295d6c83ee05dbe574b9004a51648d1f3ec
     }
 }
