@@ -1,3 +1,4 @@
+<!-- Modal para crear nuevo evaluador -->
 <div class="modal fade" id="createEvaluadorModal" tabindex="-1" role="dialog" aria-labelledby="createEvaluadorModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -40,7 +41,6 @@
                         <input type="password" class="form-control" id="password_confirmation"
                             name="password_confirmation" required>
                     </div>
-                    <!-- Aquí puedes agregar un campo oculto para el rol si es necesario -->
                     <input type="hidden" name="role" value="Evaluador">
                 </form>
             </div>

@@ -121,7 +121,7 @@ class MisCompetenciasController extends Controller
                 ]);
             }
 
-            return redirect()->route('miscompetencias.index')->with('success', 'Comprobante de pago re-enviado correctamente.');
+            return redirect()->route('miscompetencias.index')->with('success', 'Comprobante de pago subido correctamente.');
         } catch (\Exception $e) {
             Log::error('Error al guardar el archivo: ' . $e->getMessage());
             return back()->withInput()->withErrors(['error' => 'Error al guardar el archivo: ' . $e->getMessage()]);

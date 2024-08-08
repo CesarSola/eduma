@@ -55,3 +55,17 @@
         </div>
     </div>
 @stop
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Mostrar SweetAlert2 cuando se sube un comprobante exitosamente
+        @if (session('success'))
+            Swal.fire({
+                title: 'Éxito',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
+@stop

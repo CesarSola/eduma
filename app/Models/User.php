@@ -216,4 +216,8 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->cursos()->attach($cursoId);
         }
     }
+    public function evaluaciones()
+    {
+        return $this->hasMany(EvaluadoresUsuarios::class, 'usuario_id');
+    }
 }

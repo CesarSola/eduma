@@ -183,11 +183,10 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.update-form');
-            const successMessage = document.getElementById('success-message');
-            const closeButton = successMessage.querySelector('.close');
 
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
@@ -208,13 +207,14 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                successMessage.style.display = 'block';
-
-                                // Actualizar el mensaje según la acción (validar/rechazar)
+                                // Determina la acción realizada (validar o rechazar)
                                 const action = formData.get('documento_estado');
+                                let message = '';
+
                                 if (action === 'validar') {
+                                    message = 'Comprobante validado correctamente.';
                                     form.style.display =
-                                        'none'; // Ocultar el formulario del documento validado
+                                    'none'; // Ocultar el formulario del documento validado
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
                                             <div class="form-group row">
@@ -225,29 +225,34 @@
                                         `;
                                     }
                                 } else if (action === 'rechazar') {
+                                    message = 'Comprobante rechazado.';
                                     // Dejar el formulario visible, pero limpiar los campos
                                     form.querySelector('textarea[name="comentario_documento"]')
                                         .value = ''; // Limpiar el campo de comentarios
                                     form.querySelectorAll('input[type="radio"]').forEach(
                                         radio => radio.checked = false
-                                    ); // Deseleccionar todos los radio buttons
+                                        ); // Deseleccionar todos los radio buttons
                                 }
 
-                                // Ocultar el mensaje de éxito después de 5 segundos
-                                setTimeout(() => {
-                                    successMessage.style.display = 'none';
-                                }, 5000);
+                                // Muestra la alerta personalizada con SweetAlert2
+                                Swal.fire({
+                                    title: 'Éxito',
+                                    text: message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+
                             } else if (data.error) {
-                                alert(data.error); // Manejar errores si es necesario
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.error,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
                             }
                         })
                         .catch(error => console.error('Error:', error));
                 });
-            });
-
-            // Agregar evento al botón de cerrar
-            closeButton.addEventListener('click', function() {
-                successMessage.style.display = 'none';
             });
         });
     </script>

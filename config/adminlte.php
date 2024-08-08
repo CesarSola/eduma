@@ -308,13 +308,13 @@ return [
             'text' => 'search',
         ],
         [
-            'header' => 'INICIO',
+            'header' => 'INICIO'
         ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
-            'icon_color' => 'success',
+            'icon_color' => 'success'
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -360,6 +360,12 @@ return [
                             'icon_color' => 'success',
 
                         ],
+                        [
+                            'text' => 'Asigna Evaluadores',
+                            'url' => 'asignar-evaluadores',
+                            'icon' => 'fas fa-fw fa-user-check',
+                            'icon_color' => 'success',
+                        ],
                     ],
                 ],
                 [
@@ -391,6 +397,12 @@ return [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
                             'icon' => 'fas fa-tasks',
+                            'icon_color' => 'success',
+                        ],
+                        [
+                            'text' => 'Registro de Documentos Necesarios',
+                            'url' => 'documentosnec',
+                            'icon' => 'fas fa-file-alt',
                             'icon_color' => 'success',
                         ],
                         [
@@ -630,5 +642,5 @@ return [
     |
     */
 
-    'livewire' => false,
+    'livewire' => true,
 ];

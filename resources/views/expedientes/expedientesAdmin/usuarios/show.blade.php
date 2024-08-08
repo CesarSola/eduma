@@ -29,7 +29,8 @@
                         <div class="right-content">
                             @if ($documentos->isNotEmpty())
                                 @if ($documentosCompletos)
-                                    <div><span class="badge badge-success">Documentos Generales: Completos y Validados</span>
+                                    <div><span class="badge badge-success">Documentos Generales: Completos y
+                                            Validados</span>
                                     </div>
                                 @elseif ($documentosEnValidacion)
                                     <div><span class="badge badge-info">Documentos Generales: En Validación</span></div>
@@ -221,41 +222,7 @@
             </div>
         </div>
     </div>
-    @if($atencionUsuario->isNotEmpty())
-    <div class="card">
-        <div class="card-header">
-            <h3>Encuestas de Satisfacción Respondidas</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nombre del Estándar</th>
-                        <th>Fecha del Examen</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($atencionUsuario as $atencion)
-                        <tr>
-                            <td>{{ $atencion->estandar->name }}</td>
-                            <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
-                            <td>
-                                <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}" class="btn btn-info">Descargar</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-@else
-    <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
-@endif
-
-  <!-- Mostrar todas las encuestas de satisfacción -->
-<div class="col-md-12 mt-4">
-    @if($surveyResponses->isNotEmpty())
+    @if ($atencionUsuario->isNotEmpty())
         <div class="card">
             <div class="card-header">
                 <h3>Encuestas de Satisfacción Respondidas</h3>
@@ -270,13 +237,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($surveyResponses as $response)
+                        @foreach ($atencionUsuario as $atencion)
                             <tr>
-                                <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                <td>{{ $atencion->estandar->name }}</td>
+                                <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
                                 <td>
-                                    <!-- Enlace para descargar la encuesta en formato DOCX -->
-                                    <a href="{{ route('survey.downloadFile', $response->id) }}" class="btn btn-info">Descargar</a>
+                                    <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}"
+                                        class="btn btn-info">Descargar</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -287,7 +254,43 @@
     @else
         <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
     @endif
-</div>
+
+    <!-- Mostrar todas las encuestas de satisfacción -->
+    <div class="col-md-12 mt-4">
+        @if ($surveyResponses->isNotEmpty())
+            <div class="card">
+                <div class="card-header">
+                    <h3>Encuestas de Satisfacción Respondidas</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Estándar</th>
+                                <th>Fecha del Examen</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($surveyResponses as $response)
+                                <tr>
+                                    <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                    <td>
+                                        <!-- Enlace para descargar la encuesta en formato DOCX -->
+                                        <a href="{{ route('survey.downloadFile', $response->id) }}"
+                                            class="btn btn-info">Descargar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+            <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
+        @endif
+    </div>
 
 @stop
 

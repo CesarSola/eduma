@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AsignarEvaController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CalendarioController;
@@ -90,10 +91,15 @@ Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::cla
 
 //rutas de evaluadores 
 Route::resource('evaluadores', EvaluadoresController::class);
-//ruta de la carpeta registroGeneral
-// Route::resource('registroGeneral', DocumentosController::class);
+Route::get('evaluadores/{evaluador}', [EvaluadoresController::class, 'show'])->name('evaluadores.show');
+Route::get('asignar-evaluadores', [AsignarEvaController::class, 'index'])->name('asignar.evaluadores');
+Route::post('asignar-evaluador', [AsignarEvaController::class, 'store'])->name('asignar.evaluador.store');
+Route::get('get-estandares/{userId}', [AsignarEvaController::class, 'getEstandares']);
+
 //ruta index de la carpeta registroGeneral
 Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
+Route::get('/documentos/{userId}/show', [DocumentosController::class, 'show'])->name('registroGeneral.show');
+
 //ruta comentarios-validar
 Route::put('/registro-general/{id}/update-documento/{documento}', [DocumentosController::class, 'updateDocumento'])->name('registroGeneral.updateDocumento');
 //ruta de la carpeta usuarios

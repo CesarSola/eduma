@@ -95,6 +95,7 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // Función para recargar la sección cada 5 minutos
@@ -110,5 +111,41 @@
                 }
             });
         }, 3000); // 300000 milisegundos = 5 minutos
+
+        // SweetAlert para notificar sobre el estado del comprobante
+        @if (session('success'))
+            Swal.fire({
+                title: '¡Éxito!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                title: 'Error',
+                text: "{{ session('error') }}",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        // Opcional: Si quieres mostrar mensajes específicos cuando se rechaza o valida
+        @if (session('estado') == 'rechazado')
+            Swal.fire({
+                title: 'Comprobante Rechazado',
+                text: 'Por favor, revisa tu comprobante y vuelve a subirlo.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        @elseif (session('estado') == 'validado')
+            Swal.fire({
+                title: 'Comprobante Validado',
+                text: 'Tu comprobante ha sido validado exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
     </script>
 @stop
