@@ -41,6 +41,7 @@ class EvaluadoresController extends Controller
             'maternalSurname' => $request->maternalSurname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol' => 'Evaluador',
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             // Dejar 'matricula' fuera para los evaluadores

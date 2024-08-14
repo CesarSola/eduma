@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                <!-- Validar Documentos y Comprobantes -->
+                <!-- Validar Documentos -->
                 <div class="row mt-3">
                     <!-- Validar Documentos de Registro General -->
                     <div class="col-lg-4 col-md-6 mb-4">
@@ -150,28 +150,36 @@
                                         <p>No hay documentos disponibles para este usuario.</p>
                                     </div>
                                 @else
-                                    <ul class="list-group flex-grow-1 overflow-auto">
-                                        @foreach ($documentos as $documento)
-                                            <li class="list-group-item">
-                                                {{ basename($documento->ine_ife) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->comprobante_domiciliario) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->foto) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->curp) }}
-                                            </li>
-                                            <br>
-                                        @endforeach
-                                    </ul>
-                                    <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                        class="btn btn-primary">Ver</a>
+                                    <!-- Comprobar si todos los documentos están validados -->
+                                    @if ($documentosCompletos)
+                                        <p style="text-align: center">Todos los documentos ya han sido validados.</p>
+                                    @elseif ($documentosEnValidacion)
+                                        <p style="text-align: center">Algunos documentos están en proceso de validación.</p>
+                                    @else
+                                        <ul class="list-group flex-grow-1 overflow-auto">
+                                            @foreach ($documentos as $documento)
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->ine_ife) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->comprobante_domiciliario) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->foto) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->curp) }}
+                                                </li>
+                                                <br>
+                                            @endforeach
+                                        </ul>
+                                        <!-- Mostrar el botón para ver documentos si hay documentos pendientes de validación -->
+                                        <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                            class="btn btn-primary">Ver</a>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -185,12 +193,13 @@
                             </div>
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="text-center">
-                                    @if ($comprobantesCO->isNotEmpty())
-                                        <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
-                                            class="btn btn-primary">Ver
-                                            Comprobante de Pago</a>
-                                    @else
+                                    @if ($comprobantesCO->isEmpty())
                                         <p>No hay comprobantes de pago de competencia para validar.</p>
+                                    @else
+                                        <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
+                                            class="btn btn-primary">
+                                            Ver Comprobantes de Pago
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -205,13 +214,13 @@
                             </div>
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="text-center">
-                                    @if ($comprobantesCU->isNotEmpty())
+                                    @if ($comprobantesCU->isEmpty())
+                                        <p>No hay comprobantes de pago de cursos para validar.</p>
+                                    @else
                                         <a href="{{ route('validarCuP.show', $usuariosAdmin->id) }}"
                                             class="btn btn-primary">
-                                            Ver
-                                            Comprobante de Pago Cursos</a>
-                                    @else
-                                        <p>No hay comprobantes de pago de cursos para validar.</p>
+                                            Ver Comprobante de Pago Cursos
+                                        </a>
                                     @endif
                                 </div>
                             </div>

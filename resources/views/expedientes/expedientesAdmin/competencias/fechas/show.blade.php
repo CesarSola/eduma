@@ -4,24 +4,16 @@
 
 @section('content_header')
     <h1>Fechas Disponibles y Elegidas</h1>
-    <a href="{{ route('competencia.index', ['user_id' => request()->query('user_id')]) }}"
+    <a href="{{ route('calendario.index', ['user_id' => request()->query('user_id')]) }}"
         class="btn btn-secondary mt-3">Regresar</a>
 
-    <!-- Botón para abrir el modal -->
-    <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#modalAgregarFechas">Agregar Fechas</button>
-    </button>
 @stop
+
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <div id='calendar'></div>
-        </div>
-        @include('expedientes.expedientesAdmin.competencias.fechas.agregar-fechas');
-    </div>
+    <div id='calendar'></div>
 
     <!-- Modal para Fechas Dadas por Administradores -->
-    <div class="modal fade" id="availableDateModal" tabindex="-1" aria-labelledby="availableDateModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="availableDateModal" tabindex="-1" aria-labelledby="availableDateModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -32,7 +24,7 @@
                     <p><strong>Estándar:</strong> <span id="availableEventStandard"></span></p>
                     <p><strong>Fecha:</strong> <span id="availableEventDate"></span></p>
                     <p><strong>Horarios:</strong> <span id="availableEventHours"></span></p>
-                    <p><strong>Usuario:</strong> <span id="availableEventUser"></span></p> <!-- Añade esta línea -->
+                    <p><strong>Usuario:</strong> <span id="availableEventUser"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -40,7 +32,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Modal para Fechas Elegidas -->
     <div class="modal fade" id="selectedDateModal" tabindex="-1" aria-labelledby="selectedDateModalLabel"
@@ -63,7 +54,6 @@
             </div>
         </div>
     </div>
-
 @stop
 
 @section('css')
@@ -144,7 +134,7 @@
                                 estandar: '{{ $fechaElegida->fechaCompetencia->competencia->name }}',
                                 usuario: '{{ $fechaElegida->user->name }} {{ $fechaElegida->user->secondName }} {{ $fechaElegida->user->paternalSurname }} {{ $fechaElegida->user->maternalSurname }}',
                                 fecha: '{{ $fechaElegida->fechaCompetencia->fecha->format('d/m/Y') }}',
-                                horarios: '{{ $fechaElegida->horarioCompetencia->hora }}',
+                                horarios: '{{ $fechaElegida->horarioCompetencia->pluck('hora')->implode(', ') }}',
                                 tipo: 'elegida'
                             }
                         },
@@ -160,9 +150,8 @@
                             .extendedProps.horarios;
                         document.getElementById('availableEventUser').innerText = info.event
                             .extendedProps.user;
-                        var availableDateModal = new bootstrap.Modal(document.getElementById(
-                            'availableDateModal'));
-                        availableDateModal.show();
+                        var modal = new bootstrap.Modal(document.getElementById('availableDateModal'));
+                        modal.show();
                     } else if (info.event.extendedProps.tipo === 'elegida') {
                         document.getElementById('selectedEventStandard').innerText = info.event
                             .extendedProps.estandar;
@@ -172,17 +161,12 @@
                             .extendedProps.fecha;
                         document.getElementById('selectedEventHours').innerText = info.event
                             .extendedProps.horarios;
-                        var selectedDateModal = new bootstrap.Modal(document.getElementById(
-                            'selectedDateModal'));
-                        selectedDateModal.show();
+                        var modal = new bootstrap.Modal(document.getElementById('selectedDateModal'));
+                        modal.show();
                     }
                 }
             });
             calendar.render();
         });
     </script>
-
-
-
-
 @stop

@@ -5,215 +5,234 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Asignar Evaluadores a Usuarios</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assignEvaluatorModal">
-            Asignar Evaluador
-        </button>
     </div>
 @stop
 
 @section('content')
-    <div class="container">
-
+    <div class="container mt-4">
         @if (session('success'))
             <div class="alert alert-success" id="success-message" style="display:none;">
                 {{ session('success') }}
             </div>
         @endif
-
-        <!-- Modal para asignar evaluador -->
-        <div class="modal fade" id="assignEvaluatorModal" tabindex="-1" role="dialog"
-            aria-labelledby="assignEvaluatorModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="assignEvaluatorModalLabel">Asignar Evaluador</h5>
+        <div class="row">
+            <!-- Sección de Usuarios -->
+            <div class="col-12 mb-4">
+                <div class="card h-100 shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Usuarios</h5> <!-- Título general -->
                     </div>
-                    <form action="{{ route('asignar.evaluador.store') }}" method="POST" id="asignar-evaluador-form">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="usuario_id">Usuario</label>
-                                <select name="usuario_id" id="usuario_id" class="form-control" required>
-                                    @forelse ($usuarios as $usuario)
-                                        <option value="{{ $usuario->id }}">
-                                            {{ $usuario->name }} {{ $usuario->paternalSurname }} - {{ $usuario->matricula }}
-                                        </option>
-                                    @empty
-                                        <option disabled>No hay usuarios por asignar</option>
-                                    @endforelse
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="estandar_id">Estándar</label>
-                                <select name="estandar_id" id="estandar_id" class="form-control" required>
-                                    @forelse ($estandares as $estandar)
-                                        <option value="{{ $estandar->id }}">{{ $estandar->name }}</option>
-                                    @empty
-                                        <option disabled>No hay estándares por asignar</option>
-                                    @endforelse
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="evaluador_id">Evaluador</label>
-                                <select name="evaluador_id" id="evaluador_id" class="form-control" required>
-                                    @forelse ($evaluadores as $evaluador)
-                                        <option value="{{ $evaluador->id }}">{{ $evaluador->name }}
-                                            {{ $evaluador->paternalSurname }}</option>
-                                    @empty
-                                        <option disabled>No hay evaluadores disponibles</option>
-                                    @endforelse
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Asignar Evaluador</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <!-- Sección para mostrar usuarios -->
-                <div class="col-md-6">
-                    <div class="card border-primary mb-4 shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="card-title mb-0">Usuarios</h5>
-                        </div>
-                        <div class="card-body">
-                            @forelse ($evaluaciones as $evaluacion)
-                                <div class="mb-3 p-3 border rounded bg-light shadow-sm">
-                                    <h6 class="font-weight-bold">Nombre del Usuario:</h6>
-                                    <p class="mb-1">{{ $evaluacion->usuario->name }}
-                                        {{ $evaluacion->usuario->paternalSurname }}</p>
-                                    <h6 class="font-weight-bold">Matrícula:</h6>
-                                    <p class="mb-1">{{ $evaluacion->usuario->matricula }}</p>
-                                    <h6 class="font-weight-bold">Estándar:</h6>
-                                    <p class="mb-1">{{ $evaluacion->estandar->name }}</p>
-                                    <h6 class="font-weight-bold">Evaluador:</h6>
-                                    <p class="mb-1">{{ $evaluacion->evaluador->name }}
-                                        {{ $evaluacion->evaluador->paternalSurname }}</p>
-                                </div>
-                            @empty
-                                <p class="text-center text-muted">No hay usuarios asignados.</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sección para mostrar evaluadores -->
-                <div class="col-md-6">
-                    <div class="card border-success mb-4 shadow-sm">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="card-title mb-0">Evaluadores</h5>
-                        </div>
-                        <div class="card-body">
-                            @foreach ($evaluadores as $evaluador)
-                                <div class="mb-4 p-4 border rounded bg-light shadow-sm">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="me-3">
-                                            <img src="{{ $evaluador->foto }}" alt="Profile Picture" class="rounded-circle"
-                                                width="60" height="60"
-                                                onerror="this.src='{{ asset('assets/profile-default/profile_default.jpeg') }}';">
-
-                                        </div>
-                                        <div>
-                                            <h6 class="font-weight-bold mb-1">Nombre del Evaluador:</h6>
-                                            <p class="mb-1">{{ $evaluador->name }} {{ $evaluador->paternalSurname }}</p>
-                                        </div>
+                    <div class="card-body">
+                        @foreach ($users as $user)
+                            <div class="mb-4">
+                                <div class="row">
+                                    <!-- Datos personales del usuario en el lado izquierdo -->
+                                    <div class="col-md-5">
+                                        <h6 class="text-primary"><i class="fas fa-user"></i> Datos del Usuario:</h6>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item"><strong>Nombre:</strong> {{ $user->name }}
+                                                {{ $user->secondName }} {{ $user->paternalSurname }}
+                                                {{ $user->maternalSurname }}</li>
+                                            <li class="list-group-item"><strong>Matrícula:</strong> {{ $user->matricula }}
+                                            </li>
+                                            <li class="list-group-item"><strong>Email:</strong> {{ $user->email }}</li>
+                                        </ul>
                                     </div>
-                                    <h6 class="font-weight-bold mb-2">Usuarios Asignados:</h6>
-                                    <ul class="list-unstyled">
-                                        @forelse ($usuariosAsignados[$evaluador->id] as $evaluacion)
-                                            <li class="mb-3 p-2 border rounded bg-white shadow-sm">
-                                                <div class="d-flex justify-content-between">
+                                    <!-- Estándares en el lado derecho -->
+                                    <div class="col-md-7">
+                                        <h6 class="text-primary"><i class="fas fa-tasks"></i> Estándares Asignados:</h6>
+                                        <ul class="list-group">
+                                            @foreach ($user->estandares as $estandar)
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <span class="font-weight-bold">{{ $evaluacion->usuario->name }}
-                                                            {{ $evaluacion->usuario->paternalSurname }}</span>
+                                                        <span class="badge badge-info">{{ $estandar->numero }}</span> -
+                                                        {{ $estandar->name }}
                                                     </div>
                                                     <div>
-                                                        <span
-                                                            class="badge bg-info text-white">{{ $evaluacion->estandar->name }}</span>
+                                                        @if (isset($evaluacionesPorUsuario[$user->id][$estandar->id]))
+                                                            <button class="btn btn-outline-secondary btn-sm" disabled>
+                                                                <i class="fas fa-check-circle"></i> Evaluador Asignado
+                                                            </button>
+                                                        @else
+                                                            <button class="btn btn-outline-primary btn-sm"
+                                                                data-toggle="modal"
+                                                                data-target="#asignarEvaluadorModal{{ $user->id }}-{{ $estandar->id }}">
+                                                                <i class="fas fa-user-plus"></i> Asignar Evaluador
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr> <!-- Separador entre usuarios -->
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Fila para "Usuarios con sus evaluadores" -->
+            <div class="col-md-6">
+                <!-- Sección para mostrar usuarios con evaluaciones -->
+                <div class="card h-100 border-primary mb-4 shadow-lg d-flex flex-column">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Usuarios con sus Evaluadores</h5>
+                    </div>
+                    <div class="card-body flex-fill scrollable-card-body">
+                        @forelse ($usuariosConEvaluaciones as $usuarioId => $evaluaciones)
+                            @php
+                                $usuario = $evaluaciones->first()->usuario;
+                            @endphp
+                            <div class="mb-4 p-4 border rounded bg-white shadow-sm">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle overflow-hidden mr-3" style="width: 60px; height: 60px;">
+                                        <img src="{{ $usuario->foto }}" alt="Profile Picture"
+                                            class="img-fluid rounded-circle" width="60" height="60"
+                                            onerror="this.src='{{ asset('assets/profile-default/profile_default.jpeg') }}';">
+                                    </div>
+                                    <div>
+                                        <h6 class="font-weight-bold mb-0 text-secondary">Nombre del Usuario:</h6>
+                                        <p class="mb-0 text-dark">{{ $usuario->name }}
+                                            {{ $usuario->secondName }}
+                                            {{ $usuario->paternalSurname }}
+                                            {{ $usuario->maternalSurname }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 50px; height: 50px;">
+                                        <i class="fas fa-id-badge" style="font-size: 24px;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="font-weight-bold mb-0 text-secondary">Matrícula:</h6>
+                                        <p class="mb-0 text-dark">{{ $usuario->matricula }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Itera sobre los estándares evaluados por este usuario -->
+                                @foreach ($evaluaciones->groupBy('estandar_id') as $estandarId => $evaluacionesPorEstandar)
+                                    @php
+                                        $estandar = $evaluacionesPorEstandar->first()->estandar;
+                                    @endphp
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                            style="width: 50px; height: 50px;">
+                                            <i class="fas fa-book" style="font-size: 24px;"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold mb-0 text-secondary">Estándar:</h6>
+                                            <p class="mb-0 text-dark">{{ $estandar->numero }} {{ $estandar->name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="font-weight-bold mt-4 text-secondary">Evaluadores:</h6>
+                                    <ul class="list-unstyled">
+                                        @foreach ($evaluacionesPorEstandar as $evaluacion)
+                                            <li class="mb-3 p-3 border rounded bg-light shadow-sm">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                        style="width: 50px; height: 50px;">
+                                                        <i class="fas fa-user-check" style="font-size: 24px;"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-0 text-dark">{{ $evaluacion->evaluador->name }}
+                                                            {{ $evaluacion->evaluador->secondName }}
+                                                            {{ $evaluacion->evaluador->paternalSurname }}
+                                                            {{ $evaluacion->evaluador->maternalSurname }}</p>
                                                     </div>
                                                 </div>
                                             </li>
-                                        @empty
-                                            <p class="text-center text-muted">No hay usuarios asignados a este evaluador.
-                                            </p>
-                                        @endforelse
+                                        @endforeach
                                     </ul>
-                                </div>
-                            @endforeach
-                        </div>
+                                @endforeach
+                            </div>
+                        @empty
+                            <p class="text-center text-muted">No hay usuarios asignados.</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
 
+            <!-- Fila para "Evaluadores" -->
+            <div class="col-md-6">
+                <!-- Sección para mostrar evaluadores -->
+                <div class="card h-100 border-success mb-4 shadow-lg">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Evaluadores</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($evaluadores as $evaluador)
+                            <div class="mb-4 p-4 border rounded bg-white shadow-sm">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3 rounded-circle overflow-hidden" style="width: 60px; height: 60px;">
+                                        <img src="{{ $evaluador->foto }}" alt="Profile Picture"
+                                            class="img-fluid rounded-circle" width="60" height="60"
+                                            onerror="this.src='{{ asset('assets/profile-default/profile_default.jpeg') }}';">
+                                    </div>
+                                    <div>
+                                        <h6 class="font-weight-bold mb-1 text-secondary">Nombre del Evaluador:</h6>
+                                        <p class="mb-0 text-dark">{{ $evaluador->name }} {{ $evaluador->paternalSurname }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <h6 class="font-weight-bold mb-2 text-secondary">Usuarios Asignados:</h6>
+                                <ul class="list-unstyled">
+                                    @forelse ($usuariosAsignados[$evaluador->id] ?? [] as $evaluacion)
+                                        <li class="mb-3 p-3 border rounded bg-light shadow-sm">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span class="font-weight-bold text-dark">
+                                                        {{ $evaluacion->usuario->name }}
+                                                        {{ $evaluacion->usuario->secondName }}
+                                                        {{ $evaluacion->usuario->paternalSurname }}
+                                                        {{ $evaluacion->usuario->maternalSurname }}
+                                                    </span>
+                                                    <br>
+                                                    <span class="text-muted">{{ $evaluacion->usuario->matricula }}</span>
+                                                </div>
+                                                <div>
+                                                    <span
+                                                        class="badge bg-info text-white">{{ $evaluacion->estandar->name }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @empty
+                                        <p class="text-center text-muted">No hay usuarios asignados a este evaluador.</p>
+                                    @endforelse
+                                </ul>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    @include('expedientes.expedientesAdmin.competencias.evaluadores.asignarEva.create')
+@stop
 
+@section('css')
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+        }
 
-    @stop
+        .card-body {
+            flex: 1;
+            overflow-y: auto;
+        }
 
-    @section('css')
-        <!-- Agregar cualquier CSS adicional aquí -->
-    @stop
+        .scrollable-card-body {
+            max-height: 100%;
+        }
+    </style>
+@stop
 
-    @section('js')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const form = document.getElementById('asignar-evaluador-form');
-                const successMessage = document.getElementById('success-message');
-
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(form);
-                    const url = form.action;
-
-                    console.log('Sending request to:', url);
-                    console.log('Form data:', [...formData.entries()]);
-
-                    fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content'),
-                                'Accept': 'application/json'
-                            },
-                            body: formData
-                        })
-                        .then(response => {
-                            console.log('Response status:', response.status);
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Response data:', data);
-                            if (data.success) {
-                                Swal.fire({
-                                    title: 'Éxito',
-                                    text: 'Evaluador asignado correctamente.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            } else if (data.error) {
-                                Swal.fire({
-                                    title: 'Error',
-                                    text: data.error,
-                                    icon: 'error',
-                                    confirmButtonText: 'OK'
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                });
-            });
-        </script>
-    @stop
+@section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+@stop

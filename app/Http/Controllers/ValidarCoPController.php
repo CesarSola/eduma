@@ -63,9 +63,26 @@ class ValidarCoPController extends Controller
 
             // Actualizar el estado de validación en el estado del comprobante
             $estado = json_decode($comprobantesCO->estado, true) ?? [];
-            $estado['validacion_comprobante_pago'] = $accion; // Asegúrate de usar el campo de estado correcto
+
+            // Actualizar el campo 'comprobante' con el nuevo valor
+            $estado['comprobante'] = $accion;
+
+            // Eliminar otros campos de estado si se necesita
+            // Ejemplo: Si solo deseas conservar 'comprobante' y 'validacion_comprobante_pago', puedes hacerlo
+            // $estado = [
+            //     'comprobante' => $accion,
+            //     'validacion_comprobante_pago' => $estado['validacion_comprobante_pago'] ?? null
+            // ];
+
             $comprobantesCO->estado = json_encode($estado);
             $comprobantesCO->save();
+
+            // Marcar el comprobante como "no revisable" si ha sido rechazado
+            if ($accion === 'rechazar') {
+                $estado['revisable'] = false;
+                $comprobantesCO->estado = json_encode($estado);
+                $comprobantesCO->save();
+            }
 
             // Retornar una respuesta JSON con el mensaje apropiado
             $mensaje = $accion === 'validar' ? 'Comprobante de pago validado correctamente' : 'Comprobante de pago rechazado correctamente';

@@ -64,6 +64,7 @@ use App\Http\Controllers\MisCursosController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\COResubirController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\ElegirFechaController;
 use App\Http\Controllers\EvaluadoresController;
@@ -82,10 +83,9 @@ use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\FormularioController;
 //ruta del calendario
-Route::get('/calendario/{competenciaId}/fechas', [CalendarioController::class, 'index'])->name('calendario.index');
-Route::get('competencias/{competencia}/agregar-fechas', [CalendarioController::class, 'show'])->name('calendario.agregar-fechas');
+Route::resource('calendario', CalendarioController::class);
+Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');
 //ruta de agregar fechas
-Route::get('competencias/{competencia}/agregar-fechas', [FechasController::class, 'show'])->name('competencias.agregar-fechas');
 Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
 
@@ -96,6 +96,7 @@ Route::get('evaluadores/{evaluador}', [EvaluadoresController::class, 'show'])->n
 Route::get('asignar-evaluadores', [AsignarEvaController::class, 'index'])->name('asignar.evaluadores');
 Route::post('asignar-evaluador', [AsignarEvaController::class, 'store'])->name('asignar.evaluador.store');
 Route::get('get-estandares/{userId}', [AsignarEvaController::class, 'getEstandares']);
+
 
 //ruta index de la carpeta registroGeneral
 Route::get('/documentos/{userId}', [DocumentosController::class, 'index'])->name('registroGeneral.index');
@@ -149,11 +150,12 @@ Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias
 Route::resource('miscompetencias', MisCompetenciasController::class);
 //ruta en el cual se muestra si el comprobante de competencias ha sido rechazado(vista usuarios)
-Route::get('miscompetencias/{id}/mostrar-rechazado', [MisCompetenciasController::class, 'mostrarRechazado'])
+Route::get('miscompetencias/{id}/mostrar-rechazado', [COResubirController::class, 'show'])
     ->name('miscompetencias.resubir_comprobante');
 //ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
-Route::post('miscompetencias/{id}/guardar-resubir-comprobante', [MisCompetenciasController::class, 'guardarResubirComprobante'])
+Route::post('miscompetencias/{id}/guardar-resubir-comprobante', [COResubirController::class, 'guardarResubirComprobante'])
     ->name('miscompetencias.guardarResubirComprobante');
+Route::get('/ruta/para/obtener/validacion/{id}', [COResubirController::class, 'getValidacion'])->name('getValidacion');
 //ruta de mis cursos
 Route::resource('misCursos', MisCursosController::class);
 //ruta en el cual se muestra si el comprobante de cursos ha sido rechazado(vista usuario)

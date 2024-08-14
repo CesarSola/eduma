@@ -54,15 +54,18 @@ class DocumentosNecController extends Controller
                     'documento' => $filePath, // Guardamos la ruta del archivo en el campo 'documento'
                 ]);
 
-                return back()->with('success', 'Documento creado exitosamente');
+                session()->flash('success', 'Documento creado exitosamente');
+                return back();
             } else {
                 throw new \Exception('No se ha proporcionado un archivo válido');
             }
         } catch (\Exception $e) {
             Log::error('Error al crear documento:', ['exception' => $e]);
-            return back()->withErrors(['error' => 'Hubo un problema al intentar crear el documento.']);
+            session()->flash('error', 'Hubo un problema al intentar crear el documento.');
+            return back();
         }
     }
+
 
     /**
      * Display the specified resource.

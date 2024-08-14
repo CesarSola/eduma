@@ -53,6 +53,7 @@
                         @foreach ($comprobantesCO as $comprobante)
                             @php
                                 $estado = json_decode($comprobante->estado, true) ?? [];
+                                $nombreComprobante = pathinfo($comprobante->comprobante_pago, PATHINFO_FILENAME);
                             @endphp
                             @if (
                                 $comprobante->comprobante_pago &&
@@ -66,7 +67,8 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
+                                        <label class="col-sm-2 col-form-label">Comprobante de Pago:
+                                            {{ $nombreComprobante }}</label>
                                         <div class="col-sm-4">
                                             <a href="{{ Storage::url($comprobante->comprobante_pago) }}" target="_blank"
                                                 class="btn btn-primary">Ver</a>
@@ -111,6 +113,7 @@
         </div>
     </div>
 @stop
+
 
 @section('css')
     <style>
@@ -214,15 +217,36 @@
                                 if (action === 'validar') {
                                     message = 'Comprobante validado correctamente.';
                                     form.style.display =
-                                    'none'; // Ocultar el formulario del documento validado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                            <div class="form-group row">
-                                                <div class="col-sm-12 text-center">
-                                                    <p>Todos los comprobantes de pago disponibles han sido validados.</p>
-                                                </div>
-                                            </div>
-                                        `;
+                                        'none'; // Ocultar el formulario del documento validado
+                                    // Verificar si no hay más formularios visibles
+                                    const remainingForms = document.querySelectorAll(
+                                        '.update-form');
+                                    const remainingVisibleForms = Array.from(remainingForms)
+                                        .filter(
+                                            f => f.style.display !== 'none'
+                                        );
+
+                                    if (remainingVisibleForms.length === 0) {
+                                        Swal.fire({
+                                            icon: 'info',
+                                            title: 'Todos los Documentos Validados',
+                                            text: 'Todos los documentos disponibles han sido validados.',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then(() => {
+                                            // Actualizar el DOM para mostrar el mensaje final
+                                            const cardHeader = document.querySelector(
+                                                '.card-header');
+                                            if (cardHeader) {
+                                                cardHeader.innerHTML += `
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-12 text-center">
+                                                            <p>Todos los documentos disponibles han sido validados.</p>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                            }
+                                        });
                                     }
                                 } else if (action === 'rechazar') {
                                     message = 'Comprobante rechazado.';
@@ -231,7 +255,7 @@
                                         .value = ''; // Limpiar el campo de comentarios
                                     form.querySelectorAll('input[type="radio"]').forEach(
                                         radio => radio.checked = false
-                                        ); // Deseleccionar todos los radio buttons
+                                    ); // Deseleccionar todos los radio buttons
                                 }
 
                                 // Muestra la alerta personalizada con SweetAlert2
@@ -251,7 +275,15 @@
                                 });
                             }
                         })
-                        .catch(error => console.error('Error:', error));
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error inesperado.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
                 });
             });
         });

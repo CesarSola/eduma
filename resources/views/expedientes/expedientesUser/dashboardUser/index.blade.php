@@ -75,12 +75,14 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h6 style="text-align: center" class="card-title">Sube tus documentos aquí</h6>
+            <div class="card text-center p-3">
+                <h6 class="card-title">Sube tus documentos aquí</h6>
                 <br>
-                <div class="card-body text-center">
-                    <a href="{{ route('documentosUser.index') }}" class="btn btn-primary">Subir documentos</a>
-                </div>
+                <!-- Botón para abrir el modal -->
+                <button type="button" class="btn btn-success btn-sm mx-auto" data-toggle="modal"
+                    data-target="#documentosModal">
+                    Subir Documentos
+                </button>
             </div>
         @elseif (!$todosDocumentosValidados)
             <div class="card">
@@ -193,6 +195,7 @@
             </div>
         @endif
     </div>
+    @include('expedientes.expedientesUser.documentosUser.index')
 @stop
 
 @section('css')
@@ -234,6 +237,44 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleCards = document.querySelectorAll('.toggle-card');
+
+            toggleCards.forEach(function(card) {
+                const targetId = card.getAttribute('data-target');
+                const target = document.querySelector(targetId);
+
+                // Load the state from localStorage
+                const state = localStorage.getItem(targetId);
+                if (state === 'open') {
+                    target.classList.remove('d-none');
+                } else {
+                    target.classList.add('d-none');
+                }
+
+                card.addEventListener('click', function() {
+                    target.classList.toggle('d-none');
+                    // Save the state to localStorage
+                    if (target.classList.contains('d-none')) {
+                        localStorage.setItem(targetId, 'closed');
+                    } else {
+                        localStorage.setItem(targetId, 'open');
+                    }
+                });
+            });
+
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: '{{ session('success') }}',
+                    confirmButtonText: 'Aceptar'
+                });
+            @endif
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const toggleCards = document.querySelectorAll('.toggle-card');
@@ -262,6 +303,7 @@
             });
         });
     </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // Función para recargar la sección cada 5 minutos

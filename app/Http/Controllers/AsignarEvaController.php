@@ -6,39 +6,36 @@ use App\Models\Estandares;
 use App\Models\EvaluadoresUsuarios as ModelsEvaluadoresUsuarios;
 use Illuminate\Http\Request;
 use App\Models\User;
-use EvaluadoresUsuarios;
 
 class AsignarEvaController extends Controller
 {
     public function index()
     {
-        $usuarios = User::whereHas('roles', function ($query) {
-            $query->where('name', 'User');
-        })
-            ->whereHas('comprobantesCO')
-            ->whereDoesntHave('evaluaciones', function ($query) {
-                $query->whereIn('estandar_id', Estandares::pluck('id'));
-            })
-            ->get();
+        // Obtén todos los usuarios que tienen el rol "User" y carga sus estándares relacionados
+        $users = User::role('User')->with('estandares')->get();
 
-        $evaluadores = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Evaluador');
-        })->get();
+        // Obtén la lista de evaluadores (usuarios con el rol "Evaluador")
+        $evaluadores = User::role('Evaluador')->get();
 
-        $estandares = Estandares::whereDoesntHave('evaluaciones')->get();
+        // Obtén las evaluaciones (suponiendo que tienes una relación definida para esto)
+        $evaluaciones = ModelsEvaluadoresUsuarios::with('usuario', 'estandar', 'evaluador')->get();
 
-        // Obtener evaluaciones con datos de usuario, estándar y evaluador
-        $evaluaciones = ModelsEvaluadoresUsuarios::with(['usuario', 'estandar', 'evaluador'])->get();
+        // Construye un arreglo para usuarios asignados a evaluadores
+        $usuariosAsignados = $evaluaciones->groupBy('evaluador_id')->mapWithKeys(function ($evaluaciones, $evaluadorId) {
+            return [$evaluadorId => $evaluaciones];
+        });
+        // Construye un arreglo para usuarios con evaluaciones agrupados por usuario
+        $usuariosConEvaluaciones = $evaluaciones->groupBy('usuario_id');
 
-        // Obtener usuarios asignados a cada evaluador
-        $usuariosAsignados = [];
-        foreach ($evaluadores as $evaluador) {
-            $usuariosAsignados[$evaluador->id] = ModelsEvaluadoresUsuarios::where('evaluador_id', $evaluador->id)
-                ->with(['usuario', 'estandar'])
-                ->get();
-        }
+        // Crear un array para verificar si un estándar ya tiene un evaluador asignado
+        $evaluacionesPorUsuario = $evaluaciones->groupBy('usuario_id')->mapWithKeys(function ($evaluaciones, $usuarioId) {
+            return [$usuarioId => $evaluaciones->pluck('estandar_id')->unique()->flip()->map(function () {
+                return true;
+            })];
+        });
 
-        return view('expedientes.expedientesAdmin.competencias.evaluadores.asignarEva.index', compact('usuarios', 'evaluadores', 'estandares', 'evaluaciones', 'usuariosAsignados'));
+        // Retorna la vista con los datos
+        return view('expedientes.expedientesAdmin.competencias.evaluadores.asignarEva.index', compact('users', 'evaluadores', 'evaluaciones', 'usuariosAsignados', 'evaluacionesPorUsuario', 'usuariosConEvaluaciones'));
     }
 
 
@@ -57,10 +54,15 @@ class AsignarEvaController extends Controller
         $estandar = Estandares::findOrFail($validated['estandar_id']);
         $evaluador = User::findOrFail($validated['evaluador_id']);
 
-        // Asignar el evaluador al usuario y al estándar
+        // Asignar el evaluador al usuario y al estándar en la tabla evaluadores_usuarios
         ModelsEvaluadoresUsuarios::create([
             'usuario_id' => $usuario->id,
             'estandar_id' => $estandar->id,
+            'evaluador_id' => $evaluador->id,
+        ]);
+
+        // Actualizar el evaluador_id en la tabla comprobantes_competencias
+        $usuario->comprobantesCO()->where('estandar_id', $estandar->id)->update([
             'evaluador_id' => $evaluador->id,
         ]);
 

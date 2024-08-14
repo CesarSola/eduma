@@ -31,4 +31,9 @@ class EvaluadoresUsuarios extends Model
     {
         return $this->belongsTo(User::class, 'evaluador_id');
     }
+    // Relación con ComprobantesCO
+    public function comprobante()
+    {
+        return $this->belongsTo(ComprobantesCO::class, 'comprobante_id');
+    }
 }

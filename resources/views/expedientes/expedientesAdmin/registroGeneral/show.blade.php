@@ -181,15 +181,17 @@
                                         // Acción si se confirma el rechazo (si es necesario)
                                     }
 
-                                    // Actualizar el mensaje según la acción (validar/rechazar)
                                     if (action === 'validar') {
-                                        form.closest('.update-form').style.display =
-                                            'none';
+                                        // Ocultar el formulario del documento validado
+                                        form.style.display = 'none';
 
                                         // Verificar si todos los documentos han sido validados
                                         const remainingForms = document
                                             .querySelectorAll('.update-form');
-                                        if (remainingForms.length === 0) {
+                                        const remainingVisibleForms = Array.from(
+                                            remainingForms).filter(f => f.style
+                                            .display !== 'none');
+                                        if (remainingVisibleForms.length === 0) {
                                             // Mostrar el mensaje de todos los documentos validados
                                             Swal.fire({
                                                 icon: 'info',

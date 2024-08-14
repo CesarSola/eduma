@@ -73,7 +73,7 @@ class SDocumentosController extends Controller
         $documentosUser->curp = $curpPath ?? null;
         $documentosUser->save();
 
-        return redirect()->route('usuarios.index')->with('success', 'Documentos subidos correctamente');
+        return redirect()->back()->with('success', '¡Documentos subidos con éxito!');
     }
 
 

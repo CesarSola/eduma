@@ -354,10 +354,16 @@ return [
                     'icon_color' => 'primary',
                     'submenu' => [
                         [
+                            'text' => 'Mis Asignados',
+                            'url' => 'calendario',
+                            'icon' => 'fas fa-fw fa-user-tie',
+                            'icon_color' => 'danger',
+                        ],
+                        [
                             'text' => 'Agrega tus evaluadores',
                             'url' => 'evaluadores',
                             'icon' => 'fas fa-fw fa-user-plus',
-                            'icon_color' => 'success',
+                            'icon_color' => 'indigo',
 
                         ],
                         [

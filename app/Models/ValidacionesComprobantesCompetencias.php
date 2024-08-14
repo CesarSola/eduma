@@ -22,4 +22,9 @@ class ValidacionesComprobantesCompetencias extends Model
     {
         return $this->belongsTo(ComprobantesCO::class, 'comprobante_id');
     }
+    // Relación que une validaciones_comprobantes_competencias con usuarios
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

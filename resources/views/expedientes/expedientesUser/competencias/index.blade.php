@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title mb-0">
-                        Competencias inscritas por {{ $user->name }}
+                        Competencias inscritas por {{ auth()->user()->name }}
                     </h6>
                 </div>
             </div>
@@ -66,8 +66,11 @@
                                         <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
                                             class="btn btn-primary btn-sm ml-2">Ver</a>
                                     @elseif ($estado == 'rechazar')
-                                        <a href="{{ route('miscompetencias.resubir_comprobante', ['id' => $competencia->id]) }}"
-                                            class="btn btn-danger btn-sm ml-2">Resubir Comprobante</a>
+                                        <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal"
+                                            data-target="#resubirModal" data-id="{{ $competencia->id }}"
+                                            data-nombre="{{ $competencia->name }}">
+                                            Resubir Comprobante
+                                        </button>
                                     @else
                                         <span class="badge badge-warning">En validación</span>
                                     @endif
@@ -86,6 +89,7 @@
             </div>
         </div>
     </div>
+    @include('expedientes.expedientesUser.competencias.resubir_comprobante')
 @stop
 
 @section('css')
@@ -148,4 +152,34 @@
             });
         @endif
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#resubirModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botón que activó el modal
+                var competenciaId = button.data('id'); // Extrae el ID de la competencia del botón
+                var competenciaName = button.data('nombre'); // Extrae el nombre de la competencia del botón
+
+                // Actualiza los campos del modal con la información de la competencia
+                var modal = $(this);
+                modal.find('.modal-body #competencia_name').text('Competencia: ' + competenciaName);
+
+                // Usa `data-id` directamente para la acción del formulario
+                var formActionUrl = "{{ route('miscompetencias.guardarResubirComprobante', ':id') }}";
+                formActionUrl = formActionUrl.replace(':id', competenciaId);
+                modal.find('form').attr('action', formActionUrl);
+
+                // Realiza una petición AJAX para obtener la validación de comprobantes
+                $.ajax({
+                    url: '{{ url('ruta/para/obtener/validacion') }}/' + competenciaId,
+                    method: 'GET',
+                    success: function(data) {
+                        modal.find('#nombre_usuario').val(data.nombre_usuario);
+                        modal.find('#tipo_validacion').val(data.tipo_validacion);
+                        modal.find('#comentario_validacion').val(data.comentario);
+                    }
+                });
+            });
+        });
+    </script>
+
 @stop

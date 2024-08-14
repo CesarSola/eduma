@@ -19,6 +19,11 @@ class DashboardUserController extends Controller
     {
         if (Auth::check()) {
             $usuario = Auth::user();
+
+            // Verificar si el correo ha sido verificado
+            if (is_null($usuario->email_verified_at)) {
+                return redirect()->route('verification.notice');
+            }
         } else {
             return redirect()->route('login');
         }

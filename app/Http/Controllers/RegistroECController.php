@@ -65,11 +65,12 @@ class RegistroECController extends Controller
             $comprobantePagoPath = $comprobante->storeAs(
                 'public/documents/records/payments/competences/standards/' .
                     $userMatricula . '/' .
-                    $userName . ' ' .
-                    $userSecondName . ' ' .
-                    $userPaternalSurname . ' ' .
-                    $userMaternalSurname,
-                $comprobantePagoName
+                    $userName . '_' .
+                    $userSecondName . '_' .
+                    $userPaternalSurname . '_' .
+                    $userMaternalSurname . '/' .
+                    $estandarName . '/' .  // Aquí se agregó el nombre del estándar al directorio
+                    $comprobantePagoName
             );
 
             // Crear y guardar el registro del comprobante de pago

@@ -13,7 +13,8 @@ class ComprobantesCO extends Model
         'user_id',
         'estandar_id',
         'comprobante_pago',
-        'tipo_validacion',
+        'estado',
+        'evaluador_id'
     ];
     //relacion del comprobante con el usuario
     public function user()
@@ -23,12 +24,23 @@ class ComprobantesCO extends Model
     //relación del comprobante con el estandar
     public function estandar()
     {
-        return $this->belongsTo(Estandares::class, 'estandares_id', 'id');
+        return $this->belongsTo(Estandares::class, 'estandar_id', 'id');
     }
 
-    // Relación con ValidacionesComprobantesCompetencias
+    // Relación con ValidacionesComprobantesCompetencias para validar o rechazar
     public function validaciones()
     {
         return $this->hasMany(ValidacionesComprobantesCompetencias::class, 'comprobante_id');
+    }
+
+    // Relación con EvaluacionesUsuarios (o EvaluadoresUsuarios)
+    public function evaluaciones()
+    {
+        return $this->hasMany(EvaluadoresUsuarios::class, 'comprobante_id');
+    }
+    // Relación con User (Evaluador)cuando se asigna un evaluador
+    public function evaluador()
+    {
+        return $this->belongsTo(User::class, 'evaluador_id');
     }
 }
