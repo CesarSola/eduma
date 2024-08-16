@@ -30,6 +30,11 @@ class ValidarFichasController extends Controller
 
     public function updateFicha(Request $request, $id, $fichaId)
     {
+        $request->validate([
+            'documento_estado' => 'required|string|in:validar,rechazar',
+            'comentario_documento' => 'nullable|string|max:255',
+        ]);
+
         $usuario = User::findOrFail($id);
         $ficha = $usuario->fichas()->findOrFail($fichaId);
 

@@ -39,9 +39,6 @@
                                                 {{ $usuario->maternalSurname }}</h6>
                                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
                                         </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -140,6 +137,8 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.update-form');
@@ -161,41 +160,31 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            const successMessage = document.getElementById('success-message');
                             if (data.success) {
-                                successMessage.style.display = 'block';
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: data.success,
+                                    confirmButtonText: 'Cerrar',
+                                    didClose: () => {
+                                        // Ocultar el formulario del documento validado o rechazado
+                                        form.closest('.update-form').style.display =
+                                            'none';
 
-                                // Ocultar el mensaje después de 3 segundos
-                                setTimeout(() => {
-                                    successMessage.style.display = 'none';
-                                }, 3000);
-
-                                const action = formData.get('documento_estado');
-                                if (action === 'validar') {
-                                    form.closest('.update-form').style.display =
-                                        'none'; // Ocultar el formulario del documento validado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                        <div class="form-group row">
-                                            <div class="col-sm-12 text-center">
-                                                <p>Todos los documentos disponibles han sido validados.</p>
-                                            </div>
-                                        </div>
-                                    `;
+                                        // Revisar si todos los documentos han sido validados
+                                        if (data.todos_validados) {
+                                            // Recargar la página después de cerrar el modal
+                                            window.location.reload();
+                                        }
                                     }
-                                } else {
-                                    form.closest('.update-form').style.display =
-                                    'none'; // Ocultar el formulario del documento rechazado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                        <div class="form-group row">
-                                            <div class="col-sm-12 text-center">
-                                                <p>Todos los documentos disponibles han sido validados.</p>
-                                            </div>
-                                        </div>
-                                    `;
-                                    }
-                                }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message,
+                                    confirmButtonText: 'Cerrar'
+                                });
                             }
                         })
                         .catch(error => console.error('Error:', error));

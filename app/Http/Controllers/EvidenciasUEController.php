@@ -96,8 +96,12 @@ class EvidenciasUEController extends Controller
         $estandar = Estandares::find($id);
         $documento = DocumentosNec::find($documento_id);
 
-        return view('expedientes.expedientesUser.evidenciasEC.show', compact('estandar', 'documento'));
+        // Asegúrate de que 'documentos_necesarios' también esté disponible si lo usas en la vista
+        $documentos_necesarios = DocumentosNec::all(); // O ajusta esta línea según tu lógica
+
+        return view('expedientes.expedientesUser.evidenciasEC.show', compact('estandar', 'documento', 'documentos_necesarios'));
     }
+
     public function upload(Request $request, $documento_id)
     {
         $request->validate([
@@ -110,7 +114,7 @@ class EvidenciasUEController extends Controller
         $estandar = Estandares::find($estandarId);
 
         if (!$documento || !$estandar) {
-            return redirect()->back()->with('error', 'Documento o Estándar no encontrados.');
+            return response()->json(['success' => false, 'message' => 'Documento o Estándar no encontrados.']);
         }
 
         $user = auth()->user();
@@ -129,7 +133,6 @@ class EvidenciasUEController extends Controller
             'estado' => 'pendiente',
         ]);
 
-        return redirect()->route('evidenciasEC.index', ['id' => $estandarId, 'name' => $estandar->name])
-            ->with('success', 'Documento subido correctamente');
+        return response()->json(['success' => true, 'message' => 'Documento subido correctamente']);
     }
 }

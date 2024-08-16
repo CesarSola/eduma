@@ -16,9 +16,7 @@
         <div class="card mt-4 shadow-sm">
             <div class="alert alert-info">
                 <p><strong>Horarios disponibles marcados por tu evaluador para el estándar:</strong> {{ $estandar->name }}
-                    <strong>asignados
-                        al
-                        usuario:</strong>
+                    <strong>asignados al usuario:</strong>
                     {{ $usuario->name }} {{ $usuario->secondName }} {{ $usuario->paternalSurname }}
                     {{ $usuario->maternalSurname }}
                 </p>
@@ -57,11 +55,19 @@
                 @endif
             </div>
             <div class="card-footer text-center">
-                <a href="{{ route('fechas.show', $estandar->id) }}" class="btn btn-primary">Elige una fecha</a>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalFechas">
+                    Elegir una fecha
+                </button>
             </div>
         </div>
     </div>
+    @include('expedientes.expedientesUser.evidenciasEC.fechas.show', [
+        'fechas_competencia' => $fechas_competencia,
+        'estandar' => $estandar,
+        'usuario' => $usuario,
+    ])
 @stop
+
 
 
 @section('css')

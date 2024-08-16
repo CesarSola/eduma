@@ -25,6 +25,7 @@ class EvidenciasSubidasController extends Controller
         $usuario = User::find($userId);
         $usuarioName = $usuario ? $usuario->name : 'Desconocido';
 
+        // Modifica la vista para incluir los datos necesarios para el modal
         return view('expedientes.expedientesUser.evidenciasEC.evidenciasSubidas.index', [
             'documentos' => $documentos,
             'estandarId' => $estandarId,

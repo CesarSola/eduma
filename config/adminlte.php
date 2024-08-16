@@ -622,17 +622,17 @@ return [
             'title' => null,
         ],
         'buttons' => [
-            'close' => true,
-            'close_all' => true,
-            'close_all_other' => true,
-            'scroll_left' => true,
-            'scroll_right' => true,
-            'fullscreen' => true,
+            'close' => false,
+            'close_all' => false,
+            'close_all_other' => false,
+            'scroll_left' => false,
+            'scroll_right' => false,
+            'fullscreen' => false,
         ],
         'options' => [
             'loading_screen' => 1000,
-            'auto_show_new_tab' => true,
-            'use_navbar_items' => true,
+            'auto_show_new_tab' => false,
+            'use_navbar_items' => false,
         ],
     ],
 
@@ -648,5 +648,5 @@ return [
     |
     */
 
-    'livewire' => true,
+    'livewire' => false,
 ];

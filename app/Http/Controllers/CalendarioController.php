@@ -59,16 +59,17 @@ class CalendarioController extends Controller
         ]);
     }
 
+    // En el controlador
     public function show($competenciaId, Request $request)
     {
-        $evaluadorId = Auth::id();
+        $evaluador = Auth::user(); // Obtén al evaluador autenticado
 
         // Obtener la competencia por ID utilizando el modelo Estandares.
         $competencia = Estandares::findOrFail($competenciaId);
 
         // Obtener todos los usuarios asignados al evaluador autenticado y cargar sus estándares
-        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluadorId) {
-            $query->where('evaluador_id', $evaluadorId);
+        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluador) {
+            $query->where('evaluador_id', $evaluador->id);
         })->with('estandares')->get();
 
         // Obtener fechas y horarios disponibles para los usuarios del evaluador
@@ -90,8 +91,10 @@ class CalendarioController extends Controller
             'fechasDisponibles' => $fechasDisponibles,
             'fechasElegidas' => $fechasElegidas,
             'selectedUserId' => $selectedUserId,
+            'evaluador' => $evaluador, // Pasa el evaluador a la vista
         ]);
     }
+
 
 
     public function getUsuariosSinRolAdmin()
