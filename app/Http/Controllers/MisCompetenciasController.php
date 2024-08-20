@@ -19,7 +19,15 @@ class MisCompetenciasController extends Controller
      */
     public function index()
     {
-        $userId = auth()->id(); // Obtén el ID del usuario autenticado
+        // Obtener el usuario autenticado
+        $user = auth()->user();
+
+        // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Por favor inicia sesión para acceder a tus competencias.');
+        }
+
+        $userId = $user->id; // Obtén el ID del usuario autenticado
 
         // Obtener todos los estándares del usuario con comprobantes y validaciones
         $competencias = Estandares::whereHas('users', function ($query) use ($userId) {
@@ -27,9 +35,6 @@ class MisCompetenciasController extends Controller
         })
             ->with(['comprobantesCO.validaciones'])
             ->get();
-
-        // Obtener el usuario completo para usar en la vista
-        $user = auth()->user();
 
         return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'user'));
     }

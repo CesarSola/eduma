@@ -62,4 +62,9 @@ class Estandares extends Model
             'id'  // Local key on ComprobantesCO table
         );
     }
+    public function diagnosticos()
+    {
+        return $this->belongsToMany(diagnostico::class, 'estandares_diagnostico', 'estandar_id', 'diagnostico_id');
+    }
+
 }

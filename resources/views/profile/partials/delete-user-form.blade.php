@@ -63,7 +63,7 @@
 
     <!-- Deactivate Account Modal -->
     <x-modal name="confirm-user-deactivation" :show="$errors->userDeactivation->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.deactivate') }}" class="p-6">
+        <form method="post" action="{{ route('profile.reactivatePost') }}" class="p-6">
             @csrf
             @method('post')
 

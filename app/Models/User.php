@@ -99,10 +99,12 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Relación muchos a muchos con el modelo Estandares
-    public function estandares()
-    {
-        return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id');
-    }
+    public function estandares1()
+{
+    return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id')
+                ->withPivot('codigo'); // Asegúrate de incluir el campo 'numero' aquí
+}
+
 
     // Relación muchos a muchos con el modelo Curso
     public function cursos()
@@ -216,4 +218,17 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->cursos()->attach($cursoId);
         }
     }
+
+
+    public function diagnosticos()
+    {
+        return $this->belongsToMany(diagnostico::class, 'diagnostico_user', 'user_id', 'diagnostico_id')
+                    ->withPivot('user_name', 'diagnostico_code');
+    }
+    public function estandares()
+    {
+        return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id'); // Especifica los nombres de las columnas
+    }
+
+
 }

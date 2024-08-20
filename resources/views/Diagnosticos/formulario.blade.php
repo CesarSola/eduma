@@ -1737,7 +1737,7 @@ document.getElementById('calcular-btn').addEventListener('click', contabilizarYE
             window.URL.revokeObjectURL(url); // Libera el objeto URL
 
             // Redirigir después de la descarga
-            window.location.href = "{{ route('diagnosticos.index') }}";
+            window.location.href = "{{ route('usuarios.con-diagnosticos') }}";
         }).catch(error => {
             console.error('Error:', error);
         });

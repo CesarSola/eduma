@@ -14,66 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        // Verifica que los roles existan antes de asignar
-        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
-        $evaluadorRole = Role::firstOrCreate(['name' => 'Evaluador']);
-        $userRole = Role::firstOrCreate(['name' => 'User']);
-
-        $admin = Administrador::create([
-            'name' => 'Juan',
-            'secondName' => 'Gabriel',
-            'paternalSurname' => 'Contreras',
-            'maternalSurname' => 'Sansores',
-            'email' => 'admin@material.com',
-            'rol' => 'Admin',
-            'password' => Hash::make('12345'),
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ]);
-
-        $admin->assignRole($adminRole);
-
-        $evaluador = Evaluadores::create([
-            'name' => 'Fabiola',
-            'secondName' => 'Anel',
-            'paternalSurname' => 'Cuevas',
-            'maternalSurname' => 'López',
-            'rol' => 'Evaluador',
-            'email' => 'evaluador@material.com',
-            'password' => Hash::make('12345'),
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ]);
-
-        $evaluador->assignRole($evaluadorRole);
-
-        $user = User::create([
-            'name' => 'Miguel',
-            'secondName' => 'Aleman',
-            'paternalSurname' => 'Rodriguez',
-            'maternalSurname' => 'Medina',
-            'email' => 'test@material.com',
-            'matricula' => '0001',
-            'password' => Hash::make('12345'),
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ]);
-
-        $user->assignRole($userRole);
-
-        $admin2 = User::create([
-            'name' => 'Jose',
-            'secondName' => 'Gilberto',
-            'paternalSurname' => 'Martin',
-            'maternalSurname' => 'Perez',
-            'genero' => 'Hombre',
-            'phone' => '9956386893',
-            'matricula' => '0002',
-            'email' => 'test2@material.com',
-            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
-        ]);
-
-        $admin2->assignRole($userRole);
-=======
         // Crear usuario Admin
         $admin = User::create([
             'name' => 'Admin',
@@ -125,6 +65,5 @@ class UserSeeder extends Seeder
         ]);
 
         $evaluator->assignRole('Evaluador');
->>>>>>> f5c26dfb91662a310627b9ff7b2dfeedfb4647b0
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostalCodeController;
 use App\Http\Controllers\SDocumentosController;
 use App\Http\Controllers\DiagnosticoController;
+use App\Http\Controllers\Formulario2Controller;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\Exception\Exception;
 
@@ -227,17 +228,19 @@ Route::middleware(['can:users.edit'])->group(function () {
 Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
 Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
 
+//formularios
 Route::get('/formulario', function() {
     return view('Diagnosticos.formulario');
 })->name('formulario'); // Asigna un nombre a la ruta
-
-// web.php
-
-
-
 Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
-Route::resource('diagnosticos', DiagnosticoController::class);
 
+Route::get('/formulario2', function() {
+    return view('Diagnosticos.formulario2');
+})->name('formulario2'); // Asigna un nombre a la ruta
+Route::post('/formulario2', [Formulario2Controller::class, 'index'])->name('formulario2.index');
+//
+
+Route::resource('diagnosticos', DiagnosticoController::class);
 
 use App\Http\Controllers\FormController;
 
@@ -262,3 +265,12 @@ use App\Http\Controllers\AtencionUsuariosController;
 Route::get('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'create'])->name('formato-atencion.create');
 Route::post('/formato-atencion/{estandar_id}', [AtencionUsuariosController::class, 'store'])->name('formato-atencion.store');
 Route::get('/formato-atencion/download/{estandar_id}', [AtencionUsuariosController::class, 'download'])->name('formato-atencion.download');
+//
+use App\Http\Controllers\AsignarDiagnosticosController;
+
+Route::get('asignar-diagnosticos', [AsignarDiagnosticosController::class, 'index'])->name('usuarios.asignar-diagnosticos');
+Route::post('asignar-diagnosticos', [AsignarDiagnosticosController::class, 'guardarAsignacion'])->name('usuarios.guardar-asignacion');
+
+Route::get('/buscar-estandar/{id}', [AsignarDiagnosticosController::class, 'buscarEstandar']);
+
+Route::get('/usuarios-con-diagnosticos', [AsignarDiagnosticosController::class, 'usuariosConDiagnosticos'])->name('usuarios.con-diagnosticos');

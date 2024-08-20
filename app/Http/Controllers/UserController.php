@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use App\Models\diagnostico;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -18,7 +18,7 @@ class UserController extends Controller
         $users = User::whereDoesntHave('roles', function($query) {
             $query->where('name', 'Evaluador');
         })->get();
-    
+
 
         return view('users.index', compact('users'));
     }
@@ -91,4 +91,7 @@ class UserController extends Controller
     {
         //
     }
+
+
+
 }

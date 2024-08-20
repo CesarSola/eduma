@@ -10,7 +10,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Lista de Inscripciones</div>
+                    <div class="card-header">Lista de Inscripciones3</div>
 
                     <div class="card-body">
                         <table class="table">
