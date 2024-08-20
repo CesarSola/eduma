@@ -29,7 +29,8 @@
                         <div class="right-content">
                             @if ($documentos->isNotEmpty())
                                 @if ($documentosCompletos)
-                                    <div><span class="badge badge-success">Documentos Generales: Completos y Validados</span>
+                                    <div><span class="badge badge-success">Documentos Generales: Completos y
+                                            Validados</span>
                                     </div>
                                 @elseif ($documentosEnValidacion)
                                     <div><span class="badge badge-info">Documentos Generales: En Validación</span></div>
@@ -135,7 +136,7 @@
                     </div>
                 </div>
 
-                <!-- Validar Documentos y Comprobantes -->
+                <!-- Validar Documentos -->
                 <div class="row mt-3">
                     <!-- Validar Documentos de Registro General -->
                     <div class="col-lg-4 col-md-6 mb-4">
@@ -149,28 +150,36 @@
                                         <p>No hay documentos disponibles para este usuario.</p>
                                     </div>
                                 @else
-                                    <ul class="list-group flex-grow-1 overflow-auto">
-                                        @foreach ($documentos as $documento)
-                                            <li class="list-group-item">
-                                                {{ basename($documento->ine_ife) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->comprobante_domiciliario) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->foto) }}
-                                            </li>
-                                            <br>
-                                            <li class="list-group-item">
-                                                {{ basename($documento->curp) }}
-                                            </li>
-                                            <br>
-                                        @endforeach
-                                    </ul>
-                                    <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                        class="btn btn-primary">Ver</a>
+                                    <!-- Comprobar si todos los documentos están validados -->
+                                    @if ($documentosCompletos)
+                                        <p style="text-align: center">Todos los documentos ya han sido validados.</p>
+                                    @elseif ($documentosEnValidacion)
+                                        <p style="text-align: center">Algunos documentos están en proceso de validación.</p>
+                                    @else
+                                        <ul class="list-group flex-grow-1 overflow-auto">
+                                            @foreach ($documentos as $documento)
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->ine_ife) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->comprobante_domiciliario) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->foto) }}
+                                                </li>
+                                                <br>
+                                                <li class="list-group-item">
+                                                    {{ basename($documento->curp) }}
+                                                </li>
+                                                <br>
+                                            @endforeach
+                                        </ul>
+                                        <!-- Mostrar el botón para ver documentos si hay documentos pendientes de validación -->
+                                        <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
+                                            class="btn btn-primary">Ver</a>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -184,12 +193,13 @@
                             </div>
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="text-center">
-                                    @if ($comprobantesCO->isNotEmpty())
-                                        <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
-                                            class="btn btn-primary">Ver
-                                            Comprobante de Pago</a>
-                                    @else
+                                    @if ($comprobantesCO->isEmpty())
                                         <p>No hay comprobantes de pago de competencia para validar.</p>
+                                    @else
+                                        <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
+                                            class="btn btn-primary">
+                                            Ver Comprobantes de Pago
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -204,13 +214,13 @@
                             </div>
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="text-center">
-                                    @if ($comprobantesCU->isNotEmpty())
+                                    @if ($comprobantesCU->isEmpty())
+                                        <p>No hay comprobantes de pago de cursos para validar.</p>
+                                    @else
                                         <a href="{{ route('validarCuP.show', $usuariosAdmin->id) }}"
                                             class="btn btn-primary">
-                                            Ver
-                                            Comprobante de Pago Cursos</a>
-                                    @else
-                                        <p>No hay comprobantes de pago de cursos para validar.</p>
+                                            Ver Comprobante de Pago Cursos
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -221,41 +231,7 @@
             </div>
         </div>
     </div>
-    @if($atencionUsuario->isNotEmpty())
-    <div class="card">
-        <div class="card-header">
-            <h3>Encuestas de Satisfacción Respondidas</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nombre del Estándar</th>
-                        <th>Fecha del Examen</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($atencionUsuario as $atencion)
-                        <tr>
-                            <td>{{ $atencion->estandar->name }}</td>
-                            <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
-                            <td>
-                                <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}" class="btn btn-info">Descargar</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-@else
-    <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
-@endif
-
-  <!-- Mostrar todas las encuestas de satisfacción -->
-<div class="col-md-12 mt-4">
-    @if($surveyResponses->isNotEmpty())
+    @if ($atencionUsuario->isNotEmpty())
         <div class="card">
             <div class="card-header">
                 <h3>Encuestas de Satisfacción Respondidas</h3>
@@ -270,13 +246,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($surveyResponses as $response)
+                        @foreach ($atencionUsuario as $atencion)
                             <tr>
-                                <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                <td>{{ $atencion->estandar->name }}</td>
+                                <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
                                 <td>
-                                    <!-- Enlace para descargar la encuesta en formato DOCX -->
-                                    <a href="{{ route('survey.downloadFile', $response->id) }}" class="btn btn-info">Descargar</a>
+                                    <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}"
+                                        class="btn btn-info">Descargar</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -287,7 +263,43 @@
     @else
         <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
     @endif
-</div>
+
+    <!-- Mostrar todas las encuestas de satisfacción -->
+    <div class="col-md-12 mt-4">
+        @if ($surveyResponses->isNotEmpty())
+            <div class="card">
+                <div class="card-header">
+                    <h3>Encuestas de Satisfacción Respondidas</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Estándar</th>
+                                <th>Fecha del Examen</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($surveyResponses as $response)
+                                <tr>
+                                    <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                    <td>
+                                        <!-- Enlace para descargar la encuesta en formato DOCX -->
+                                        <a href="{{ route('survey.downloadFile', $response->id) }}"
+                                            class="btn btn-info">Descargar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+            <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
+        @endif
+    </div>
 
 @stop
 

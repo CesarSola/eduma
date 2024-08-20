@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EvaluadoresUsuarios;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +32,7 @@ class EvaluadoresController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
+
         // Crear el usuario
         $user = User::create([
             'name' => $request->name,
@@ -40,20 +41,31 @@ class EvaluadoresController extends Controller
             'maternalSurname' => $request->maternalSurname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol' => 'Evaluador',
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             // Dejar 'matricula' fuera para los evaluadores
         ]);
-    
+
         // Asignar el rol de Evaluador
         $user->assignRole('Evaluador');
-    
-        return redirect()->route('evaluadores.index')->with('success', 'Evaluador creado exitosamente.');
+
+        return response()->json(['success' => 'Evaluador creado correctamente.']);
     }
-    
-    public function show(User $evaluador)
+
+    public function show($id)
     {
-        return view('expedientes.expedientesAdmin.competencias.evaluadores.show', compact('evaluador'));
+        // Obtener el evaluador con el ID especificado
+        $evaluador = User::findOrFail($id);
+
+        // Obtener los usuarios asignados a este evaluador
+        $usuariosAsignados = EvaluadoresUsuarios::where('evaluador_id', $id)
+            ->with('usuario')
+            ->get()
+            ->pluck('usuario');
+
+        // Pasar datos a la vista, incluyendo el evaluador
+        return view('expedientes.expedientesAdmin.competencias.evaluadores.show', compact('evaluador', 'usuariosAsignados'));
     }
 
     public function edit(User $evaluador)
@@ -82,14 +94,21 @@ class EvaluadoresController extends Controller
 
         $evaluador->update($data);
 
-        return redirect()->route('evaluadores.index')->with('success', 'Evaluador actualizado correctamente.');
+        return response()->json(['success' => 'Evaluador actualizado correctamente.']);
     }
 
     public function destroy($id)
     {
-        $evaluador = User::findOrFail($id);
-        $evaluador->delete();
+        try {
+            // Encuentra el evaluador por ID y elimínalo
+            $evaluador = User::findOrFail($id);
+            $evaluador->delete();
 
-        return redirect()->route('evaluadores.index')->with('success', 'Evaluador eliminado exitosamente.');
+            // Retorna una respuesta JSON de éxito
+            return response()->json(['success' => 'Evaluador eliminado exitosamente.']);
+        } catch (\Exception $e) {
+            // Retorna una respuesta JSON de error en caso de excepción
+            return response()->json(['error' => 'No se pudo eliminar el evaluador.'], 400);
+        }
     }
 }

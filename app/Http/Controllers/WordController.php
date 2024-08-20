@@ -34,18 +34,24 @@ class WordController extends Controller
         // Obtener el usuario autenticado
         $user = auth()->user();
 
+        // Obtener el estándar (competencia)
+        $competencia = Estandares::find($id);
+
         // Generar el nombre del archivo usando el nombre completo y matrícula del usuario
         $fileName = 'ficha_registro_' .
             Str::slug($user->name) . '_' .
             Str::slug($user->secondName) . '_' .
             Str::slug($user->paternalSurname) . '_' .
-            Str::slug($user->maternalSurname) . '_' . // Asegúrate de que el campo esté presente en el modelo User
+            Str::slug($user->maternalSurname) . '_' .
             $user->matricula . '.' .
             $request->file('ficha_registro')->getClientOriginalExtension();
 
         // Almacenar el archivo en el directorio especificado
         $filePath = $request->file('ficha_registro')->storeAs(
-            'public/documents/evidence/competencias/fichas/' . $user->matricula . '/' . Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
+            'public/documents/evidence/competencias/fichas/' .
+                $user->matricula . '/' .
+                Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
+                Str::slug($competencia->name),
             $fileName
         );
 
@@ -55,7 +61,7 @@ class WordController extends Controller
             'file_path' => $filePath,
             'user_id' => $user->id,
             'estandar_id' => $id,
-            'matricula' => $user->matricula, // Agrega este campo si lo necesitas en la base de datos
+            'matricula' => $user->matricula,
         ]);
 
         // Redirigir con un mensaje de éxito
@@ -73,7 +79,12 @@ class WordController extends Controller
             'carta_firma' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
+        // Obtener el usuario autenticado
         $user = auth()->user();
+
+        // Obtener el estándar (competencia)
+        $competencia = Estandares::find($id);
+
         $fileName = 'carta_firma_' .
             Str::slug($user->name) . '_' .
             Str::slug($user->secondName) . '_' .
@@ -82,11 +93,15 @@ class WordController extends Controller
             $user->matricula . '.' .
             $request->file('carta_firma')->getClientOriginalExtension();
 
+
+        // Almacenar el archivo en el directorio especificado
         $filePath = $request->file('carta_firma')->storeAs(
-            'public/documents/evidence/competencias/cartas/' . $user->matricula . '/' .  Str::slug($user->name . '  ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
+            'public/documents/evidence/competencias/carta/' .
+                $user->matricula . '/' .
+                Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
+                Str::slug($competencia->name),
             $fileName
         );
-
 
         // Guardar la información en la tabla fichas_documentos
         $ficha = CartasDocumentos::create([

@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        $user->assignRole('User');
+        $user->assignRole('Evaluador');
 
         // Crear usuario Evaluador
         $evaluator = User::create([
@@ -65,5 +65,6 @@ class UserSeeder extends Seeder
         ]);
 
         $evaluator->assignRole('Evaluador');
+>>>>>>> f5c26dfb91662a310627b9ff7b2dfeedfb4647b0
     }
 }

@@ -41,7 +41,7 @@ class CompetenciasAddController extends Controller
         // Sincroniza los documentos con la relación
         $competencia->documentosnec()->sync($request->input('documentosnec_id'));
 
-        return back()->with('success', 'Competencia creada exitosamente');
+        return redirect()->route('competenciasAD.index')->with('success', 'Competencia creada exitosamente');
     }
     public function update(Request $request, string $id)
     {
@@ -65,7 +65,7 @@ class CompetenciasAddController extends Controller
         // Sincroniza los documentos con la relación
         $competencia->documentosnec()->sync($request->input('documentosnec_id'));
 
-        return back()->with('success', 'Competencia actualizada exitosamente');
+        return redirect()->route('competenciasAD.index')->with('success', 'Competencia actualizada exitosamente');
     }
 
 

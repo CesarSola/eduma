@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Agregar Competencias')
 
 @section('content_header')
-    <h1>Estandares</h1>
+    <h1>Crea Nuevos Estandares</h1>
 @stop
 
 @section('content')
@@ -90,6 +90,8 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -119,5 +121,15 @@
             });
         });
     </script>
-
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+    </script>
 @stop

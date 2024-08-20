@@ -17,11 +17,13 @@ return new class extends Migration
             $table->unsignedBigInteger('estandar_id');
             $table->string('comprobante_pago', 500);
             $table->json('estado')->nullable(); // Estado como JSON
+            $table->unsignedBigInteger('evaluador_id')->nullable(); // Evaluador asignado, puede ser nulo
             $table->timestamps();
 
             // Claves foráneas
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('estandar_id')->references('id')->on('estandares')->onDelete('cascade');
+            $table->foreign('evaluador_id')->references('id')->on('users')->onDelete('set null'); // Enlazar con el evaluador
         });
     }
 

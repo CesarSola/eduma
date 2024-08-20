@@ -308,13 +308,13 @@ return [
             'text' => 'search',
         ],
         [
-            'header' => 'INICIO',
+            'header' => 'INICIO'
         ],
         [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
-            'icon_color' => 'success',
+            'icon_color' => 'success'
         ],
         [
             'header' => 'ADMINISTRADOR'
@@ -354,11 +354,23 @@ return [
                     'icon_color' => 'primary',
                     'submenu' => [
                         [
+                            'text' => 'Mis Asignados',
+                            'url' => 'calendario',
+                            'icon' => 'fas fa-fw fa-user-tie',
+                            'icon_color' => 'danger',
+                        ],
+                        [
                             'text' => 'Agrega tus evaluadores',
                             'url' => 'evaluadores',
                             'icon' => 'fas fa-fw fa-user-plus',
-                            'icon_color' => 'success',
+                            'icon_color' => 'indigo',
 
+                        ],
+                        [
+                            'text' => 'Asigna Evaluadores',
+                            'url' => 'asignar-evaluadores',
+                            'icon' => 'fas fa-fw fa-user-check',
+                            'icon_color' => 'success',
                         ],
                     ],
                 ],
@@ -391,6 +403,12 @@ return [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
                             'icon' => 'fas fa-plus-circle',
+                            'icon_color' => 'success',
+                        ],
+                        [
+                            'text' => 'Registro de Documentos Necesarios',
+                            'url' => 'documentosnec',
+                            'icon' => 'fas fa-file-alt',
                             'icon_color' => 'success',
                         ],
                         [
@@ -606,17 +624,17 @@ return [
             'title' => null,
         ],
         'buttons' => [
-            'close' => true,
-            'close_all' => true,
-            'close_all_other' => true,
-            'scroll_left' => true,
-            'scroll_right' => true,
-            'fullscreen' => true,
+            'close' => false,
+            'close_all' => false,
+            'close_all_other' => false,
+            'scroll_left' => false,
+            'scroll_right' => false,
+            'fullscreen' => false,
         ],
         'options' => [
             'loading_screen' => 1000,
-            'auto_show_new_tab' => true,
-            'use_navbar_items' => true,
+            'auto_show_new_tab' => false,
+            'use_navbar_items' => false,
         ],
     ],
 

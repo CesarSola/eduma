@@ -3,44 +3,99 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estandares;
+use App\Models\EvaluadoresUsuarios;
 use App\Models\FechaCompetencia;
 use App\Models\FechaElegida;
+use App\Models\Horario;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class CalendarioController extends Controller
 {
 
-    public function index($competenciaId, Request $request)
+    public function index(Request $request)
     {
-        $userId = $request->query('user_id');
+        // Obtén el ID del evaluador autenticado
+        $evaluadorId = Auth::id();
+
+        // Obtener todos los usuarios asignados a este evaluador
+        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluadorId) {
+            $query->where('evaluador_id', $evaluadorId);
+        })->with('estandares')->get();
+
+        // Obtener todos los estándares
+        $estandares = Estandares::all();
+
+        // Supongamos que $competenciaId se pasa como parámetro en la solicitud
+        $competenciaId = $request->query('competenciaId');
+
+        // Obtener información de la competencia, si existe
+        $competencia = null;
+        if ($competenciaId) {
+            $competencia = Estandares::find($competenciaId);
+        }
+
+        // Obtener fechas y horarios para cada usuario y estándar
+        foreach ($usuarios as $usuario) {
+            foreach ($usuario->estandares as $estandar) {
+                $estandar->fechas = FechaCompetencia::where('user_id', $usuario->id)
+                    ->where('competencia_id', $estandar->id)
+                    ->get();
+                foreach ($estandar->fechas as $fecha) {
+                    $fecha->horarios = Horario::where('fecha_competencia_id', $fecha->id)->get();
+                }
+            }
+        }
+
+        // Retornar la vista con los datos necesarios
+        return view('expedientes.expedientesAdmin.competencias.fechas.index', [
+            'usuarios' => $usuarios,
+            'competencia' => $competencia,
+            'estandares' => $estandares,
+            'selectedUserId' => $request->query('user_id', null),
+            'competenciaId' => $competenciaId, // Asegúrate de pasar esta variable
+        ]);
+    }
+
+    // En el controlador
+    public function show($competenciaId, Request $request)
+    {
+        $evaluador = Auth::user(); // Obtén al evaluador autenticado
+
         // Obtener la competencia por ID utilizando el modelo Estandares.
         $competencia = Estandares::findOrFail($competenciaId);
 
-        // Obtener todos los usuarios sin el rol de administrador y cargar sus estándares
-        $usuarios = $this->getUsuariosSinRolAdmin();
+        // Obtener todos los usuarios asignados al evaluador autenticado y cargar sus estándares
+        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluador) {
+            $query->where('evaluador_id', $evaluador->id);
+        })->with('estandares')->get();
 
-        // Si quieres cargar también los estándares de los usuarios, puedes hacerlo aquí
-        $usuarios = $usuarios->load('estandares');
-        // Ejemplo de cómo podrías recuperar las fechas en el controlador
-        $fechasDisponibles = FechaCompetencia::with('competencia', 'horarios', 'user')->get();
-        $fechasElegidas = FechaElegida::with('fechaCompetencia', 'horarioCompetencia', 'user')->get();
+        // Obtener fechas y horarios disponibles para los usuarios del evaluador
+        $fechasDisponibles = FechaCompetencia::whereIn('user_id', $usuarios->pluck('id'))
+            ->with('competencia', 'horarios', 'user')
+            ->get();
 
-        // Obtener el user_id de la solicitud, si se proporciona. Si no se proporciona, se usa null como valor predeterminado.
+        // Obtener fechas y horarios elegidos por los usuarios del evaluador
+        $fechasElegidas = FechaElegida::whereIn('user_id', $usuarios->pluck('id'))
+            ->with('fechaCompetencia', 'horarioCompetencia', 'user')
+            ->get();
+
+        // Obtener el user_id de la solicitud, si se proporciona.
         $selectedUserId = $request->input('user_id', null);
 
-
-        // Retornar la vista 'expedientes.expedientesAdmin.competencias.fechas.show' con los datos necesarios.
+        // Retornar la vista con los datos necesarios.
         return view('expedientes.expedientesAdmin.competencias.fechas.show', [
             'competencia' => $competencia,
             'fechasDisponibles' => $fechasDisponibles,
             'fechasElegidas' => $fechasElegidas,
             'selectedUserId' => $selectedUserId,
-            'usuarios' => $usuarios,
-            'competencias' => $competencia,
+            'evaluador' => $evaluador, // Pasa el evaluador a la vista
         ]);
     }
+
+
 
     public function getUsuariosSinRolAdmin()
     {

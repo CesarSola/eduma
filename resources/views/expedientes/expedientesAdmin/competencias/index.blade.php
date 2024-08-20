@@ -127,8 +127,8 @@
                                 </ul>
                             </td>
                             <td>
-                                <a href="{{ route('calendario.index', ['competenciaId' => $competencia->id, 'user_id' => $userId]) }}"
-                                    class="btn btn-primary">Ver Todas las Fechas</a>
+                                <p>Para asignar fechas y horarios a este usuario ve a la pestaña de <a
+                                        href="{{ route('calendario.index') }}" class="btn btn-primary">Mis Usuarios</a></p>
                             </td>
                         </tr>
                     @endforeach

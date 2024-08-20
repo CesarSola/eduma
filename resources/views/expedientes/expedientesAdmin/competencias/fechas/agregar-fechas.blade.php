@@ -1,99 +1,122 @@
-<!-- Modal -->
-<div class="modal fade" id="modalAgregarFechas" tabindex="-1" role="dialog" aria-labelledby="modalAgregarFechasLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarFechasLabel">Agregar Fechas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulario para agregar fechas -->
-                <form action="{{ route('competencias.guardar-fechas-modal', ['competencia' => $competencia->id]) }}"
-                    method="POST" id="formGuardarFechas">
-                    @csrf
-                    @csrf
-                    <input type="hidden" name="user_id" id="user_id" value="{{ $selectedUserId }}">
-
-                    <!-- Selección de Usuario -->
-                    <div class="form-group mb-4">
-                        <label for="usuario">Seleccionar Usuario:</label>
-                        <select id="usuario" name="usuario_id" class="form-control" required>
-                            <option value="">Seleccione un usuario</option>
-                            @foreach ($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}"
-                                    {{ $usuario->id == $selectedUserId ? 'selected' : '' }}>
-                                    {{ $usuario->name }} {{ $usuario->secondName }} {{ $usuario->paternalSurname }}
-                                    {{ $usuario->maternalSurname }}
-                                </option>
-                            @endforeach
-                        </select>
+<!-- Modal para asignar fechas -->
+@foreach ($usuarios as $usuario)
+    @foreach ($usuario->estandares as $estandar)
+        <div class="modal fade" id="modalAgregarFechas{{ $usuario->id }}-{{ $estandar->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modalAgregarFechasLabel{{ $usuario->id }}-{{ $estandar->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <!-- Encabezado del modal -->
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="modalAgregarFechasLabel{{ $usuario->id }}-{{ $estandar->id }}">
+                            Agregar Fechas para {{ $estandar->name }}
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-
-                    <!-- Selección de Estándares -->
-                    <div class="form-group mb-4">
-                        <label for="estandar_id">Seleccionar Estándar:</label>
-                        <select id="estandar" name="estandar_id" class="form-control" required>
-                            <option value="">Seleccione un estándar</option>
-                            <!-- Opciones se llenarán dinámicamente -->
-                        </select>
-                    </div>
-
-                    <!-- Fechas y Horarios -->
-                    <div id="fechasContainer">
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="form-group mb-4">
-                                <label for="fecha">Fecha:</label>
-                                <input type="date" name="fechas[]" class="form-control" required>
-
-                                <label for="hora" class="mt-2">Horario:</label>
-                                <input type="time" name="horarios[{{ $i }}][]" class="form-control"
-                                    required>
+                    <!-- Cuerpo del modal -->
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Usuario:</strong> {{ $usuario->name }} {{ $usuario->secondName }}
+                                        {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Matrícula:</strong> {{ $usuario->matricula }} </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Estándar:</strong> {{ $estandar->numero }} {{ $estandar->name }}</p>
+                                </div>
                             </div>
-                        @endfor
+                            <!-- Formulario para agregar fechas y horarios -->
+                            <form id="formAgregarFechas{{ $usuario->id }}-{{ $estandar->id }}">
+                                <div class="form-group">
+                                    <label for="fecha1-{{ $usuario->id }}-{{ $estandar->id }}">Fecha 1:</label>
+                                    <input type="date" id="fecha1-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control" required>
+                                    <input type="time" id="hora1-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control mt-2" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha2-{{ $usuario->id }}-{{ $estandar->id }}">Fecha 2:</label>
+                                    <input type="date" id="fecha2-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control" required>
+                                    <input type="time" id="hora2-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control mt-2" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha3-{{ $usuario->id }}-{{ $estandar->id }}">Fecha 3:</label>
+                                    <input type="date" id="fecha3-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control" required>
+                                    <input type="time" id="hora3-{{ $usuario->id }}-{{ $estandar->id }}"
+                                        class="form-control mt-2" required>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">Guardar Fechas y Horarios</button>
-                </form>
+                    <!-- Pie del modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary"
+                            id="guardarFechasBtn{{ $usuario->id }}-{{ $estandar->id }}">Guardar Fechas</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
+        <!-- Script para manejar la adición de fechas -->
+        <script>
+            document.getElementById('guardarFechasBtn{{ $usuario->id }}-{{ $estandar->id }}').addEventListener('click',
+                function() {
+                    var fechas = [{
+                            fecha: $('#fecha1-{{ $usuario->id }}-{{ $estandar->id }}').val(),
+                            hora: [$('#hora1-{{ $usuario->id }}-{{ $estandar->id }}').val()]
+                        },
+                        {
+                            fecha: $('#fecha2-{{ $usuario->id }}-{{ $estandar->id }}').val(),
+                            hora: [$('#hora2-{{ $usuario->id }}-{{ $estandar->id }}').val()]
+                        },
+                        {
+                            fecha: $('#fecha3-{{ $usuario->id }}-{{ $estandar->id }}').val(),
+                            hora: [$('#hora3-{{ $usuario->id }}-{{ $estandar->id }}').val()]
+                        }
+                    ];
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const usuarioSelect = document.getElementById('usuario');
-        const estandarSelect = document.getElementById('estandar');
-
-        // Función para actualizar los estándares cuando se cambia el usuario
-        usuarioSelect.addEventListener('change', function() {
-            const userId = this.value;
-            estandarSelect.innerHTML =
-                '<option value="">Seleccione un estándar</option>'; // Limpiar opciones
-
-            if (userId) {
-                // Buscar estándares del usuario seleccionado
-                const usuarios =
-                    @json($usuarios); // Convertir la colección de usuarios a JSON
-                const selectedUser = usuarios.find(user => user.id == userId);
-
-                if (selectedUser) {
-                    selectedUser.estandares.forEach(estandar => {
-                        const option = document.createElement('option');
-                        option.value = estandar.id;
-                        option.textContent = estandar.name;
-                        estandarSelect.appendChild(option);
+                    $.ajax({
+                        url: '{{ route('competencias.guardar-fechas-modal', ['competencia' => 'COMPETENCIA_ID_PLACEHOLDER']) }}'
+                            .replace('COMPETENCIA_ID_PLACEHOLDER', '{{ $estandar->id }}'),
+                        method: 'POST',
+                        data: {
+                            usuario_id: '{{ $usuario->id }}',
+                            estandar_id: '{{ $estandar->id }}',
+                            fechas: fechas,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Fechas Guardadas',
+                                    text: 'Las fechas se han guardado correctamente.',
+                                    confirmButtonText: 'Aceptar'
+                                }).then(function() {
+                                    $('#modalAgregarFechas{{ $usuario->id }}-{{ $estandar->id }}')
+                                        .modal('hide');
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ocurrió un error al guardar las fechas. Por favor, inténtalo de nuevo.',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
                     });
-                }
-            }
-        });
-
-        // Disparar evento de cambio para llenar el select de estándares si hay un usuario seleccionado
-        if ({{ $selectedUserId ? 'true' : 'false' }}) {
-            usuarioSelect.dispatchEvent(new Event('change'));
-        }
-    });
-</script>
+                });
+        </script>
+    @endforeach
+@endforeach

@@ -51,8 +51,17 @@ class ValidarDocumentosController extends Controller
         $estado[$documento->nombre] = $accion;
         $documento->update(['estado' => json_encode($estado)]);
 
+        // Verificar si todos los documentos han sido validados
+        $todosValidados = $usuario->documentosE->every(function ($doc) {
+            $estado = json_decode($doc->estado, true) ?? [];
+            return isset($estado[$doc->nombre]) && $estado[$doc->nombre] != 'pendiente';
+        });
+
         // Responder
         $mensaje = $accion == 'validar' ? 'Documento validado correctamente' : 'Documento rechazado correctamente';
-        return response()->json(['success' => $mensaje]);
+        return response()->json([
+            'success' => $mensaje,
+            'todos_validados' => $todosValidados
+        ]);
     }
 }

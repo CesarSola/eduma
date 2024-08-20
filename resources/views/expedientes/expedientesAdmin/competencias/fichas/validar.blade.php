@@ -16,7 +16,7 @@
 
     <div class="container">
         <div id="success-message" class="alert alert-success" style="display: none;">
-            Documento actualizado correctamente.
+            Ficha actualizada correctamente.
             <button type="button" class="close" aria-label="Close" onclick="this.parentElement.style.display='none';">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -40,9 +40,6 @@
                                                 {{ $usuario->paternalSurname }}
                                                 {{ $usuario->maternalSurname }}</h6>
                                             <h6 class="text-left mt-2">Edad: {{ $usuario->age }} años</h6>
-                                        </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
                                         </div>
                                     </div>
                                 </div>
@@ -165,19 +162,19 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            const successMessage = document.getElementById('success-message');
                             if (data.success) {
-                                successMessage.style.display = 'block';
-
-                                // Ocultar el mensaje después de 3 segundos
-                                setTimeout(() => {
-                                    successMessage.style.display = 'none';
-                                }, 3000);
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: 'Documento actualizado correctamente.',
+                                    showConfirmButton: true, // Mostrar el botón de cierre
+                                    confirmButtonText: 'Cerrar', // Texto del botón
+                                });
 
                                 const action = formData.get('documento_estado');
                                 if (action === 'validar') {
-                                    form.closest('.update-form').style.display =
-                                        'none'; // Ocultar el formulario del documento validado
+                                    form.closest('.update-form').style.display = 'none';
+
                                     if (!document.querySelector('.update-form')) {
                                         document.querySelector('.card-header').innerHTML += `
                                             <div class="form-group row">
@@ -188,25 +185,21 @@
                                         `;
                                     }
                                 } else if (action === 'rechazar') {
-                                    // Resetear campos de validar y comentario
                                     form.querySelector('input[type="radio"]:checked').checked =
-                                        false; // Deseleccionar el radio button seleccionado
+                                        false;
                                     form.querySelector('textarea[name="comentario_documento"]')
-                                        .value = ''; // Reiniciar el campo de comentarios
-
-                                    // Mostrar mensaje de documento rechazado
-                                    const messageElement = form.querySelector(
-                                        '.alert.alert-info');
-                                    if (messageElement) {
-                                        messageElement.style.display = 'block';
-                                    }
-
-                                    // Cambiar texto del botón
+                                        .value = '';
                                     form.querySelector('.btn.btn-success').innerText =
                                         'Volver a validar';
                                 }
                             } else if (data.error) {
-                                alert(data.error); // Manejar errores si es necesario
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.error,
+                                    showConfirmButton: true, // Mostrar el botón de cierre en caso de error
+                                    confirmButtonText: 'Cerrar', // Texto del botón
+                                });
                             }
                         })
                         .catch(error => console.error('Error:', error));

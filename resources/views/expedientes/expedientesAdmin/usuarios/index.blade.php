@@ -38,65 +38,72 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($usuariosAdmin as $usuario)
-                                <tr style="text-align: center">
-                                    <td>{{ $usuario->id }}</td>
-                                    <td>{{ $usuario->name }}</td>
-                                    <td>{{ $usuario->secondName }}</td>
-                                    <td>{{ $usuario->paternalSurname }}</td>
-                                    <td>{{ $usuario->maternalSurname }}</td>
-                                    <td>{{ $usuario->age }}</td>
-                                    <td>{{ $usuario->matricula ?? 'N/A' }}</td>
-                                    <td>
-                                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->ine_ife)
-                                            <object
-                                                data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
-                                                type="application/pdf" width="100" height="100">
-                                                <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
-                                                    target="_blank">Ver INE</a>
-                                            </object>
-                                        @else
-                                            No disponible
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->comprobante_domiciliario)
-                                            <object
-                                                data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
-                                                type="application/pdf" width="100" height="100">
-                                                <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
-                                                    target="_blank">Ver Comprobante</a>
-                                            </object>
-                                        @else
-                                            No disponible
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->curp)
-                                            <object
-                                                data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->curp)) }}"
-                                                type="application/pdf" width="100" height="100">
-                                                <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->curp)) }}"
-                                                    target="_blank">Ver Comprobante</a>
-                                            </object>
-                                        @else
-                                            No disponible
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->foto)
-                                            <img src="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->foto)) }}"
-                                                width="100" height="100" />
-                                        @else
-                                            No disponible
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('usuariosAdmin.show', $usuario->id) }}"
-                                            class="btn btn-primary">Ver</a>
-                                    </td>
+                            @if ($usuariosAsignados->isEmpty())
+                                <tr>
+                                    <td colspan="12" class="text-center">Aún no tiene ningún usuario asignado, solicita a
+                                        tu administrador la asignación de usuarios para poder evaluarlos</td>
                                 </tr>
-                            @endforeach
+                            @else
+                                @foreach ($usuariosAsignados as $usuario)
+                                    <tr style="text-align: center">
+                                        <td>{{ $usuario->id }}</td>
+                                        <td>{{ $usuario->name }}</td>
+                                        <td>{{ $usuario->secondName }}</td>
+                                        <td>{{ $usuario->paternalSurname }}</td>
+                                        <td>{{ $usuario->maternalSurname }}</td>
+                                        <td>{{ $usuario->age }}</td>
+                                        <td>{{ $usuario->matricula ?? 'N/A' }}</td>
+                                        <td>
+                                            @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->ine_ife)
+                                                <object
+                                                    data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
+                                                    type="application/pdf" width="100" height="100">
+                                                    <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->ine_ife)) }}"
+                                                        target="_blank">Ver INE</a>
+                                                </object>
+                                            @else
+                                                No disponible
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->comprobante_domiciliario)
+                                                <object
+                                                    data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
+                                                    type="application/pdf" width="100" height="100">
+                                                    <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->comprobante_domiciliario)) }}"
+                                                        target="_blank">Ver Comprobante</a>
+                                                </object>
+                                            @else
+                                                No disponible
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->curp)
+                                                <object
+                                                    data="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->curp)) }}"
+                                                    type="application/pdf" width="100" height="100">
+                                                    <a href="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->curp)) }}"
+                                                        target="_blank">Ver Comprobante</a>
+                                                </object>
+                                            @else
+                                                No disponible
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->foto)
+                                                <img src="{{ asset(str_replace('public/', 'storage/', $usuario->documentos->first()->foto)) }}"
+                                                    width="100" height="100" />
+                                            @else
+                                                No disponible
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('usuariosAdmin.show', $usuario->id) }}"
+                                                class="btn btn-primary">Ver</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

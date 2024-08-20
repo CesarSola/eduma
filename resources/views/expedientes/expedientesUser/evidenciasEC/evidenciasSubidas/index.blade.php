@@ -64,7 +64,11 @@
                                 <td>{{ $validacion ? $validacion->comentario : 'Sin comentarios' }}</td>
                                 <td>
                                     @if ($validacion && $validacion->tipo_validacion === 'rechazar')
-                                        <a href="{{ route('evidencias.resubir', ['id' => $documento->id]) }}"
+                                        <!-- Botón para abrir el modal con datos del documento -->
+                                        <a href="#" data-toggle="modal" data-target="#resubirModal"
+                                            data-id="{{ $documento->id }}" data-nombre="{{ $documento->nombre }}"
+                                            data-estandar="{{ optional($documento->estandar)->name }}"
+                                            data-usuario="{{ $usuarioName }}"
                                             class="btn btn-warning btn-sm shadow-sm">Resubir</a>
                                     @endif
                                     @if ($validacion && $validacion->tipo_validacion === 'pendiente')
@@ -78,6 +82,7 @@
             </div>
         </div>
     </div>
+    @include('expedientes.expedientesUser.evidenciasEC.resubir.resubir')
 @stop
 
 

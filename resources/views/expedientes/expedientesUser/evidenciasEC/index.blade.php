@@ -173,7 +173,8 @@
                                             <tr>
                                                 <th>Documento</th>
                                                 <th>Nombre</th>
-                                                <th>Acciones</th>
+                                                <th>Ver</th>
+                                                <th>Descargar documento</th>
                                                 <th>Subir Evidencias</th>
                                             </tr>
                                         </thead>
@@ -188,22 +189,30 @@
                                                 <tr>
                                                     <td>{{ $documento->name }}</td>
                                                     <td>{{ $documento->description }}</td>
-                                                    <td>
+                                                    <td class="text-center align-middle">
                                                         <a href="{{ Storage::url($documento->documento) }}" target="_blank"
                                                             class="btn btn-primary btn-sm shadow-sm">Ver</a>
+                                                    </td>
+                                                    <td class="text-center align-middle">
                                                         <a href="{{ route('document.download', $documento->id) }}"
                                                             class="btn btn-danger btn-sm shadow-sm">Descargar</a>
                                                     </td>
-                                                    <td>
+                                                    <td class="text-center align-middle">
                                                         @if (!$documento_subido)
-                                                            <a class="btn btn-success btn-sm shadow-sm"
-                                                                href="{{ route('evidenciasEC.show', ['id' => $estandar->id, 'documento_id' => $documento->id]) }}">Subir</a>
+                                                            <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                                data-bs-toggle="modal" data-bs-target="#uploadEvidenceModal"
+                                                                data-documento-id="{{ $documento->id }}"
+                                                                data-estandar-id="{{ $estandar->id }}"
+                                                                data-documento-name="{{ $documento->name }}">
+                                                                Subir Documento
+                                                            </button>
                                                         @else
-                                                            <span class="badge badge-info">Subido</span>
+                                                            <span class="badge bg-info">Subido</span>
                                                         @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
+
 
                                             @if ($documentos_necesarios->isEmpty())
                                                 <tr>
@@ -297,22 +306,38 @@
                     @endif
                 @endif
             </div>
-            <div class="card">
-                <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu plan de evaluación
-                </div>
-                <div class="card-body">
-                    <div class="mb-3 d-flex flex-column align-items-center">
-                        <h6 class="card-title text-primary font-weight-bold">Sube tu plan de evaluación después de la fecha
-                            pactada con tu evaluador</h6>
-                        <br>
-                        <!-- En tu vista Blade -->
-                        <a href="{{ route('Plan.show', ['id' => $estandar->id]) }}" class="btn btn-success">Subir Plan de
-                            Evaluación</a>
-                    </div>
-                </div>
-            </div>
+            @if ($fechas_elegidas->isNotEmpty())
+                @if ($todos_documentos_validos)
+                    @if ($carta_validada && $ficha_validada)
+                        <div class="card">
+                            <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu plan de
+                                evaluación
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 d-flex flex-column align-items-center">
+                                    <h6 class="card-title text-primary font-weight-bold">Sube tu plan de evaluación después
+                                        de la fecha
+                                        pactada con tu evaluador</h6>
+                                    <br>
+                                    <!-- En tu vista Blade -->
+                                    <a href="{{ route('Plan.show', ['id' => $estandar->id]) }}"
+                                        class="btn btn-success">Subir Plan de
+                                        Evaluación</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endif
+            @endif
         </div>
     </div>
+    @if ($carta_validada && $ficha_validada)
+        @if (!$todos_documentos_validos)
+            @if (!$hay_evidencias_subidas)
+                @include('expedientes.expedientesUser.evidenciasEC.show')
+            @endif
+        @endif
+    @endif
 @stop
 
 @section('css')
@@ -459,11 +484,68 @@
             margin-bottom: 0;
             text-align: center;
         }
+
+        .table td {
+            vertical-align: middle;
+            /* Alinea verticalmente el contenido dentro de las celdas de la tabla */
+        }
+
+        .text-center {
+            text-align: center;
+            /* Centra el texto horizontalmente */
+        }
+
+        .align-middle {
+            vertical-align: middle;
+            /* Alinea verticalmente el contenido dentro de las celdas */
+        }
+
+        .btn {
+            display: inline-block;
+            /* Asegura que los botones se comporten como elementos en línea */
+            font-size: 0.8em;
+            /* Tamaño de fuente para botones */
+            padding: 0.375rem 0.75rem;
+            /* Tamaño de padding uniforme */
+            border-radius: 0.375rem;
+            /* Bordes redondeados */
+            line-height: 1.5;
+            /* Altura de línea para centrar el texto verticalmente */
+        }
+
+        .btn-sm {
+            font-size: 0.8em;
+            /* Tamaño de fuente para botones pequeños */
+            padding: 0.25rem 0.5rem;
+            /* Padding uniforme */
+        }
+
+        .shadow-sm {
+            box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+            /* Sombra pequeña */
+        }
+
+        .badge {
+            font-size: 0.75em;
+            /* Tamaño de fuente para las insignias */
+            padding: 0.25em 0.4em;
+            /* Padding uniforme */
+            border-radius: 0.25rem;
+            /* Bordes redondeados */
+        }
+
+        .badge.bg-info {
+            background-color: #17a2b8;
+            /* Color de fondo para la insignia */
+            color: #fff;
+            /* Color del texto */
+        }
     </style>
 
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // Función para recargar la sección cada 5 minutos

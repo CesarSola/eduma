@@ -53,6 +53,7 @@
                         @foreach ($comprobantesCO as $comprobante)
                             @php
                                 $estado = json_decode($comprobante->estado, true) ?? [];
+                                $nombreComprobante = pathinfo($comprobante->comprobante_pago, PATHINFO_FILENAME);
                             @endphp
                             @if (
                                 $comprobante->comprobante_pago &&
@@ -66,7 +67,8 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Comprobante de Pago</label>
+                                        <label class="col-sm-2 col-form-label">Comprobante de Pago:
+                                            {{ $nombreComprobante }}</label>
                                         <div class="col-sm-4">
                                             <a href="{{ Storage::url($comprobante->comprobante_pago) }}" target="_blank"
                                                 class="btn btn-primary">Ver</a>
@@ -111,6 +113,7 @@
         </div>
     </div>
 @stop
+
 
 @section('css')
     <style>
@@ -183,11 +186,11 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.update-form');
-            const successMessage = document.getElementById('success-message');
-            const closeButton = successMessage.querySelector('.close');
 
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
@@ -208,23 +211,46 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                successMessage.style.display = 'block';
-
-                                // Actualizar el mensaje según la acción (validar/rechazar)
+                                // Determina la acción realizada (validar o rechazar)
                                 const action = formData.get('documento_estado');
+                                let message = '';
+
                                 if (action === 'validar') {
+                                    message = 'Comprobante validado correctamente.';
                                     form.style.display =
                                         'none'; // Ocultar el formulario del documento validado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                            <div class="form-group row">
-                                                <div class="col-sm-12 text-center">
-                                                    <p>Todos los comprobantes de pago disponibles han sido validados.</p>
-                                                </div>
-                                            </div>
-                                        `;
+                                    // Verificar si no hay más formularios visibles
+                                    const remainingForms = document.querySelectorAll(
+                                        '.update-form');
+                                    const remainingVisibleForms = Array.from(remainingForms)
+                                        .filter(
+                                            f => f.style.display !== 'none'
+                                        );
+
+                                    if (remainingVisibleForms.length === 0) {
+                                        Swal.fire({
+                                            icon: 'info',
+                                            title: 'Todos los Documentos Validados',
+                                            text: 'Todos los documentos disponibles han sido validados.',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then(() => {
+                                            // Actualizar el DOM para mostrar el mensaje final
+                                            const cardHeader = document.querySelector(
+                                                '.card-header');
+                                            if (cardHeader) {
+                                                cardHeader.innerHTML += `
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-12 text-center">
+                                                            <p>Todos los documentos disponibles han sido validados.</p>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                            }
+                                        });
                                     }
                                 } else if (action === 'rechazar') {
+                                    message = 'Comprobante rechazado.';
                                     // Dejar el formulario visible, pero limpiar los campos
                                     form.querySelector('textarea[name="comentario_documento"]')
                                         .value = ''; // Limpiar el campo de comentarios
@@ -233,21 +259,33 @@
                                     ); // Deseleccionar todos los radio buttons
                                 }
 
-                                // Ocultar el mensaje de éxito después de 5 segundos
-                                setTimeout(() => {
-                                    successMessage.style.display = 'none';
-                                }, 5000);
+                                // Muestra la alerta personalizada con SweetAlert2
+                                Swal.fire({
+                                    title: 'Éxito',
+                                    text: message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+
                             } else if (data.error) {
-                                alert(data.error); // Manejar errores si es necesario
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.error,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
                             }
                         })
-                        .catch(error => console.error('Error:', error));
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error inesperado.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
                 });
-            });
-
-            // Agregar evento al botón de cerrar
-            closeButton.addEventListener('click', function() {
-                successMessage.style.display = 'none';
             });
         });
     </script>

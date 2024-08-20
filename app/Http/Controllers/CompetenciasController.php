@@ -8,6 +8,7 @@ use App\Models\Estandares;
 use App\Models\FechaCompetencia;
 use App\Models\Horario;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class CompetenciasController extends Controller
@@ -18,7 +19,7 @@ class CompetenciasController extends Controller
     public function index(Request $request)
     {
         // Obtener el ID del usuario desde la solicitud o usar el usuario autenticado
-        $userId = $request->query('user_id') ?? auth()->user()->id;
+        $userId = $request->query('user_id') ?? Auth::user()->id; // Usar Auth::user()->id
 
         // Buscar el usuario por ID
         $usuario = User::findOrFail($userId);
@@ -55,7 +56,7 @@ class CompetenciasController extends Controller
         $userId = $request->query('user_id');
 
         // Verificar si se pasó un userId, si no, asignar el usuario autenticado
-        $selectedUserId = $userId ?? auth()->user()->id;
+        $selectedUserId = $userId ?? Auth::user()->id; // Usar Auth::user()->id
 
         // Obtener el usuario para mostrar su nombre
         $usuario = User::findOrFail($selectedUserId);

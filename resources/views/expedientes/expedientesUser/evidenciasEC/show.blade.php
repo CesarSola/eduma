@@ -1,29 +1,20 @@
-@extends('adminlte::page')
-
-@section('title', 'Subir Evidencia')
-
-@section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="text-center text-white bg-success p-3 rounded">
-            <h1>Subir Evidencia para el estándar {{ $estandar->name }}</h1>
-        </div>
-        <a href="{{ route('evidenciasEC.index', ['id' => $estandar->id, 'name' => $estandar->name]) }}"
-            class="btn btn-secondary">Regresar</a>
-    </div>
-@stop
-
-@section('content')
-    <div class="container mt-4">
-        <div class="card">
-            <div class="card-body">
-                <form action="{{ route('evidenciasEC.upload', $documento->id) }}" method="POST" enctype="multipart/form-data">
+<!-- Modal -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div class="modal fade" id="uploadEvidenceModal" tabindex="-1" aria-labelledby="uploadEvidenceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadEvidenceModalLabel">Subir Evidencia</h5>
+            </div>
+            <div class="modal-body">
+                <form id="uploadEvidenceForm" action="{{ route('evidenciasEC.upload', $documento->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
-                    <!-- Campo oculto para pasar el ID del estándar -->
-                    <input type="hidden" name="estandar_id" value="{{ $estandar->id }}">
-
+                    <input type="hidden" name="estandar_id" value="">
                     <div class="form-group">
-                        <div class="alert alert-info">
-                            <p><strong>Nombre del documento:</strong> {{ $documento->name }}</p>
+                        <div class="alert alert-info" id="documentNameAlert">
+                            <p><strong>Nombre del documento:</strong> </p>
                         </div>
                         <label for="documento">Seleccionar Documento</label>
                         <input type="file" class="form-control-file @error('documento') is-invalid @enderror"
@@ -34,54 +25,157 @@
                             <span class="invalid-feedback" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Subir</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Subir</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-@stop
+</div>
 
+<style>
+    .modal-content {
+        border-radius: 0.5rem;
+        /* Bordes redondeados para el modal */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        /* Sombra del modal */
+    }
 
-@section('css')
-    <style>
-        .card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    .modal-header {
+        border-bottom: 1px solid #e0e0e0;
+        /* Borde inferior en el encabezado del modal */
+        background-color: #13a200;
+        /* Fondo azul para el encabezado */
+        color: #ffffff;
+        /* Texto blanco en el encabezado */
+    }
 
-        .btn-primary {
-            margin-top: 10px;
-        }
+    .modal-title {
+        font-weight: bold;
+        /* Negrita para el título del modal */
+    }
 
-        .alert-info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            padding: 10px;
-            border-radius: 5px;
-        }
+    .modal-body {
+        padding: 1.5rem;
+        /* Relleno adicional en el cuerpo del modal */
+    }
 
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: .375rem;
-            /* Bordes redondeados */
-            font-size: 1rem;
-            /* Tamaño de fuente */
-        }
+    .modal-footer {
+        border-top: 1px solid #e0e0e0;
+        /* Borde superior en el pie del modal */
+        padding: 0.75rem;
+        /* Relleno adicional en el pie del modal */
+    }
 
-        /* Texto centrado */
-        .alert p {
-            margin-bottom: 0;
-            text-align: center;
-        }
-    </style>
-@stop
+    .btn-primary {
+        background-color: #13a200;
+        border-color: #13a200;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
 
-@section('js')
-    <script>
-        console.log("Subir Evidencia page loaded!");
-    </script>
-@stop
+    .btn-primary:hover {
+        background-color: #3c9100;
+        border-color: #008510;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .form-control-file {
+        border: 1px solid #ced4da;
+        border-radius: .375rem;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalElement = document.getElementById('uploadEvidenceModal');
+        const modal = new bootstrap.Modal(modalElement);
+
+        modalElement.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const documentoId = button.getAttribute('data-documento-id');
+            const estandarId = button.getAttribute('data-estandar-id');
+            const documentoName = button.getAttribute('data-documento-name');
+
+            // Actualizar la acción del formulario
+            const form = document.getElementById('uploadEvidenceForm');
+            form.action = form.action.replace(/evidencias\/\d+\/upload/,
+                `evidencias/${documentoId}/upload`);
+
+            // Establecer el valor del campo oculto para el estandar_id
+            form.querySelector('input[name="estandar_id"]').value = estandarId;
+
+            // Actualizar el nombre del documento en el modal
+            const documentNameAlert = document.getElementById('documentNameAlert');
+            documentNameAlert.querySelector('strong').textContent = documentoName;
+        });
+
+        // Manejo del envío del formulario
+        document.getElementById('uploadEvidenceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const url = this.action;
+
+            fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                            .getAttribute('content'),
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: data.message,
+                            confirmButtonText: 'Cerrar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Cerrar el modal
+                                modal.hide();
+                                // Recargar la página después de cerrar el modal
+                                window.location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                            confirmButtonText: 'Cerrar'
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+</script>

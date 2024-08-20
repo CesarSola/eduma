@@ -38,9 +38,6 @@
                                                 {{ $registroGeneral->maternalSurname }}</h6>
                                             <h6 class="text-left mt-2">Edad: {{ $registroGeneral->age }} años</h6>
                                         </div>
-                                        <div class="right-content">
-                                            <span class="badge badge-info">Estatus: Activo</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -165,46 +162,105 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                document.getElementById('success-message').style.display =
-                                    'block';
-
-                                // Actualizar el mensaje según la acción (validar/rechazar)
                                 const action = formData.get('documento_estado');
-                                if (action === 'validar') {
-                                    form.closest('.update-form').style.display =
-                                        'none'; // Ocultar el formulario del documento validado
-                                    if (!document.querySelector('.update-form')) {
-                                        document.querySelector('.card-header').innerHTML += `
-                                            <div class="form-group row">
-                                                <div class="col-sm-12 text-center">
-                                                    <p>Todos los documentos disponibles han sido validados.</p>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }
-                                } else if (action === 'rechazar') {
-                                    // Resetear campos de validar y comentario
-                                    form.querySelector('input[type="radio"]:checked').checked =
-                                        false; // Deseleccionar el radio button seleccionado
-                                    form.querySelector('textarea[name="comentario_documento"]')
-                                        .value = ''; // Reiniciar el campo de comentarios
 
-                                    // Mostrar mensaje de documento rechazado
-                                    const messageElement = form.querySelector(
-                                        '.alert.alert-info');
-                                    if (messageElement) {
-                                        messageElement.style.display = 'block';
+                                // Mostrar SweetAlert2 para éxito de validación o rechazo
+                                Swal.fire({
+                                    icon: action === 'validar' ? 'success' : 'warning',
+                                    title: action === 'validar' ? 'Documento Validado' :
+                                        'Documento Rechazado',
+                                    text: action === 'validar' ?
+                                        'Documento validado correctamente.' :
+                                        'El documento ha sido rechazado.',
+                                    showCancelButton: action === 'rechazar',
+                                    confirmButtonText: action === 'validar' ?
+                                        'Aceptar' : 'Volver a Validar',
+                                    cancelButtonText: 'Cancelar'
+                                }).then(result => {
+                                    if (result.isConfirmed && action === 'rechazar') {
+                                        // Acción si se confirma el rechazo (si es necesario)
                                     }
 
-                                    // Cambiar texto del botón
-                                    form.querySelector('.btn.btn-success').innerText =
-                                        'Volver a validar';
-                                }
+                                    if (action === 'validar') {
+                                        // Ocultar el formulario del documento validado
+                                        form.style.display = 'none';
+
+                                        // Verificar si todos los documentos han sido validados
+                                        const remainingForms = document
+                                            .querySelectorAll('.update-form');
+                                        const remainingVisibleForms = Array.from(
+                                            remainingForms).filter(f => f.style
+                                            .display !== 'none');
+                                        if (remainingVisibleForms.length === 0) {
+                                            // Mostrar el mensaje de todos los documentos validados
+                                            Swal.fire({
+                                                icon: 'info',
+                                                title: 'Todos los Documentos Validados',
+                                                text: 'Todos los documentos disponibles han sido validados.',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then(() => {
+                                                // Actualizar el DOM para mostrar el mensaje final
+                                                const cardHeader = document
+                                                    .querySelector(
+                                                        '.card-header');
+                                                if (cardHeader) {
+                                                    cardHeader.innerHTML += `
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-12 text-center">
+                                                                <p>Todos los documentos disponibles han sido validados.</p>
+                                                            </div>
+                                                        </div>
+                                                    `;
+                                                }
+                                            });
+                                        }
+                                    } else if (action === 'rechazar') {
+                                        // Resetear campos de validar y comentario
+                                        form.querySelector(
+                                                'input[type="radio"]:checked').checked =
+                                            false; // Deseleccionar el radio button seleccionado
+                                        form.querySelector(
+                                                'textarea[name="comentario_documento"]')
+                                            .value =
+                                            ''; // Reiniciar el campo de comentarios
+
+                                        // Mostrar mensaje de documento rechazado
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Documento Rechazado',
+                                            text: 'El documento ha sido rechazado. Puedes volver a validar.',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Aceptar',
+                                            cancelButtonText: 'Cancelar'
+                                        }).then(result => {
+                                            if (result.isConfirmed) {
+                                                // Acción si se confirma el rechazo (si es necesario)
+                                            }
+                                        });
+
+                                        // Cambiar texto del botón
+                                        form.querySelector('.btn.btn-success')
+                                            .innerText = 'Volver a Validar';
+                                    }
+                                });
                             } else if (data.error) {
-                                alert(data.error); // Manejar errores si es necesario
+                                // Mostrar SweetAlert2 para error
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.error
+                                });
                             }
                         })
-                        .catch(error => console.error('Error:', error));
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ocurrió un error inesperado.'
+                            });
+                        });
                 });
             });
         });
