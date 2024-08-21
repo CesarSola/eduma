@@ -219,7 +219,13 @@ Route::get('/profile/reactivate', function () {
 
 Route::post('/profile/reactivate', [ProfileController::class, 'reactivate'])->name('profile.reactivatePost');
 
+Route::middleware(['auth'])->group(function () {
+    // Ruta para eliminar cuenta
+    Route::delete('/profile/destroy', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Ruta para desactivar cuenta
+    Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
+});
 
 Route::resource('roles', App\Http\Controllers\RoleController::class);
 
