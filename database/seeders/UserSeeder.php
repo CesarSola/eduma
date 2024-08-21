@@ -1,9 +1,7 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,17 +12,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Crear el usuario Admin y asignarle el rol de 'Admin'
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@material.com',
             'matricula' => '0000',
-            'password' => Hash::make('secret'), // Asegúrate de cifrar la contraseña
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+            'password' => Hash::make('secret'),
+            'email_verified_at' => now(),
+            'rol' => 'Admin', // Guardar el rol en la columna 'rol'
         ]);
-
         $admin->assignRole('Admin');
 
-        $admin = User::create([
+        // Crear el usuario Miguel y asignarle el rol de 'User'
+        $user1 = User::create([
             'name' => 'Miguel',
             'secondName' => 'Adrian',
             'paternalSurname' => 'Rodriguez',
@@ -33,13 +33,14 @@ class UserSeeder extends Seeder
             'phone' => '9987327293',
             'matricula' => '0001',
             'email' => 'test@material.com',
-            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+            'password' => Hash::make('12345'),
+            'email_verified_at' => now(),
+            'rol' => 'User', // Guardar el rol en la columna 'rol'
         ]);
+        $user1->assignRole('User');
 
-        $admin->assignRole('User');
-
-        $admin = User::create([
+        // Crear el usuario Jose y asignarle el rol de 'User'
+        $user2 = User::create([
             'name' => 'Jose',
             'secondName' => 'Gilberto',
             'paternalSurname' => 'Martin',
@@ -48,10 +49,10 @@ class UserSeeder extends Seeder
             'phone' => '9956386893',
             'matricula' => '0002',
             'email' => 'test2@material.com',
-            'password' => Hash::make('12345'), // Asegúrate de cifrar la contraseña
-            'email_verified_at' => now(), // Establece la fecha y hora actual como verificada
+            'password' => Hash::make('12345'),
+            'email_verified_at' => now(),
+            'rol' => 'User', // Guardar el rol en la columna 'rol'
         ]);
-
-        $admin->assignRole('User');
+        $user2->assignRole('User');
     }
 }
