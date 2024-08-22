@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estandares;
-use App\Models\PlanesEvaluacion;
+use App\Models\JuiciosUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-class SubirPlanEvaluacionController extends Controller
+class JuiciosUsuarioController extends Controller
 {
     public function show($id) // Aceptar un parámetro $id para el estándar específico
     {
@@ -18,8 +18,9 @@ class SubirPlanEvaluacionController extends Controller
         $estandar = Estandares::findOrFail($id);
 
         // Pasar el estándar a la vista
-        return view('expedientes.expedientesUser.evidenciasEC.PlanEvaluacion.show', compact('estandar'));
+        return view('expedientes.expedientesUser.evidenciasEC.juicio.show', compact('estandar'));
     }
+
     public function store(Request $request)
     {
         // Validar la solicitud
@@ -42,7 +43,7 @@ class SubirPlanEvaluacionController extends Controller
             $fileName = Str::slug($request->input('nombre')) . '.' . $file->getClientOriginalExtension();
 
             // Construir la ruta del archivo
-            $directoryPath = 'public/documents/evidence/competencias/evaluaciones/' .
+            $directoryPath = 'public/documents/evidence/competencias/juicios/' .
                 $user->matricula . '/' .
                 Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
                 Str::slug($estandar->name);
@@ -54,7 +55,7 @@ class SubirPlanEvaluacionController extends Controller
             $filePath = $file->storeAs($directoryPath, $fileName);
 
             // Crear un nuevo registro en la base de datos
-            $documento = new PlanesEvaluacion();
+            $documento = new JuiciosUsuario();
             $documento->user_id = $user->id;
             $documento->estandar_id = $request->input('estandar_id');
             $documento->nombre = $request->input('nombre');
@@ -71,7 +72,7 @@ class SubirPlanEvaluacionController extends Controller
             return redirect()->route('evidenciasEC.index', [
                 'id' => $request->input('estandar_id'),
                 'name' => $estandar->name
-            ])->with('success', 'Plan de evaluación subido exitosamente.');
+            ])->with('success', 'Juicio de competencia subido exitosamente.');
         }
 
         // Si no se subió ningún archivo, redirigir a la misma vista 'evidenciasEC.index' con un mensaje de error

@@ -1,17 +1,17 @@
 <!-- Modal -->
-<div class="modal fade" id="uploadPlanModal" tabindex="-1" role="dialog" aria-labelledby="uploadPlanModalLabel"
+<div class="modal fade" id="uploadJuicioModal" tabindex="-1" role="dialog" aria-labelledby="uploadJuicioModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content border-success shadow-sm">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="uploadPlanModalLabel">Subir Plan de Evaluación</h5>
+                <h5 class="modal-title" id="uploadJuicioModalLabel">Subir Juicio de Competencia</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Formulario para subir el plan de evaluación -->
-                <form action="{{ route('plan.store') }}" method="POST" enctype="multipart/form-data">
+                <!-- Formulario para subir los juicios de competencia -->
+                <form action="{{ route('juicio.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="estandar_id" value="{{ $estandar->id }}">
                     <input type="hidden" name="user_id" value="{{ auth()->id() }}">
@@ -19,9 +19,9 @@
                     <div class="form-group mt-2">
                         <label for="nombre">Nombre del Documento:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre"
-                            value="Plan_Evaluación_{{ $estandar->name }}_{{ auth()->user()->matricula }}_{{ auth()->user()->name }}_{{ auth()->user()->secondName }}_{{ auth()->user()->paternalSurname }}_{{ auth()->user()->maternalSurname }}"
+                            value="Juicio_Competencia_{{ $estandar->name }}_{{ auth()->user()->matricula }}_{{ auth()->user()->name }}_{{ auth()->user()->secondName }}_{{ auth()->user()->paternalSurname }}_{{ auth()->user()->maternalSurname }}"
                             readonly>
-                        <small class="form-text text-muted">Asegúrate de firmar tu plan de Evaluación.</small>
+                        <small class="form-text text-muted">Asegúrate de firmar tu juicio de Competencia.</small>
                         @error('nombre')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -41,7 +41,7 @@
                         <div id="pdf-preview" style="width: 100%; height: 300px; border: 1px solid #ddd;"></div>
                     </div>
 
-                    <button type="submit" class="btn btn-success mt-3">Subir Plan de Evaluación</button>
+                    <button type="submit" class="btn btn-success mt-3">Subir Juicio de Competencia</button>
                 </form>
             </div>
         </div>
@@ -66,8 +66,12 @@
         margin: 0 auto;
     }
 </style>
-<script script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf_viewer.min.css">
+
+<head>
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf_viewer.min.css">
+</head>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var fileInput = document.getElementById('file');
@@ -76,15 +80,20 @@
         fileInput.addEventListener('change', function(event) {
             var file = event.target.files[0];
             if (file && file.type === 'application/pdf') {
+                console.log('Archivo PDF seleccionado:', file.name);
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var pdfData = new Uint8Array(e.target.result);
+
+                    console.log('Datos del PDF cargados');
 
                     // Cargar y mostrar el PDF
                     pdfjsLib.getDocument({
                         data: pdfData
                     }).promise.then(function(pdf) {
+                        console.log('PDF cargado correctamente');
                         pdf.getPage(1).then(function(page) {
+                            console.log('Página 1 cargada');
                             var scale = 1.5;
                             var viewport = page.getViewport({
                                 scale: scale
@@ -103,6 +112,7 @@
                                 viewport: viewport
                             };
                             page.render(renderContext).promise.then(function() {
+                                console.log('Página renderizada');
                                 // Ajustar el tamaño del canvas al contenedor
                                 var container = pdfPreview
                                     .getBoundingClientRect();
@@ -120,6 +130,8 @@
                                     scale) + 'px';
                             });
                         });
+                    }).catch(function(error) {
+                        console.error('Error al cargar el PDF:', error);
                     });
                 };
                 reader.readAsArrayBuffer(file);

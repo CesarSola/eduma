@@ -82,6 +82,8 @@ use App\Http\Controllers\ValidarFichasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\JuiciosUsuarioController;
+
 //ruta del calendario
 Route::resource('calendario', CalendarioController::class);
 Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');
@@ -170,7 +172,11 @@ Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index']
 // Ruta para el formulario del plan de evaluación
 Route::get('/plan-evaluacion/{id}', [SubirPlanEvaluacionController::class, 'show'])->name('Plan.show');
 // Ruta para almacenar el documento
-Route::post('/documentos/store', [SubirPlanEvaluacionController::class, 'store'])->name('plan.store');
+Route::post('/plan-evaluacion/store', [SubirPlanEvaluacionController::class, 'store'])->name('plan.store');
+// rutas de juicios 
+Route::get('/juicio-competencia/{id}', [JuiciosUsuarioController::class, 'show'])->name('Juicio.show');
+Route::post('/juicio-competencia/store', [JuiciosUsuarioController::class, 'store'])->name('juicio.store');
+//rutas de evidencias
 Route::get('/evidencias/{id}/{documento_id}/show', [EvidenciasUEController::class, 'show'])->name('evidenciasEC.show');
 Route::post('/evidencias/{documento}/upload', [EvidenciasUEController::class, 'upload'])->name('evidenciasEC.upload');
 //rutas para resubir documentos de evidencias

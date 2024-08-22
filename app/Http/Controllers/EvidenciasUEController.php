@@ -6,14 +6,17 @@ use App\Models\CartasDocumentos;
 use App\Models\DocumentosEvidencias;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
+use App\Models\EvaluadoresUsuarios;
 use App\Models\FechaElegida;
 use App\Models\FichasDocumentos;
 use App\Models\PlanesEvaluacion;
 use App\Models\ValidacionesCartas;
 use App\Models\ValidacionesEvidencias;
 use App\Models\ValidacionesFichas;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,7 +25,7 @@ class EvidenciasUEController extends Controller
     public function index($id, $name)
     {
         $estandar = Estandares::find($id);
-        $user_id = auth()->id();
+        $user_id = Auth::id();
 
         // Obtener ficha de registro y carta de firma
         $ficha_registro = FichasDocumentos::where('estandar_id', $id)
@@ -66,7 +69,29 @@ class EvidenciasUEController extends Controller
             ->where('fechas_competencias.competencia_id', $id)
             ->where('fechas_horarios_elegidos.user_id', $user_id)
             ->select('fechas_horarios_elegidos.*', 'fechas_competencias.fecha', 'horarios_competencias.hora')
-            ->get();
+            ->get()
+            ->map(function ($fecha) {
+                try {
+                    // Convertir el formato 'HH:MM:SS' a 'h:i A' (12 horas con AM/PM)
+                    $hora24 = $fecha->hora; // Suponiendo que el formato es 'HH:MM:SS'
+                    $fecha->horaFormatted = Carbon::createFromFormat('H:i:s', $hora24)->format('g:i A');
+                } catch (\Exception $e) {
+                    // Manejar excepciones, por ejemplo, para depuración
+                    $fecha->horaFormatted = 'Formato no válido';
+                }
+                return $fecha;
+            });
+
+        // Obtener el evaluador relacionado con el estándar y el usuario
+        $evaluador = EvaluadoresUsuarios::where('usuario_id', $user_id)
+            ->where('estandar_id', $id)
+            ->with('evaluador') // Asegúrate de incluir la relación evaluador
+            ->first();
+
+        // Consultar si ya se ha subido un plan de evaluación
+        $plan_evaluacion_subido = PlanesEvaluacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->exists();
 
         // Pasar datos a la vista
         return view('expedientes.expedientesUser.evidenciasEC.index', compact(
@@ -81,7 +106,9 @@ class EvidenciasUEController extends Controller
             'todos_documentos_validos',
             'hay_evidencias_subidas',
             'fechas_elegidas',
-            'id' // Asegúrate de pasar esta variable a la vista
+            'evaluador',
+            'plan_evaluacion_subido', // Pasar el estado del plan de evaluación a la vista
+            'id'
         ));
     }
 
@@ -117,7 +144,7 @@ class EvidenciasUEController extends Controller
             return response()->json(['success' => false, 'message' => 'Documento o Estándar no encontrados.']);
         }
 
-        $user = auth()->user();
+        $user = Auth::user();
         $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension();
         $filePath = $request->file('documento')->storeAs(
             'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
@@ -125,7 +152,7 @@ class EvidenciasUEController extends Controller
         );
 
         DocumentosEvidencias::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'estandar_id' => $estandarId, // Usar el estandar_id de la solicitud
             'documento_id' => $documento_id,
             'file_path' => $filePath,

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estandar_id');
-            $table->string('comprobante_pago');
+            $table->string('comprobante_pago', 999);
             $table->json('estado')->nullable(); // Estado como JSON
             $table->unsignedBigInteger('evaluador_id')->nullable(); // Evaluador asignado, puede ser nulo
             $table->timestamps();

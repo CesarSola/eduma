@@ -37,6 +37,13 @@ class PlanEvaluacionController extends Controller
             ->with(['fechaCompetencia', 'horarioCompetencia'])
             ->get();
 
+        // Recuperar los evaluadores asociados al usuario y al estándar
+        $evaluadores = $user->evaluaciones()
+            ->where('estandar_id', $competencia->id)
+            ->with('evaluador')
+            ->get()
+            ->pluck('evaluador');
+
         // Reemplazar marcadores en la plantilla
         $templateProcessor->setValue('user_name', $user->name);
         $templateProcessor->setValue('user_secondName', $user->secondName);
@@ -64,6 +71,13 @@ class PlanEvaluacionController extends Controller
             $fechasHorariosText .= $fechaFormatted . ' ' . $hora . "\n";
         }
         $templateProcessor->setValue('fechas_horarios', $fechasHorariosText);
+
+        // Generar el texto para los evaluadores
+        $evaluadoresText = "";
+        foreach ($evaluadores as $evaluador) {
+            $evaluadoresText .= $evaluador->name . ' ' . $evaluador->paternalSurname . ' ' . $evaluador->maternalSurname . "\n";
+        }
+        $templateProcessor->setValue('evaluadores', $evaluadoresText);
 
         // Asegurarse de que la carpeta exista
         if (!Storage::exists('public/documents/required/form/plan/')) {
