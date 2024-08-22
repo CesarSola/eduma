@@ -1,87 +1,101 @@
 <section class="space-y-6">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Account Settings') }}
+            {{ __('Configuración de la Cuenta') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Manage your account settings including deactivation and deletion.') }}
+            {{ __('Administra la configuración de tu cuenta, incluyendo la desactivación y eliminación.') }}
         </p>
     </header>
 
-    <!-- Delete Account Button -->
-    <x-danger-button x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Account') }}</x-danger-button>
+    <!-- Botón para eliminar cuenta -->
+    <x-danger-button
+        x-data=""
+        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+    >{{ __('Eliminar Cuenta') }}</x-danger-button>
 
-    <!-- Deactivate Account Button -->
-    <x-secondary-button x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deactivation')">{{ __('Deactivate Account') }}</x-secondary-button>
+    <!-- Botón para desactivar cuenta -->
+    <x-secondary-button
+        x-data=""
+        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deactivation')"
+    >{{ __('Desactivar Cuenta') }}</x-secondary-button>
 
-    <!-- Delete Account Modal -->
+    <!-- Modal para eliminar cuenta -->
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
+                {{ __('¿Estás seguro de que deseas eliminar tu cuenta?') }}
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Por favor, ingresa tu contraseña para confirmar que deseas eliminar tu cuenta de forma permanente.') }}
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-input-label for="delete-password" value="{{ __('Contraseña') }}" class="sr-only" />
 
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}" />
+                <x-text-input
+                    id="delete-password"
+                    name="password"
+                    type="password"
+                    class="mt-1 block w-3/4"
+                    placeholder="{{ __('Contraseña') }}"
+                />
 
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
+                    {{ __('Cancelar') }}
                 </x-secondary-button>
 
                 <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
+                    {{ __('Eliminar Cuenta') }}
                 </x-danger-button>
             </div>
         </form>
     </x-modal>
 
-    <!-- Deactivate Account Modal -->
+    <!-- Modal para desactivar cuenta -->
     <x-modal name="confirm-user-deactivation" :show="$errors->userDeactivation->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.reactivatePost') }}" class="p-6">
+        <form method="post" action="{{ route('profile.deactivate') }}" class="p-6">
             @csrf
             @method('post')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to deactivate your account?') }}
+                {{ __('¿Estás seguro de que deseas desactivar tu cuenta?') }}
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deactivated, you can reactivate it at any time by logging back in. Please enter your password to confirm you would like to deactivate your account.') }}
+                {{ __('Una vez que tu cuenta esté desactivada, tendrás 30 días para reactivarla volviendo a iniciar sesión. Por favor, introduce tu contraseña para confirmar que deseas desactivar tu cuenta.') }}
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-input-label for="deactivation-password" value="{{ __('Contraseña') }}" class="sr-only" />
 
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}" />
+                <x-text-input
+                    id="deactivation-password"
+                    name="password"
+                    type="password"
+                    class="mt-1 block w-3/4"
+                    placeholder="{{ __('Contraseña') }}"
+                />
 
                 <x-input-error :messages="$errors->userDeactivation->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
+                    {{ __('Cancelar') }}
                 </x-secondary-button>
 
                 <x-danger-button class="ms-3">
-                    {{ __('Deactivate Account') }}
+                    {{ __('Desactivar Cuenta') }}
                 </x-danger-button>
             </div>
         </form>

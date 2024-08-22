@@ -62,10 +62,4 @@ class Estandares extends Model
             'id'  // Local key on ComprobantesCO table
         );
     }
-    // En el modelo Estandares
-
-    public function evaluaciones()
-    {
-        return $this->hasMany(EvaluadoresUsuarios::class, 'estandar_id');
-    }
 }

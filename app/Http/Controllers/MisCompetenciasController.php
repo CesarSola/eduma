@@ -9,11 +9,31 @@ class MisCompetenciasController extends Controller
 {
     public function index()
     {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
+        $userId = auth()->id(); // Obtén el ID del usuario autenticado
 
-        // Obtener las competencias (estándares) inscritas por el usuario autenticado
-        $competencias = $usuario->estandares;
+        // Obtener todos los estándares del usuario con comprobantes y validaciones
+        $competencias = Estandares::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->with(['comprobantesCO.validaciones'])
+            ->get();
+
+        // Obtener el usuario completo para usar en la vista
+        $user = auth()->user();
+
+        return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'user'));
+    }
+
+
+    /**
+     * Mostrar la vista para re-subir el comprobante de pago rechazado.
+     */
+    public function mostrarRechazado($id)
+    {
+        $competencia = Estandares::findOrFail($id);
+        $validacionComentario = ValidacionesComprobantesCompetencias::where('comprobante_id', $competencia->id)
+            ->where('comprobante_id', 'tipo_validacion')
+            ->first();
 
         // Obtener las validaciones de comprobantes para las competencias del usuario
         $validacionesComentarios = ValidacionesComprobantesCompetencias::whereIn('comprobante_id', $competencias->pluck('id'))

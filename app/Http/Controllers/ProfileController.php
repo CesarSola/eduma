@@ -117,23 +117,25 @@ class ProfileController extends Controller
         $request->validateWithBag('userDeactivation', [
             'password' => ['required', 'current_password'],
         ]);
-
+    
         $user = $request->user();
-
+    
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors(['password' => 'The provided password does not match our records.']);
         }
-
+    
         $user->active = false;
+        $user->deactivated_at = now(); // Registrar la fecha y hora de desactivación
         $user->save();
-
+    
         Auth::logout();
-
+    
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+    
         return Redirect::to('/')->with('status', 'Account deactivated successfully.');
     }
+    
 
     public function reactivate(Request $request): RedirectResponse
     {
@@ -141,22 +143,33 @@ class ProfileController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
-
+    
         $user = \App\Models\User::where('email', $request->email)->first();
-
+    
         if (!$user) {
             return back()->withErrors(['email' => 'The provided email does not match our records.']);
         }
-
+    
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors(['password' => 'The provided password does not match our records.']);
         }
-
+    
+        if ($user->active) {
+            return back()->withErrors(['email' => 'The account is already active.']);
+        }
+    
+        // Verificar si han pasado más de 30 días desde la desactivación
+        if ($user->deactivated_at && $user->deactivated_at->diffInDays(now()) > 30) {
+            return back()->withErrors(['email' => 'The reactivation period has expired. Please contact support.']);
+        }
+    
         $user->active = true;
+        $user->deactivated_at = null; // Limpiar la fecha de desactivación
         $user->save();
-
+    
         Auth::login($user);
-
+    
         return Redirect::to('/dashboard')->with('status', 'Account reactivated successfully.');
     }
+    
 }

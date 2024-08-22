@@ -37,23 +37,25 @@ class DocumentosNecController extends Controller
             'description' => 'required|string|max:255',
             'documento' => 'required|file|mimes:pdf|max:2048', // Validación para el campo 'documento'
         ]);
-
+    
         try {
             $user = Auth::user();
             $userName = str_replace(' ', '_', $user->name);
             $userSecondName = str_replace(' ', '_', $user->secondName);
             $documentName = str_replace(' ', '_', $request->input('name'));
-
+    
             if ($request->hasFile('documento')) {
                 $file = $request->file('documento');
                 $filePath = $file->storeAs('public/documents/required/required documents/' . $userName . ' ' . $userSecondName, $documentName . '.' . $file->getClientOriginalExtension());
-
+                
+                Log::info('Archivo guardado en: ' . $filePath);
+    
                 $documento = DocumentosNec::create([
                     'name' => $request->input('name'),
                     'description' => $request->input('description'),
-                    'documento' => $filePath, // Guardamos la ruta del archivo en el campo 'documento'
+                    'documento' => $filePath,
                 ]);
-
+    
                 session()->flash('success', 'Documento creado exitosamente');
                 return back();
             } else {
@@ -65,6 +67,7 @@ class DocumentosNecController extends Controller
             return back();
         }
     }
+    
 
 
     /**

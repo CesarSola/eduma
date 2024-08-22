@@ -1,9 +1,7 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,56 +12,47 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear usuario Admin
+        // Crear el usuario Admin y asignarle el rol de 'Admin'
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@material.com',
+            'matricula' => '0000',
             'password' => Hash::make('secret'),
             'email_verified_at' => now(),
+            'rol' => 'Admin', // Guardar el rol en la columna 'rol'
         ]);
-
         $admin->assignRole('Admin');
 
-        // Crear usuario User
-        $user = User::create([
-            'name' => 'Angel',
-            'secondName' => 'Antonio',
-            'paternalSurname' => 'Canul',
-            'maternalSurname' => 'Chin',
-            'age' => '20',
-            'calle_avenida' => 'C18 entre 15 y 17',
-            'numext' => 'S/N',
-            'd_codigo' => '97818',
-            'd_asenta' => 'Kopomá',
-            'd_estado' => 'Yucatán',
-            'd_ciudad' => 'Kopomá',
-            'D_mnpio' => 'Kopomá',
-            'email' => 'test@example.com',
+        // Crear el usuario Miguel y asignarle el rol de 'User'
+        $user1 = User::create([
+            'name' => 'Miguel',
+            'secondName' => 'Adrian',
+            'paternalSurname' => 'Rodriguez',
+            'maternalSurname' => 'Alvarado',
+            'genero' => 'Hombre',
+            'phone' => '9987327293',
+            'matricula' => '0001',
+            'email' => 'test@material.com',
             'password' => Hash::make('12345'),
             'email_verified_at' => now(),
+            'rol' => 'User', // Guardar el rol en la columna 'rol'
         ]);
+        $user1->assignRole('User');
 
-        $user->assignRole('Evaluador');
-
-        // Crear usuario Evaluador
-        $evaluator = User::create([
-            'name' => 'José',
-            'secondName' => 'Luis',
-            'paternalSurname' => 'Pérez',
-            'maternalSurname' => 'Moo',
-            'age' => '45',
-            'calle_avenida' => 'C32 entre 28 y 27',
-            'numext' => 'S/N',
-            'd_codigo' => '97800',
-            'd_asenta' => 'Maxcanú',
-            'd_estado' => 'Yucatán',
-            'd_ciudad' => 'Maxcanú',
-            'D_mnpio' => 'Maxcanú',
-            'email' => 'test2@example.com',
+        // Crear el usuario Jose y asignarle el rol de 'User'
+        $user2 = User::create([
+            'name' => 'Jose',
+            'secondName' => 'Gilberto',
+            'paternalSurname' => 'Martin',
+            'maternalSurname' => 'Perez',
+            'genero' => 'Hombre',
+            'phone' => '9956386893',
+            'matricula' => '0002',
+            'email' => 'test2@material.com',
             'password' => Hash::make('12345'),
             'email_verified_at' => now(),
+            'rol' => 'User', // Guardar el rol en la columna 'rol'
         ]);
-
-        $evaluator->assignRole('User');
+        $user2->assignRole('User');
     }
 }

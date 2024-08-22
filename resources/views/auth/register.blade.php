@@ -286,17 +286,21 @@
                                 @enderror
                             </div>
                             <!--Nacimiento -->
-                            <div class="input-group mb-3">
-                                <input type="date" name="nacimiento"
-                                    class="form-control @error('nacimiento') is-invalid @enderror"
-                                    placeholder="{{ __('Fecha de Nacimiento') }}" value="{{ old('nacimiento') }}"
-                                    required>
-                                @error('nacimiento')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                            <div class="mb-3">
+                                <label for="nacimiento" class="form-label">{{ __('Fecha de Nacimiento') }}</label>
+                                <div class="input-group">
+                                    <input type="date" name="nacimiento" id="nacimiento"
+                                        class="form-control @error('nacimiento') is-invalid @enderror"
+                                        placeholder="{{ __('Fecha de Nacimiento') }}" value="{{ old('nacimiento') }}"
+                                        required>
+                                    @error('nacimiento')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
+                            
                             <!--Nacionalidad -->
                             <div class="input-group mb-3">
                                 <input type="text" name="nacionalidad"

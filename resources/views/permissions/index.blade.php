@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Permisos')
 
 @section('content_header')
-    <script src="https:/kit.fontawesome.com/646ac4fad6.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/646ac4fad6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
         integrity="sha384-xrR6LJoJdBJ5D4qz7f8K94JPPIU5xN9xnecb76WywRJ2OLqFz1EGgM5V1WQ1gXQQ" crossorigin="anonymous">
 
@@ -22,6 +22,11 @@
 
     <div class="card">
         <div class="card-body">
+            <!-- Campo de búsqueda -->
+            <div class="mb-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar permisos...">
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
@@ -33,7 +38,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="permissionsTableBody">
                         @foreach ($permissions as $permission)
                             <tr>
                                 <td>{{ $permission->id }}</td>
@@ -103,6 +108,28 @@
 
 @section('js')
     <script>
-        console.log('Hi!');
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('permissionsTableBody');
+            
+            searchInput.addEventListener('input', function () {
+                const filter = searchInput.value.toLowerCase();
+                const rows = tableBody.getElementsByTagName('tr');
+                
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let matched = false;
+                    
+                    for (let j = 0; j < cells.length; j++) {
+                        if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                            matched = true;
+                            break;
+                        }
+                    }
+                    
+                    rows[i].style.display = matched ? '' : 'none';
+                }
+            });
+        });
     </script>
 @stop

@@ -402,7 +402,7 @@ return [
                         [
                             'text' => 'Registro de estandares',
                             'url' => 'competenciasAD',
-                            'icon' => 'fas fa-tasks',
+                            'icon' => 'fas fa-plus-circle',
                             'icon_color' => 'success',
                         ],
                         [
@@ -412,16 +412,12 @@ return [
                             'icon_color' => 'success',
                         ],
                         [
-                            'text' => 'Agregar diagnosticos',
+                            'text' => 'Registro de diagnósticos ',
                             'url' => 'diagnosticos',
-                            'icon' => 'fas fa-fw fa-file-invoice',
-                        ],
-                        [
-                            'text' => 'Regitro de diagnosticos',
-                            'url' => '',
-                            'icon' => 'fas fa-fw fa-file-invoice',
+                            'icon' => 'fas fa-plus-circle',
                             'icon_color' => 'success',
                         ],
+
                     ],
                 ],
                 [
@@ -461,6 +457,12 @@ return [
                     'url' => 'miscompetencias',
                     'icon' => 'fas fa-fw fa-clipboard-check',
                     'icon_color' => 'teal',
+                ],
+                [
+                    'text' => 'Mis diagnosticos',
+                    'url' => 'usuarios-con-diagnosticos',
+                    'icon' => 'fas fa-fw fa-file-invoice',
+                    'icon_color' => 'blue',
                 ]
             ]
         ],

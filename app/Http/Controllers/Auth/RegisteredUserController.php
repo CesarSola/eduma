@@ -82,6 +82,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // Redirigir al dashboard u otra página después del registro
-        return redirect(route('usuarios.index', absolute: false));
+        return redirect(route('dashboard', absolute: false));
     }
 }
