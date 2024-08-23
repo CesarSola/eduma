@@ -55,6 +55,13 @@ class Estandares extends Model
     {
         return $this->hasMany(EvaluadoresUsuarios::class, 'estandar_id');
     }
+
+    // relacion con calificaciones
+    public function calificaciones()
+    {
+        return $this->hasMany(CalificacionEvaluacion::class, 'estandar_id');
+    }
+
     // Obtener validaciones a través de comprobantes
     public function validacionesComentarios()
     {

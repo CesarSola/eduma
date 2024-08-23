@@ -89,11 +89,17 @@ use App\Http\Controllers\JuiciosUsuarioController;
 //ruta del calendario
 Route::resource('calendario', CalendarioController::class);
 Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');
+
+//calificaciones
+Route::resource('calificaciones_evaluaciones', CalificacionEvaluacionController::class);
+Route::post('/calificaciones/store', [CalificacionEvaluacionController::class, 'store'])->name('calificaciones.store');
+Route::get('/calificaciones/show/{userId}/{estandarId}', [CalificacionEvaluacionController::class, 'showCalificaciones'])->name('calificaciones.show');
+
+
 //ruta de agregar fechas
 Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
-//calificaciones
-Route::resource('calificaciones_evaluaciones', CalificacionEvaluacionController::class);
+
 
 //rutas de evaluadores
 Route::resource('evaluadores', EvaluadoresController::class);

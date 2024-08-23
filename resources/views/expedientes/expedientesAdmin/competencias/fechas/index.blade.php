@@ -91,7 +91,7 @@
                                                         @foreach ($usuario->estandares as $estandar)
                                                             <li
                                                                 class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <div>
+                                                                <div class="mr-2">
                                                                     <span
                                                                         class="badge badge-info">{{ $estandar->numero }}</span>
                                                                     - {{ $estandar->name }}
@@ -112,16 +112,29 @@
                                                                             </button>
                                                                         @endif
                                                                     </div>
-                                                                    <div>
-                                                                        <!-- Ejemplo del botón -->
-                                                                        <button type="button"
-                                                                            class="btn btn-success btn-sm"
+                                                                    <div class="mr-2">
+                                                                        @if ($estandar->calificacion_asignada)
+                                                                            <span class="badge badge-info">Calificaciones
+                                                                                Asignadas</span>
+                                                                        @else
+                                                                            <button type="button"
+                                                                                class="btn btn-success btn-sm"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#calificacionModal"
+                                                                                data-user-id="{{ $usuario->id }}"
+                                                                                data-estandar-id="{{ $estandar->id }}">
+                                                                                Asignar Calificaciones
+                                                                            </button>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="mr-2">
+                                                                        <!-- Botón para abrir el modal -->
+                                                                        <button class="btn btn-warning btn-sm"
                                                                             data-bs-toggle="modal"
-                                                                            data-bs-target="#calificacionModal"
-                                                                            data-user-id="{{ $usuario->id }}"
-                                                                            data-estandar-id="{{ $estandar->id }}">
-                                                                            Asignar Calificaciones
+                                                                            data-bs-target="#verCalificacionesModal{{ $usuario->id }}-{{ $estandar->id }}">
+                                                                            Ver Calificaciones
                                                                         </button>
+
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -142,6 +155,7 @@
     </div>
     @include('expedientes.expedientesAdmin.competencias.fechas.agregar-fechas')
     @include('expedientes.expedientesAdmin.competencias.calificaciones.show')
+    @include('expedientes.expedientesAdmin.competencias.fechas.verCalificaciones.show')
 @stop
 
 
@@ -187,10 +201,31 @@
             background-color: #218838;
             border-color: #1e7e34;
         }
+
+        .btn-warning {
+            color: white
+        }
     </style>
 @stop
 
 @section('js')
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay un mensaje de éxito en la sesión
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: '{{ session('success') }}',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @stop

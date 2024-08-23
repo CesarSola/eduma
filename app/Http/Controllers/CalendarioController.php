@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalificacionEvaluacion;
 use App\Models\Estandares;
 use App\Models\EvaluadoresUsuarios;
 use App\Models\FechaCompetencia;
@@ -52,6 +53,13 @@ class CalendarioController extends Controller
                 foreach ($estandar->fechas as $fecha) {
                     $fecha->horarios = Horario::where('fecha_competencia_id', $fecha->id)->get();
                 }
+
+                // Obtener las calificaciones para el usuario y estándar
+                $calificaciones = CalificacionEvaluacion::where('user_id', $usuario->id)
+                    ->where('estandar_id', $estandar->id)
+                    ->get();
+                $estandar->calificaciones = $calificaciones;
+                $estandar->calificacion_asignada = $calificaciones->isNotEmpty();
             }
         }
 
@@ -64,6 +72,7 @@ class CalendarioController extends Controller
             'competenciaId' => $competenciaId,
         ]);
     }
+
 
 
     // En el controlador
