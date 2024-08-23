@@ -13,8 +13,8 @@
 
 @section('content')
     <div id="1">
-        <div class="card">
-            <div class="container">
+        <div class="container">
+            <div class="card">
                 @if (!$ficha_registro)
                     <div class="card">
                         <h6 class="card-header bg-success text-white text-center font-weight-bold">Carta de Firma
@@ -340,10 +340,17 @@
                     </div>
                 </div>
             @endif
+            <div class="card">
+                <div class="card-header bg-success text-white text-center font-weight-bold">
+
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
         </div>
     </div>
     </div>
-
     @if (!$plan_evaluacion_subido)
         @if ($fechas_elegidas->isNotEmpty())
             @include('expedientes.expedientesUser.evidenciasEC.PlanEvaluacion.show')
@@ -570,6 +577,10 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
         // Función para recargar la sección cada 5 minutos
         setInterval(function() {
@@ -585,4 +596,29 @@
             });
         }, 3000); // 300000 milisegundos = 5 minutos
     </script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
 @stop

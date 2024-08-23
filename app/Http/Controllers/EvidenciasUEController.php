@@ -24,6 +24,9 @@ class EvidenciasUEController extends Controller
 {
     public function index($id, $name)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login'); // Redirige a la página de inicio de sesión
+        }
         $estandar = Estandares::find($id);
         $user_id = Auth::id();
 
@@ -146,8 +149,9 @@ class EvidenciasUEController extends Controller
 
         $user = Auth::user();
         $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension();
+        // Aquí se incluye la carpeta del estándar después de la matrícula del usuario
         $filePath = $request->file('documento')->storeAs(
-            'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
+            'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($estandar->nombre),
             $fileName
         );
 

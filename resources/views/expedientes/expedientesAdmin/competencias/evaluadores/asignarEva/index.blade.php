@@ -73,8 +73,6 @@
                     </div>
                 </div>
             </div>
-
-
             <!-- Fila para "Usuarios con sus evaluadores" -->
             <div class="col-md-6">
                 <!-- Sección para mostrar usuarios con evaluaciones -->

@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DocumentosEvidencias;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Models\ValidacionesFichas;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ResubirDocumentosController extends Controller
@@ -35,14 +33,21 @@ class ResubirDocumentosController extends Controller
 
         // Obtener el documento relacionado
         $documento = $evidencia->documento;
-        $user = auth()->user();
+        $user = Auth::user();
+
+        // Obtener el estándar del documento
+        $estandar = $evidencia->estandar;
+        $estandar_id = $estandar ? $estandar->id : 'No disponible';
+        $estandar_name = $estandar ? $estandar->name : 'No disponible';
 
         // Procesar y guardar el archivo resubido
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = Str::slug($documento->name) . '.' . $file->getClientOriginalExtension();
+
+            // Modificar la ruta para incluir la carpeta del estándar después de la matrícula del usuario
             $filePath = $file->storeAs(
-                'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname),
+                'public/documents/evidence/competencias/documentos/' . $user->matricula . '/' . Str::slug($estandar->name),
                 $fileName
             );
 

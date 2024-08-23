@@ -49,7 +49,12 @@ class Estandares extends Model
     {
         return $this->hasMany(PlanesEvaluacion::class);
     }
+    // En el modelo Estandares
 
+    public function evaluaciones()
+    {
+        return $this->hasMany(EvaluadoresUsuarios::class, 'estandar_id');
+    }
     // Obtener validaciones a través de comprobantes
     public function validacionesComentarios()
     {

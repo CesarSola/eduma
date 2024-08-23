@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles; // Importa el trait
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -65,7 +64,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'deactivated_at' => 'datetime',
     ];
     public function adminlte_image()
     {
@@ -101,12 +99,10 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Relación muchos a muchos con el modelo Estandares
-    public function estandares1()
-{
-    return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id')
-                ->withPivot('codigo'); // Asegúrate de incluir el campo 'numero' aquí
-}
-
+    public function estandares()
+    {
+        return $this->belongsToMany(Estandares::class, 'user_estandares', 'user_id', 'estandar_id');
+    }
 
     // Relación muchos a muchos con el modelo Curso
     public function cursos()
@@ -150,7 +146,7 @@ class User extends Authenticatable implements MustVerifyEmail
         // Redirigir o mostrar un mensaje de éxito
     }
 
-// Método para generar la matrícula automáticamente solo para usuarios con rol 'User'
+    // Método para generar la matrícula automáticamente solo para usuarios con rol 'User'
     // Dentro del modelo User
     public static function boot()
     {
@@ -220,8 +216,15 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->cursos()->attach($cursoId);
         }
     }
-    public function evaluaciones()
-{
-    return $this->hasMany(Result::class);
-}
+    //relacion evaluadores-usuarios
+    public function evaluadores()
+    {
+        return $this->hasMany(EvaluadoresUsuarios::class, 'usuario_id');
+    }
+
+    //traer el nombre del usuario
+    public function getFullNameAttribute()
+    {
+        return trim("{$this->name} {$this->secondName} {$this->paternalSurname} {$this->maternalSurname}");
+    }
 }

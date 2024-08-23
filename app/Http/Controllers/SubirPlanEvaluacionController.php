@@ -41,17 +41,14 @@ class SubirPlanEvaluacionController extends Controller
             $file = $request->file('file');
             $fileName = Str::slug($request->input('nombre')) . '.' . $file->getClientOriginalExtension();
 
-            // Construir la ruta del archivo
+            // Construir la ruta del archivo en 'storage/app/public'
             $directoryPath = 'public/documents/evidence/competencias/evaluaciones/' .
                 $user->matricula . '/' .
                 Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
                 Str::slug($estandar->name);
 
-            // Asegurarse de que el directorio existe
-            Storage::makeDirectory($directoryPath);
-
             // Guardar el archivo en la ruta especificada
-            $filePath = $file->storeAs($directoryPath, $fileName);
+            $filePath = $file->storeAs($directoryPath, $fileName, 'public');
 
             // Crear un nuevo registro en la base de datos
             $documento = new PlanesEvaluacion();

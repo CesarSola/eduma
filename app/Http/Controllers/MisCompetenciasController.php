@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Estandares;
 use App\Models\ValidacionesComprobantesCompetencias;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,7 +10,7 @@ class MisCompetenciasController extends Controller
 {
     public function index()
     {
-        $userId = auth()->id(); // Obtén el ID del usuario autenticado
+        $userId = Auth::id(); // Obtén el ID del usuario autenticado
 
         // Obtener todos los estándares del usuario con comprobantes y validaciones
         $competencias = Estandares::whereHas('users', function ($query) use ($userId) {
@@ -19,7 +20,7 @@ class MisCompetenciasController extends Controller
             ->get();
 
         // Obtener el usuario completo para usar en la vista
-        $user = auth()->user();
+        $user = Auth::user();
 
         return view('expedientes.expedientesUser.competencias.index', compact('competencias', 'user'));
     }
@@ -36,7 +37,7 @@ class MisCompetenciasController extends Controller
             ->first();
 
         // Obtener las validaciones de comprobantes para las competencias del usuario
-        $validacionesComentarios = ValidacionesComprobantesCompetencias::whereIn('comprobante_id', $competencias->pluck('id'))
+        $validacionesComentarios = ValidacionesComprobantesCompetencias::whereIn('comprobante_id', $competencia->pluck('id'))
             ->where('tipo_documento', 'comprobante')
             ->with('usuario')
             ->get()

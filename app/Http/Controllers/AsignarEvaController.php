@@ -11,8 +11,9 @@ class AsignarEvaController extends Controller
 {
     public function index()
     {
-        // Obtén todos los usuarios que tienen el rol "User" y carga sus estándares relacionados
-        $users = User::role('User')->with('estandares')->get();
+        // Obtén todos los usuarios cuyo campo 'rol' es 'User' y carga sus estándares relacionados
+        $users = User::where('rol', 'User')->with('estandares')->get();
+
 
         // Obtén la lista de evaluadores (usuarios con el rol "Evaluador")
         $evaluadores = User::role('Evaluador')->get();
@@ -37,8 +38,6 @@ class AsignarEvaController extends Controller
         // Retorna la vista con los datos
         return view('expedientes.expedientesAdmin.competencias.evaluadores.asignarEva.index', compact('users', 'evaluadores', 'evaluaciones', 'usuariosAsignados', 'evaluacionesPorUsuario', 'usuariosConEvaluaciones'));
     }
-
-
 
     public function store(Request $request)
     {

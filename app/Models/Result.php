@@ -9,12 +9,15 @@ class Result extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'porcentaje_si', 'recomendacion',     'decision',
-    'fecha',
-    'estandar',
-    'estado',
-];
-
+    protected $fillable = [
+        'user_id',
+        'porcentaje_si',
+        'recomendacion',
+        'decision',
+        'fecha',
+        'estandar',
+        'estado',
+    ];
 
     public function user()
     {

@@ -24,7 +24,7 @@ class ExpedientesUsuariosController extends Controller
         $evaluadorId = Auth::user()->id;
 
         // Obtener solo los usuarios asignados a este evaluador
-        $usuariosAsignados = User::whereHas('evaluaciones', function ($query) use ($evaluadorId) {
+        $usuariosAsignados = User::whereHas('evaluadores', function ($query) use ($evaluadorId) {
             $query->where('evaluador_id', $evaluadorId);
         })->with('documentos')->get();
 

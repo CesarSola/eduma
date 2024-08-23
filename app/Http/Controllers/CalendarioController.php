@@ -14,24 +14,30 @@ use Spatie\Permission\Models\Role;
 
 class CalendarioController extends Controller
 {
-
     public function index(Request $request)
     {
         // Obtén el ID del evaluador autenticado
         $evaluadorId = Auth::id();
 
-        // Obtener todos los usuarios asignados a este evaluador
-        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluadorId) {
-            $query->where('evaluador_id', $evaluadorId);
-        })->with('estandares')->get();
+        // Obtener los usuarios asignados al evaluador autenticado y sus estándares específicos
+        $evaluadoresUsuarios = EvaluadoresUsuarios::where('evaluador_id', $evaluadorId)
+            ->with('usuario', 'estandar') // Cargar usuarios y estándares
+            ->get();
 
-        // Obtener todos los estándares
-        $estandares = Estandares::all();
+        // Agrupar los estándares únicos por usuario
+        $usuarios = $evaluadoresUsuarios->groupBy('usuario_id')->map(function ($evaluadores) {
+            $usuario = $evaluadores->first()->usuario;
+            // Obtener los estándares únicos para este usuario
+            $usuario->estandares = $evaluadores->map->estandar->unique('id');
+            return $usuario;
+        });
 
-        // Supongamos que $competenciaId se pasa como parámetro en la solicitud
+        // Obtener los estándares únicos asignados
+        $estandaresIds = $evaluadoresUsuarios->pluck('estandar_id')->unique();
+        $estandares = Estandares::whereIn('id', $estandaresIds)->get();
+
+        // Obtener la competencia si se pasa como parámetro
         $competenciaId = $request->query('competenciaId');
-
-        // Obtener información de la competencia, si existe
         $competencia = null;
         if ($competenciaId) {
             $competencia = Estandares::find($competenciaId);
@@ -55,9 +61,10 @@ class CalendarioController extends Controller
             'competencia' => $competencia,
             'estandares' => $estandares,
             'selectedUserId' => $request->query('user_id', null),
-            'competenciaId' => $competenciaId, // Asegúrate de pasar esta variable
+            'competenciaId' => $competenciaId,
         ]);
     }
+
 
     // En el controlador
     public function show($competenciaId, Request $request)
@@ -68,7 +75,7 @@ class CalendarioController extends Controller
         $competencia = Estandares::findOrFail($competenciaId);
 
         // Obtener todos los usuarios asignados al evaluador autenticado y cargar sus estándares
-        $usuarios = User::whereHas('evaluaciones', function ($query) use ($evaluador) {
+        $usuarios = User::whereHas('evaluadores', function ($query) use ($evaluador) {
             $query->where('evaluador_id', $evaluador->id);
         })->with('estandares')->get();
 
@@ -94,8 +101,6 @@ class CalendarioController extends Controller
             'evaluador' => $evaluador, // Pasa el evaluador a la vista
         ]);
     }
-
-
 
     public function getUsuariosSinRolAdmin()
     {

@@ -4,6 +4,7 @@ use App\Http\Controllers\AsignarEvaController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\CalificacionEvaluacionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
 use App\Http\Controllers\ECviewsController;
@@ -91,7 +92,8 @@ Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])
 //ruta de agregar fechas
 Route::post('/competencias/{competencia}/guardar-fechas-modal', [FechasController::class, 'store'])->name('competencias.guardar-fechas-modal');
 Route::get('/competencias/{userId}/filtrar-competencias', [FechasController::class, 'filtrarCompetencias']);
-
+//calificaciones
+Route::resource('calificaciones_evaluaciones', CalificacionEvaluacionController::class);
 
 //rutas de evaluadores
 Route::resource('evaluadores', EvaluadoresController::class);
@@ -246,12 +248,12 @@ Route::middleware(['can:users.edit'])->group(function () {
 Route::get('/users/{user}/assign-diagnostico', [UserController::class, 'assignDiagnostico'])->name('users.assignDiagnostico');
 Route::get('/users/diagnosticos', [UserController::class, 'showAssignedDiagnosticos'])->name('users.diagnosticos');
 
-Route::get('/formulario', function() {
+Route::get('/formulario', function () {
     return view('Diagnosticos.formulario');
 })->name('formulario'); // Asigna un nombre a la ruta
 Route::post('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
 
-Route::get('/formulario2', function() {
+Route::get('/formulario2', function () {
     return view('Diagnosticos.formulario2');
 })->name('formulario2'); // Asigna un nombre a la ruta
 Route::post('/formulario2', [Formulario2Controller::class, 'index'])->name('formulario2.index');
