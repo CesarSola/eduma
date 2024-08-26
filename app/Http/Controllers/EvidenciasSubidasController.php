@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DocumentosEvidencias;
 use App\Models\Estandares;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class EvidenciasSubidasController extends Controller
 {
@@ -15,7 +16,7 @@ class EvidenciasSubidasController extends Controller
         $estandarName = $name;
 
         // Obtén todos los documentos asociados al estándar dado y al usuario autenticado
-        $userId = auth()->id();  // Usar el ID del usuario autenticado
+        $userId = Auth::id();  // Usar el ID del usuario autenticado
 
         $documentos = DocumentosEvidencias::where('estandar_id', $estandarId)
             ->where('user_id', $userId)  // Filtra por usuario

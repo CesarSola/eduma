@@ -201,6 +201,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(PlanesEvaluacion::class);
     }
+    //relacion con cedulas de evaluacion
+    public function cedulaEvaluacion()
+    {
+        return $this->hasMany(CedulaEvaluacion::class);
+    }
+    //relacion con juicios de competencia
+    public function juicioCompetencia()
+    {
+        return $this->hasMany(JuiciosUsuario::class);
+    }
+
 
     // relaciones para agregar las relaciones de comprobantesCO y validaciones comprobantes competencias en la tabla pivot user_estandares
     public function attachEstandarIfNotAttached1($estandarId)

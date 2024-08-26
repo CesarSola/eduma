@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\CalificacionEvaluacionController;
+use App\Http\Controllers\CedulaEvaluacionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColoniaController;
 use App\Http\Controllers\ECviewsController;
@@ -182,6 +183,8 @@ Route::get('/evidenciasEC/{id}/{name}', [EvidenciasUEController::class, 'index']
 Route::get('/plan-evaluacion/{id}', [SubirPlanEvaluacionController::class, 'show'])->name('Plan.show');
 // Ruta para almacenar el documento
 Route::post('/plan-evaluacion/store', [SubirPlanEvaluacionController::class, 'store'])->name('plan.store');
+// Ruta para almacenar el documento
+Route::post('/cedula-evaluacion/store', [CedulaEvaluacionController::class, 'store'])->name('cedula.store');
 // rutas de juicios 
 Route::get('/juicio-competencia/{id}', [JuiciosUsuarioController::class, 'show'])->name('Juicio.show');
 Route::post('/juicio-competencia/store', [JuiciosUsuarioController::class, 'store'])->name('juicio.store');

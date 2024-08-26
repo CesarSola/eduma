@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('tipo');
             $table->json('documentos')->nullable();
+            $table->decimal('calificacion_minima', 5, 2);
             $table->timestamps();
         });
     }

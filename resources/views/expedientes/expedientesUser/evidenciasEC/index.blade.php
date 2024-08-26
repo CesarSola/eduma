@@ -236,7 +236,7 @@
                     @endif
                 @endif
             @endif
-            @if (!$plan_evaluacion_subido)
+            @if (!$plan_evaluacion_subido && !$cedula_evaluacion_subido)
                 @if ($fechas_elegidas->isNotEmpty())
                     <div class="card">
                         <div class="card-body">
@@ -272,94 +272,171 @@
                             @else
                                 <p class="text-muted text-center">No has elegido ninguna fecha aún.</p>
                             @endif
-                            <div class="card">
-                                <div class="card-header bg-success text-white text-center font-weight-bold">Descarga
-                                    tu
-                                    plan
-                                    de Evaluación
-                                </div>
-                                <div class="card-body">
-                                    <form id="form-plan"
-                                        action="{{ route('generate-plan', ['userId' => Auth::id(), 'standardId' => $estandar->numero]) }}"
-                                        method="GET">
-                                        @csrf
+                            @if (!$cedula_evaluacion_subido)
+                                <div class="card">
+                                    <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu
+                                        Cedula
+                                        de
+                                        Evaluación</div>
+                                    <div class="card-body">
                                         <div class="mb-3 d-flex flex-column align-items-center">
-                                            <h6 class="card-title text-primary font-weight-bold">Descarga el Plan
-                                                de
+                                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                                Sube la Cédula de Evaluacion que tu @if ($evaluador)
+                                                    <span class="font-weight-bold">Evaluador:</span>
+                                                    <span>{{ $evaluador->evaluador->name }}
+                                                        {{ $evaluador->evaluador->secondName }}
+                                                        {{ $evaluador->evaluador->paternalSurname }}
+                                                        {{ $evaluador->evaluador->maternalSurname }}</span>
+                                                @else
+                                                    <span class="text-muted">Sin evaluador asignado</span>
+                                                @endif te dará el día de la reunión de tu Plan de
                                                 Evaluación
-                                                de tu Estándar</h6>
-                                            <button type="submit" class="btn btn-success shadow-sm mt-3">Descargar
-                                                Plan</button>
+                                            </div>
+                                            <!-- Botón para abrir el modal -->
+                                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                                data-target="#uploadCedulaModal">
+                                                Subir Cedula de Evaluación
+                                            </button>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu
-                                    plan de
-                                    evaluación
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3 d-flex flex-column align-items-center">
-                                        <h6 class="card-title text-primary font-weight-bold">Sube tu plan de
-                                            evaluación
-                                            después
-                                            de la fecha
-                                            pactada con tu evaluador</h6>
-                                        <br>
-                                        <!-- En tu vista Blade -->
-                                        <!-- Botón para abrir el modal -->
-                                        <button type="button" class="btn btn-success" data-toggle="modal"
-                                            data-target="#uploadPlanModal">
-                                            Subir Plan de Evaluación
-                                        </button>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
+                            @if ($cedula_evaluacion_subido)
+                                @if (!$plan_evaluacion_subido)
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white text-center font-weight-bold">
+                                            Descarga
+                                            tu
+                                            plan
+                                            de Evaluación
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="form-plan"
+                                                action="{{ route('generate-plan', ['userId' => Auth::id(), 'standardId' => $estandar->numero]) }}"
+                                                method="GET">
+                                                @csrf
+                                                <div class="mb-3 d-flex flex-column align-items-center">
+                                                    <div class="alert text-center alert-info shadow-sm mt-4"
+                                                        role="alert">
+                                                        Descarga tu Plan de Evaluación y leelo detalladamente, tu
+                                                        @if ($evaluador)
+                                                            <span class="font-weight-bold">Evaluador:</span>
+                                                            <span>{{ $evaluador->evaluador->name }}
+                                                                {{ $evaluador->evaluador->secondName }}
+                                                                {{ $evaluador->evaluador->paternalSurname }}
+                                                                {{ $evaluador->evaluador->maternalSurname }}</span>
+                                                        @else
+                                                            <span class="text-muted">Sin evaluador asignado</span>
+                                                        @endif
+                                                        te dará mas información.
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="btn btn-success shadow-sm mt-3">Descargar
+                                                        Plan
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu
+                                            plan de
+                                            evaluación
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3 d-flex flex-column align-items-center">
+                                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                                    Subelo hasta el día de la @foreach ($fechas_elegidas as $fecha)
+                                                        <span class="font-weight-bold">Fecha:</span>
+                                                        <span>{{ $fecha->fechaCompetencia->fecha->format('d/m/Y') }}</span>
+                                                    @endforeach escogida entre tú y tu evaluador
+                                                </div>
+                                                <!-- Botón para abrir el modal -->
+                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                                    data-target="#uploadPlanModal">
+                                                    Subir Plan de Evaluación
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 @endif
             @endif
-            @if ($plan_evaluacion_subido)
+            @if ($plan_evaluacion_subido && $cedula_evaluacion_subido)
+                @if (!$juicio_competencia_subido)
+                    <div class="card">
+                        <div class="card-header bg-success text-white text-center font-weight-bold">Sube los
+                            resultados de tu
+                            evaluación
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3 d-flex flex-column align-items-center">
+                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                    Sube los resultados de los
+                                    juicios de
+                                    competencia
+                                    que tu @if ($evaluador)
+                                        <span class="font-weight-bold">Evaluador:</span>
+                                        <span>{{ $evaluador->evaluador->name }}
+                                            {{ $evaluador->evaluador->secondName }}
+                                            {{ $evaluador->evaluador->paternalSurname }}
+                                            {{ $evaluador->evaluador->maternalSurname }}</span>
+                                    @else
+                                        <span class="text-muted">Sin evaluador asignado</span>
+                                    @endif te dió al finalizar las pruebas de tu evaluación
+                                </div>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-target="#uploadJuicioModal">
+                                    Subir Juicio de Competencia
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
+            @endif
+            @if ($plan_evaluacion_subido && $cedula_evaluacion_subido && $juicio_competencia_subido)
                 <div class="card">
-                    <div class="card-header bg-success text-white text-center font-weight-bold">Sube los
-                        resultados de tu
-                        evaluación
+                    <div class="card-header bg-success text-white text-center font-weight-bold">
+                        Sube el pago de tu Cédula de Certificación
                     </div>
                     <div class="card-body">
                         <div class="mb-3 d-flex flex-column align-items-center">
-                            <h6 class="card-title text-primary font-weight-bold">Sube los resultados de los
-                                juicios de
-                                competencia
-                                que tu evaluador te dió al finalizar las pruebas de tu evaluación</h6>
-                            <br>
-                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#uploadJuicioModal">
-                                Subir Juicio de Competencia
+                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                Sube el comprobante de pago para empezar el proceso de certificación
+                            </div>
+                            <button class="btn btn-success">
+                                Subir Comprobante Pago
                             </button>
                         </div>
-
                     </div>
                 </div>
             @endif
-            <div class="card">
-                <div class="card-header bg-success text-white text-center font-weight-bold">
-
-                </div>
-                <div class="card-body">
-
-                </div>
-            </div>
         </div>
     </div>
-    </div>
+
+    @if (!$cedula_evaluacion_subido)
+        @if ($fechas_elegidas->isNotEmpty())
+            @include('expedientes.expedientesUser.evidenciasEC.CedulaEvaluacion.show')
+        @endif
+    @endif
+
     @if (!$plan_evaluacion_subido)
         @if ($fechas_elegidas->isNotEmpty())
             @include('expedientes.expedientesUser.evidenciasEC.PlanEvaluacion.show')
         @endif
     @endif
 
-    @if ($plan_evaluacion_subido)
+    @if (!$juicio_competencia_subido)
         @include('expedientes.expedientesUser.evidenciasEC.juicios.show')
     @endif
+
+    {{--  
+    @if (!comprobante_pago)
+        @include('expedientes.expedientesUser.evidenciasEC.ComprobantePago.show')
+    @endif
+    --}}
 
     @if ($carta_validada && $ficha_validada)
         @if (!$todos_documentos_validos)

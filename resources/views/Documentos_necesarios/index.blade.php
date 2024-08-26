@@ -3,18 +3,20 @@
 @section('title', 'Documentos Necesarios')
 
 @section('content_header')
-    <h1>Documentos necesarios por estándar</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Documentos necesarios por estándar</h1>
+        <!-- Button trigger modal -->
+        <div class="mb-4">
+            <button class="btn btn-primary" data-modal-target="create-modal" data-toggle="modal" data-target="#create"
+                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">
+                Crear nuevo documento
+            </button>
+        </div>
+    </div>
 @stop
 
 @section('content')
-    <!-- Button trigger modal -->
-    <div class="mb-4">
-        <button data-modal-target="create-modal" data-toggle="modal" data-target="#create"
-            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button">
-            Crear nuevo documento
-        </button>
-    </div>
 
     <table id="documentos-table" class="table table-bordered table-hover">
         <thead class="text-center">
@@ -48,7 +50,8 @@
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel{{ $documento->id }}">Editar documento necesario
+                                <h5 class="modal-title" id="editModalLabel{{ $documento->id }}">Editar documento
+                                    necesario
                                 </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -71,8 +74,6 @@
 @stop
 
 @section('css')
-
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 @stop
 

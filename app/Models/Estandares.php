@@ -15,6 +15,7 @@ class Estandares extends Model
         'numero',
         'name',
         'tipo',
+        'calificacion_minima',
         'documentos' // Agrega este campo
     ];
     //sirve para guardar el array de documentos necesarios

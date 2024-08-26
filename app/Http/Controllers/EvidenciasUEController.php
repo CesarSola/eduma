@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartasDocumentos;
+use App\Models\CedulaEvaluacion;
 use App\Models\DocumentosEvidencias;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
 use App\Models\EvaluadoresUsuarios;
 use App\Models\FechaElegida;
 use App\Models\FichasDocumentos;
+use App\Models\JuiciosUsuario;
 use App\Models\PlanesEvaluacion;
 use App\Models\ValidacionesCartas;
 use App\Models\ValidacionesEvidencias;
@@ -91,8 +93,18 @@ class EvidenciasUEController extends Controller
             ->with('evaluador') // Asegúrate de incluir la relación evaluador
             ->first();
 
+        // Consultar si ya se ha subido una cedula de evaluación
+        $cedula_evaluacion_subido = CedulaEvaluacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->exists();
+
         // Consultar si ya se ha subido un plan de evaluación
         $plan_evaluacion_subido = PlanesEvaluacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->exists();
+
+        // Consultar si ya se ha subido una cedula de evaluación
+        $juicio_competencia_subido = JuiciosUsuario::where('user_id', $user_id)
             ->where('estandar_id', $id)
             ->exists();
 
@@ -111,6 +123,8 @@ class EvidenciasUEController extends Controller
             'fechas_elegidas',
             'evaluador',
             'plan_evaluacion_subido', // Pasar el estado del plan de evaluación a la vista
+            'cedula_evaluacion_subido',
+            'juicio_competencia_subido',
             'id'
         ));
     }
