@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalificacionEvaluacion;
 use App\Models\CartasDocumentos;
 use App\Models\CedulaEvaluacion;
+use App\Models\ComprobanteCertificacion;
 use App\Models\DocumentosEvidencias;
 use App\Models\DocumentosNec;
 use App\Models\Estandares;
@@ -103,11 +105,41 @@ class EvidenciasUEController extends Controller
             ->where('estandar_id', $id)
             ->exists();
 
-        // Consultar si ya se ha subido una cedula de evaluación
+        // Consultar si ya se ha subido un juicio de competencia
         $juicio_competencia_subido = JuiciosUsuario::where('user_id', $user_id)
             ->where('estandar_id', $id)
             ->exists();
 
+        // Obtener las calificaciones del usuario
+        $calificaciones = CalificacionEvaluacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->first();
+
+        if ($calificaciones) {
+            // Calcular el promedio
+            $evidencias = $calificaciones->evidencias ?? 0;
+            $evaluacion = $calificaciones->evaluacion ?? 0;
+            $presentacion = $calificaciones->presentacion ?? 0;
+
+            $promedio = ($evidencias + $evaluacion + $presentacion) / 3;
+
+            // Convertir el promedio a un porcentaje
+            $promedio = $promedio * 10; // Porque estamos en una escala de 1 a 10
+        } else {
+            $promedio = 0;
+        }
+
+        // Obtener la calificación mínima del estándar
+        $calificacion_minima = $estandar->calificacion_minima;
+
+        // Consultar si ya se ha subido un comprobante de pago
+        $comprobante_pago_subido = ComprobanteCertificacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->whereNotNull('comprobante_pago') // Ajusta esto según la columna que almacena el archivo de pago
+            ->exists();
+
+
+        // Pasar datos a la vista
         // Pasar datos a la vista
         return view('expedientes.expedientesUser.evidenciasEC.index', compact(
             'estandar',
@@ -122,12 +154,16 @@ class EvidenciasUEController extends Controller
             'hay_evidencias_subidas',
             'fechas_elegidas',
             'evaluador',
-            'plan_evaluacion_subido', // Pasar el estado del plan de evaluación a la vista
+            'plan_evaluacion_subido',
             'cedula_evaluacion_subido',
             'juicio_competencia_subido',
-            'id'
+            'comprobante_pago_subido', // Agrega esto
+            'id',
+            'promedio',
+            'calificacion_minima'
         ));
     }
+
 
     public function download($id)
     {

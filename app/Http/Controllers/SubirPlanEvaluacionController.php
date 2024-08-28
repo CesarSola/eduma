@@ -47,8 +47,9 @@ class SubirPlanEvaluacionController extends Controller
                 Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
                 Str::slug($estandar->name);
 
-            // Guardar el archivo en la ruta especificada
-            $filePath = $file->storeAs($directoryPath, $fileName, 'public');
+            Storage::makeDirectory($directoryPath);
+
+            $filePath = $file->storeAs($directoryPath, $fileName);
 
             // Crear un nuevo registro en la base de datos
             $documento = new PlanesEvaluacion();

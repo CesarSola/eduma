@@ -27,11 +27,20 @@ class Estandares extends Model
     {
         return $this->belongsToMany(DocumentosNec::class, 'competencia_documentosnec', 'competencia_id', 'documentosnec_id');
     }
-
+    //relacion comprobantes pago competencias
+    public function comprobantesCE()
+    {
+        return $this->hasMany(ComprobanteCertificacion::class, 'estandar_id', 'id');
+    }
     //relacion comprobantes pago competencias
     public function comprobantesCO()
     {
         return $this->hasMany(ComprobantesCO::class, 'estandar_id', 'id');
+    }
+    //relacion comprobantes pago competencias
+    public function comprobantesCOR()
+    {
+        return $this->hasMany(ComprobantesCOR::class, 'estandar_id', 'id');
     }
 
     //relación de estandares con fechas

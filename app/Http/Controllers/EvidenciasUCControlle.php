@@ -9,6 +9,7 @@ use App\Models\EvidenciasCursos;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EvidenciasUCControlle extends Controller
 {
@@ -19,7 +20,8 @@ class EvidenciasUCControlle extends Controller
     {
         $cursos = Curso::find($id);
         $documentos = $cursos->documentosnec;
-        $evidencias = EvidenciasCursos::where('curso_id', $id)->where('user_id', auth()->id())->get();
+        $evidencias = EvidenciasCursos::where('curso_id', $id)->where('user_id', Auth::id())->get();
+
 
         // Map document IDs to easily check if an evidence exists for a document
         $uploadedDocumentIds = $evidencias->pluck('documento_id')->toArray();
@@ -61,7 +63,7 @@ class EvidenciasUCControlle extends Controller
         ]);
 
         $documento = DocumentosNec::find($documento_id);
-        $user = auth()->user();
+        $user = Auth::user();
         $userName = Str::slug($user->name);  // Convert the user's name to a URL-friendly format
         $fileName = Str::slug($documento->name) . '.' . $request->file('documento')->getClientOriginalExtension(); // Create the new file name
 
@@ -73,7 +75,7 @@ class EvidenciasUCControlle extends Controller
 
         // Save the file information to the database
         EvidenciasCursos::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'curso_id' => $documento->cursos->first()->id,
             'documento_id' => $documento_id,
             'file_path' => $filePath,

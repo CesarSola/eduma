@@ -97,6 +97,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(comprobantesCO::class);
     }
+    //relacón donde el comprobante de competencias toma el id de usuario
+    public function comprobantesCE()
+    {
+        return $this->hasMany(ComprobanteCertificacion::class);
+    }
 
     // Relación muchos a muchos con el modelo Estandares
     public function estandares()
@@ -211,8 +216,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(JuiciosUsuario::class);
     }
-
-
     // relaciones para agregar las relaciones de comprobantesCO y validaciones comprobantes competencias en la tabla pivot user_estandares
     public function attachEstandarIfNotAttached1($estandarId)
     {

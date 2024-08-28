@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartasDocumentos;
+use App\Models\ComprobanteCertificacion;
 use App\Models\DocumentosEvidencias;
 use App\Models\Estandares;
 use App\Models\FichasDocumentos;
 use App\Models\User;
 use App\Models\ValidacionesCartas;
+use App\Models\ValidacionesCertificaciones;
 use App\Models\ValidacionesEvidencias;
 use App\Models\ValidacionesFichas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class EvidenciasCompetenciasController extends Controller
@@ -20,7 +23,7 @@ class EvidenciasCompetenciasController extends Controller
         $userId = $request->query('user_id');
         $competenciaId = $request->query('competencia');
 
-        $usuario = $userId ? User::findOrFail($userId) : auth()->user();
+        $usuario = $userId ? User::findOrFail($userId) : Auth::user();
         $competencia = Estandares::findOrFail($competenciaId);
 
         // Obtener documentos
@@ -39,6 +42,10 @@ class EvidenciasCompetenciasController extends Controller
             ->where('estandar_id', $competenciaId)
             ->get();
 
+        // Obtener comprobantes de certificación
+        $fichas_pago = ComprobanteCertificacion::where('user_id', $usuario->id)
+            ->where('estandar_id', $competenciaId)
+            ->get();
 
         // Obtener validaciones de documentos
         $documentos_validaciones = ValidacionesEvidencias::where('user_id', $usuario->id)
@@ -58,11 +65,16 @@ class EvidenciasCompetenciasController extends Controller
             ->get()
             ->keyBy('carta_id');
 
+        // Obtener validaciones de comprobantes de certificación
+        $comprobantes_validaciones = ValidacionesCertificaciones::where('user_id', $usuario->id)
+            ->where('id', $competenciaId)
+            ->get()
+            ->keyBy('comprobante_id');
+
         // Verificar si todos los documentos están validados
         $todosDocumentosValidados = $documentos->every(function ($documento) use ($documentos_validaciones) {
             return isset($documentos_validaciones[$documento->id]);
         });
-
 
         return view('expedientes.expedientesAdmin.competencias.evidencias', compact(
             'usuario',
@@ -73,7 +85,9 @@ class EvidenciasCompetenciasController extends Controller
             'cartas',
             'competencia',
             'documentos_validaciones',
-            'todosDocumentosValidados'
+            'todosDocumentosValidados',
+            'fichas_pago', // Agregar aquí
+            'comprobantes_validaciones' // Agregar aquí
         ));
     }
 

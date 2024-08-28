@@ -27,7 +27,7 @@
                         Comprobante</a>
                 @else
                     <!-- Formulario para subir el comprobante de pago -->
-                    <form action="{{ route('competenciaEC.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('competenciaEC.storeRecursar') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="competencia_id" value="{{ $competencia->id }}">
                         <div class="form-group">

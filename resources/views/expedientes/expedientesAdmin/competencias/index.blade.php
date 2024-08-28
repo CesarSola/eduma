@@ -22,39 +22,6 @@
                         <p>Apellidos: {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
                         <p>Edad: {{ $usuario->age }} años</p>
                     </div>
-                    <div class="right-content">
-                        <!-- Mostrar el estatus de la competencia -->
-                        @foreach ($competencias as $competencia)
-                            <span class="badge badge-info">Estatus:
-                                @php
-                                    $comprobanteValidado = false;
-
-                                    // Verificar si hay comprobantes de competencias y procesarlos
-                                    if ($competencia->comprobantesCO) {
-                                        foreach ($competencia->comprobantesCO as $comprobante) {
-                                            // Asegurarnos de que $comprobante es un objeto
-                                            if (is_object($comprobante)) {
-                                                $estado = json_decode($comprobante->estado, true);
-                                                if (
-                                                    isset($estado['validacion_comprobante_pago']) &&
-                                                    $estado['validacion_comprobante_pago'] === 'validar'
-                                                ) {
-                                                    $comprobanteValidado = true;
-                                                    break; // Salir del bucle una vez encontrado un comprobante validado
-                                                }
-                                            }
-                                        }
-                                    }
-                                @endphp
-
-                                @if ($comprobanteValidado)
-                                    Activo
-                                @else
-                                    Inactivo
-                                @endif
-                            </span>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         </div>
@@ -64,10 +31,10 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>NO.</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
-                        <th>Acciones</th>
+                        <th>Evidencias del Usuario</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,7 +58,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>NO.</th>
                         <th>Competencias</th>
                         <th>Fechas Asignadas</th>
                         <th>Horarios Asignados</th>

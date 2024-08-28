@@ -6,6 +6,7 @@ use App\Models\CedulaEvaluacion;
 use App\Models\Estandares;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CedulaEvaluacionController extends Controller
@@ -37,8 +38,9 @@ class CedulaEvaluacionController extends Controller
                 Str::slug($user->name . ' ' . $user->secondName . ' ' . $user->paternalSurname . ' ' . $user->maternalSurname) . '/' .
                 Str::slug($estandar->name);
 
-            // Guardar el archivo en la ruta especificada
-            $filePath = $file->storeAs($directoryPath, $fileName, 'public');
+            Storage::makeDirectory($directoryPath);
+
+            $filePath = $file->storeAs($directoryPath, $fileName);
 
             // Crear un nuevo registro en la base de datos
             $documento = new CedulaEvaluacion();

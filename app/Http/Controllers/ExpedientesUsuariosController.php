@@ -10,14 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpedientesUsuariosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    /**
-     * Mostrar la lista de usuarios asignados.
-     * 
-     * @return \Illuminate\View\View
-     */
+
     public function index()
     {
         // Obtener el evaluador autenticado
@@ -34,13 +27,26 @@ class ExpedientesUsuariosController extends Controller
 
     public function show($id)
     {
-        $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCU', 'comprobantesCO', 'estandares', 'cursos')->findOrFail($id);
+        // Obtener el evaluador autenticado
+        $evaluadorId = Auth::user()->id;
 
-        // Recuperar documentos, comprobantes, estándares y cursos
+        // Obtener el usuario especificado
+        $usuariosAdmin = User::with('documentos.validacionesComentarios', 'comprobantesCO', 'comprobantesCU', 'estandares', 'cursos')->findOrFail($id);
+
+        // Recuperar los comprobantes de competencia relacionados con el evaluador
+        $comprobantesCO = $usuariosAdmin->comprobantesCO()->where('evaluador_id', $evaluadorId)->get();
+
+        // Obtener los IDs de los estándares asociados a estos comprobantes de competencia
+        $estandaresIds = $comprobantesCO->pluck('estandar_id')->unique();
+
+        // Recuperar los estándares del usuario que están asociados con los comprobantes de competencia y el evaluador
+        $estandares = $usuariosAdmin->estandares()->whereIn('id', $estandaresIds)->whereHas('evaluaciones', function ($query) use ($evaluadorId) {
+            $query->where('evaluador_id', $evaluadorId);
+        })->get();
+
+        // Continuar con la lógica existente para documentos y comprobantes
         $documentos = $usuariosAdmin->documentos;
-        $comprobantesCO = $usuariosAdmin->comprobantesCO; // Comprobantes de pago competencia
         $comprobantesCU = $usuariosAdmin->comprobantesCU; // Comprobantes de pago curso
-        $estandares = $usuariosAdmin->estandares;
         $cursos = $usuariosAdmin->cursos;
 
         // Recuperar respuestas de encuestas y cargar la relación estandar
@@ -54,14 +60,10 @@ class ExpedientesUsuariosController extends Controller
         foreach ($documentos as $documento) {
             $estado = json_decode($documento->estado, true) ?? [];
 
-            // Comprobar si algún documento está en estado 'Pendiente' o 'rechazar'
             $documentosEnValidacion = in_array('Pendiente', $estado) || in_array('rechazar', $estado);
-
-            // Comprobar si todos los documentos están validados
             $documentosCompletos = !in_array('validar', $estado) ? false : $documentosCompletos;
         }
 
-        // Variables para comprobar los comprobantes de pago
         $comprobanteSubidoCO = $comprobantesCO->isNotEmpty();
         $comprobanteEnValidacionCO = false;
         $comprobanteValidadoCO = true; // Asumimos inicialmente que todos están validados
@@ -69,8 +71,6 @@ class ExpedientesUsuariosController extends Controller
         if ($comprobanteSubidoCO) {
             foreach ($comprobantesCO as $comprobanteCO) {
                 $estado = json_decode($comprobanteCO->estado, true) ?? [];
-
-                // Filtra comprobantes con estado null y considera estos como no validados
                 if ($estado === null || (isset($estado['comprobante_pago']) && $estado['comprobante_pago'] === 'Pendiente')) {
                     $comprobanteEnValidacionCO = true;
                     $comprobanteValidadoCO = false;
@@ -85,7 +85,6 @@ class ExpedientesUsuariosController extends Controller
             foreach ($comprobantesCU as $comprobanteCU) {
                 $estado = json_decode($comprobanteCU->estado, true) ?? [];
                 $comprobantePagoStatusCU = $estado['comprobante_pago'] ?? null;
-
                 if ($comprobantePagoStatusCU === 'Pendiente') {
                     $comprobanteEnValidacionCU = true;
                     break;
@@ -111,8 +110,6 @@ class ExpedientesUsuariosController extends Controller
             'atencionUsuario'
         ));
     }
-
-
 
     /**
      * Show the expediente for the specified user.

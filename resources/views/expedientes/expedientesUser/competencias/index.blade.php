@@ -26,46 +26,21 @@
             <div class="container">
                 @if ($competencias->isEmpty())
                     <div class="alert alert-primary" role="alert">
-                        No tienes Competencias inscritos.
+                        No tienes Competencias inscritas.
                         <a class="btn btn-primary" href="{{ route('competenciaEC.index') }}">Ir a la pestaña de inscripción
                             a una competencia</a>
                     </div>
                 @else
                     <ul class="list-group">
                         @foreach ($competencias as $competencia)
-                            @php
-                                $usuarioId = auth()->user()->id;
-
-                                // Verifica si hay comprobantes asociados
-                                $comprobantes = $competencia->comprobantesCO;
-
-                                // Inicializa estado
-                                $estado = 'no_validado';
-
-                                // Verifica si hay comprobantes disponibles
-                                if ($comprobantes) {
-                                    foreach ($comprobantes as $comprobante) {
-                                        // Recupera el primer comentario de validación para el comprobante de pago
-                                        $validacionComentarios = $comprobante->validaciones
-                                            ->where('user_id', $usuarioId)
-                                            ->first();
-
-                                        if ($validacionComentarios) {
-                                            $estado = $validacionComentarios->tipo_validacion;
-                                            break; // Salir del bucle si encontramos una validación
-                                        }
-                                    }
-                                }
-                            @endphp
-
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <span style="font-weight: bold; color: #333;">{{ $competencia->name }}</span> -
                                     {{ $competencia->tipo }}
-                                    @if ($estado == 'validar')
+                                    @if ($competencia->estado == 'validar')
                                         <a href="{{ route('evidenciasEC.index', ['id' => $competencia->id, 'name' => $competencia->name]) }}"
                                             class="btn btn-primary btn-sm ml-2">Ver</a>
-                                    @elseif ($estado == 'rechazar')
+                                    @elseif ($competencia->estado == 'rechazar')
                                         <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal"
                                             data-target="#resubirModal" data-id="{{ $competencia->id }}"
                                             data-nombre="{{ $competencia->name }}">
@@ -75,9 +50,13 @@
                                         <span class="badge badge-warning">En validación</span>
                                     @endif
                                 </div>
-                                @if ($estado == 'validar')
-                                    <span class="badge badge-success badge-pill">Inscrito</span>
-                                @elseif ($estado == 'rechazar')
+                                @if ($competencia->estado == 'validar')
+                                    @if ($competencia->promedio !== null)
+                                        <span class="badge badge-success badge-pill">{{ $competencia->mensaje }}</span>
+                                    @else
+                                        <span class="badge badge-success badge-pill">Inscrito</span>
+                                    @endif
+                                @elseif ($competencia->estado == 'rechazar')
                                     <span class="badge badge-danger badge-pill">Comprobante: Rechazado</span>
                                 @else
                                     <span class="badge badge-warning badge-pill">Comprobante: Subido</span>
@@ -91,6 +70,7 @@
     </div>
     @include('expedientes.expedientesUser.competencias.resubir_comprobante')
 @stop
+
 
 @section('css')
     <style>

@@ -67,6 +67,7 @@ use App\Http\Controllers\MisCursosController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\CompetenciasController;
+use App\Http\Controllers\ComprobanteCertificacionController;
 use App\Http\Controllers\COResubirController;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\ElegirFechaController;
@@ -86,6 +87,7 @@ use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\JuiciosUsuarioController;
+use App\Http\Controllers\ValidacionesCertificacionesController;
 
 //ruta del calendario
 Route::resource('calendario', CalendarioController::class);
@@ -146,7 +148,10 @@ Route::put('/validar-cop/{id}/update-comprobante/{documento}', [ValidarCoPContro
 Route::resource('validarCuP', ValidarCuPController::class);
 //rutas para validar comprobante de pagos cursos
 Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPController::class, 'updateComprobante'])->name('validarCuP.updateComprobante');
-
+//ruta de la carpeta validarCE
+Route::resource('validarCE', ValidacionesCertificacionesController::class);
+// Rutas para validar comprobante de pagos de certificaciones
+Route::put('/validar-ce/{id}/update-comprobante/{documento}', [ValidacionesCertificacionesController::class, 'updateCertificados'])->name('validarCE.updateCertificado');
 //rutas del expediente Usuario
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
@@ -157,6 +162,14 @@ Route::get('/documentosUser/edit/{tipo_documento}', [SDocumentosController::clas
 Route::post('/documentosUser/update/{tipo_documento}', [SDocumentosController::class, 'update'])->name('documentosUser.updateByTipo');
 //ruta del registro a un EC
 Route::resource('competenciaEC', RegistroECController::class);
+// Ruta personalizada para volver a cursar
+Route::get('recursar/{competencia}/volverACursar', [RegistroECController::class, 'volverACursar'])->name('volverACursar');
+// Ruta para la acción de recursar
+Route::post('competenciaEC/recursar', [RegistroECController::class, 'storeRecursar'])->name('competenciaEC.storeRecursar');
+
+//ruta para subir el comprobante de pago de la certificación
+// Registrar las rutas del recurso para el controlador de ComprobanteCertificacion
+Route::resource('certificacion', ComprobanteCertificacionController::class);
 //ruta del registro de un curso
 Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias

@@ -5,30 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Estandares;
-use App\Models\FechaCompetencia;
-use App\Models\Horario;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class CompetenciasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         // Obtener el ID del usuario desde la solicitud o usar el usuario autenticado
-        $userId = $request->query('user_id') ?? Auth::user()->id; // Usar Auth::user()->id
+        $userId = $request->query('user_id') ?? Auth::user()->id;
+
+        // Obtener el ID del evaluador autenticado
+        $evaluadorId = Auth::user()->id;
 
         // Buscar el usuario por ID
-        $usuario = User::findOrFail($userId);
+        $usuario = User::with('comprobantesCO', 'estandares')->findOrFail($userId);
 
-        // Obtener todas las competencias asociadas al usuario con sus fechas, horarios y comprobantesCO
+        // Recuperar los comprobantes de competencia relacionados con el evaluador
+        $comprobantesCO = $usuario->comprobantesCO()->where('evaluador_id', $evaluadorId)->get();
+
+        // Obtener los IDs de los estándares asociados a estos comprobantes de competencia
+        $estandaresIds = $comprobantesCO->pluck('estandar_id')->unique();
+
+        // Obtener todos los estándares del usuario que están asociados con los comprobantes de competencia y el evaluador
         $competencias = $usuario->estandares()
+            ->whereIn('id', $estandaresIds)
             ->with(['fechas' => function ($query) use ($userId) {
                 $query->where('user_id', $userId);
-            }, 'fechas.horarios', 'comprobantesCO'])
+            }, 'fechas.horarios'])
             ->get();
 
         // Renderizar la vista del expediente de competencias del usuario
@@ -42,84 +46,6 @@ class CompetenciasController extends Controller
     public function create()
     {
         return view('lista_estandares.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function agregarFechas($competenciaId, Request $request)
-    {
-        // Obtener la competencia por su ID
-        $competencia = Estandares::findOrFail($competenciaId);
-
-        // Obtener el userId desde la solicitud
-        $userId = $request->query('user_id');
-
-        // Verificar si se pasó un userId, si no, asignar el usuario autenticado
-        $selectedUserId = $userId ?? Auth::user()->id; // Usar Auth::user()->id
-
-        // Obtener el usuario para mostrar su nombre
-        $usuario = User::findOrFail($selectedUserId);
-
-        // Obtener las fechas del usuario seleccionado
-        $fechasUsuario = $competencia->fechas->where('user_id', $selectedUserId);
-
-        // Verificar si el usuario ya tiene fechas y horarios asignados
-        $tieneFechasYHorarios = $fechasUsuario->isNotEmpty() && $fechasUsuario->every(function ($fecha) {
-            return $fecha->horarios->isNotEmpty();
-        });
-
-        return view('expedientes.expedientesAdmin.competencias.agregar-fechas', compact('competencia', 'selectedUserId', 'fechasUsuario', 'usuario', 'tieneFechasYHorarios'));
-    }
-
-
-    public function guardarFechas(Request $request, $competenciaId)
-    {
-        // Validar la solicitud
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'fechas.*' => 'required|date',
-            'horarios.*.*' => 'required|date_format:H:i',
-        ]);
-
-        // Encontrar la competencia
-        $competencia = Estandares::findOrFail($competenciaId);
-
-        // Eliminar todas las fechas existentes para este usuario y competencia
-        FechaCompetencia::where('competencia_id', $competenciaId)
-            ->where('user_id', $request->user_id)
-            ->delete();
-
-        foreach ($request->fechas as $index => $fecha) {
-            // Crear una nueva fecha asociada a la competencia
-            $fechaCompetencia = new FechaCompetencia();
-            $fechaCompetencia->fecha = $fecha;
-            $fechaCompetencia->competencia_id = $competenciaId;
-            $fechaCompetencia->user_id = $request->user_id; // Asigna el ID del usuario especificado
-            $fechaCompetencia->save();
-
-            // Guardar los horarios para esta fecha
-            if (isset($request->horarios[$index])) {
-                foreach ($request->horarios[$index] as $hora) {
-                    try {
-                        // Asegúrate de que la hora está en formato 'H:i'
-                        $hora24 = Carbon::createFromFormat('H:i', $hora)->format('H:i');
-                    } catch (\Exception $e) {
-                        // Manejar el error de formato si ocurre
-                        return back()->withErrors(['horarios' => 'Formato de hora inválido.']);
-                    }
-
-                    $horario = new Horario();
-                    $horario->hora = $hora24; // Guarda el formato de 24 horas
-                    $horario->competencia_id = $competenciaId;
-                    $horario->fecha_competencia_id = $fechaCompetencia->id;
-                    $horario->user_id = $request->user_id; // Asigna el ID del usuario especificado
-                    $horario->save();
-                }
-            }
-        }
-
-        return Redirect::route('competencia.index')->with('success', 'Fechas y horarios agregados correctamente');
     }
 
     /**

@@ -225,7 +225,45 @@
                     @endif
                 </div>
             </div>
-
+            <!-- Sección para validar fichas de pago de certificados -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3>Validar Fichas de Pago de Certificados</h3>
+                </div>
+                <div class="card-body">
+                    @if ($fichas_pago->isNotEmpty())
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Ficha de Pago</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($fichas_pago as $ficha_pago)
+                                    <tr>
+                                        <td>{{ basename($ficha_pago->comprobante_pago) }}</td>
+                                        <td>
+                                            @if (isset($fichas_pago_validaciones[$ficha_pago->id]) && $fichas_pago_validaciones[$ficha_pago->id]->tipo_validacion)
+                                                <span class="text-success">Ficha de Pago validada</span>
+                                            @else
+                                                <a href="{{ route('validarCE.show', ['validarCE' => $usuario->id, 'competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
+                                                    class="btn btn-primary">
+                                                    Ver Comprobantes de Pago
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-center">
+                            <p class="text-muted">No hay fichas de pago para validar.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 @stop

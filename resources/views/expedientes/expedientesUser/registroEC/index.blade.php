@@ -24,7 +24,6 @@
                     @else
                         @php
                             $usuario = Auth::user();
-                            $inscrito = false;
                         @endphp
                         @if ($usuario)
                             @foreach ($competencias as $competencia)
@@ -34,10 +33,11 @@
                                         ->where('estandar_id', $competencia->id)
                                         ->first();
 
-                                    if ($comprobanteExistente) {
-                                        $inscrito = true;
-                                        $competenciaInscrita = $competencia;
-                                    }
+                                    $inscrito = $comprobanteExistente !== null;
+                                    $promedio = $competencia->promedio_usuario;
+                                    $calificacionMinima = $competencia->calificacion_minima;
+                                    $mostrarVolverACursar =
+                                        $inscrito && $promedio !== null && $promedio < $calificacionMinima;
                                 @endphp
                                 <div class="col-md-6 mb-4">
                                     <div class="card h-100">
@@ -49,19 +49,21 @@
                                                 </h6>
                                             </div>
                                             @if ($comprobanteExistente)
-                                                <span class="badge badge-success badge-pill">Inscrito</span>
+                                                @if ($mostrarVolverACursar && !$competencia->comprobante_recursar_existente)
+                                                    <a href="{{ route('volverACursar', ['competencia' => $competencia->id]) }}"
+                                                        class="btn btn-warning">Volver a Cursar</a>
+                                                @else
+                                                    <span class="badge badge-success badge-pill">Inscrito</span>
+                                                    <div class="card-footer">
+                                                        <a href="{{ route('miscompetencias.index') }}"
+                                                            class="btn btn-primary">Ir a Mis Competencias</a>
+                                                    </div>
+                                                @endif
                                             @else
                                                 <a href="{{ route('competenciaEC.show', ['competenciaEC' => $competencia->id]) }}"
                                                     class="btn btn-primary">Inscribirse</a>
                                             @endif
-                                            @if ($inscrito && $competencia->id === $competenciaInscrita->id)
-                                                <div class="card-footer">
-                                                    <a href="{{ route('miscompetencias.index') }}"
-                                                        class="btn btn-primary">Ir a
-                                                        Mis
-                                                        Competencias</a>
-                                                </div>
-                                            @endif
+
                                         </div>
                                     </div>
                                 </div>
@@ -125,6 +127,17 @@
             background-color: #6c757d;
             border-color: #6c757d;
             color: white;
+        }
+
+        .btn-warning {
+            background-color: #f0ad4e;
+            border-color: #f0ad4e;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #ec971f;
+            border-color: #d58512;
         }
     </style>
 @stop
