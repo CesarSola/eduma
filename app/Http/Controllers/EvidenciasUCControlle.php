@@ -29,23 +29,6 @@ class EvidenciasUCControlle extends Controller
         return view('expedientes.expedientesUser.evidenciasCU.index', compact('cursos', 'documentos', 'evidencias', 'uploadedDocumentIds'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      */

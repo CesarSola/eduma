@@ -384,8 +384,8 @@
             @endif
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido && $juicio_competencia_subido)
-            @if ($comprobante_pago_subido)
-                <!-- Sección visible solo cuando el comprobante de pago ya ha sido subido -->
+            @if ($comprobante_pago_subido && $estado_comprobante_valido)
+                <!-- Sección visible solo cuando el comprobante de pago ya ha sido subido y está en estado "validar" -->
                 <div class="card">
                     <div class="card-header bg-success text-white text-center font-weight-bold">
                         Comprobante de Pago Subido
@@ -398,19 +398,24 @@
                             <br>
                         </div>
                         <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            Edumatics / PowerSkills and Talent Management S.A.S. agredece tu confianza, al participar por la
+                            Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al participar por la
                             certificación en este estándar de la mano con la página del Sistema Innovador de Centro
                             Evaluador (SICE).
                         </div>
                         <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            El Promedio Obtenido fue de: {{ $promedio }}, y la calificación minima requerida para la
-                            certificación del estandar: {{ $estandar->numero }} {{ $estandar->name }} fue de:
+                            El Promedio Obtenido fue de: {{ $promedio }}, y la calificación mínima requerida para la
+                            certificación del estándar: {{ $estandar->numero }} {{ $estandar->name }} fue de:
                             {{ $calificacion_minima }}
                         </div>
                     </div>
                 </div>
             @else
-                @if ($promedio >= $calificacion_minima)
+                @php
+                    // Verifica si el comprobante ha sido subido y su estado
+                    $mostrar_boton = !$comprobante_pago_subido || $estado_comprobante_rechazado;
+                @endphp
+
+                @if ($mostrar_boton)
                     <div class="card">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
                             Sube el pago de tu Cédula de Certificación
@@ -434,8 +439,37 @@
                         </div>
                     </div>
                 @else
+                    <!-- Mostrar sección de estado del comprobante -->
                     <div class="card">
-                        <div class="card-header bg-danger text-white text-center font-weight-bold">
+                        <div class="card-header bg-success text-white text-center font-weight-bold">
+                            Estado del Comprobante de Pago
+                        </div>
+                        <div class="card-body">
+                            @if ($estado_comprobante_valido)
+                                <div class="alert text-center alert-success shadow-sm mt-4" role="alert">
+                                    El comprobante de pago ha sido validado. Puedes seguir el proceso a través del mensaje
+                                    que te llegará al correo con el que te inscribiste.
+                                </div>
+                            @elseif ($estado_comprobante_rechazado)
+                                <div class="alert text-center alert-danger shadow-sm mt-4" role="alert">
+                                    El comprobante de pago ha sido rechazado. Por favor, revisa el motivo del rechazo y
+                                    vuelve a subir un comprobante válido.
+                                </div>
+                                <div class="text-center mt-4">
+                                    <a href="#" class="btn btn-primary">Volver a subir Comprobante</a>
+                                </div>
+                            @elseif ($comprobante_en_proceso)
+                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                    El comprobante de pago está en proceso de validación. Por favor, espera mientras se
+                                    revisa.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+                @if ($promedio < $calificacion_minima)
+                    <div class="card">
+                        <div class="card-header bg-success text-white text-center font-weight-bold">
                             Calificación Insuficiente
                         </div>
                         <div class="card-body">
@@ -449,7 +483,6 @@
                 @endif
             @endif
         @endif
-
 
     </div>
     @if (!$cedula_evaluacion_subido)

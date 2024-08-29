@@ -137,7 +137,19 @@ class EvidenciasUEController extends Controller
             ->where('estandar_id', $id)
             ->whereNotNull('comprobante_pago') // Ajusta esto según la columna que almacena el archivo de pago
             ->exists();
+        // Consultar el estado del comprobante de pago
+        $comprobante = ComprobanteCertificacion::where('user_id', $user_id)
+            ->where('estandar_id', $id)
+            ->first();
 
+        $estado_comprobante = $comprobante ? json_decode($comprobante->estado, true) : null;
+
+        // Determinar si el comprobante está en estado "rechazar" o "pendiente"
+        $estado_comprobante_valido = $estado_comprobante && in_array($estado_comprobante['comprobante'], ['rechazar', 'pendiente']);
+        // Determinar si el comprobante está en estado "rechazar"
+        $estado_comprobante_rechazado = $estado_comprobante && $estado_comprobante['comprobante'] === 'rechazar';
+        // Determinar si el comprobante está en proceso de validación
+        $comprobante_en_proceso = $estado_comprobante === null && $comprobante_pago_subido;
 
         // Pasar datos a la vista
         // Pasar datos a la vista
@@ -158,6 +170,10 @@ class EvidenciasUEController extends Controller
             'cedula_evaluacion_subido',
             'juicio_competencia_subido',
             'comprobante_pago_subido', // Agrega esto
+            'comprobante',
+            'estado_comprobante_valido',
+            'estado_comprobante_rechazado',
+            'comprobante_en_proceso',
             'id',
             'promedio',
             'calificacion_minima'
