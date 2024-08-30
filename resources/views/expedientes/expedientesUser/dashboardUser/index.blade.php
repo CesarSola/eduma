@@ -7,7 +7,8 @@
         <div class="card-body">
             <div class="left-content">
                 <div class="text-center">
-                    <p class="sice-text">SICE</p>
+                    <p class="sice-text">S.I.C.E.</p>
+                    <p class="sice-text">Sistema Innovador de Centro Evaluador</p>
                 </div>
             </div>
         </div>
@@ -358,7 +359,12 @@
         /* Definición de la animación */
         @keyframes fadeInText {
             0% {
-                opacity: 0.5;
+                opacity: 0.8;
+                transform: scale(0.90);
+            }
+
+            50% {
+                opacity: 0.9;
                 transform: scale(0.95);
             }
 
