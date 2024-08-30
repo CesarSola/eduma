@@ -467,7 +467,7 @@
                                 <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
                                     <h4 class="alert-heading">Agradecimiento</h4>
                                     <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
-                                        participar por la certificación en este estándar de la mano con la página del
+                                        participar por la evaluacion en este estándar de la mano con la página del
                                         Sistema Innovador de Centro Evaluador (SICE).</p>
                                 </div>
 

@@ -238,46 +238,12 @@
                             </div>
                         </div>
                     </div>
-                    @include('expedientes.expedientesAdmin.usuarios.edit')
-                </div>
-            </div>
-        </div>
-        @if ($atencionUsuario->isNotEmpty())
-            <div class="card">
-                <div class="card-header">
-                    <h3>Encuestas de Satisfacción Respondidas</h3>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Estándar</th>
-                                <th>Fecha del Examen</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($atencionUsuario as $atencion)
-                                <tr>
-                                    <td>{{ $atencion->estandar->name }}</td>
-                                    <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
-                                    <td>
-                                        <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}"
-                                            class="btn btn-info">Descargar</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @else
-            <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
-        @endif
 
-        <!-- Mostrar todas las encuestas de satisfacción -->
-        <div class="col-md-12 mt-4">
-            @if ($surveyResponses->isNotEmpty())
+                </div>
+
+            </div>
+
+            @if ($atencionUsuario->isNotEmpty())
                 <div class="card">
                     <div class="card-header">
                         <h3>Encuestas de Satisfacción Respondidas</h3>
@@ -292,13 +258,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($surveyResponses as $response)
+                                @foreach ($atencionUsuario as $atencion)
                                     <tr>
-                                        <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                        <td>{{ $atencion->estandar->name }}</td>
+                                        <td>{{ $atencion->fecha->format('d/m/Y') }}</td>
                                         <td>
-                                            <!-- Enlace para descargar la encuesta en formato DOCX -->
-                                            <a href="{{ route('survey.downloadFile', $response->id) }}"
+                                            <a href="{{ route('formato-atencion.download', ['estandar_id' => $atencion->estandar_id]) }}"
                                                 class="btn btn-info">Descargar</a>
                                         </td>
                                     </tr>
@@ -310,99 +275,138 @@
             @else
                 <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
             @endif
+
+            <!-- Mostrar todas las encuestas de satisfacción -->
+            <div class="col-md-12 mt-4">
+                @if ($surveyResponses->isNotEmpty())
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Encuestas de Satisfacción Respondidas</h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del Estándar</th>
+                                        <th>Fecha del Examen</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($surveyResponses as $response)
+                                        <tr>
+                                            <td>{{ $response->estandar->name ?? 'Nombre del estándar no disponible' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($response->exam_date)->format('d/m/Y') }}</td>
+                                            <td>
+                                                <!-- Enlace para descargar la encuesta en formato DOCX -->
+                                                <a href="{{ route('survey.downloadFile', $response->id) }}"
+                                                    class="btn btn-info">Descargar</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @else
+                    <p>No hay encuestas de satisfacción respondidas para este usuario.</p>
+                @endif
+            </div>
+
         </div>
+    </div>
+    @include('expedientes.expedientesAdmin.usuarios.edit')
+@stop
 
-    @stop
+@section('css')
+    <style>
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    @section('css')
-        <style>
-            .header-flex {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .left-content {
+            width: 70%;
+        }
 
-            .left-content {
-                width: 70%;
-            }
+        .right-content {
+            text-align: right;
+        }
 
-            .right-content {
-                text-align: right;
-            }
+        .right-content div {
+            margin-bottom: 5px;
+            /* Espacio entre cada badge */
+        }
 
-            .right-content div {
-                margin-bottom: 5px;
-                /* Espacio entre cada badge */
-            }
+        .card-title {
+            background-color: #067dd2;
+            text-align: center;
+            width: 100%;
+            color: white;
+            border-radius: 5px;
+        }
 
-            .card-title {
-                background-color: #067dd2;
-                text-align: center;
-                width: 100%;
-                color: white;
-                border-radius: 5px;
-            }
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #5cb8a9;
+            border-radius: 5px;
+        }
 
-            .card-body {
-                background-color: #ffffff;
-                padding: 20px;
-                border: 1px solid #5cb8a9;
-                border-radius: 5px;
-            }
+        .list-group-item {
+            text-align: center;
+            width: 100%;
+        }
 
-            .list-group-item {
-                text-align: center;
-                width: 100%;
-            }
+        .h-100 {
+            height: 100%;
+        }
 
-            .h-100 {
-                height: 100%;
-            }
+        .overflow-auto {
+            max-height: 200px;
+            /* Adjust this height as needed */
+            overflow-y: auto;
+        }
 
-            .overflow-auto {
-                max-height: 200px;
-                /* Adjust this height as needed */
-                overflow-y: auto;
-            }
+        .btn-secondary {
+            margin-left: auto;
+        }
 
-            .btn-secondary {
-                margin-left: auto;
-            }
+        .btn-success {
+            align-content: center;
+            width: 50%;
+        }
 
-            .btn-success {
-                align-content: center;
-                width: 50%;
-            }
+        .btn-primary {
+            width: 100%;
+        }
 
-            .btn-primary {
-                width: 100%;
-            }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+        }
 
-            .btn-sm {
-                padding: 0.25rem 0.5rem;
-            }
+        .toggle-card {
+            cursor: pointer;
+        }
+    </style>
+@stop
 
-            .toggle-card {
-                cursor: pointer;
-            }
-        </style>
-    @stop
-
-    @section('js')
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Función para recargar la sección cada 5 minutos
-            setInterval(function() {
-                $.ajax({
-                    url: window.location.href, // URL actual, puede ser ajustada según necesidad
-                    type: 'GET', // Método de solicitud GET
-                    dataType: 'html', // Tipo de datos esperado (html en este caso)
-                    success: function(response) {
-                        // Actualizar el contenido de la sección específica
-                        var updatedContent = $(response).find('#1');
-                        $('#1').html(updatedContent.html());
-                    }
-                });
-            }, 3000); // 300000 milisegundos = 5 minutos
-        </script>
-    @stop
+@section('js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para recargar la sección cada 5 minutos
+        setInterval(function() {
+            $.ajax({
+                url: window.location.href, // URL actual, puede ser ajustada según necesidad
+                type: 'GET', // Método de solicitud GET
+                dataType: 'html', // Tipo de datos esperado (html en este caso)
+                success: function(response) {
+                    // Actualizar el contenido de la sección específica
+                    var updatedContent = $(response).find('#1');
+                    $('#1').html(updatedContent.html());
+                }
+            });
+        }, 3000); // 300000 milisegundos = 5 minutos
+    </script>
+@stop

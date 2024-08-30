@@ -59,7 +59,7 @@
 
         @if (!$documentosSubidos)
             <!-- Tarjeta principal que se despliega al hacer clic -->
-            <div class="card modern-card">
+            <div class="card">
                 <h6 style="text-align: center" class="card-title toggle-card" data-target="#requerimientos-container">
                     Lista de requerimientos y documentación
                 </h6>
@@ -352,20 +352,20 @@
             /* Color del texto */
             text-transform: uppercase;
             /* Transformación de texto a mayúsculas */
-            animation: fadeInText 2s ease-in-out infinite alternate;
+            animation: fadeInText 5s ease-in-out infinite alternate;
             /* Animación */
         }
 
         /* Definición de la animación */
         @keyframes fadeInText {
             0% {
-                opacity: 0.8;
-                transform: scale(0.90);
+                opacity: 0.98;
+                transform: scale(0.98);
             }
 
             50% {
-                opacity: 0.9;
-                transform: scale(0.95);
+                opacity: 0.99;
+                transform: scale(0.99);
             }
 
             100% {
