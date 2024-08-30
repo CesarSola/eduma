@@ -27,9 +27,12 @@
                                 <div class="card">
                                     <div class="card-body header-flex">
                                         <div class="left-content">
-                                            <div class="text-center">
-                                                <img src="{{ asset('path_to_default_avatar') }}" alt=""
-                                                    class="img-circle">
+                                            <!-- Foto del usuario -->
+                                            <div class="rounded-circle overflow-hidden mr-3"
+                                                style="width: 60px; height: 60px;">
+                                                <img src="{{ $usuario->foto }}" alt="Profile Picture"
+                                                    class="img-fluid rounded-circle" width="60" height="60"
+                                                    onerror="this.src='{{ asset('assets/profile-default/profile_default.jpeg') }}';">
                                             </div>
                                             <h6 class="text-left mt-2">Nombres: {{ $registroGeneral->name }}
                                                 {{ $registroGeneral->secondName }}</h6>

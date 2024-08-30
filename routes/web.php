@@ -87,6 +87,7 @@ use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\JuiciosUsuarioController;
+use App\Http\Controllers\ResubirCertificadoController;
 use App\Http\Controllers\ValidacionesCertificacionesController;
 
 //ruta del calendario
@@ -170,6 +171,13 @@ Route::post('competenciaEC/recursar', [RegistroECController::class, 'storeRecurs
 //ruta para subir el comprobante de pago de la certificación
 // Registrar las rutas del recurso para el controlador de ComprobanteCertificacion
 Route::resource('certificacion', ComprobanteCertificacionController::class);
+//ruta en el cual se muestra si el comprobante de competencias ha sido rechazado(vista usuarios)
+Route::get('certificados/{id}/mostrar-rechazado', [ResubirCertificadoController::class, 'show'])
+    ->name('certificados.resubir_comprobante');
+//ruta en el cual se sube de nuevo el comprobante si fue rechazado (vista usuarios)
+Route::post('certificados/{id}/guardar-resubir-comprobante', [ResubirCertificadoController::class, 'guardarResubirComprobante'])
+    ->name('certificados.guardarResubirComprobante');
+Route::get('/ruta/para/obtener/validacion/certificado/{id}', [ResubirCertificadoController::class, 'getValidacion'])->name('getValidacion');
 //ruta del registro de un curso
 Route::resource('registroCurso', RegistroCursoController::class);
 //ruta de mis competencias

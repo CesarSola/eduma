@@ -84,4 +84,18 @@ class Estandares extends Model
             'id'  // Local key on ComprobantesCO table
         );
     }
+
+
+    // Obtener validaciones a través de comprobantes
+    public function validacionesCertificados()
+    {
+        return $this->hasManyThrough(
+            ValidacionesCertificaciones::class,
+            ComprobanteCertificacion::class,
+            'estandar_id', // Foreign key on ComprobantesCO table
+            'comprobante_id', // Foreign key on ValidacionesComprobantesCompetencias table
+            'id', // Local key on Estandares table
+            'id'  // Local key on ComprobantesCO table
+        );
+    }
 }

@@ -15,6 +15,7 @@ use App\Models\FichasDocumentos;
 use App\Models\JuiciosUsuario;
 use App\Models\PlanesEvaluacion;
 use App\Models\ValidacionesCartas;
+use App\Models\ValidacionesCertificaciones;
 use App\Models\ValidacionesEvidencias;
 use App\Models\ValidacionesFichas;
 use Carbon\Carbon;
@@ -144,12 +145,15 @@ class EvidenciasUEController extends Controller
 
         $estado_comprobante = $comprobante ? json_decode($comprobante->estado, true) : null;
 
-        // Determinar si el comprobante está en estado "rechazar" o "pendiente"
-        $estado_comprobante_valido = $estado_comprobante && in_array($estado_comprobante['comprobante'], ['rechazar', 'pendiente']);
+        // Determinar si el comprobante está en estado "validar"
+        $estado_comprobante_valido = $estado_comprobante && $estado_comprobante['comprobante'] === 'validar';
+
         // Determinar si el comprobante está en estado "rechazar"
         $estado_comprobante_rechazado = $estado_comprobante && $estado_comprobante['comprobante'] === 'rechazar';
+
         // Determinar si el comprobante está en proceso de validación
-        $comprobante_en_proceso = $estado_comprobante === null && $comprobante_pago_subido;
+        $comprobante_en_proceso = $comprobante_pago_subido === null  && $estado_comprobante['comprobante'] === 'pendiente';
+
 
         // Pasar datos a la vista
         // Pasar datos a la vista
@@ -169,6 +173,7 @@ class EvidenciasUEController extends Controller
             'plan_evaluacion_subido',
             'cedula_evaluacion_subido',
             'juicio_competencia_subido',
+            'estado_comprobante',
             'comprobante_pago_subido', // Agrega esto
             'comprobante',
             'estado_comprobante_valido',
@@ -180,6 +185,26 @@ class EvidenciasUEController extends Controller
         ));
     }
 
+    /**
+     * Mostrar la vista para re-subir el comprobante de pago rechazado.
+     */
+    public function mostrarRechazado($id)
+    {
+        $competencia = Estandares::findOrFail($id);
+        $validacionComentario = ValidacionesCertificaciones::where('comprobante_id', $competencia->id)
+            ->where('comprobante_id', 'tipo_validacion')
+            ->first();
+
+        // Obtener las validaciones de comprobantes para las competencias del usuario
+        $validacionesComentarios = ValidacionesCertificaciones::whereIn('comprobante_id', $competencia->pluck('id'))
+            ->where('tipo_documento', 'comprobante')
+            ->with('usuario')
+            ->get()
+            ->keyBy('comprobante_id');
+
+        // Pasar los datos a la vista correspondiente
+        return view('expedientes.expedientesUser.evidenciasEC.index', compact('competencias', 'validacionesComentarios'));
+    }
 
     public function download($id)
     {

@@ -16,7 +16,7 @@
     <div class="container">
         <div class="card">
             @if (!$ficha_registro)
-                <div class="card">
+                <div class="card border-0 shadow-sm mt-4">
                     <h6 class="card-header bg-success text-white text-center font-weight-bold">Carta de Firma
                         Digital y Ficha de Inscripción</h6>
                     <div class="card-body text-center">
@@ -88,7 +88,7 @@
         @endif
         {{-- Mostrar validaciones solo si la carta y la ficha no están validadas --}}
         @if ($ficha_registro && $carta_firma && (!$carta_validada || !$ficha_validada))
-            <div class="card">
+            <div class="card border-0 shadow-sm mt-4">
                 <h6 class="card-header bg-success text-white text-center font-weight-bold">Validaciones de
                     Carta y Ficha</h6>
                 <div class="card-body">
@@ -138,7 +138,7 @@
         @endif
         @if ($carta_validada && $ficha_validada)
             @if (!$todos_documentos_validos)
-                <div class="card">
+                <div class="card border-0 shadow-sm mt-4">
                     @if (!$hay_evidencias_subidas)
                         <div class="alert alert-secondary shadow-sm mt-4" role="alert">
                             Descarga los formatos de los documentos y adáptalos a tus necesidades, luego súbelos
@@ -203,18 +203,18 @@
                                 </tbody>
                             </table>
                         </div>
+                        @if ($documentos_necesarios->isNotEmpty())
+                            <div class="card-header bg-success text-white text-center font-weight-bold">Verifica el
+                                estado de
+                                tus
+                                evidencias en la siguiente pestaña</div>
+                            <div class="card-body text-center">
+                                <a class="btn btn-success mt-4"
+                                    href="{{ route('mis.evidencias', ['id' => $estandar->id, 'user_id' => auth()->id(), 'name' => $estandar->name]) }}">
+                                    Ir a mis Evidencias Subidas
+                                </a>
+                            </div>
                     </div>
-                    @if ($documentos_necesarios->isNotEmpty())
-                        <div class="card-header bg-success text-white text-center font-weight-bold">Verifica el
-                            estado de
-                            tus
-                            evidencias en la siguiente pestaña</div>
-                        <div class="card-body text-center">
-                            <a class="btn btn-success mt-4"
-                                href="{{ route('mis.evidencias', ['id' => $estandar->id, 'user_id' => auth()->id(), 'name' => $estandar->name]) }}">
-                                Ir a mis Evidencias Subidas
-                            </a>
-                        </div>
                 </div>
             @endif
         @endif
@@ -222,7 +222,7 @@
         @if ($fechas_elegidas->isEmpty())
             @if ($todos_documentos_validos)
                 @if ($carta_validada && $ficha_validada)
-                    <div class="card">
+                    <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
                             Elige una Fecha para el plan de evaluación en la siguiente pestaña
                         </div>
@@ -237,7 +237,7 @@
         @endif
         @if (!$plan_evaluacion_subido || !$cedula_evaluacion_subido)
             @if ($fechas_elegidas->isNotEmpty())
-                <div class="card">
+                <div class="card border-0 shadow-sm mt-4">
                     <div class="card-body">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
                             Fecha Elegida
@@ -273,7 +273,7 @@
                         @endif
                         @if (!$cedula_evaluacion_subido)
                             <!-- Sección para subir la cédula de evaluación -->
-                            <div class="card">
+                            <div class="card border-0 shadow-sm mt-4">
                                 <div class="card-header bg-success text-white text-center font-weight-bold">Sube tu Cédula
                                     de Evaluación</div>
                                 <div class="card-body">
@@ -301,7 +301,7 @@
                         @else
                             <!-- Sección para el plan de evaluación -->
                             @if (!$plan_evaluacion_subido)
-                                <div class="card">
+                                <div class="card border-0 shadow-sm mt-4">
                                     <div class="card-header bg-success text-white text-center font-weight-bold">Descarga tu
                                         Plan de Evaluación</div>
                                     <div class="card-body">
@@ -352,7 +352,7 @@
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido)
             @if (!$juicio_competencia_subido)
-                <div class="card">
+                <div class="card border-0 shadow-sm mt-4">
                     <div class="card-header bg-success text-white text-center font-weight-bold">Sube los
                         resultados de tu
                         evaluación
@@ -384,92 +384,113 @@
             @endif
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido && $juicio_competencia_subido)
-            @if ($comprobante_pago_subido && $estado_comprobante_valido)
-                <!-- Sección visible solo cuando el comprobante de pago ya ha sido subido y está en estado "validar" -->
-                <div class="card">
+            @if ($comprobante_pago_subido = $comprobante_en_proceso)
+                <!-- Mostrar botón para subir el comprobante si no ha sido subido o está rechazado -->
+                <div class="card border-0 shadow-sm mt-4">
                     <div class="card-header bg-success text-white text-center font-weight-bold">
-                        Comprobante de Pago Subido
+                        Sube el pago de tu Cédula de Certificación
                     </div>
                     <div class="card-body">
-                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            El comprobante de pago ya ha sido subido. Cuando empiece el proceso, podrás
-                            darle seguimiento con un mensaje
-                            que te llegará al correo con el que te inscribiste
-                            <br>
-                        </div>
-                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al participar por la
-                            certificación en este estándar de la mano con la página del Sistema Innovador de Centro
-                            Evaluador (SICE).
-                        </div>
-                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            El Promedio Obtenido fue de: {{ $promedio }}, y la calificación mínima requerida para la
-                            certificación del estándar: {{ $estandar->numero }} {{ $estandar->name }} fue de:
-                            {{ $calificacion_minima }}
+                        <div class="mb-3 d-flex flex-column align-items-center">
+                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                Sube el comprobante de pago verificando que el monto sea el que te dió tu
+                                @if ($evaluador)
+                                    <span class="font-weight-bold">Evaluador:</span>
+                                    <span>{{ $evaluador->evaluador->name }} {{ $evaluador->evaluador->secondName }}
+                                        {{ $evaluador->evaluador->paternalSurname }}
+                                        {{ $evaluador->evaluador->maternalSurname }}</span>
+                                @else
+                                    <span class="text-muted">Sin evaluador asignado</span>
+                                @endif para empezar el proceso de certificación.
+                            </div>
+
+                            <a href="{{ route('certificacion.show', ['certificacion' => $estandar->id]) }}"
+                                class="btn btn-success">Subir
+                                Comprobante para Certificación</a>
                         </div>
                     </div>
                 </div>
             @else
-                @php
-                    // Verifica si el comprobante ha sido subido y su estado
-                    $mostrar_boton = !$comprobante_pago_subido || $estado_comprobante_rechazado;
-                @endphp
-
-                @if ($mostrar_boton)
-                    <div class="card">
+                @if (!($comprobante_pago_subido = $estado_comprobante_rechazado || $estado_comprobante_valido))
+                    <!-- Mostrar sección si el comprobante está en proceso de validación -->
+                    <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
-                            Sube el pago de tu Cédula de Certificación
+                            Comprobante de Pago en Proceso
                         </div>
                         <div class="card-body">
-                            <div class="mb-3 d-flex flex-column align-items-center">
-                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                                    Sube el comprobante de pago verificando que el monto sea el que te dió tu
-                                    @if ($evaluador)
-                                        <span class="font-weight-bold">Evaluador:</span>
-                                        <span>{{ $evaluador->evaluador->name }} {{ $evaluador->evaluador->secondName }}
-                                            {{ $evaluador->evaluador->paternalSurname }}
-                                            {{ $evaluador->evaluador->maternalSurname }}</span>
-                                    @else
-                                        <span class="text-muted">Sin evaluador asignado</span>
-                                    @endif para empezar el proceso de certificación
-                                </div>
-                                <a href="{{ route('certificacion.show', ['certificacion' => $estandar->id]) }}"
-                                    class="btn btn-primary">Subir Comprobante para Certificación</a>
+                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                El comprobante de pago está en proceso de validación. Por favor, espera mientras se
+                                revisa.
                             </div>
                         </div>
                     </div>
-                @else
-                    <!-- Mostrar sección de estado del comprobante -->
-                    <div class="card">
-                        <div class="card-header bg-success text-white text-center font-weight-bold">
-                            Estado del Comprobante de Pago
+                @endif
+            @endif
+            @if ($comprobante_pago_subido = $estado_comprobante_rechazado)
+                <!-- Mostrar sección si el comprobante ha sido rechazado -->
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-success text-white text-center font-weight-bold">
+                        Comprobante de Pago Rechazado
+                    </div>
+                    <div class="card-body">
+                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                            El comprobante de pago ha sido rechazado. Por favor, revisa el motivo del
+                            rechazo y
+                            vuelve a subir un comprobante válido.
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal"
+                                data-target="#resubirModal" data-id="{{ $estandar->id }}"
+                                data-nombre="{{ $estandar->name }}">
+                                Resubir Comprobante
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @else
+                @if ($comprobante_pago_subido = $estado_comprobante_valido)
+                    <!-- Mostrar sección si el comprobante ha sido validado -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header bg-success text-white text-center font-weight-bold py-3 rounded-top">
+                            Comprobante de Pago Validado
                         </div>
                         <div class="card-body">
-                            @if ($estado_comprobante_valido)
-                                <div class="alert text-center alert-success shadow-sm mt-4" role="alert">
-                                    El comprobante de pago ha sido validado. Puedes seguir el proceso a través del mensaje
-                                    que te llegará al correo con el que te inscribiste.
+                            <div class="container mt-4">
+                                <!-- Alerta de validación -->
+                                <div class="alert alert-info text-center shadow-sm rounded p-3" role="alert">
+                                    <h4 class="alert-heading">¡Comprobante Validado!</h4>
+                                    <p>El comprobante de pago ha sido validado. Puedes seguir el proceso a través del
+                                        mensaje que te llegará al correo con el que te inscribiste.</p>
                                 </div>
-                            @elseif ($estado_comprobante_rechazado)
-                                <div class="alert text-center alert-danger shadow-sm mt-4" role="alert">
-                                    El comprobante de pago ha sido rechazado. Por favor, revisa el motivo del rechazo y
-                                    vuelve a subir un comprobante válido.
+
+                                <!-- Agradecimiento -->
+                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                    <h4 class="alert-heading">Agradecimiento</h4>
+                                    <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
+                                        participar por la certificación en este estándar de la mano con la página del
+                                        Sistema Innovador de Centro Evaluador (SICE).</p>
                                 </div>
-                                <div class="text-center mt-4">
-                                    <a href="#" class="btn btn-primary">Volver a subir Comprobante</a>
+
+                                <!-- Promedio y calificación mínima -->
+                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                    <h4 class="alert-heading">Detalles de Calificación</h4>
+                                    <p>El Promedio Obtenido fue de: <strong>{{ $promedio }}</strong>, y la calificación
+                                        mínima requerida para la certificación del estándar:
+                                        <strong>{{ $estandar->numero }} {{ $estandar->name }}</strong> fue de:
+                                        <strong>{{ $calificacion_minima }}</strong>
+                                    </p>
                                 </div>
-                            @elseif ($comprobante_en_proceso)
-                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                                    El comprobante de pago está en proceso de validación. Por favor, espera mientras se
-                                    revisa.
-                                </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 @endif
+            @endif
+        @endif
+        @if ($plan_evaluacion_subido && $cedula_evaluacion_subido)
+            @if (!$juicio_competencia_subido)
                 @if ($promedio < $calificacion_minima)
                     <div class="card">
-                        <div class="card-header bg-success text-white text-center font-weight-bold">
+                        <div class="card-header bg-danger text-white text-center font-weight-bold">
                             Calificación Insuficiente
                         </div>
                         <div class="card-body">
@@ -483,31 +504,31 @@
                 @endif
             @endif
         @endif
-
-    </div>
-    @if (!$cedula_evaluacion_subido)
-        @if ($fechas_elegidas->isNotEmpty())
-            @include('expedientes.expedientesUser.evidenciasEC.CedulaEvaluacion.show')
-        @endif
-    @endif
-
-    @if (!$plan_evaluacion_subido)
-        @if ($fechas_elegidas->isNotEmpty())
-            @include('expedientes.expedientesUser.evidenciasEC.PlanEvaluacion.show')
-        @endif
-    @endif
-
-    @if (!$juicio_competencia_subido)
-        @include('expedientes.expedientesUser.evidenciasEC.juicios.show')
-    @endif
-
-    @if ($carta_validada && $ficha_validada)
-        @if (!$todos_documentos_validos)
-            @if (!$hay_evidencias_subidas)
-                @include('expedientes.expedientesUser.evidenciasEC.show')
+        @if (!$cedula_evaluacion_subido)
+            @if ($fechas_elegidas->isNotEmpty())
+                @include('expedientes.expedientesUser.evidenciasEC.CedulaEvaluacion.show')
             @endif
         @endif
-    @endif
+
+        @if (!$plan_evaluacion_subido)
+            @if ($fechas_elegidas->isNotEmpty())
+                @include('expedientes.expedientesUser.evidenciasEC.PlanEvaluacion.show')
+            @endif
+        @endif
+
+        @if (!$juicio_competencia_subido)
+            @include('expedientes.expedientesUser.evidenciasEC.juicios.show')
+        @endif
+
+        @if ($carta_validada && $ficha_validada)
+            @if (!$todos_documentos_validos)
+                @if (!$hay_evidencias_subidas)
+                    @include('expedientes.expedientesUser.evidenciasEC.show')
+                @endif
+            @endif
+        @endif
+
+        @include('expedientes.expedientesUser.evidenciasEC.comprobanteCertificacion.resubir.resubir_comprobante')
     </div>
 @stop
 
@@ -746,5 +767,34 @@
             });
         </script>
     @endif
+    <script>
+        $(document).ready(function() {
+            $('#resubirModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botón que activó el modal
+                var competenciaId = button.data('id'); // Extrae el ID de la competencia del botón
+                var competenciaName = button.data('nombre'); // Extrae el nombre de la competencia del botón
 
+                // Actualiza los campos del modal con la información de la competencia
+                var modal = $(this);
+                modal.find('.modal-body #competencia_name').text('Competencia: ' + competenciaName);
+
+                // Usa `data-id` directamente para la acción del formulario
+                var formActionUrl = "{{ route('certificados.guardarResubirComprobante', ':id') }}";
+                formActionUrl = formActionUrl.replace(':id', competenciaId);
+                modal.find('form').attr('action', formActionUrl);
+
+                // Realiza una petición AJAX para obtener la validación de comprobantes
+                $.ajax({
+                    url: '{{ url('/ruta/para/obtener/validacion/certificado/') }}/' +
+                        competenciaId,
+                    method: 'GET',
+                    success: function(data) {
+                        modal.find('#nombre_usuario').val(data.nombre_usuario);
+                        modal.find('#tipo_validacion').val(data.tipo_validacion);
+                        modal.find('#comentario_validacion').val(data.comentario);
+                    }
+                });
+            });
+        });
+    </script>
 @stop

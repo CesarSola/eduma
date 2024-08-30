@@ -10,28 +10,38 @@
 @stop
 
 @section('content')
+    <!-- Información del usuario -->
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body header-flex">
-                    <div class="left-content">
-                        <div class="text-center">
-                            <img src="{{ asset('path_to_default_avatar') }}" alt="" class="img-circle">
-                        </div>
-                        <p>Nombres: {{ $usuario->name }} {{ $usuario->secondName }}</p>
-                        <p>Apellidos: {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
-                        <p>Edad: {{ $usuario->age }} años</p>
+            <div class="card mb-4 shadow-sm border-light">
+                <div class="card-body d-flex align-items-center p-4">
+                    <!-- Foto del usuario -->
+                    <div class="rounded-circle overflow-hidden mr-3" style="width: 60px; height: 60px;">
+                        <img src="{{ $usuario->foto }}" alt="Profile Picture" class="img-fluid rounded-circle" width="60"
+                            height="60" onerror="this.src='{{ asset('assets/profile-default/profile_default.jpeg') }}';">
+                    </div>
+                    <!-- Información del usuario -->
+                    <div>
+                        <p class="mb-1 text-dark font-weight-bold" style="font-size: 1rem;"><strong>Nombres:</strong>
+                            {{ $usuario->name }} {{ $usuario->secondName }}</p>
+                        <p class="mb-1 text-dark font-weight-bold" style="font-size: 1rem;"><strong>Apellidos:</strong>
+                            {{ $usuario->paternalSurname }} {{ $usuario->maternalSurname }}</p>
+                        <p class="mb-0 text-dark font-weight-bold" style="font-size: 1rem;"><strong>Edad:</strong>
+                            {{ $usuario->age }} años</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="table">
-                <thead>
+
+    <!-- Tarjeta de Evidencias del Usuario -->
+    <div class="card mb-4 shadow-sm border-primary">
+        <div class="card-body bg-light">
+            <h5 class="card-title mb-3 text-white bg-primary p-2 rounded">Evidencias del Usuario</h5>
+            <table class="table table-striped table-hover mb-0 border-primary">
+                <thead class="bg-primary text-white">
                     <tr>
-                        <th>NO.</th>
+                        <th>No.</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Evidencias del Usuario</th>
@@ -45,7 +55,7 @@
                             <td>{{ $competencia->tipo }}</td>
                             <td>
                                 <a href="{{ route('evidenciasACO.index', ['competencia' => $competencia->id, 'user_id' => $usuario->id]) }}"
-                                    class="btn btn-primary">Ver Evidencias</a>
+                                    class="btn btn-primary btn-sm">Ver Evidencias</a>
                             </td>
                         </tr>
                     @endforeach
@@ -53,12 +63,15 @@
             </table>
         </div>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="table">
-                <thead>
+
+    <!-- Tarjeta de Fechas y Horarios Asignados -->
+    <div class="card mb-4 shadow-sm border-success">
+        <div class="card-body bg-light">
+            <h5 class="card-title mb-3 text-white bg-success p-2 rounded">Fechas y Horarios Asignados</h5>
+            <table class="table table-striped table-hover mb-0 border-success">
+                <thead class="bg-success text-white">
                     <tr>
-                        <th>NO.</th>
+                        <th>No.</th>
                         <th>Competencias</th>
                         <th>Fechas Asignadas</th>
                         <th>Horarios Asignados</th>
@@ -70,32 +83,26 @@
                         <tr>
                             <td>{{ $competencia->id }}</td>
                             <td>{{ $competencia->name }}</td>
-
                             <td>
-                                <ul>
+                                <ul class="list-unstyled mb-0">
                                     @foreach ($competencia->fechas as $fecha)
-                                        <strong>
-                                            <li>{{ $fecha->fecha->format('d/m/Y') }}</li>
-                                        </strong>
+                                        <li><strong>{{ $fecha->fecha->format('d/m/Y') }}</strong></li>
                                     @endforeach
                                 </ul>
                             </td>
                             <td>
-                                <ul>
+                                <ul class="list-unstyled mb-0">
                                     @foreach ($competencia->fechas as $fecha)
-                                        <ul>
-                                            @foreach ($fecha->horarios as $horario)
-                                                <strong>
-                                                    <li>{{ $horario->hora }}</li>
-                                                </strong>
-                                            @endforeach
-                                        </ul>
+                                        @foreach ($fecha->horarios as $horario)
+                                            <li><strong>{{ $horario->hora }}</strong></li>
+                                        @endforeach
                                     @endforeach
                                 </ul>
                             </td>
                             <td>
-                                <p>Para asignar fechas y horarios a este usuario ve a la pestaña de <a
-                                        href="{{ route('calendario.index') }}" class="btn btn-primary">Mis Usuarios</a></p>
+                                <p class="mb-0">Para asignar fechas y horarios a este usuario, ve a la pestaña de <a
+                                        href="{{ route('calendario.index') }}" class="btn btn-success btn-sm">Mis
+                                        Usuarios</a></p>
                             </td>
                         </tr>
                     @endforeach
