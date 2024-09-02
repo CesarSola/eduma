@@ -120,23 +120,26 @@
                                 <th>Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($fichas as $ficha)
-                                <tr>
-                                    <td>{{ $ficha->nombre }}</td>
-                                    <td>
-                                        @if (isset($fichas_validaciones[$ficha->id]) && $fichas_validaciones[$ficha->id]->tipo_validacion)
+                        @foreach ($fichas as $ficha)
+                            <tr>
+                                <td>{{ $ficha->nombre }}</td>
+                                <td>
+                                    @if (isset($fichas_validaciones[$ficha->id]) && $fichas_validaciones[$ficha->id]->tipo_validacion)
+                                        @if ($fichas_validaciones[$ficha->id]->tipo_validacion == 'validar')
                                             <span class="text-success">Ficha validada</span>
-                                        @else
-                                            <a href="{{ route('fichas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
-                                                class="btn btn-primary btn-sm">
-                                                Validar Ficha
-                                            </a>
+                                        @elseif ($fichas_validaciones[$ficha->id]->tipo_validacion == 'rechazar')
+                                            <span class="text-danger">Ficha rechazada</span>
                                         @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                                    @else
+                                        <a href="{{ route('fichas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                            class="btn btn-primary">
+                                            Validar Ficha
+                                        </a>
+                                    @endif
+
+                                </td>
+                            </tr>
+                        @endforeach
                     </table>
                 @else
                     <div class="text-center text-muted">
@@ -166,7 +169,11 @@
                                     <td>{{ $carta->nombre }}</td>
                                     <td>
                                         @if (isset($cartas_validaciones[$carta->id]) && $cartas_validaciones[$carta->id]->tipo_validacion)
-                                            <span class="text-success">Carta validada</span>
+                                            @if ($cartas_validaciones[$carta->id]->tipo_validacion == 'validar')
+                                                <span class="text-success">Carta validada</span>
+                                            @elseif ($cartas_validaciones[$carta->id]->tipo_validacion == 'rechazar')
+                                                <span class="text-danger">Carta rechazada</span>
+                                            @endif
                                         @else
                                             <a href="{{ route('cartas.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
                                                 class="btn btn-primary btn-sm">

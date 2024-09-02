@@ -8,6 +8,7 @@ use App\Models\Estandares;
 use App\Models\EvidenciasCompetencias;
 use App\Models\FichasDocumentos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -32,7 +33,7 @@ class WordController extends Controller
         ]);
 
         // Obtener el usuario autenticado
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Obtener el estándar (competencia)
         $competencia = Estandares::find($id);
@@ -80,7 +81,7 @@ class WordController extends Controller
         ]);
 
         // Obtener el usuario autenticado
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Obtener el estándar (competencia)
         $competencia = Estandares::find($id);

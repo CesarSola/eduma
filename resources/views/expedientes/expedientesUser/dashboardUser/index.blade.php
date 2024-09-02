@@ -159,7 +159,7 @@
                                             </td>
                                             <td>
                                                 @if (isset($estado[$tipo_documento]) && $estado[$tipo_documento] == 'rechazar')
-                                                    <a href="{{ route('documentosUser.edit', ['tipo_documento' => $tipo_documento]) }}"
+                                                    <a href="{{ route('documentosUser.editByTipo', ['tipo_documento' => $tipo_documento]) }}"
                                                         class="btn btn-warning">Resubir</a>
                                                 @endif
                                             </td>

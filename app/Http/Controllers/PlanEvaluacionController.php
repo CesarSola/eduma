@@ -38,7 +38,7 @@ class PlanEvaluacionController extends Controller
             ->get();
 
         // Recuperar los evaluadores asociados al usuario y al estándar
-        $evaluadores = $user->evaluaciones()
+        $evaluadores = $user->evaluadores()
             ->where('estandar_id', $competencia->id)
             ->with('evaluador')
             ->get()

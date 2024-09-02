@@ -70,6 +70,6 @@ class CalificacionEvaluacionController extends Controller
         ]);
 
         // Redireccionar con un mensaje de éxito
-        return redirect()->route('calificaciones.store')->with('success', 'Calificación asignada correctamente.');
+        return redirect()->route('calendario.index')->with('success', 'Calificación asignada correctamente.');
     }
 }

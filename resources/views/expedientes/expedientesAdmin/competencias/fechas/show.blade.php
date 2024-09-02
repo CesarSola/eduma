@@ -41,7 +41,7 @@
                                 class="badge bg-warning text-dark"></span></p>
                     </div>
                     <div class="mb-3">
-                        <p><strong>Evaluador:</strong> <span id="availableEventUser" class="badge bg-success"></span></p>
+                        <p><strong>Participante:</strong> <span id="availableEventUser" class="badge bg-success"></span></p>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">

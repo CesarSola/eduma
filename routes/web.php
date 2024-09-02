@@ -95,7 +95,7 @@ Route::resource('calendario', CalendarioController::class);
 Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');
 
 //calificaciones
-Route::resource('calificaciones_evaluaciones', CalificacionEvaluacionController::class);
+// Route::resource('calificaciones_evaluaciones', CalificacionEvaluacionController::class);
 Route::post('/calificaciones/store', [CalificacionEvaluacionController::class, 'store'])->name('calificaciones.store');
 Route::get('/calificaciones/show/{userId}/{estandarId}', [CalificacionEvaluacionController::class, 'showCalificaciones'])->name('calificaciones.show');
 
@@ -153,6 +153,7 @@ Route::put('/validar-cup/{id}/update-comprobante/{documento}', [ValidarCuPContro
 Route::resource('validarCE', ValidacionesCertificacionesController::class);
 // Rutas para validar comprobante de pagos de certificaciones
 Route::put('/validar-ce/{id}/update-comprobante/{documento}', [ValidacionesCertificacionesController::class, 'updateCertificados'])->name('validarCE.updateCertificado');
+
 //rutas del expediente Usuario
 //ruta dashboard usuario
 Route::resource('usuarios', DashboardUserController::class);
@@ -167,7 +168,6 @@ Route::resource('competenciaEC', RegistroECController::class);
 Route::get('recursar/{competencia}/volverACursar', [RegistroECController::class, 'volverACursar'])->name('volverACursar');
 // Ruta para la acción de recursar
 Route::post('competenciaEC/recursar', [RegistroECController::class, 'storeRecursar'])->name('competenciaEC.storeRecursar');
-
 //ruta para subir el comprobante de pago de la certificación
 // Registrar las rutas del recurso para el controlador de ComprobanteCertificacion
 Route::resource('certificacion', ComprobanteCertificacionController::class);

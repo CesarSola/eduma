@@ -352,66 +352,82 @@
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido)
             @if (!$juicio_competencia_subido)
-                <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-header bg-success text-white text-center font-weight-bold">Sube los
-                        resultados de tu
-                        evaluación
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3 d-flex flex-column align-items-center">
-                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                                Sube los resultados de los
-                                juicios de
-                                competencia
-                                que tu @if ($evaluador)
-                                    <span class="font-weight-bold">Evaluador:</span>
-                                    <span>{{ $evaluador->evaluador->name }}
-                                        {{ $evaluador->evaluador->secondName }}
-                                        {{ $evaluador->evaluador->paternalSurname }}
-                                        {{ $evaluador->evaluador->maternalSurname }}</span>
-                                @else
-                                    <span class="text-muted">Sin evaluador asignado</span>
-                                @endif te dió al finalizar las pruebas de tu evaluación
-                            </div>
-                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#uploadJuicioModal">
-                                Subir Juicio de Competencia
-                            </button>
-                        </div>
+                @if ($promedio === null)
 
+                    <!-- Mostrar mensaje cuando el promedio es null -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header bg-success text-dark text-center font-weight-bold">
+                            Calificaciones No Disponibles
+                        </div>
+                        <div class="card-body">
+                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                El evaluador aún no ha subido tus calificaciones. Por favor, espera hasta que se complete
+                                el proceso de evaluación.
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header bg-success text-white text-center font-weight-bold">Sube los
+                            resultados de tu
+                            evaluación
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3 d-flex flex-column align-items-center">
+                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                    Sube los resultados de los
+                                    juicios de
+                                    competencia
+                                    que tu @if ($evaluador)
+                                        <span class="font-weight-bold">Evaluador:</span>
+                                        <span>{{ $evaluador->evaluador->name }}
+                                            {{ $evaluador->evaluador->secondName }}
+                                            {{ $evaluador->evaluador->paternalSurname }}
+                                            {{ $evaluador->evaluador->maternalSurname }}</span>
+                                    @else
+                                        <span class="text-muted">Sin evaluador asignado</span>
+                                    @endif te dió al finalizar las pruebas de tu evaluación
+                                </div>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-target="#uploadJuicioModal">
+                                    Subir Juicio de Competencia
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
             @endif
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido && $juicio_competencia_subido)
-            @if ($comprobante_pago_subido = $comprobante_en_proceso)
-                <!-- Mostrar botón para subir el comprobante si no ha sido subido o está rechazado -->
-                <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-header bg-success text-white text-center font-weight-bold">
-                        Sube el pago de tu Cédula de Certificación
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3 d-flex flex-column align-items-center">
-                            <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                                Sube el comprobante de pago verificando que el monto sea el que te dió tu
-                                @if ($evaluador)
-                                    <span class="font-weight-bold">Evaluador:</span>
-                                    <span>{{ $evaluador->evaluador->name }} {{ $evaluador->evaluador->secondName }}
-                                        {{ $evaluador->evaluador->paternalSurname }}
-                                        {{ $evaluador->evaluador->maternalSurname }}</span>
-                                @else
-                                    <span class="text-muted">Sin evaluador asignado</span>
-                                @endif para empezar el proceso de certificación.
-                            </div>
+            @if ($promedio === null)
+            @elseif ($promedio >= $calificacion_minima)
+                @if (!$comprobante_pago_subido)
+                    <!-- Mostrar botón para subir el comprobante si no ha sido subido o está rechazado -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header bg-success text-white text-center font-weight-bold">
+                            Sube el pago de tu Cédula de Certificación
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3 d-flex flex-column align-items-center">
+                                <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                                    Sube el comprobante de pago verificando que el monto sea el que te dió tu
+                                    @if ($evaluador)
+                                        <span class="font-weight-bold">Evaluador:</span>
+                                        <span>{{ $evaluador->evaluador->name }} {{ $evaluador->evaluador->secondName }}
+                                            {{ $evaluador->evaluador->paternalSurname }}
+                                            {{ $evaluador->evaluador->maternalSurname }}</span>
+                                    @else
+                                        <span class="text-muted">Sin evaluador asignado</span>
+                                    @endif para empezar el proceso de certificación.
+                                </div>
 
-                            <a href="{{ route('certificacion.show', ['certificacion' => $estandar->id]) }}"
-                                class="btn btn-success">Subir
-                                Comprobante para Certificación</a>
+                                <a href="{{ route('certificacion.show', ['certificacion' => $estandar->id]) }}"
+                                    class="btn btn-success">Subir Comprobante para Certificación</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @else
-                @if (!($comprobante_pago_subido = $estado_comprobante_rechazado || $estado_comprobante_valido))
+                @elseif (!$comprobante_pago_subido == $comprobante_en_proceso)
                     <!-- Mostrar sección si el comprobante está en proceso de validación -->
                     <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
@@ -419,91 +435,61 @@
                         </div>
                         <div class="card-body">
                             <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                                El comprobante de pago está en proceso de validación. Por favor, espera mientras se
-                                revisa.
+                                El comprobante de pago está en proceso de validación. Por favor, espera mientras se revisa.
                             </div>
                         </div>
                     </div>
                 @endif
-            @endif
-            @if ($comprobante_pago_subido = $estado_comprobante_rechazado)
-                <!-- Mostrar sección si el comprobante ha sido rechazado -->
+            @elseif (!$comprobante_pago_subido == $estado_comprobante_valido)
+                <!-- Mostrar sección si el comprobante ha sido validado -->
                 <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-header bg-success text-white text-center font-weight-bold">
-                        Comprobante de Pago Rechazado
+                    <div class="card-header bg-success text-white text-center font-weight-bold py-3 rounded-top">
+                        Comprobante de Pago Validado
                     </div>
                     <div class="card-body">
-                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
-                            El comprobante de pago ha sido rechazado. Por favor, revisa el motivo del
-                            rechazo y
-                            vuelve a subir un comprobante válido.
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal"
-                                data-target="#resubirModal" data-id="{{ $estandar->id }}"
-                                data-nombre="{{ $estandar->name }}">
-                                Resubir Comprobante
-                            </button>
+                        <div class="container mt-4">
+                            <div class="alert alert-info text-center shadow-sm rounded p-3" role="alert">
+                                <h4 class="alert-heading">¡Comprobante Validado!</h4>
+                                <p>El comprobante de pago ha sido validado. Puedes seguir el proceso a través del
+                                    mensaje que te llegará al correo con el que te inscribiste.</p>
+                            </div>
+
+                            <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                <h4 class="alert-heading">Agradecimiento</h4>
+                                <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
+                                    participar por la evaluacion en este estándar de la mano con la página del
+                                    Sistema Innovador de Centro Evaluador (SICE).</p>
+                            </div>
+
+                            <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                <h4 class="alert-heading">Detalles de Calificación</h4>
+                                <p>El Promedio Obtenido fue de: <strong>{{ $promedio }}</strong>, y la calificación
+                                    mínima requerida para la certificación del estándar:
+                                    <strong>{{ $estandar->numero }} {{ $estandar->name }}</strong> fue de:
+                                    <strong>{{ $calificacion_minima }}</strong>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             @else
-                @if ($comprobante_pago_subido = $estado_comprobante_valido)
-                    <!-- Mostrar sección si el comprobante ha sido validado -->
-                    <div class="card border-0 shadow-sm mt-4">
-                        <div class="card-header bg-success text-white text-center font-weight-bold py-3 rounded-top">
-                            Comprobante de Pago Validado
-                        </div>
-                        <div class="card-body">
-                            <div class="container mt-4">
-                                <!-- Alerta de validación -->
-                                <div class="alert alert-info text-center shadow-sm rounded p-3" role="alert">
-                                    <h4 class="alert-heading">¡Comprobante Validado!</h4>
-                                    <p>El comprobante de pago ha sido validado. Puedes seguir el proceso a través del
-                                        mensaje que te llegará al correo con el que te inscribiste.</p>
-                                </div>
-
-                                <!-- Agradecimiento -->
-                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
-                                    <h4 class="alert-heading">Agradecimiento</h4>
-                                    <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
-                                        participar por la evaluacion en este estándar de la mano con la página del
-                                        Sistema Innovador de Centro Evaluador (SICE).</p>
-                                </div>
-
-                                <!-- Promedio y calificación mínima -->
-                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
-                                    <h4 class="alert-heading">Detalles de Calificación</h4>
-                                    <p>El Promedio Obtenido fue de: <strong>{{ $promedio }}</strong>, y la calificación
-                                        mínima requerida para la certificación del estándar:
-                                        <strong>{{ $estandar->numero }} {{ $estandar->name }}</strong> fue de:
-                                        <strong>{{ $calificacion_minima }}</strong>
-                                    </p>
-                                </div>
-                            </div>
+                <!-- Mostrar sección de Calificación Insuficiente si el promedio es menor a la calificación mínima -->
+                <div class="card">
+                    <div class="card-header bg-success text-white text-center font-weight-bold">
+                        Calificación Insuficiente
+                    </div>
+                    <div class="card-body">
+                        <div class="alert text-center alert-info shadow-sm mt-4" role="alert">
+                            Tu promedio de calificaciones es {{ number_format($promedio, 2) }} y no cumple con la
+                            calificación mínima de {{ $calificacion_minima }} para poder proceder con el proceso de
+                            certificación.
                         </div>
                     </div>
-                @endif
+                </div>
             @endif
         @endif
-        @if ($plan_evaluacion_subido && $cedula_evaluacion_subido)
-            @if (!$juicio_competencia_subido)
-                @if ($promedio < $calificacion_minima)
-                    <div class="card">
-                        <div class="card-header bg-danger text-white text-center font-weight-bold">
-                            Calificación Insuficiente
-                        </div>
-                        <div class="card-body">
-                            <div class="alert text-center alert-danger shadow-sm mt-4" role="alert">
-                                Tu promedio de calificaciones es {{ number_format($promedio, 2) }} y no cumple con la
-                                calificación mínima de {{ $calificacion_minima }} para poder proceder con el proceso de
-                                certificación.
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endif
-        @endif
+
+
         @if (!$cedula_evaluacion_subido)
             @if ($fechas_elegidas->isNotEmpty())
                 @include('expedientes.expedientesUser.evidenciasEC.CedulaEvaluacion.show')

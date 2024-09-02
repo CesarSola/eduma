@@ -203,12 +203,11 @@
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <div class="text-center">
                                         @if ($comprobantesCO->isEmpty())
-                                            <p class="text-white" style="color: white;">No hay comprobantes de pago de
-                                                competencia para validar.</p>
+                                            <p>No hay comprobantes de pago de competencias para validar.</p>
                                         @else
                                             <a href="{{ route('validarCoP.show', $usuariosAdmin->id) }}"
                                                 class="btn btn-primary">
-                                                Ver Comprobantes de Pago
+                                                Ver Comprobante de Pago Competencias
                                             </a>
                                         @endif
                                     </div>

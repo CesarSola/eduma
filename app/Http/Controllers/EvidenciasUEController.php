@@ -127,7 +127,7 @@ class EvidenciasUEController extends Controller
             // Convertir el promedio a un porcentaje
             $promedio = $promedio * 10; // Porque estamos en una escala de 1 a 10
         } else {
-            $promedio = 0;
+            $promedio = null;
         }
 
         // Obtener la calificación mínima del estándar
