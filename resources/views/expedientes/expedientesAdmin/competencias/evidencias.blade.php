@@ -264,7 +264,7 @@
                                                 $comprobantes_validaciones[$comprobante->id]->tipo_validacion)
                                             <span class="text-success">Comprobante validado</span>
                                         @else
-                                            <a href="{{ route('comprobantes.show', ['user_id' => $usuario->id, 'competencia' => $competencia]) }}"
+                                            <a href="{{ route('validarCE.show', ['validarCE' => $usuario->id, 'competencia' => $competencia->id]) }}"
                                                 class="btn btn-primary btn-sm">
                                                 Validar Comprobante
                                             </a>

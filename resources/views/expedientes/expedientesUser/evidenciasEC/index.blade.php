@@ -401,9 +401,10 @@
         @endif
         @if ($plan_evaluacion_subido && $cedula_evaluacion_subido && $juicio_competencia_subido)
             @if ($promedio === null)
+                <!-- No hay promedio calculado -->
             @elseif ($promedio >= $calificacion_minima)
                 @if (!$comprobante_pago_subido)
-                    <!-- Mostrar botón para subir el comprobante si no ha sido subido o está rechazado -->
+                    <!-- Mostrar botón para subir el comprobante si no ha sido subido -->
                     <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
                             Sube el pago de tu Cédula de Certificación
@@ -427,7 +428,7 @@
                             </div>
                         </div>
                     </div>
-                @elseif (!$comprobante_pago_subido == $comprobante_en_proceso)
+                @elseif ($comprobante_en_proceso)
                     <!-- Mostrar sección si el comprobante está en proceso de validación -->
                     <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-success text-white text-center font-weight-bold">
@@ -439,39 +440,39 @@
                             </div>
                         </div>
                     </div>
-                @endif
-            @elseif (!$comprobante_pago_subido == $estado_comprobante_valido)
-                <!-- Mostrar sección si el comprobante ha sido validado -->
-                <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-header bg-success text-white text-center font-weight-bold py-3 rounded-top">
-                        Comprobante de Pago Validado
-                    </div>
-                    <div class="card-body">
-                        <div class="container mt-4">
-                            <div class="alert alert-info text-center shadow-sm rounded p-3" role="alert">
-                                <h4 class="alert-heading">¡Comprobante Validado!</h4>
-                                <p>El comprobante de pago ha sido validado. Puedes seguir el proceso a través del
-                                    mensaje que te llegará al correo con el que te inscribiste.</p>
-                            </div>
+                @elseif ($estado_comprobante_valido)
+                    <!-- Mostrar sección si el comprobante ha sido validado -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header bg-success text-white text-center font-weight-bold py-3 rounded-top">
+                            Comprobante de Pago Validado
+                        </div>
+                        <div class="card-body">
+                            <div class="container mt-4">
+                                <div class="alert alert-info text-center shadow-sm rounded p-3" role="alert">
+                                    <h4 class="alert-heading">¡Comprobante Validado!</h4>
+                                    <p>El comprobante de pago ha sido validado. Puedes seguir el proceso a través del
+                                        mensaje que te llegará al correo con el que te inscribiste.</p>
+                                </div>
 
-                            <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
-                                <h4 class="alert-heading">Agradecimiento</h4>
-                                <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
-                                    participar por la evaluacion en este estándar de la mano con la página del
-                                    Sistema Innovador de Centro Evaluador (SICE).</p>
-                            </div>
+                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                    <h4 class="alert-heading">Agradecimiento</h4>
+                                    <p>Edumatics / PowerSkills and Talent Management S.A.S. agradece tu confianza al
+                                        participar por la evaluación en este estándar de la mano con la página del
+                                        Sistema Innovador de Centro Evaluador (SICE).</p>
+                                </div>
 
-                            <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
-                                <h4 class="alert-heading">Detalles de Calificación</h4>
-                                <p>El Promedio Obtenido fue de: <strong>{{ $promedio }}</strong>, y la calificación
-                                    mínima requerida para la certificación del estándar:
-                                    <strong>{{ $estandar->numero }} {{ $estandar->name }}</strong> fue de:
-                                    <strong>{{ $calificacion_minima }}</strong>
-                                </p>
+                                <div class="alert alert-info text-center shadow-sm rounded p-3 mt-3" role="alert">
+                                    <h4 class="alert-heading">Detalles de Calificación</h4>
+                                    <p>El Promedio Obtenido fue de: <strong>{{ $promedio }}</strong>, y la calificación
+                                        mínima requerida para la certificación del estándar:
+                                        <strong>{{ $estandar->numero }} {{ $estandar->name }}</strong> fue de:
+                                        <strong>{{ $calificacion_minima }}</strong>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @else
                 <!-- Mostrar sección de Calificación Insuficiente si el promedio es menor a la calificación mínima -->
                 <div class="card">
