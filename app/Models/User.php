@@ -90,12 +90,12 @@ class User extends Authenticatable implements MustVerifyEmail
     //relacón donde el comprobante de cursos toma el id de usuario
     public function comprobantesCU()
     {
-        return $this->hasMany(comprobantesCU::class);
+        return $this->hasMany(ComprobantesCU::class);
     }
     //relacón donde el comprobante de competencias toma el id de usuario
     public function comprobantesCO()
     {
-        return $this->hasMany(comprobantesCO::class);
+        return $this->hasMany(ComprobantesCO::class);
     }
     //relacón donde el comprobante de competencias toma el id de usuario
     public function comprobantesCE()
