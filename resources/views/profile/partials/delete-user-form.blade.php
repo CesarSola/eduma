@@ -10,94 +10,85 @@
     </header>
 
     <!-- Botón para eliminar cuenta -->
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Eliminar Cuenta') }}</x-danger-button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirm-user-deletion">
+        {{ __('Eliminar Cuenta') }}
+    </button>
 
     <!-- Botón para desactivar cuenta -->
-    <x-secondary-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deactivation')"
-    >{{ __('Desactivar Cuenta') }}</x-secondary-button>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#confirm-user-deactivation">
+        {{ __('Desactivar Cuenta') }}
+    </button>
 
     <!-- Modal para eliminar cuenta -->
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
-            @csrf
-            @method('delete')
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('¿Estás seguro de que deseas eliminar tu cuenta?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Por favor, ingresa tu contraseña para confirmar que deseas eliminar tu cuenta de forma permanente.') }}
-            </p>
-
-            <div class="mt-6">
-                <x-input-label for="delete-password" value="{{ __('Contraseña') }}" class="sr-only" />
-
-                <x-text-input
-                    id="delete-password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Contraseña') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+    <div class="modal fade" id="confirm-user-deletion" tabindex="-1" role="dialog"
+        aria-labelledby="confirmUserDeletionLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-lg font-medium text-gray-900" id="confirmUserDeletionLabel">
+                        {{ __('¿Estás seguro de que deseas eliminar tu cuenta?') }}
+                    </h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Por favor, ingresa tu contraseña para confirmar que deseas eliminar tu cuenta de forma permanente.') }}
+                    </p>
+                    <form method="post" action="{{ route('profile.destroy') }}">
+                        @csrf
+                        @method('delete')
+                        <div class="mt-6">
+                            <x-input-label for="delete-password" value="{{ __('Contraseña') }}" class="sr-only" />
+                            <x-text-input id="delete-password" name="password" type="password" class="mt-1 block w-100"
+                                placeholder="{{ __('Contraseña') }}" />
+                            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                    <button type="submit" class="btn btn-danger">{{ __('Eliminar Cuenta') }}</button>
+                </div>
+                </form>
             </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancelar') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Eliminar Cuenta') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
+        </div>
+    </div>
 
     <!-- Modal para desactivar cuenta -->
-    <x-modal name="confirm-user-deactivation" :show="$errors->userDeactivation->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.deactivate') }}" class="p-6">
-            @csrf
-            @method('post')
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('¿Estás seguro de que deseas desactivar tu cuenta?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Una vez que tu cuenta esté desactivada, tendrás 30 días para reactivarla volviendo a iniciar sesión. Por favor, introduce tu contraseña para confirmar que deseas desactivar tu cuenta.') }}
-            </p>
-
-            <div class="mt-6">
-                <x-input-label for="deactivation-password" value="{{ __('Contraseña') }}" class="sr-only" />
-
-                <x-text-input
-                    id="deactivation-password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Contraseña') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeactivation->get('password')" class="mt-2" />
+    <div class="modal fade" id="confirm-user-deactivation" tabindex="-1" role="dialog"
+        aria-labelledby="confirmUserDeactivationLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-lg font-medium text-gray-900" id="confirmUserDeactivationLabel">
+                        {{ __('¿Estás seguro de que deseas desactivar tu cuenta?') }}
+                    </h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ __('Una vez que tu cuenta esté desactivada, tendrás 30 días para reactivarla volviendo a iniciar sesión. Por favor, introduce tu contraseña para confirmar que deseas desactivar tu cuenta.') }}
+                    </p>
+                    <form method="post" action="{{ route('profile.deactivate') }}">
+                        @csrf
+                        @method('post')
+                        <div class="mt-6">
+                            <x-input-label for="deactivation-password" value="{{ __('Contraseña') }}"
+                                class="sr-only" />
+                            <x-text-input id="deactivation-password" name="password" type="password"
+                                class="mt-1 block w-100" placeholder="{{ __('Contraseña') }}" />
+                            <x-input-error :messages="$errors->userDeactivation->get('password')" class="mt-2" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                    <button type="submit" class="btn btn-danger">{{ __('Desactivar Cuenta') }}</button>
+                </div>
+                </form>
             </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancelar') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Desactivar Cuenta') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
+        </div>
+    </div>
 </section>
