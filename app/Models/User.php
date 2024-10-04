@@ -241,4 +241,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return trim("{$this->name} {$this->secondName} {$this->paternalSurname} {$this->maternalSurname}");
     }
+
+    public function diagnosticos()
+    {
+        return $this->belongsToMany(Diagnostico::class, 'diagnostico_user');
+    }
 }
