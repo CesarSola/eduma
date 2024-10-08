@@ -104,6 +104,10 @@ Route::get('/autodiagnosticos/create', [AutoDiagController::class, 'create'])->n
 Route::post('/autodiagnosticos', [AutoDiagController::class, 'store'])->name('autodiagnosticos.store');
 // Ruta para almacenar preguntas
 Route::post('/preguntas', [PregAutDiagController::class, 'store'])->name('preguntas.store');
+Route::get('/preguntas/{id}/edit', [PregAutDiagController::class, 'edit']);
+Route::put('/preguntas/{id}', [PregAutDiagController::class, 'update'])->name('preguntas.update');
+
+
 //ruta del calendario
 Route::resource('calendario', CalendarioController::class);
 Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');

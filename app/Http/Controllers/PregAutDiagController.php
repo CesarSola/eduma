@@ -55,6 +55,9 @@ class PregAutDiagController extends Controller
             'autodiagnostico_id' => 'required|exists:autodiagnosticos,id',
         ]);
 
+        // Log para verificar autodiagnostico_id
+        Log::info('autodiagnostico_id recibido: ' . $request->autodiagnostico_id);
+
         // Encontrar la pregunta y actualizarla
         $pregunta = PregAutDiag::findOrFail($id);
         $pregunta->update([

@@ -28,7 +28,7 @@
                                     @if ($elemento->criterios->isNotEmpty())
                                         @foreach ($elemento->criterios as $criterio)
                                             <li>
-                                                <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
                                                     <span>{{ $criterio->nombre }}</span>
                                                     <!-- Botón para agregar nueva pregunta -->
                                                     <button class="btn btn-primary me-2" data-bs-target="#addPreguntaModal"
@@ -42,7 +42,8 @@
                                                 <ul>
                                                     @if ($criterio->preguntas->isNotEmpty())
                                                         @foreach ($criterio->preguntas as $pregunta)
-                                                            <li class="d-flex justify-content-between align-items-center">
+                                                            <li
+                                                                class="d-flex justify-content-between align-items-center mb-3">
                                                                 <span>{{ $pregunta->pregunta }}</span>
                                                                 <!-- Botón para editar la pregunta -->
                                                                 <button class="btn btn-warning me-2"
@@ -74,9 +75,10 @@
                         <li>No hay elementos asociados</li>
                     @endif
                 </ul>
-
-
-                <a href="{{ route('autodiagnosticos.index') }}" class="btn btn-secondary">Regresar</a>
+                <br>
+                <div class="card">
+                    <a href="{{ route('autodiagnosticos.index') }}" class="btn btn-secondary">Regresar</a>
+                </div>
             </div>
         </div>
     </div>

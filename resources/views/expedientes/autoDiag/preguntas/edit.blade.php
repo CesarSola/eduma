@@ -51,7 +51,7 @@
     document.querySelectorAll('.btn-warning[data-bs-target="#editPreguntaModal"]').forEach(button => {
         button.addEventListener('click', function() {
             const id = this.getAttribute(
-            'data-id'); // Asumiendo que tienes un atributo data-id con el ID de la pregunta
+                'data-id'); // Asumiendo que tienes un atributo data-id con el ID de la pregunta
             const elementoId = this.getAttribute('data-elemento-id');
             const criterioId = this.getAttribute('data-criterio-id');
             const autodiagnosticoId = this.getAttribute('data-autodiagnostico-id');
