@@ -6,9 +6,9 @@
     <div class="header-flex">
         <h1>Revisión de Documentos Generales</h1>
         <div>
-            <a href="{{ route('usuariosAdmin.show', ['usuariosAdmin' => $registroGeneral->id]) }}"
-                class="btn btn-secondary">Regresar</a>
+            <a href="{{ route('usuarios-doc.index') }}" class="btn btn-secondary">Regresar</a>
         </div>
+
     </div>
 @stop
 

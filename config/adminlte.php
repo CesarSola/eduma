@@ -349,6 +349,19 @@ return [
             'icon_color' => 'info',
             'submenu' => [
                 [
+                    'text' => 'Validación',
+                    'icon' => 'fas fa-check-circle',  // Cambiado para reflejar validación
+                    'icon_color' => 'primary',
+                    'submenu' => [
+                        [
+                            'text' => 'Validar Documentos',
+                            'url' => 'usuarios-doc',
+                            'icon' => 'fas fa-file-alt',  // Icono que representa documentos
+                            'icon_color' => 'success',
+                        ],
+                    ],
+                ],
+                [
                     'text' => 'Evaluadores',
                     'icon' => 'fas fa-fw fa-user-shield',
                     'icon_color' => 'primary',
@@ -388,7 +401,8 @@ return [
                     ],
                 ],
                 [
-                    'text' => 'Competencias y Cursos',
+                    'text' => 'Competencias, Cursos
+                        y autodiagnosticos',
                     'icon' => 'fas fa-fw fa-book',
                     'icon_color' => 'primary',
                     'submenu' => [
@@ -417,7 +431,12 @@ return [
                             'icon' => 'fas fa-plus-circle',
                             'icon_color' => 'success',
                         ],
-
+                        [
+                            'text' => 'Diagnósticos Automatizados',
+                            'url' => 'autodiagnosticos',
+                            'icon' => 'fas fa-clipboard-check',
+                            'icon_color' => 'success',
+                        ],
                     ],
                 ],
                 [

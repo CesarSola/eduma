@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AsignarEvaController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\AutoDiagController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\CalificacionEvaluacionController;
@@ -87,9 +88,22 @@ use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\JuiciosUsuarioController;
+use App\Http\Controllers\PregAutDiagController;
 use App\Http\Controllers\ResubirCertificadoController;
+use App\Http\Controllers\UserDocController;
 use App\Http\Controllers\ValidacionesCertificacionesController;
 
+// Ruta para ver la lista de usuarios y sus documentos
+Route::get('/usuarios-doc', [UserDocController::class, 'index'])->name('usuarios-doc.index');
+
+// Ruta para ver la lista de autodiagnosticos
+Route::resource('autodiagnosticos', AutoDiagController::class);
+Route::get('autodiagnosticos', [AutoDiagController::class, 'index'])->name('autodiagnosticos.index');
+Route::get('autodiagnosticos/{id}', [AutoDiagController::class, 'show'])->name('autodiagnosticos.show');
+Route::get('/autodiagnosticos/create', [AutoDiagController::class, 'create'])->name('autodiagnosticos.create');
+Route::post('/autodiagnosticos', [AutoDiagController::class, 'store'])->name('autodiagnosticos.store');
+// Ruta para almacenar preguntas
+Route::post('/preguntas', [PregAutDiagController::class, 'store'])->name('preguntas.store');
 //ruta del calendario
 Route::resource('calendario', CalendarioController::class);
 Route::get('/calendario/{competenciaId}', [CalendarioController::class, 'show'])->name('calendario.show');

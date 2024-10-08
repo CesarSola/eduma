@@ -75,25 +75,6 @@
 
             <div class="container">
                 <div class="row mt-3">
-                    <!-- Documentos de Registro General -->
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card h-100 border-light shadow-sm">
-                            <div class="card-header bg-primary border-bottom">
-                                <h3 class="card-title mb-0 text-center text-white" style="font-size: 1.25rem;">
-                                    Ver Documentos de Registro General
-                                </h3>
-                            </div>
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
-                                @if ($documentos->isNotEmpty())
-                                    <a href="{{ route('registroGeneral.index', ['userId' => $usuariosAdmin->id]) }}"
-                                        class="btn btn-primary mt-3">Ver Documentos</a>
-                                @else
-                                    <p class="mt-3 text-muted">No hay documentos disponibles para este usuario.</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
 
                     <!-- Estandares -->
                     <div class="col-lg-4 col-md-6 mb-4">
@@ -148,50 +129,7 @@
                         </div>
                     </div>
 
-
-                    <!-- Validar Documentos -->
                     <div class="row mt-3">
-                        <!-- Validar Documentos de Registro General -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card h-100 border-light shadow-sm">
-                                <div class="card-header bg-primary text-white">
-                                    <h3 class="card-title mb-0" style="font-size: 1.25rem;">
-                                        Validar <br> Documentos de Registro General
-                                    </h3>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    @if ($documentos->isEmpty())
-                                        <div class="text-center mt-3">
-                                            <p class="text-muted">No hay documentos disponibles para este usuario.</p>
-                                        </div>
-                                    @else
-                                        <!-- Comprobar si todos los documentos están validados -->
-                                        @if ($documentosCompletos)
-                                            <p class="text-center mt-3 text-success">Todos los documentos ya han sido
-                                                validados.</p>
-                                        @elseif ($documentosEnValidacion)
-                                            <p class="text-center mt-3 text-warning">Algunos documentos están en proceso de
-                                                validación.</p>
-                                        @else
-                                            <ul class="list-group flex-grow-1 overflow-auto">
-                                                @foreach ($documentos as $documento)
-                                                    <li class="list-group-item">{{ basename($documento->ine_ife) }}</li>
-                                                    <li class="list-group-item">
-                                                        {{ basename($documento->comprobante_domiciliario) }}</li>
-                                                    <li class="list-group-item">{{ basename($documento->foto) }}</li>
-                                                    <li class="list-group-item">{{ basename($documento->curp) }}</li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="text-center mt-3">
-                                                <!-- Mostrar el botón para ver documentos si hay documentos pendientes de validación -->
-                                                <a href="{{ route('registroGeneral.show', $usuariosAdmin->id) }}"
-                                                    class="btn btn-primary">Ver</a>
-                                            </div>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Validar Comprobantes de Pago Competencia -->
                         <div class="col-lg-4 col-md-6 mb-4">
