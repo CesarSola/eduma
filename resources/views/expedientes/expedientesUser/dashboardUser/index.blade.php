@@ -174,6 +174,27 @@
         @else
             <br>
             <div class="card">
+                <h6 style="text-align: center" class="card-title">Autodiagnosticos</h6>
+                <br>
+                <div class="row">
+                    @foreach ($autodiagnosticos as $autodiagnostico)
+                        <div class="col-md-3 mb-3">
+                            <div class="card modern-card">
+                                <h6 style="text-align: center" class="card-title">{{ $autodiagnostico->titulo }}
+                                </h6>
+                                <div class="card-body text-center">{{ $autodiagnostico->descripcion }}</p>
+                                    <br>
+                                    <a href="{{ route('autoDiagUser.index', $autodiagnostico->id) }}"
+                                        class="btn btn-primary">Realizar Autodiagnostico</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <br>
+            <div class="card">
                 <h6 style="text-align: center" class="card-title">Estándares de Competencias</h6>
                 <br>
                 <div class="row">

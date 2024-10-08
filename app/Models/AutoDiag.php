@@ -15,6 +15,10 @@ class AutoDiag extends Model
         'estandar_id',
         'elementos',
     ];
+    public function preguntas()
+    {
+        return $this->hasMany(PregAutDiag::class); // Asegúrate que 'PregAutDiag' es el modelo correcto para tus preguntas
+    }
 
     // Relación con Criterios
     public function criterios()
