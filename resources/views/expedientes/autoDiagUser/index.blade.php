@@ -6,18 +6,20 @@
     <div class="card modern-card">
         <div class="card-body">
             <div class="text-center">
-                <h2>Autodiagnósticos Disponibles</h2>
+                <h2>Autodiagnóstico del estandar {{ $estandar->name }} </h2>
             </div>
         </div>
     </div>
+
 @stop
 
 @section('content')
-    <form action="#" method="POST" id="autodiagnosticoForm">
+    <form action="{{ route('autoDiagUser.store') }}" method="POST" id="autodiagnosticoForm">
         @csrf
         @foreach ($autodiagnosticos as $autodiagnostico)
             <div class="card mb-3">
                 <div class="card-header bg-success text-white">
+                    <input type="hidden" name="autodiagnostico_id" value="{{ $autodiagnostico->id }}">
                     <h4 class="text-center">{{ $autodiagnostico->titulo }}</h4>
                 </div>
                 <br>
@@ -29,8 +31,7 @@
                         <div class="card-body">
                             <h6>
                                 Servir como referente para la evaluación y certificación de las personas que diseñan
-                                cursos
-                                de
+                                cursos de
                                 formación del capital humano de manera presencial grupal, sus instrumentos de evaluación
                                 y
                                 manuales del curso.
@@ -46,7 +47,6 @@
                                 formación
                                 basados en el Estándar de Competencia.
                             </h6>
-
                         </div>
                     </div>
                 </div>
@@ -64,8 +64,7 @@
                             de la competencia laboral o asiste a un taller de capacitación final.
                         </h6>
                         <br>
-                        <h5 class="bg-warning text-white text-center p-2">INSTRUCCIONES
-                        </h5>
+                        <h5 class="bg-warning text-white text-center p-2">INSTRUCCIONES</h5>
                         <ol>
                             <li>Lea cuidadosamente cada uno de los apartados del Diagnóstico tomando en cuenta las
                                 actividades que usted sabe hacer, bajo qué condiciones las ha realizado, cómo las ha
@@ -91,11 +90,11 @@
                                     ->where('autodiagnostico_id', $autodiagnostico->id)
                                     ->count();
                                 $contadorElemento = 1; // Inicializa el contador para los elementos
+                                $totalPreguntas = 0; // Inicializa el contador para las preguntas
+                                $preguntasPorElemento = []; // Inicializa un array para preguntas por elemento
                             @endphp
-
                             @foreach ($elementos as $elemento)
                                 @if ($elemento->autodiagnostico_id == $autodiagnostico->id)
-                                    <!-- Asegura que el elemento pertenece al autodiagnóstico -->
                                     <div class="card mt-2">
                                         <div class="card-header bg-info text-white">
                                             <h5>Elemento {{ $contadorElemento }} de {{ $totalElementos }}:
@@ -105,47 +104,31 @@
                                             <h5 class="text-center">CRITERIOS A DIAGNOSTICAR</h5>
                                             @foreach ($criterios as $criterio)
                                                 @if ($criterio->elemento_id == $elemento->id)
-                                                    <!-- Asegura que el criterio pertenece al elemento -->
                                                     <div class="mt-3">
-                                                        <div class="position-relative">
-                                                            <h6 class="bg-info text-white text-center p-2">
-                                                                Con relación a este elemento, ¿usted obtiene los siguientes
-                                                                {{ $criterio->nombre }}?
-                                                            </h6>
-                                                            <div
-                                                                style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.5);">
-                                                            </div>
-                                                        </div>
-
+                                                        <h6 class="bg-info text-white text-center p-2">
+                                                            {{ $criterio->nombre }}</h6>
                                                         @php
-                                                            // Filtra las preguntas que pertenecen al criterio actual
+                                                            // Filtrar las preguntas que pertenecen al criterio actual
                                                             $preguntasDelCriterio = $preguntas->where(
                                                                 'criterio_id',
                                                                 $criterio->id,
                                                             );
-                                                            // Agrupa las preguntas filtradas por su título
                                                             $preguntasAgrupadas = $preguntasDelCriterio->groupBy(
                                                                 'titulo',
                                                             );
+                                                            $numeroPreguntas = $preguntasDelCriterio->count();
+                                                            $totalPreguntas += $numeroPreguntas;
+                                                            $preguntasPorElemento[$elemento->nombre][
+                                                                $criterio->nombre
+                                                            ] = $numeroPreguntas;
                                                         @endphp
 
                                                         @foreach ($preguntasAgrupadas as $titulo => $grupoPreguntas)
-                                                            <!-- Mostrar el título solo una vez -->
-                                                            <div class="position-relative">
-                                                                <h6 class="bg-secondary text-white text-center p-2">
-                                                                    {{ $titulo }}</h6>
-                                                                <div
-                                                                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.5);">
-                                                                </div>
-                                                            </div>
-
-                                                            @php
-                                                                // Inicializa el contador para las preguntas
-                                                                $contador = 1;
-                                                            @endphp
+                                                            <h6 class="bg-secondary text-white text-center p-2">
+                                                                {{ $titulo }}</h6>
+                                                            @php $contador = 1; @endphp
 
                                                             @foreach ($grupoPreguntas as $pregunta)
-                                                                <!-- Asegura que la pregunta pertenece al criterio -->
                                                                 <div class="mb-3">
                                                                     <div class="row align-items-center">
                                                                         <div class="col-md-9">
@@ -161,7 +144,9 @@
                                                                                     class="form-check-input"
                                                                                     id="pregunta_si_{{ $pregunta->id }}"
                                                                                     name="respuestas[{{ $pregunta->id }}]"
-                                                                                    value="si" required>
+                                                                                    value="si"
+                                                                                    {{ (session('respuestas')[$pregunta->id] ?? '') == 'si' ? 'checked' : '' }}
+                                                                                    required>
                                                                                 <label class="form-check-label"
                                                                                     for="pregunta_si_{{ $pregunta->id }}">Sí</label>
                                                                             </div>
@@ -170,17 +155,16 @@
                                                                                     class="form-check-input"
                                                                                     id="pregunta_no_{{ $pregunta->id }}"
                                                                                     name="respuestas[{{ $pregunta->id }}]"
-                                                                                    value="no" required>
+                                                                                    value="no"
+                                                                                    {{ (session('respuestas')[$pregunta->id] ?? '') == 'no' ? 'checked' : '' }}
+                                                                                    required>
                                                                                 <label class="form-check-label"
                                                                                     for="pregunta_no_{{ $pregunta->id }}">No</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                @php
-                                                                    // Incrementa el contador para la siguiente pregunta
-                                                                    $contador++;
-                                                                @endphp
+                                                                @php $contador++; @endphp
                                                             @endforeach
                                                         @endforeach
                                                     </div>
@@ -188,10 +172,7 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                    @php
-                                        // Incrementa el contador para el siguiente elemento
-                                        $contadorElemento++;
-                                    @endphp
+                                    @php $contadorElemento++; @endphp
                                 @endif
                             @endforeach
                         </div>
@@ -199,13 +180,88 @@
                 </div>
             </div>
         @endforeach
-        <div class="card">
-            <div-card-body>
-
-            </div-card-body>
+        <!-- Tarjeta para mostrar el total de preguntas -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="bg-info text-white text-center p-2">Total de preguntas</h6>
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Elemento</th>
+                            <th scope="col">Criterio</th>
+                            <th scope="col">Número de Preguntas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($preguntasPorElemento as $elemento => $criterios)
+                            @foreach ($criterios as $criterio => $cantidad)
+                                <tr>
+                                    <td>{{ $elemento }}</td>
+                                    <td>{{ $criterio }}</td>
+                                    <td>{{ $cantidad }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Enviar Respuestas</button>
+
+        <div class="text-center mt-4">
+            @if (!$yaRespondido)
+                <button type="submit" class="btn btn-success">Enviar Respuestas</button>
+            @endif
         </div>
     </form>
+
+    @if ($yaRespondido)
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="bg-info text-white text-center p-2">
+                    Porcentaje de respuestas correctas: {{ number_format($porcentajeCorrectas, 2) }}%
+                </h6>
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Elemento</th>
+                            <th>Total de respuestas "Sí"</th>
+                            <th>Total de respuestas "No"</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($resumenResultados as $elemento => $respuestas)
+                            <tr>
+                                <td>{{ $elemento }}</td>
+                                <td>{{ $respuestas['si'] }}</td>
+                                <td>{{ $respuestas['no'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+
+@stop
+
+@section('css')
+    <style>
+        .card-body {
+            border: 1px solid #dee2e6;
+            /* Borde alrededor del cuerpo de la tarjeta */
+            padding: 1rem;
+            /* Espaciado interno */
+        }
+
+        h6 {
+            font-weight: bold;
+            /* Negrita para la conclusión */
+        }
+
+        p {
+            color: #6c757d;
+            /* Color gris para la frase */
+        }
+    </style>
 @stop

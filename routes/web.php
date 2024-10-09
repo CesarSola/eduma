@@ -94,14 +94,18 @@ use App\Http\Controllers\ResubirCertificadoController;
 use App\Http\Controllers\UserDocController;
 use App\Http\Controllers\ValidacionesCertificacionesController;
 
+// Ruta para mostrar los autodiagnósticos y el formulario
 Route::get('/autoDiagUser', [AutoDiagUserController::class, 'index'])->name('autoDiagUser.index');
+
+// Ruta para almacenar las respuestas del usuario
+Route::post('/autoDiagUser/store', [AutoDiagUserController::class, 'store'])->name('autoDiagUser.store');
 
 // Ruta para ver la lista de usuarios y sus documentos
 Route::get('/usuarios-doc', [UserDocController::class, 'index'])->name('usuarios-doc.index');
 
 // Ruta para ver la lista de autodiagnosticos
 Route::resource('autodiagnosticos', AutoDiagController::class);
-Route::get('autodiagnosticos', [AutoDiagController::class, 'index'])->name('autodiagnosticos.index');
+Route::get('/autodiagnosticos/{autodiagnostico}', [AutoDiagUserController::class, 'index'])->name('autoDiagUser.index');
 Route::get('autodiagnosticos/{id}', [AutoDiagController::class, 'show'])->name('autodiagnosticos.show');
 Route::get('/autodiagnosticos/create', [AutoDiagController::class, 'create'])->name('autodiagnosticos.create');
 Route::post('/autodiagnosticos', [AutoDiagController::class, 'store'])->name('autodiagnosticos.store');
