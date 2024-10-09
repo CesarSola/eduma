@@ -466,18 +466,6 @@ return [
                     'icon_color' => 'orange',
                 ],
                 [
-                    'text' => 'Mis cursos',
-                    'url' => 'misCursos',
-                    'icon' => 'fas fa-fw fa-chalkboard',
-                    'icon_color' => 'purple',
-                ],
-                [
-                    'text' => 'Mis Competencias',
-                    'url' => 'miscompetencias',
-                    'icon' => 'fas fa-fw fa-clipboard-check',
-                    'icon_color' => 'teal',
-                ],
-                [
                     'text' => 'Mis diagnosticos',
                     'url' => 'usuarios-con-diagnosticos',
                     'icon' => 'fas fa-fw fa-file-invoice',

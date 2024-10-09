@@ -239,19 +239,23 @@
         </div>
         <div class="card">
             <div class="card-body text-center"> <!-- Centra el contenido -->
+                {{-- Mensaje del porcentaje obtenido --}}
+                @if ($yaRespondido)
+                    <h4 class="text-info">Obtuviste el {{ number_format($porcentajeCorrectas, 2) }}%</h4>
+                @endif
+
                 {{-- Botón basado en el porcentaje --}}
                 @if ($porcentajeCorrectas > 90)
-                    <a href="{{ route('competenciaEC.index') }}" class="btn btn-success">Inscríbete a un Estandar</a>
+                    <a href="{{ route('competenciaEC.index') }}" class="btn btn-success">Inscríbete al Estándar
+                        {{ $estandar->name }} </a>
+                    <small class="form-text text-muted mt-2">¡Excelente trabajo! Estás listo para inscribirte.</small>
                 @else
                     <a href="{{ route('registroCurso.index') }}" class="btn btn-warning">Inscríbete a un curso</a>
+                    <small class="form-text text-muted mt-2">Considera mejorar tus respuestas con un curso.</small>
                 @endif
             </div>
         </div>
-
-
     @endif
-
-
 @stop
 
 @section('css')
