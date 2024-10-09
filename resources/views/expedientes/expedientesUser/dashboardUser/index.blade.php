@@ -184,8 +184,10 @@
                                 </h6>
                                 <div class="card-body text-center">{{ $autodiagnostico->descripcion }}</p>
                                     <br>
-                                    <a href="{{ route('autoDiagUser.index', $autodiagnostico->id) }}">Ver Diagnóstico</a>
-
+                                    <a href="{{ route('autoDiagUser.index', $autodiagnostico->id) }}"
+                                        class="btn btn-primary btn-lg">
+                                        Ver Diagnóstico
+                                    </a>
                                 </div>
                             </div>
                         </div>

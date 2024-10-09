@@ -71,6 +71,27 @@ class AutoDiagUserController extends Controller
                 $totalCorrectas = $respuestas->where('correcta', 1)->count();
                 $porcentajeCorrectas = $totalRespuestas > 0 ? ($totalCorrectas / $totalRespuestas) * 100 : 0;
             }
+            // Verifica si el usuario ya ha respondido a este autodiagnóstico
+            $yaRespondido = RespAutDiag::where('usuario_id', $usuarioId)
+                ->where('autodiagnostico_id', $autodiagnosticoId)
+                ->exists();
+
+            // Cargar las respuestas y calcular resultados si ya ha respondido
+            if ($yaRespondido) {
+                $respuestas = RespAutDiag::where('usuario_id', $usuarioId)
+                    ->where('autodiagnostico_id', $autodiagnosticoId)
+                    ->with('pregunta.criterio.elemento') // Cargar las preguntas relacionadas
+                    ->get();
+
+                // Aquí puedes calcular el resumen de resultados si es necesario
+                foreach ($respuestas as $respuesta) {
+                    // Lógica para calcular los resultados, similar a como lo hacías antes...
+                }
+            } else {
+                // Inicializa las respuestas como vacías si no ha respondido
+                $respuestas = [];
+            }
+
 
             // Retornar la vista con los datos necesarios
             return view('expedientes.autoDiagUser.index', compact(
@@ -109,6 +130,9 @@ class AutoDiagUserController extends Controller
                 // Compara la respuesta del usuario con la respuesta correcta (sin importar mayúsculas)
                 $correcta = (strtolower($pregunta->resp_correcta) === strtolower($respuesta));
 
+                // Guarda las respuestas en la sesión
+                session(['respuestas' => $request->input('respuestas')]);
+
                 // Guarda la respuesta en la tabla resp_aut_diag
                 RespAutDiag::create([
                     'usuario_id' => $usuarioId,
@@ -123,8 +147,7 @@ class AutoDiagUserController extends Controller
             }
         }
 
-        // Redirigir al índice de autodiagnósticos (u otra vista según tu lógica)
-        return redirect()->route('autoDiagUser.index');
+        return redirect()->route('autoDiagUser.index', ['autodiagnostico' => $autodiagnosticoId]);
     }
 
     public function resultados($autodiagnosticoId)
