@@ -103,13 +103,17 @@ Route::post('/autoDiagUser/store', [AutoDiagUserController::class, 'store'])->na
 // Ruta para ver la lista de usuarios y sus documentos
 Route::get('/usuarios-doc', [UserDocController::class, 'index'])->name('usuarios-doc.index');
 
-// Ruta para ver la lista de autodiagnosticos
-Route::resource('autodiagnosticos', AutoDiagController::class);
-Route::get('/autodiagnosticos/{autodiagnostico}', [AutoDiagUserController::class, 'index'])->name('autoDiagUser.index');
-Route::get('autodiagnosticos/{id}', [AutoDiagController::class, 'show'])->name('autodiagnosticos.show');
+// Ruta para ver la lista de autodiagnósticos
+Route::get('/autodiagnosticos', [AutoDiagController::class, 'index'])->name('autodiagnosticos.index');
+
+// Ruta para ver un autodiagnóstico específico
+Route::get('/autodiagnosticos/{id}', [AutoDiagController::class, 'show'])->name('autodiagnosticos.show');
+
+// Ruta para crear un nuevo autodiagnóstico
 Route::get('/autodiagnosticos/create', [AutoDiagController::class, 'create'])->name('autodiagnosticos.create');
 Route::post('/autodiagnosticos', [AutoDiagController::class, 'store'])->name('autodiagnosticos.store');
-// Ruta para almacenar preguntas
+
+// Rutas para preguntas
 Route::post('/preguntas', [PregAutDiagController::class, 'store'])->name('preguntas.store');
 Route::get('/preguntas/{id}/edit', [PregAutDiagController::class, 'edit']);
 Route::put('/preguntas/{id}', [PregAutDiagController::class, 'update'])->name('preguntas.update');

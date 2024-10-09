@@ -14,20 +14,35 @@ class UserDocController extends Controller
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'Admin');
             })
-            ->with('documentos')
-            ->paginate(10); // Cambiado a paginate(10) para mostrar 10 usuarios por página
+            ->with('documentos.validacionesComentarios')
+            ->paginate(10);
 
         // Verificar el estado de los documentos de cada usuario
         foreach ($usuarios as $usuario) {
             $documentos = $usuario->documentos;
             $todosDocumentosValidados = true;
 
-            foreach ($documentos as $documento) {
-                $estado = json_decode($documento->estado, true) ?? [];
-                // Comprobar si algún documento está en estado 'Pendiente' o 'rechazar'
-                if (in_array('Pendiente', $estado) || in_array('rechazar', $estado)) {
-                    $todosDocumentosValidados = false;
-                    break; // Si encontramos algún documento no validado, salimos del bucle
+            // Si el usuario no tiene documentos, los documentos no están validados
+            if ($documentos->isEmpty()) {
+                $todosDocumentosValidados = false;
+            } else {
+                foreach ($documentos as $documento) {
+                    // Revisar el estado en la tabla de documentos
+                    $estado = json_decode($documento->estado, true) ?? [];
+
+                    // Si no hay estado, el documento no está validado
+                    if (empty($estado)) {
+                        $todosDocumentosValidados = false;
+                        break;
+                    }
+
+                    // Revisar la tabla de validaciones para ver si hay algún documento rechazado o pendiente
+                    foreach ($documento->validacionesComentarios as $validacion) {
+                        if ($validacion->tipo_validacion === 'rechazar' || $validacion->tipo_validacion === 'Pendiente') {
+                            $todosDocumentosValidados = false;
+                            break 2; // Salimos de ambos bucles
+                        }
+                    }
                 }
             }
 

@@ -26,7 +26,7 @@ class CompetenciasAddController extends Controller
         // Validar los datos recibidos
         $request->validate([
             'numero' => 'nullable|string|max:200',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:2550',
             'tipo' => 'required|string',
             'calificacion_minima' => 'nullable|numeric|min:0', // Añadido para validar la calificación mínima
             'documentosnec_id' => 'required|array',
@@ -54,7 +54,7 @@ class CompetenciasAddController extends Controller
         // Validar los datos recibidos
         $request->validate([
             'numero' => 'nullable|string|max:200',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:2550',
             'tipo' => 'required|string',
             'calificacion_minima' => 'nullable|numeric|min:0', // Añadido para validar la calificación mínima
             'documentosnec_id' => 'required|array',

@@ -32,37 +32,52 @@
                             <td>{{ $usuario->matricula }}</td>
                             <td>{{ $usuario->getFullNameAttribute() }}</td>
                             <td>{{ $usuario->email }}</td>
-                            <td>
-                                @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->ine_ife)
-                                    {{ basename($usuario->documentos->first()->ine_ife) }}
-                                @else
-                                    <span class="text-danger">No disponible</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->comprobante_domiciliario)
-                                    {{ basename($usuario->documentos->first()->comprobante_domiciliario) }}
-                                @else
-                                    <span class="text-danger">No disponible</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->curp)
-                                    {{ basename($usuario->documentos->first()->curp) }}
-                                @else
-                                    <span class="text-danger">No disponible</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($usuario->documentos && $usuario->documentos->first() && $usuario->documentos->first()->foto)
-                                    {{ basename($usuario->documentos->first()->foto) }}
-                                @else
-                                    <span class="text-danger">No disponible</span>
-                                @endif
-                            </td>
+
+                            @if ($usuario->documentos->isEmpty())
+                                <!-- Verificar si no ha subido ningún documento -->
+                                <td colspan="5" class="text-center text-warning">Aún no ha subido sus documentos</td>
+                                <td>
+                                    <div class="text-center">
+                                        <span class="text-danger">Sin documentos</span>
+                                    </div>
+                                </td>
+                            @else
+                                <!-- Mostrar los documentos si existen -->
+                                <td>
+                                    @if ($usuario->documentos->first()->ine_ife)
+                                        {{ basename($usuario->documentos->first()->ine_ife) }}
+                                    @else
+                                        <span class="text-danger">No disponible</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($usuario->documentos->first()->comprobante_domiciliario)
+                                        {{ basename($usuario->documentos->first()->comprobante_domiciliario) }}
+                                    @else
+                                        <span class="text-danger">No disponible</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($usuario->documentos->first()->curp)
+                                        {{ basename($usuario->documentos->first()->curp) }}
+                                    @else
+                                        <span class="text-danger">No disponible</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($usuario->documentos->first()->foto)
+                                        {{ basename($usuario->documentos->first()->foto) }}
+                                    @else
+                                        <span class="text-danger">No disponible</span>
+                                    @endif
+                                </td>
+                            @endif
+
                             <td>
                                 <div class="text-center">
-                                    @if (!$usuario->todosDocumentosValidados)
+                                    @if ($usuario->documentos->isEmpty())
+                                        <span class="text-warning">Documentos no subidos</span>
+                                    @elseif (!$usuario->todosDocumentosValidados)
                                         <a href="{{ route('registroGeneral.show', $usuario->id) }}"
                                             class="btn btn-success">Ver</a>
                                     @else
@@ -73,18 +88,18 @@
                         </tr>
                     @endforeach
                 </tbody>
-            </table>
 
 
-            @if ($usuarios->hasMorePages())
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $usuarios->links() }} <!-- Mostrar enlaces de paginación -->
-                </div>
-            @else
-                <div class="text-center mt-4">
-                    <span>No hay más usuarios para mostrar.</span>
-                </div>
-            @endif
+
+                @if ($usuarios->hasMorePages())
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $usuarios->links() }} <!-- Mostrar enlaces de paginación -->
+                    </div>
+                @else
+                    <div class="text-center mt-4">
+                        <span>No hay más usuarios para mostrar.</span>
+                    </div>
+                @endif
 
         </div>
     </div>
