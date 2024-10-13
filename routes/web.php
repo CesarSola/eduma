@@ -318,7 +318,7 @@ Route::get('/formulario2', function () {
 Route::post('/formulario2', [Formulario2Controller::class, 'index'])->name('formulario2.index');
 //
 
-Route::resource('diagnosticos', DiagnosticoController::class);
+// Route::resource('diagnosticos', DiagnosticoController::class);
 
 use App\Http\Controllers\FormController;
 
